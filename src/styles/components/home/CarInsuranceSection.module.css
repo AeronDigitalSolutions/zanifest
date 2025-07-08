@@ -1,0 +1,186 @@
+.cont {
+  place-items: center;
+  padding-top: 50px;
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 20px;
+}
+
+.heading {
+  font-size: 35px;
+}
+
+.orange {
+  color: #fa621a;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 2rem;
+}
+
+.item {
+  /* display: flex; */
+  border-radius: 22px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  transition: all 0.3s;
+  border-style: solid;
+  border-color: white;
+}
+
+.item:hover {
+  border-color: #fa621a;
+}
+
+.top {
+}
+
+.imageCont {
+  background-color: #f6f6f6;
+  border-top-left-radius: 22px;
+  border-top-right-radius: 22px;
+  width: 100%;
+
+  height: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.image {
+  width: 120px;
+  height: 120px;
+  object-fit: scale-down;
+}
+
+.rightCont {
+  padding: 10px;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  transition: all 0.3s;
+}
+
+.rightCont:hover {
+  transform: translateY(-10px);
+}
+
+.bottom {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 150px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.bottomCont {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  padding: 50px 0px;
+}
+
+.button {
+  background-color: #fa621a;
+  color: white;
+  padding: 10px 40px;
+  border-radius: 30px;
+  font-size: 20px;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.button:hover {
+  transform: translateY(-10px);
+}
+
+.button:active {
+  transform: scale(0.9);
+}
+
+@media screen and (max-width: 1200px) {
+  .list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .list {
+    place-items: center;
+    width: 90%;
+  }
+
+  .item {
+    width: 80%;
+  }
+
+  .imageCont {
+  }
+
+  .top {
+    width: 100%;
+  }
+
+  .imageCont {
+    width: auto;
+  }
+
+  .image {
+    object-fit: contain;
+  }
+
+  .rightCont {
+    font-size: 10px;
+  }
+
+  .bottom {
+    overflow: scroll;
+  }
+}
+
+@media screen and (max-width: 768px) {
+
+  .heading{
+    font-size: 25px;
+  }
+
+  .bottom {
+    font-size: 14px;
+  }
+  
+}
+
+@media screen and (max-width: 470px) {
+  .list {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    place-items: center;
+    gap: 0;
+  }
+  .item {
+    place-items: center;
+    margin-bottom: 20px;
+  }
+
+  .imageCont {
+  }
+  .image {
+  }
+  .rightCont {
+    font-size: 6px;
+  }
+  .bottom {
+    font-size: 10px;
+
+    display: flex;
+    flex-wrap: wrap;
+  }
+}

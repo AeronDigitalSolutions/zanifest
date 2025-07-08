@@ -1,0 +1,164 @@
+.cont {
+  display: grid;
+  width: 100%;
+  place-items: center;
+  margin-top: 40px;
+}
+
+.head {
+  display: flex;
+  gap: 0.7rem;
+  justify-content: center;
+}
+
+.heading {
+  font-size: 35px;
+  font-weight: 600;
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+.orange {
+  color: #fa621a;
+}
+
+.bottom {
+  display: grid;
+  width: 80%;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.item {
+  padding: 20px;
+  display: grid;
+  place-items: center;
+  gap: 2rem;
+  cursor: pointer;
+}
+
+.image {
+  width: 100px;
+  height: 100px;
+}
+
+.name {
+  all: unset;
+  font-size: 20px;
+}
+
+.desc {
+  all: unset;
+  text-align: center;
+  font-size: 14px;
+}
+
+.servciesCont {
+  background-color: #f6f7fb;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  padding: 40px 0px;
+}
+
+.services {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  width: 80%;
+  gap: 5rem;
+}
+
+.serviceItem {
+  display: grid;
+  padding: 20px;
+  gap: 10px;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  border-radius: 22px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.servicetop {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.serviceImage {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #fff2e6;
+  padding: 10px;
+}
+
+.serviceName {
+  all: unset;
+  font-size: 14px;
+  text-align: center;
+}
+
+.serviceDesc {
+  all: unset;
+  font-size: 16px;
+  background-color: #1c75bb;
+  color: white;
+  text-align: center;
+  padding: 5px 12px;
+  transition: all 0.3s;
+
+  border-radius: 8px; /* 🔵 Rounded corners */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* 🟤 Subtle shadow */
+}
+
+
+.serviceItem:hover .serviceDesc {
+  transform: translateY(-10px);
+}
+
+@media screen and (max-width: 1200px) {
+  .bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+  .item {
+    max-width: 400px;
+    overflow: hidden;
+  }
+
+  .services {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .serviceItem {
+    max-width: 300px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+
+  .heading{
+    font-size: 25px;
+  }
+
+  .serviceImage{
+    border-radius: 50px;
+  }
+
+  .services{
+    gap: 1rem;
+  }
+
+  /* .bottom {
+    font-size: 14px;
+  } */
+  
+}

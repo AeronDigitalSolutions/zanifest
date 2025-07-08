@@ -1,0 +1,41 @@
+.cont {
+  background-color: #f7f7f7;
+  padding: 20px;
+}
+
+.inner {
+  background-color: white;
+  height: 90%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.head1 {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.6rem;
+}
+
+.middle {
+}
+
+.bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.button {
+  all: unset;
+  background-color: #1c75bb;
+  color: white;
+  padding: 10px 40px;
+  border-radius: 22px;
+}
+
+.bottom > p {
+  font-size: 12px;
+}

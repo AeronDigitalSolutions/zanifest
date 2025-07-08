@@ -1,0 +1,39 @@
+import React from "react";
+import { FaPhoneAlt, FaInstagram, FaTwitter } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
+import { FaLocationDot } from "react-icons/fa6";
+
+import { FiFacebook, FiLinkedin } from "react-icons/fi";
+
+import styles from "@/styles/components/ui/UserDetails.module.css";
+
+function UserDetails() {
+  return (
+    <div className={styles.cont}>
+      <div className={styles.detailsSection}>
+        <div className={styles.detailItem}>
+          <FaPhoneAlt />
+          <h4 className={styles.detailsText}>+91 8593959395</h4>
+        </div>
+        <div className={styles.line}></div>
+        <div className={styles.detailItem}>
+          <MdEmail />
+          <h4 className={styles.detailsText}>abc@gmail.com</h4>
+        </div>
+        {/* <div className={styles.line}></div>
+        <div className={styles.detailItem}>
+          <FaLocationDot />
+          <h4 className={styles.detailsText}>123 street, abc city</h4>
+        </div> */}
+      </div>
+      <div className={styles.logosCont}>
+        <FaInstagram />
+        <FaTwitter />
+        <FiFacebook />
+        <FiLinkedin />
+      </div>
+    </div>
+  );
+}
+
+export default UserDetails;

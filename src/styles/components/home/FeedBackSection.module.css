@@ -1,0 +1,268 @@
+.cont {
+  display: grid;
+  width: 100%;
+  place-items: center;
+  margin-top: 40px;
+}
+
+.head {
+  display: flex;
+  gap: 0.7rem;
+  justify-content: center;
+}
+
+.heading {
+  font-size: 35px;
+  font-weight: 600;
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.orange {
+  color: #fa621a;
+}
+
+.bottom {
+  display: grid;
+  width: 80%;
+  place-self: center;
+  /* grid-template-columns: 1fr 1fr 1fr; */
+}
+
+.serviceItem {
+  position: relative; /* ✅ Needed for arrow buttons to align relative to card */
+  min-width: 300px;
+  max-width: 300px;
+  margin: 20px 10px;
+  flex-shrink: 0;
+  background-color: white;
+  padding: 20px;
+  border-radius: 22px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  display: grid;
+  place-items: center;
+  gap: 5rem;
+}
+
+
+.namePost {
+  text-align: left;
+}
+
+.singlecar {
+  display: none;
+}
+
+.image {
+  width: 100px;
+  height: 100px;
+}
+
+.name {
+  all: unset;
+  font-size: 20px;
+  color: #1c75bb;
+  font-weight: 600;
+}
+
+.desc {
+  all: unset;
+  text-align: center;
+  font-size: 14px;
+  padding: 10px;
+}
+
+.post {
+  font-size: 12px;
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 20px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background-color: grey;
+  border-radius: 50%;
+}
+
+.blue {
+  background-color: #1c75bb;
+}
+
+.claimCont {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+
+  padding: 50px 100px;
+  background: url("../../../assets//home//claimbackground.png");
+  color: white;
+  backdrop-filter: blur(5px);
+}
+
+.claimLeft {
+  display: flex;
+  align-items: center;
+  font-size: 130px;
+}
+
+.fileImage {
+  width: 140px;
+  height: 170px;
+  filter: brightness(100);
+}
+
+.claimText {
+  display: grid;
+  gap: 1rem;
+}
+
+.CT1 {
+  font-size: 20px;
+}
+
+.CT2 {
+  font-size: 40px;
+}
+
+.claimRight {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+}
+
+.claimButton {
+  background-color: white;
+  color: black;
+  padding: 25px 60px;
+  font-size: 25px;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.claimButton:hover {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+@media screen and (max-width: 1200px) {
+  .bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .serviceItem {
+    max-width: 400px;
+  }
+
+  .claimCont {
+    padding: 50px 0px;
+  }
+
+  .singlecar {
+    display: block;
+  }
+
+  .multicar {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 530px) {
+  .claimCont {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .heading {
+    justify-content: center;
+  }
+}
+
+.carouselWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slide {
+  transform: translateX(-33.33%);
+}
+
+.carouselWindow {
+  width: 100%;
+  max-width: 1120px;
+  overflow: hidden;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+.track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  gap: 20px;
+}
+
+.serviceItem {
+  min-width: 300px;
+  max-width: 300px;
+  margin: 20px 10px;
+  flex-shrink: 0;
+  background-color: white;
+  padding: 20px;
+  border-radius: 22px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  display: grid;
+  place-items: center;
+  gap: 5rem;
+}
+
+.itemBottom {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  place-items: center;
+}
+
+/* CSS for arrows */
+.nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(187, 187, 187, 0.2);
+  border: none;
+  padding: 10px 12px;
+  cursor: pointer;
+  z-index: 1;
+  border-radius: 50%;
+}
+
+.left {
+  left: 10px;
+}
+
+.right {
+  right: 10px;
+}
+
+@media screen and (max-width: 768px) {
+
+  .heading{
+    font-size: 25px;
+  }
+
+ 
+
+  
+}

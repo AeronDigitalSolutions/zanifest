@@ -1,0 +1,97 @@
+.cont {
+  background-color: #f7f7f7;
+  padding: 20px;
+  display: grid;
+}
+
+.inner {
+  background-color: white;
+
+  padding: 20px;
+}
+
+.header {
+  font-size: 30px;
+  color: #1c75bb;
+  position: absolute;
+  background-color: white;
+  padding-right: 20px;
+}
+
+.form {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border-style: solid none none none;
+  border-color: #1c75bb;
+  margin-top: 20px;
+  padding-top: 40px;
+}
+
+.inputDiv {
+  position: relative;
+  margin: 20px;
+}
+
+.input {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  outline: none;
+  background-color: transparent;
+}
+
+.label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 16px;
+  color: rgb(204, 204, 204);
+  pointer-events: none;
+  transition: all 0.3s ease;
+  z-index: 3;
+}
+
+.input:focus + .label {
+  top: -20px;
+  font-size: 12px;
+  color: #007bff;
+}
+
+.input:focus + .label {
+  width: 100%;
+}
+
+.bottomButton {
+  position: relative;
+  height: 120px;
+}
+
+.button {
+  all: unset;
+  background-color: #1c75bb;
+  padding: 10px 30px;
+  color: white;
+  border-radius: 22px;
+  transition: all 0.5s;
+  position: absolute;
+  bottom: 30px;
+  right: 50px;
+}
+
+.button:hover {
+  background-color: #a9daff;
+  color: #1c75bb;
+}
+
+.button:active {
+  transform: scale(0.9);
+}
+
+@media screen and (max-width: 1000px) {
+  .form {
+    grid-template-columns: 1fr;
+  }
+}

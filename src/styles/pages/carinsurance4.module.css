@@ -1,0 +1,370 @@
+/* ===================== COMPONENT ROOT WRAPPER ===================== */
+.wrapper {
+}
+.wrapper :global(*) {
+  box-sizing: border-box;
+}
+.wrapper :global(*::before),
+.wrapper :global(*::after) {
+  box-sizing: border-box;
+}
+.wrapper :global(body) {
+  margin: 0;
+  padding: 0;
+  background-color: #fef6f3;
+  font-family: Arial, sans-serif;
+}
+
+/* ===================== BASE STYLES ===================== */
+.mainContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.pageContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 2rem;
+  padding: 5rem 0;
+  width: 85%;
+  margin: auto;
+  flex: 1;
+}
+
+.outerBox {
+  background-color: #fa4e1b;
+  border-radius: 20px;
+  padding: 3rem;
+  max-width: 42vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.innerBox {
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 0 0 2rem 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 50vw;
+  height: 30vw;
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+}
+
+.headingBox {
+  width: 94%;
+  min-height: 100px;
+  background-color: #f5fafa;
+  margin-bottom: 20px;
+  padding: 1.5rem 1rem;
+  border-radius: 16px 16px 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.heading {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.3rem;
+  text-align: center;
+  justify-content: center;
+}
+
+.subtext {
+  color: #777;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.datepickerWrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 1rem 0;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+.helpLinkContainer {
+  padding: 0 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.helpLink {
+  font-size: 0.85rem;
+  color: #0000ff;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  
+}
+
+.helpLink:hover {
+  opacity: 0.8;
+}
+
+.rightSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%;
+}
+
+.carImage {
+  object-fit: contain;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  transform: scaleX(-1);
+}
+
+/* ===================== DATEPICKER STYLES ===================== */
+.customCalendar {
+  display: flex !important;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.react-datepicker__month-container {
+  width: 100%;
+  max-width: 280px;
+}
+
+.react-datepicker__header {
+  background-color: white;
+  border: none;
+  padding-top: 0.5rem;
+}
+
+.customCalendar :global(.react-datepicker__current-month) {
+  color: #0000ff;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.react-datepicker__day-names {
+  display: flex;
+  justify-content: space-around;
+  padding: 0 0.5rem;
+}
+
+.react-datepicker__day-name,
+.react-datepicker__day {
+  font-size: 0.8rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  line-height: 2.2rem;
+  margin: 0.2rem;
+  text-align: center;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background-color: #fa4e1b !important;
+  color: white !important;
+  border-radius: 50%;
+}
+
+/* ===================== RESPONSIVE STYLES ===================== */
+
+/* TABLET */
+@media screen and (max-width: 1024px) {
+  .pageContainer {
+    flex-direction: column;
+    width: 100%;
+    padding: 2rem 1.5rem;
+    gap: 2rem;
+  }
+
+  .outerBox {
+    max-width: 100%;
+    width: 100%;
+    padding: 2rem;
+  }
+
+  .innerBox {
+    width: 100%;
+    height: auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 16px;
+  }
+
+  .rightSection {
+    display: none;
+  }
+
+  .customCalendar {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  /* ✅ Ensure only one calendar is visible */
+  .customCalendar .react-datepicker__month-container:nth-child(n+2) {
+    display: none !important;
+  }
+}
+
+/* SMALL TABLET */
+@media screen and (max-width: 768px) {
+  .pageContainer {
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+
+  .outerBox {
+    padding: 1.5rem;
+  }
+
+  .innerBox {
+    width: 100%;
+    height: auto;
+    justify-items:center;
+  }
+
+  .heading {
+    font-size: 1.1rem;
+  }
+
+  .subtext {
+    font-size: 0.85rem;
+  }
+
+  .customCalendar {
+    gap: 1rem;
+  }
+
+  .customCalendar .react-datepicker__month-container:nth-child(n+2) {
+    display: none !important;
+  }
+
+  .react-datepicker__day,
+  .react-datepicker__day-name {
+    font-size: 0.75rem;
+    width: 2rem;
+    height: 2rem;
+    line-height: 2rem;
+  }
+
+  .customCalendar :global(.react-datepicker__current-month) {
+    font-size: 0.9rem;
+  }
+}
+
+/* MOBILE */
+@media screen and (max-width: 600px) {
+  .pageContainer {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .outerBox {
+    padding: 1rem;
+  }
+
+  .innerBox {
+    padding-bottom: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+  }
+
+  .headingBox {
+    min-height: 70px;
+    padding: 1rem ;
+    border-radius: 12px 12px 0 0;
+    justify-content: center;
+  }
+
+  .heading {
+    font-size: 1rem;
+  }
+
+  .subtext {
+    font-size: 0.8rem;
+  }
+
+  .datepickerWrapper {
+    padding: 0;
+  }
+
+  .customCalendar {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  /* ✅ One calendar only */
+  .customCalendar .react-datepicker__month-container:nth-child(n+2) {
+    display: none !important;
+  }
+
+  .react-datepicker__day,
+  .react-datepicker__day-name {
+    font-size: 0.7rem;
+    width: 1.8rem;
+    height: 1.8rem;
+    line-height: 1.8rem;
+  }
+
+  .helpLink {
+    font-size: 0.8rem;
+  }
+}
+
+/* SMALL MOBILE */
+@media screen and (max-width: 400px) {
+  .pageContainer {
+    padding: 1rem;
+  }
+
+  .outerBox {
+    padding: 1rem;
+    border-radius: 16px;
+  }
+
+  .innerBox {
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    padding:1vw;
+  }
+
+  .headingBox {
+    border-radius: 12px 12px 0 0;
+  }
+
+  .customCalendar .react-datepicker__month-container:nth-child(n+2) {
+    display: none !important;
+  }
+
+  .react-datepicker__day,
+  .react-datepicker__day-name {
+    font-size: 0.65rem;
+    width: 1.6rem;
+    height: 1.6rem;
+    line-height: 1.6rem;
+  }
+}
