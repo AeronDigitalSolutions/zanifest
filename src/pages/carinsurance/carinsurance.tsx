@@ -6,8 +6,10 @@ import UserDetails from "@/components/ui/UserDetails";
 import styles from "@/styles/pages/carinsurance.module.css";
 import Image from "next/image";
 import { FaArrowRight } from "react-icons/fa6";
+import {useRouter} from 'next/router';
 
 function carinsurance() {
+  const router =useRouter();
   return (
     <div>
       <UserDetails />
@@ -31,7 +33,7 @@ function carinsurance() {
               placeholder="Enter car number (eg - DL-10-CB-1234)"
               className={styles.input}
             />
-            <button className={styles.button}>
+            <button className={styles.button} onClick={()=>{router.push('./carinsurance2')}}>
               View Prices <FaArrowRight />
             </button>
           </div>

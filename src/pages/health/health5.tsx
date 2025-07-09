@@ -5,7 +5,9 @@ import Footer from "@/components/ui/Footer";
 import manicon from "@/assets/health/manicon.webp";
 import { IoIosArrowBack } from "react-icons/io";
 import UserDetails from "@/components/ui/UserDetails";
+import {useRouter} from 'next/router'
 const health5 = () => {
+  const router =useRouter();
   return (
     <div>
       <UserDetails />
@@ -46,7 +48,7 @@ const health5 = () => {
               ))}
             </div>
 
-            <button className={styles.button}>View plans ›</button>
+            <button className={styles.button} onClick={()=>{router.push('./health6')}}>View plans ›</button>
           </div>
         </div>
       </div>

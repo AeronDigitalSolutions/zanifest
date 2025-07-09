@@ -6,7 +6,7 @@ import Footer from "@/components/ui/Footer";
 import manicon from "@/assets/health/manicon.webp";
 import Image from "next/image";
 import UserDetails from "@/components/ui/UserDetails";
-
+import {useRouter} from 'next/router';
 const health3 = () => {
   const cities = [
     "Delhi",
@@ -20,8 +20,9 @@ const health3 = () => {
     "Ghaziabad",
     "Ernakulam",
   ];
-
+ const router=useRouter();
   return (
+
     <div>
       <UserDetails />
       <Navbar />
@@ -39,7 +40,7 @@ const health3 = () => {
                 <button key={idx}>{city}</button>
               ))}
             </div>
-            <button className={styles.continueBtn}>Continue</button>
+            <button className={styles.continueBtn} onClick={()=>{router.push('./health4')}}>Continue</button>
           </div>
         </div>
       </div>

@@ -5,7 +5,9 @@ import { IoIosArrowBack } from "react-icons/io";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import UserDetails from "@/components/ui/UserDetails";
+import {useRouter} from 'next/router';
 const health4 = () => {
+  const router =useRouter();
   return (
             <div>
                      <UserDetails />
@@ -44,7 +46,7 @@ const health4 = () => {
             />
           </div>
 
-          <button className={styles.continueBtn}>Continue</button>
+          <button className={styles.continueBtn} onClick={()=>{router.push('./health5')}}>Continue</button>
         </div>
       </div>
     </div>

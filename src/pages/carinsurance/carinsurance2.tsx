@@ -7,11 +7,12 @@ import Image from "next/image";
 import { FaArrowRight} from "react-icons/fa6";
 import { IoIosArrowBack } from "react-icons/io";
 import indiaFlag from "@/assets/pageImages/Flag_of_India.png";
-
+import {useRouter} from 'next/router';
 
                  
 
 function carinsurance2() {
+  const router =useRouter();
   return (
     <div>
       <UserDetails />
@@ -49,7 +50,7 @@ function carinsurance2() {
             />
           </div>
 
-          <button className={styles.submitButton} aria-label="View Prices">
+          <button className={styles.submitButton} onClick={()=>{router.push('./carinsurance3')}}  aria-label="View Prices">
             View Prices <FaArrowRight />
           </button>
 

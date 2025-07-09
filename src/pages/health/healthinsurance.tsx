@@ -4,7 +4,7 @@ import UserDetails from "@/components/ui/UserDetails";
 import React, { useState } from "react";
 import Image from "next/image";
 import { FaAngleDown, FaChevronRight } from "react-icons/fa6";
-
+import {useRouter} from 'next/router'
 import styles from "@/styles/pages/healthinsurance.module.css";
 
 const MEMBERLIST = [
@@ -31,6 +31,7 @@ const MEMBERLIST = [
 function healthinsurance() {
   const [selectedMan, setSelectedMan] = useState<boolean>(true);
   const [selectedMember, setSelectedMember] = useState<number>(0);
+  const router = useRouter();
   return (
     <div>
       <UserDetails />
@@ -87,7 +88,7 @@ function healthinsurance() {
         <button className={styles.moreButton}>
           more members <FaAngleDown size={10} />
         </button>
-        <button className={styles.continueButton}>
+        <button className={styles.continueButton} onClick={()=>{router.push('./health1')}}>
           Continue <FaChevronRight size={10} />
         </button>
 
