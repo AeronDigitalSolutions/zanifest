@@ -110,6 +110,7 @@
     margin-top: .5rem;
     padding: 0 16px;
     margin-bottom:1rem;
+        min-height: 26vh;
   }
 
   .title {
