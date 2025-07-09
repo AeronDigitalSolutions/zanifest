@@ -10,14 +10,15 @@
 
 .detailsSection {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   width: 100%;
+  gap: 3rem;
 }
 
 .detailItem {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: .5rem;
   color: #fa621a;
   font-size: 1rem;
 }
@@ -26,6 +27,7 @@
   all: unset;
   color: white;
   font-size: 16px;
+ 
 }
 
 .line {
@@ -33,6 +35,7 @@
   border-style: solid;
   border-color: grey;
   width: 0;
+  
 }
 
 .logosCont {

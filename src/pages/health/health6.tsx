@@ -115,7 +115,7 @@ const health6 = () => {
                   </div>
                   <p className={styles.hospitals}>
                     <FaBriefcaseMedical className={styles.medicalIcon} />
-                    {plan.hospitals} Cashless hospitals. <span>View list ›</span>
+                    {plan.hospitals} Cashless hospitals. <span className={styles.viewList}>View list ›</span>
                   </p>
                   <ul className={styles.features}>
                     {plan.features.map((feature, idx) => (
