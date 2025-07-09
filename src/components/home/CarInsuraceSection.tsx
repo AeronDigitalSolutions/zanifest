@@ -1,12 +1,12 @@
 import React from "react";
 import Image from "next/image";
-
 import { FaArrowRight } from "react-icons/fa6";
-
 import styles from "@/styles/components/home/CarInsuranceSection.module.css";
+import {useRouter} from 'next/router';
+
 
 const INSURANCELIST = [
-  { name: "Family", image: require("@/assets/home/car/1.png") },
+  { name: "Family", image: require("@/assets/home/car/1.png"), onClick: handleFamily},
   { name: "Critical Illness", image: require("@/assets/home/car/2.png") },
   {name: "Personal Accident", image: require("@/assets/home/car/3.png")},
   { name: "Car", image: require("@/assets/home/car/4.png") },
@@ -17,8 +17,12 @@ const INSURANCELIST = [
   { name: "Home", image: require("@/assets/home/car/9.png") },
   { name: "Home Loan", image: require("@/assets/home/car/10.png") },
 ];
-
 function CarInsuraceSection() {
+  const router=useRouter();
+  
+const handleFamily=()=>{
+  router.push('./healthinsurance');
+}
   return (
     <div className={styles.cont}>
       <div className={styles.head}>

@@ -25,9 +25,9 @@ const CarInsurance5 = () => {
               </p>
 
               <div className={styles.options}>
-                <button className={styles.optionButton}>Yes</button>
-                <button className={styles.optionButton}>No</button>
-                <button className={styles.optionButton}>Not sure</button>
+                <button className={styles.optionButton} onClick={()=>{router.push('./carinsurance6')}}>Yes</button>
+                <button className={styles.optionButton} onClick={()=>{router.push('./carinsurance6')}}>No</button>
+                <button className={styles.optionButton}onClick={()=>{router.push('./carinsurance6')}}>Not sure</button>
               </div>
             </div>
           </div>

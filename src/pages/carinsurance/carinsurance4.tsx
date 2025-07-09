@@ -44,7 +44,7 @@ const CarInsurance4 = () => {
                 <p className={styles.subtext}>This is the policy you bought last year</p>
               </div>
               
-              <div className={styles.datepickerWrapper}>
+              <div className={styles.datepickerWrapper}     onClick={()=>{router.push('./carinsurance5')}}>
                 <DatePicker
                   selected={selectedDate}
                   onChange={(date) => setSelectedDate(date)}

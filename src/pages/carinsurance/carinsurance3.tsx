@@ -137,7 +137,7 @@ const CarInsurance3 = () => {
                   </div>
                 </div>
                 <div className={styles.actions}>
-                  <div className={styles.price} onClick={()=>{router.push('/carinsurance5')}}>₹2,520 →</div>
+                  <div className={styles.price} onClick={()=>{router.push('./carinsurance4')}}>₹2,520 →</div>
                 </div>
               </div>
               <div className={styles.inspectionNote}>
