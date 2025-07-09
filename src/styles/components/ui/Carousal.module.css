@@ -27,7 +27,10 @@
   padding: 30px 10px;
   cursor: pointer;
   z-index: 2;
+  display:none;
 }
+
+
 
 .navButton:hover {
   background-color: rgba(246, 246, 246, 0.4);

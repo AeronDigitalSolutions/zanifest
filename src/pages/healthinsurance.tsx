@@ -9,7 +9,7 @@ import styles from "@/styles/pages/healthinsurance.module.css";
 
 const MEMBERLIST = [
   { id: 1, name: "Self", image: require("@/assets/pageImages/health/1.webp") },
-  { id: 2, name: "Wife", image: require("@/assets/pageImages/health/2.webp") },
+  { id: 2, name: "Spouse", image: require("@/assets/pageImages/health/2.webp") },
   { id: 3, name: "Son", image: require("@/assets/pageImages/health/3.webp") },
   {
     id: 4,
