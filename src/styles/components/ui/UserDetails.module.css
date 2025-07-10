@@ -12,7 +12,7 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  gap: 3rem;
+  gap: 1rem;
 }
 
 .detailItem {
@@ -42,12 +42,17 @@
   width: 100%;
   margin-left: 20rem;
   display: flex;
+
   justify-content: center;
 
   gap: 1rem;
   /* color: #1c75bb; */
   color: white;
   font-size: 1.2rem;
+}
+.logosCont a{
+  color: #ffffff;
+  text-decoration: none;
 }
 
 @media screen and (max-width: 1000px) {

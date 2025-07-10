@@ -280,6 +280,7 @@
   .pageContainer {
     padding: 1rem;
     gap: 1rem;
+    width: min-content;
   }
 
   .outerBox {

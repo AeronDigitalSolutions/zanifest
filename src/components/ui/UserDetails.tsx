@@ -27,10 +27,18 @@ function UserDetails() {
         </div> */}
       </div>
       <div className={styles.logosCont}>
-        <FaInstagram />
-        <FaTwitter />
-        <FiFacebook />
-        <FiLinkedin />
+        <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+        <FaInstagram className={styles.socialIcon}  />
+      </a>
+      <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
+        <FaTwitter  />
+      </a>
+      <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+        <FiFacebook  />
+      </a>
+      <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
+        <FiLinkedin  />
+      </a>
       </div>
     </div>
   );
