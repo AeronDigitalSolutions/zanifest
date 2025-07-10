@@ -15,7 +15,7 @@ const health4 = () => {
            <div className={styles.wrapper}>
       <div className={styles.inner}>
         <div className={styles.imageSection}>
-          <button className={styles.backButton}>
+          <button className={styles.backButton} onClick={() => router.push('./health3')}>
             <IoIosArrowBack size={20} />
           </button>
           <div className={styles.avatar}>

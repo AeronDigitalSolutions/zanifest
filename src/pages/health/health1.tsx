@@ -35,7 +35,7 @@ const Health1 = () => {
           </div>
           <button className={styles.continueBtn} onClick={() => router.push('./health3')}>Continue ›</button>
         </div>
-        <button className={styles.backBtn}>
+        <button className={styles.backBtn} onClick={() => router.push('./healthinsurance')}>
           <IoIosArrowBack className={styles.arrowBack} />
         </button>
       </div>
