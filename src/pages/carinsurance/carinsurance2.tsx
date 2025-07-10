@@ -9,10 +9,13 @@ import { IoIosArrowBack } from "react-icons/io";
 import indiaFlag from "@/assets/pageImages/Flag_of_India.png";
 import {useRouter} from 'next/router';
 
-                 
 
 function carinsurance2() {
   const router =useRouter();
+   React.useEffect(() => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, []);
+
   return (
     <div>
       <UserDetails />

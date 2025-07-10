@@ -5,31 +5,41 @@
   padding: 2rem 4rem;
   gap: 2rem;
   font-family: 'Inter', sans-serif;
+  height: 115vh;
 }
 
+
+
+/* ✅ Make the LEFT section sticky */
 .leftSection {
   flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: sticky;
+  top: 6rem; /* Adjust for fixed navbar/UserDetails height */
+  align-self: flex-start;
+  height: fit-content;
+  z-index: 1;
 }
 
+/* ✅ The image wrapper stays normal */
 .imageWrapper {
-  max-width: 400px;
+  max-width: 500px;
   width: 100%;
 }
 
+/* ✅ Keep image styling as-is */
 .image {
   max-width: 100%;
   height: auto;
+  margin-top:5rem;
+  margin-left:2rem;
   object-fit: contain;
-  transform: scaleX(-1); 
-  margin-top:10rem;
+  transform: scaleX(-1);
 }
 
 .rightSection {
   flex: 1;
   position: relative;
+  height: 120vh; /* Ensure full viewport height */
 }
 
 .backButton {
@@ -71,11 +81,13 @@
 }
 
 /* Tablet */
+/* Tablet */
 @media screen and (max-width: 1024px) {
   .container {
     flex-direction: column;
     padding: 2rem;
     align-items: center;
+    height:auto;
   }
 
   .backButton {
@@ -85,28 +97,34 @@
 
   .rightSection {
     width: 100%;
+    height:auto;
   }
 
   .yearGrid {
     grid-template-columns: repeat(3, 1fr);
   }
+
+  .imageWrapper {
+    display: none;
+  }
 }
 
 /* Mobile */
 @media screen and (max-width: 640px) {
+  .container {
+    padding: 1rem;
+    height: auto;
+  }
+
   .yearGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .container {
-    padding: 1rem;
+  .question {
+    text-align: center;
   }
 
   .imageWrapper {
-    max-width: 300px;
-  }
-
-  .question {
-    text-align: center;
+    display: none;
   }
 }

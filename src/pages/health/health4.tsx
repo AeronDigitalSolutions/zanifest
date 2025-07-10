@@ -6,8 +6,12 @@ import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import UserDetails from "@/components/ui/UserDetails";
 import {useRouter} from 'next/router';
+import { useEffect } from "react";
 const health4 = () => {
   const router =useRouter();
+useEffect(() => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, []);
   return (
             <div>
                      <UserDetails />

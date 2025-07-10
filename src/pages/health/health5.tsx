@@ -6,8 +6,12 @@ import manicon from "@/assets/health/manicon.webp";
 import { IoIosArrowBack } from "react-icons/io";
 import UserDetails from "@/components/ui/UserDetails";
 import {useRouter} from 'next/router'
+import { useEffect } from "react";
 const health5 = () => {
   const router =useRouter();
+useEffect(() => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, []);
   return (
     <div>
       <UserDetails />

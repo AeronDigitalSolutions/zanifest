@@ -10,6 +10,9 @@ import {useRouter} from 'next/router';
 
 function carinsurance() {
   const router =useRouter();
+React.useEffect(() => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, []);
   return (
     <div>
       <UserDetails />

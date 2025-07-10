@@ -7,6 +7,7 @@ import { FaFilter, FaPlus, FaVideo, FaTrophy, FaCircle, FaBars, FaTimes } from "
 import { RiArrowRightWideLine } from "react-icons/ri";
 import UserDetails from "@/components/ui/UserDetails";
 import {useRouter} from 'next/router';
+
 const CarInsurance3 = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -19,6 +20,9 @@ const CarInsurance3 = () => {
     checkViewport();
     window.addEventListener("resize", checkViewport);
     return () => window.removeEventListener("resize", checkViewport);
+  }, []);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   const toggleSidebar = () => setSidebarOpen((prev) => !prev);

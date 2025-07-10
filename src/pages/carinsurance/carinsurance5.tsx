@@ -6,8 +6,12 @@ import styles from "@/styles/pages/carinsurance5.module.css";
 import carImage from "@/assets/pageImages/blackcar.png";
 import UserDetails from "@/components/ui/UserDetails";
 import {useRouter} from 'next/router';
+
 const CarInsurance5 = () => {
     const router =useRouter();
+React.useEffect(() => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, []);
   return (
     <div>
              <UserDetails />

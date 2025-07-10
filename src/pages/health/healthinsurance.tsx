@@ -6,7 +6,7 @@ import Image from "next/image";
 import { FaAngleDown, FaChevronRight } from "react-icons/fa6";
 import {useRouter} from 'next/router'
 import styles from "@/styles/pages/healthinsurance.module.css";
-
+import { useEffect } from "react";
 const MEMBERLIST = [
   { id: 1, name: "Self", image: require("@/assets/pageImages/health/1.webp") },
   { id: 2, name: "Spouse", image: require("@/assets/pageImages/health/2.webp") },
@@ -32,6 +32,9 @@ function healthinsurance() {
   const [selectedMan, setSelectedMan] = useState<boolean>(true);
   const [selectedMember, setSelectedMember] = useState<number>(0);
   const router = useRouter();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
   return (
     <div>
       <UserDetails />

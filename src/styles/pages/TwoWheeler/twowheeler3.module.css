@@ -14,6 +14,7 @@
 .left {
   flex: 1;
   max-width: 600px;
+  margin-left:5rem;
 }
 
 .backButton {
@@ -30,14 +31,17 @@
 }
 
 .searchInput {
-  width: 100%;
+  width: 90%;
   padding: 0.8rem 1rem;
   border: 1px solid #ccc;
   border-radius: 6px;
   margin-bottom: 1.5rem;
   font-size: 1rem;
 }
-
+.makeIcon{
+  width:100px;
+  height:20px;
+}
 .popularTitle {
   font-weight: 500;
   margin-bottom: 1rem;
@@ -57,6 +61,8 @@
   text-align: center;
   font-weight: 500;
   cursor: pointer;
+  align-items: center;
+  justify-items:center;
   transition: box-shadow 0.2s ease;
 }
 
@@ -72,36 +78,47 @@
 }
 
 .right {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+flex: 1;
+  position: sticky;
+  top: 6rem; /* Adjust for fixed navbar/UserDetails height */
+  align-self: flex-start;
+  height: fit-content;
+  z-index: 1;
+  margin-left: 3rem;
 }
 
 .scooterImageWrapper {
-  position: relative;
+  max-width: 500px;
   width: 100%;
-  max-width: 350px;
 }
 
 .scooterImage {
-  width: 100%;
+ max-width: 100%;
   height: auto;
+  margin-top:7rem;
+  margin-left:10rem;
+  object-fit: contain;
+  
 }
+
 
 /* Tablet */
 @media (max-width: 1024px) {
   .container {
-    flex-direction: column-reverse;
+    flex-direction: column;
     align-items: center;
+    width: 89%;
   }
 
   .right {
-    margin-bottom: 2rem;
+    display: none;
   }
 
   .grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+  .backButton{
+    display:none;
   }
 }
 
@@ -110,7 +127,11 @@
   .wrapper {
     padding: 1rem;
   }
-
+.container{
+  flex-direction: column;
+        align-items: center;
+        width: 71%;
+}
   .grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -118,13 +139,21 @@
   .makeCard {
     padding: 0.6rem;
     font-size: 0.9rem;
+    width: auto;
   }
 
   .searchInput {
     padding: 0.6rem 0.9rem;
   }
 
- .backButton h3 {
+  .backButton h3 {
     font-size: 1.3rem;
+  }
+
+  .backButton{
+    display:none;
+  }
+  .right {
+    display: none;
   }
 }

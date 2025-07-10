@@ -29,7 +29,7 @@ const INSURANCELIST = [
   {
     name: "Two Wheeler",
     image: require("@/assets/home/car/5.png"),
-    link: "/insurance/two-wheeler",
+    link: "./TwoWheeler/bikeinsurance",
   },
   {
     name: "Pay As you Drive",

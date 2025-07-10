@@ -10,7 +10,9 @@ import { IoIosArrowBack } from "react-icons/io";
 
 const Health1 = () => {
     const router = useRouter();
-
+React.useEffect(() => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, []);
   //    const handleClick = () => {
   //   router.push('./health3');
   // };

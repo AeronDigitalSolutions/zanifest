@@ -5,15 +5,27 @@ import Footer from "@/components/ui/Footer";
 import Navbar from "@/components/ui/Navbar";
 import UserDetails from "@/components/ui/UserDetails";
 import { FaArrowLeft } from 'react-icons/fa';
-
+import {useRouter} from 'next/router';
 
 const makes = [
-  'Honda', 'Bajaj', 'TVS', 'Yamaha',
-  'Hero Motorcorp', 'Royal Enfield', 'Suzuki', 'Mahindra',
-  'KTM', 'LML', 'Ola', 'Harley Davidson'
+  { name: 'Honda', image: require('@/assets/home/partners/1.png') },
+  { name: 'Bajaj', image: require('@/assets/home/partners/1.png') },
+  { name: 'TVS', image: require('@/assets/home/partners/1.png') },
+  { name: 'Yamaha', image: require('@/assets/home/partners/1.png') },
+  { name: 'Hero Motorcorp', image: require('@/assets/home/partners/1.png') },
+  { name: 'Royal Enfield', image: require('@/assets/home/partners/1.png') },
+  { name: 'Suzuki', image: require('@/assets/home/partners/1.png') },
+  { name: 'Mahindra', image: require('@/assets/home/partners/1.png') },
+  { name: 'KTM', image: require('@/assets/home/partners/1.png') },
+  { name: 'LML', image: require('@/assets/home/partners/1.png') },
+  { name: 'Ola', image: require('@/assets/home/partners/1.png') },
+  { name: 'Harley Davidson', image: require('@/assets/home/partners/1.png') },
 ];
 
+
 export default function twowheeler3() {
+    const router =useRouter();
+    
   return (
     <div>
               <UserDetails />
@@ -30,12 +42,14 @@ export default function twowheeler3() {
           />
           <p className={styles.popularTitle}>Popular makes</p>
           <div className={styles.grid}>
-            {makes.map((make, index) => (
-              <div key={index} className={styles.makeCard}>
-                {make}
-              </div>
-            ))}
-          </div>
+  {makes.map((make, index) => (
+    <div key={index} className={styles.makeCard} onClick={()=>{router.push('./twowheeler4')}}>
+      <Image src={make.image} alt={make.name} className={styles.makeIcon} />
+      <span>{make.name}</span>
+    </div>
+  ))}
+</div>
+
           <p className={styles.searchText}>Can’t find your bike’s make? Click here to search</p>
         </div>
         <div className={styles.right}>
