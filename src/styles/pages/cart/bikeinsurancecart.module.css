@@ -1,3 +1,4 @@
+/* Base styles — Desktop (default) */
 .wrapper {
   background: #eaf3ff;
   padding: 24px 94px;
@@ -22,16 +23,15 @@
   background: #eaf3ff;
   border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   flex-wrap: wrap;
 }
 
 .left {
   flex: 1;
   min-width: 300px;
-      background-color: white;
-    border-radius: 10px;
-    padding: 40px;
+  background-color: white;
+  border-radius: 10px;
+  padding: 40px;
 }
 
 .right {
@@ -70,25 +70,23 @@
 }
 
 .select {
- padding: 12px 12px;
-    font-size: 15px;
-    border: 1px solid #cfd4dc;
-    border-radius: 10px;
-    width: 5rem;
+  padding: 12px 12px;
+  font-size: 15px;
+  border: 1px solid #cfd4dc;
+  border-radius: 10px;
+  width: 5rem;
 }
 
 .nameInputWrapper {
-      width: 27.5rem;
-    display: flex
-;
-    align-items: center;
-    border: 1px solid #cfd4dc;
-    border-radius: 10px;
-    height: 42px;
-    padding: 0 12px;
-    background: #fff;
-    justify-content: space-evenly;
-    
+  width: 27.5rem;
+  display: flex;
+  align-items: center;
+  border: 1px solid #cfd4dc;
+  border-radius: 10px;
+  height: 42px;
+  padding: 0 12px;
+  background: #fff;
+  justify-content: space-evenly;
 }
 
 .input {
@@ -116,7 +114,7 @@
   border-radius: 10px;
   margin-bottom: 12px;
   background: white;
-  margin-top:0.7rem;
+  margin-top: 0.7rem;
 }
 
 .multiYearBox {
@@ -257,13 +255,76 @@
   text-decoration: underline;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* Tablet (481px – 1024px) */
+@media (min-width: 481px) and (max-width: 1024px) {
+  .wrapper {
+    padding: 20px 32px;
+  }
+
   .card {
     flex-direction: column;
   }
 
+  .left {
+    padding: 24px;
+  }
+
   .right {
     width: 100%;
+    padding: 16px;
+  }
+
+  .inputField,
+  .multiYearBox,
+  .nameInputWrapper {
+    width: 96%;
+  }
+}
+
+/* Mobile (≤480px) */
+/* Mobile (≤480px) */
+@media (max-width: 480px) {
+  .wrapper {
+    padding: 16px;
+  }
+
+  .card {
+    flex-direction: column;
+    padding: 16px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .left,
+  .right {
+    width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+
+  .inputField,
+  .multiYearBox,
+  .nameInputWrapper {
+width: 90%;
+  max-width: 420px;
+  }
+
+  .nameInputWrapper {
+    flex-direction: row;
+    padding: 0 12px;
+  }
+
+  .payBtn {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .select {
+    width: 4rem;
+  }
+
+  .back {
+    font-size: 14px;
   }
 }
