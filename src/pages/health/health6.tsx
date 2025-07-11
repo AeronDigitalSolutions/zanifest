@@ -6,7 +6,7 @@ import { CiFilter } from "react-icons/ci";
 import Image from "next/image";
 import manicon from "@/assets/liclogo.png";
 import UserDetails from "@/components/ui/UserDetails";
-
+import {useRouter} from 'next/router'
 const plans = [
   {
     id: 1,
@@ -66,6 +66,7 @@ const plans = [
 ];
 
 const health6 = () => {
+    const router =useRouter();
   return (
     <div>
       <UserDetails />
@@ -147,7 +148,7 @@ const health6 = () => {
                     </div>
                   </div>
              
-                  <button className={styles.customize}>Customize plan ›</button>
+                  <button className={styles.customize} onClick={()=>{router.push('/cart/healthinsurancecart')}}>Customize plan ›</button>
                   <label className={styles.compare}>
                     <input type="checkbox" /> Add to compare
                   </label>

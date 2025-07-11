@@ -9,9 +9,7 @@ import {useRouter} from 'next/router';
 
 const CarInsurance5 = () => {
     const router =useRouter();
-React.useEffect(() => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}, []);
+
   return (
     <div>
              <UserDetails />
@@ -29,9 +27,9 @@ React.useEffect(() => {
               </p>
 
               <div className={styles.options}>
-                <button className={styles.optionButton} >Yes</button>
-                <button className={styles.optionButton} >No</button>
-                <button className={styles.optionButton}>Not sure</button>
+                <button className={styles.optionButton} onClick={()=>{router.push('/cart/carinsurancecart')}} >Yes</button>
+                <button className={styles.optionButton} onClick={()=>{router.push('/cart/carinsurancecart')}}>No</button>
+                <button className={styles.optionButton} onClick={()=>{router.push('/cart/carinsurancecart')}}>Not sure</button>
               </div>
             </div>
           </div>

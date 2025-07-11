@@ -12,7 +12,7 @@ import { RiEBikeLine } from "react-icons/ri";
 import { VscSettings } from "react-icons/vsc";
 import { LuTicketsPlane, LuArrowDownUp } from "react-icons/lu";
 import { IoMdMenu, IoMdClose } from "react-icons/io"; // icons for toggle
-
+import {useRouter} from 'next/router'
 const plans = [
   {
     id: 1,
@@ -56,7 +56,7 @@ const twowheeler5 = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
+    const router =useRouter();
   return (
     <div>
       <UserDetails />
@@ -130,7 +130,7 @@ const twowheeler5 = () => {
                     <p className={styles.idvLabel}>IDV</p>
                     <p className={styles.idvValue}>{plan.idv}</p>
                   </div>
-                  <button className={styles.buyBtn}>
+                  <button className={styles.buyBtn} onClick={()=>{router.push('/cart/bikeinsurancecart')}}>
                     Buy now <br /> <span>{plan.price}</span>
                     <MdOutlineKeyboardArrowRight />
                   </button>
