@@ -1,5 +1,5 @@
 import React from "react";
-
+import {useRouter} from 'next/router';
 import styles from "@/styles/pages/bikeinsurance.module.css";
 import UserDetails from "@/components/ui/UserDetails";
 import Navbar from "@/components/ui/Navbar";
@@ -13,6 +13,10 @@ import {
 import { FaArrowRight } from "react-icons/fa6";
 
 function bikeinsurance() {
+  const router =useRouter();
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
   return (
     <div>
       <UserDetails />
@@ -55,7 +59,7 @@ function bikeinsurance() {
                 placeholder="Your bike number ex - DL-10-CB-1234"
                 className={styles.input}
               />
-              <button className={styles.button}>Check Prices</button>
+              <button className={styles.button} onClick={()=>{router.push('./twowheeler')}}>Check Prices</button>
             </div>
             <p>
               By clicking, I agree to{" "}

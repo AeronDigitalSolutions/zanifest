@@ -6,10 +6,12 @@ import Footer from "@/components/ui/Footer";
 import { FaFilter, FaPlus, FaVideo, FaTrophy, FaCircle, FaBars, FaTimes } from "react-icons/fa";
 import { RiArrowRightWideLine } from "react-icons/ri";
 import UserDetails from "@/components/ui/UserDetails";
+import {useRouter} from 'next/router';
+
 const CarInsurance3 = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
+  const router =useRouter();
   useEffect(() => {
     const checkViewport = () => {
       setIsMobile(window.innerWidth <= 1024);
@@ -18,6 +20,9 @@ const CarInsurance3 = () => {
     checkViewport();
     window.addEventListener("resize", checkViewport);
     return () => window.removeEventListener("resize", checkViewport);
+  }, []);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   const toggleSidebar = () => setSidebarOpen((prev) => !prev);
@@ -136,7 +141,7 @@ const CarInsurance3 = () => {
                   </div>
                 </div>
                 <div className={styles.actions}>
-                  <div className={styles.price}>₹2,520 →</div>
+                  <div className={styles.price} onClick={()=>{router.push('./carinsurance4')}}>₹2,520 →</div>
                 </div>
               </div>
               <div className={styles.inspectionNote}>

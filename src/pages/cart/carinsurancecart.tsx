@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import styles from "@/styles/pages/carinsurance6.module.css";
+import styles from "@/styles/pages/cart/carinsurancecart.module.css";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import UserDetails from "@/components/ui/UserDetails";
-const carinsurance6 = () => {
+import { FaRegFileVideo } from "react-icons/fa";
+
+const carinsurancecart = () => {
   const [owner, setOwner] = useState('individual');
   const [hasCng, setHasCng] = useState('no');
   const [isChecked, setIsChecked] = useState(false);
+
 
   return (
     <div>
@@ -23,7 +26,7 @@ const carinsurance6 = () => {
       <div className={styles.main}>
         <div className={styles.left}>
           <div className={styles.card}>
-            <h4 className={styles.sectionTitle}>Confirm & Pay</h4>
+             <h4 className={styles.sectionTitle}>Confirm & Pay</h4>
             <div className={styles.optionGroup}>
               <p>Car is owned by</p>
               <label>
@@ -43,7 +46,8 @@ const carinsurance6 = () => {
                 An Individual
               </label>
               <p className={styles.note}>
-                Car video inspection required. Details will be shared after payment.
+                <FaRegFileVideo />
+Car video inspection required. Details will be shared after payment.
               </p>
             </div>
 
@@ -68,7 +72,7 @@ const carinsurance6 = () => {
             </div>
           </div>
 
-          <div className={styles.card}>
+          <div className={styles.card1}>
             <p className={styles.carTitle}>
               SKODA SLAVIA Style Matte 1.0 TSI AT (999cc)
             </p>
@@ -133,4 +137,4 @@ const carinsurance6 = () => {
   );
 };
 
-export default carinsurance6;
+export default carinsurancecart;

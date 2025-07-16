@@ -7,7 +7,10 @@
   padding: 10px 0;
   z-index: 3;
   background-color: white;
+   position: sticky;
+  top: 0;
 }
+
 
 .totalLine {
   border-style: solid;
@@ -122,16 +125,14 @@
   position: fixed;
   translate: 0rem 1.5rem;
   background-color: white;
-  border-color: #a1a1a1;
-  border-style: solid;
+  border-color: #101010;
+  border:1px solid;
   padding: 8px 0px;
   font-size: 1rem;
   color: #494949;
   z-index: 4;
   border-radius: 10px;
-
   gap: 0.4rem;
-
   animation: dropdownAnimation 0.3s ease-in;
 }
 
@@ -162,7 +163,7 @@
   color: white;
 
   background-color: #fa621a;
-  padding: 8px 32px;
+  padding: 10px 32px;
   font-size: 20px;
   transition: all 0.4s;
 }

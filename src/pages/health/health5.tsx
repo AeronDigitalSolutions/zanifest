@@ -5,7 +5,13 @@ import Footer from "@/components/ui/Footer";
 import manicon from "@/assets/health/manicon.webp";
 import { IoIosArrowBack } from "react-icons/io";
 import UserDetails from "@/components/ui/UserDetails";
+import {useRouter} from 'next/router'
+import { useEffect } from "react";
 const health5 = () => {
+  const router =useRouter();
+useEffect(() => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, []);
   return (
     <div>
       <UserDetails />
@@ -13,7 +19,7 @@ const health5 = () => {
       <div className={styles.wrapper}>
         <div className={styles.container}>
           <div className={styles.avatarSection}>
-            <button className={styles.backButton}>
+            <button className={styles.backButton}onClick={() => router.push('./health4')}>
               <IoIosArrowBack size={22} />
             </button>
             <div className={styles.avatar}>
@@ -46,7 +52,7 @@ const health5 = () => {
               ))}
             </div>
 
-            <button className={styles.button}>View plans ›</button>
+            <button className={styles.button} onClick={()=>{router.push('./health6')}}>View plans ›</button>
           </div>
         </div>
       </div>

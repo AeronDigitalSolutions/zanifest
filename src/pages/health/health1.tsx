@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from 'next/router';
 import styles from "@/styles/pages/health/health1.module.css";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
@@ -8,6 +9,14 @@ import UserDetails from "@/components/ui/UserDetails";
 import { IoIosArrowBack } from "react-icons/io";
 
 const Health1 = () => {
+    const router = useRouter();
+React.useEffect(() => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, []);
+  //    const handleClick = () => {
+  //   router.push('./health3');
+  // };
+
   return (
     <div>
              <UserDetails />
@@ -26,9 +35,9 @@ const Health1 = () => {
               <option value="46+">46+</option>
             </select>
           </div>
-          <button className={styles.continueBtn}>Continue ›</button>
+          <button className={styles.continueBtn} onClick={() => router.push('./health3')}>Continue ›</button>
         </div>
-        <button className={styles.backBtn}>
+        <button className={styles.backBtn} onClick={() => router.push('./healthinsurance')}>
           <IoIosArrowBack className={styles.arrowBack} />
         </button>
       </div>

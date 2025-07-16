@@ -5,7 +5,11 @@ import Footer from "@/components/ui/Footer";
 import styles from "@/styles/pages/carinsurance5.module.css";
 import carImage from "@/assets/pageImages/blackcar.png";
 import UserDetails from "@/components/ui/UserDetails";
+import {useRouter} from 'next/router';
+
 const CarInsurance5 = () => {
+    const router =useRouter();
+
   return (
     <div>
              <UserDetails />
@@ -23,9 +27,9 @@ const CarInsurance5 = () => {
               </p>
 
               <div className={styles.options}>
-                <button className={styles.optionButton}>Yes</button>
-                <button className={styles.optionButton}>No</button>
-                <button className={styles.optionButton}>Not sure</button>
+                <button className={styles.optionButton} onClick={()=>{router.push('/cart/carinsurancecart')}} >Yes</button>
+                <button className={styles.optionButton} onClick={()=>{router.push('/cart/carinsurancecart')}}>No</button>
+                <button className={styles.optionButton} onClick={()=>{router.push('/cart/carinsurancecart')}}>Not sure</button>
               </div>
             </div>
           </div>

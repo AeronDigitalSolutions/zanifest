@@ -37,7 +37,7 @@
   background-color: #fa4e1b;
   border-radius: 20px;
   padding: 3rem;
-  max-width: 42vw;
+  max-width: 48vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -280,10 +280,12 @@
   .pageContainer {
     padding: 1rem;
     gap: 1rem;
+    width: min-content;
   }
 
   .outerBox {
     padding: 1rem;
+    
   }
 
   .innerBox {

@@ -4,6 +4,8 @@
   width: 100%;
   /* height: 600px; */
   margin: 0;
+    position: relative; /* ✅ Add this line */
+
   /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); */
 }
 
@@ -20,15 +22,18 @@
 }
 
 .navButton {
-  position: absolute;
+  position: absolute; /* ✅ stays inside .carousel */
+  top: 50%;
+  transform: translateY(-50%);
   background-color: rgb(255, 255, 255);
   color: rgb(0, 0, 0);
   border: none;
   padding: 30px 10px;
   cursor: pointer;
   z-index: 2;
-  display:none;
 }
+
+
 
 
 
