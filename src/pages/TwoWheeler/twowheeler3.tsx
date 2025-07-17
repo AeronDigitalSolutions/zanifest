@@ -1,4 +1,4 @@
-import styles from "@/styles/pages/twowheeler/twowheeler3.module.css";
+import styles from "@/styles/pages/TwoWheeler/twowheeler3.module.css";
 import Image from "next/image";
 import scooterImg from "@/assets/motorcycle.png"; // rename your uploaded image to scooter.png and place it in assets folder
 import Footer from "@/components/ui/Footer";

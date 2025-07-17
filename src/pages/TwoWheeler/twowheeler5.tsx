@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styles from "@/styles/pages/twowheeler/twowheeler5.module.css";
+import styles from "@/styles/pages/TwoWheeler/twowheeler5.module.css";
 import Image from "next/image";
 import bajaj from "@/assets/liclogo.png";
 import tata from "@/assets/liclogo.png";
