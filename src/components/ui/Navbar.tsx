@@ -250,9 +250,16 @@ function Navbar() {
             router.push("/login");
           }}
         >
+          <div className={styles.signupButton}
+            onClick={() => {
+            router.push("/signup");
+            }}>
+               
+          
           <p className={styles.loginText}>
             Get A Quote <FaPaperPlane />
           </p>
+        </div>
         </div>
       </div>
     </div>
