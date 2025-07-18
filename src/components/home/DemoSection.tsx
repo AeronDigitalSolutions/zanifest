@@ -35,7 +35,7 @@ function DemoSection() {
     <div className={styles.cont}>
       <div className={styles.head}>
         <div className={styles.heading}>
-          Why is <div style={{ color: "#fa621a" }}>Demo</div> India's go-to for
+          Why is <div style={{ color: "#fa621a" }}>ZENIFEST</div> India's go-to for
           insurance?
         </div>
         <div className={styles.subHeading}>

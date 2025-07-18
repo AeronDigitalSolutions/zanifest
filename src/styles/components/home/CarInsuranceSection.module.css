@@ -28,7 +28,7 @@
 .item {
   /* display: flex; */
   border-radius: 22px;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  box-shadow: rgba(6, 4, 6, 0.2) 0px 7px 10px 0px;
   transition: all 0.3s;
   border-style: solid;
   border-color: white;
@@ -86,7 +86,7 @@
   display: grid;
   place-items: center;
   width: 100%;
-  padding: 50px 0px;
+  padding: 28px 0px;
 }
 
 .button {
@@ -179,7 +179,7 @@
     font-size: 6px;
   }
   .bottom {
-    font-size: 10px;
+    font-size: 14px;
 
     display: flex;
     flex-wrap: wrap;

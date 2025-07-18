@@ -36,7 +36,7 @@
   padding: 20px;
   display: grid;
   place-items: center;
-  gap: 2rem;
+  gap: 1rem;
   cursor: pointer;
 }
 
@@ -79,6 +79,7 @@
   border-radius: 22px;
   background-color: white;
   cursor: pointer;
+      width: 100%;
 }
 
 .servicetop {
@@ -148,9 +149,27 @@
   .heading{
     font-size: 25px;
   }
-
+.servciesCont{
+      margin-top: 20px;
+}
   .serviceImage{
     border-radius: 50px;
+  }
+  .cont{
+    display: grid;
+  width: 100%;
+  place-items: center;
+  margin-top: 0px;
+  margin-bottom:10px;
+  }
+  .item{
+    padding: 0px;
+    display: grid
+;
+    place-items: center;
+    grid-gap: 2rem;
+    gap: 1rem;
+    cursor: pointer;
   }
 
   .services{

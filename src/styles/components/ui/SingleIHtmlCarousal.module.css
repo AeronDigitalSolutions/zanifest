@@ -22,7 +22,7 @@
 
 .nav {
   position: absolute;
-  top: 50%;
+  top: 35%;
   transform: translateY(-150%);
   background: rgba(187, 187, 187, 0.153);
   color: rgb(0, 0, 0);
@@ -34,11 +34,11 @@
 }
 
 .left {
-  left: 10px;
+  left: 35px;
 }
 
 .right {
-  right: 10px;
+  right: 35px;
 }
 
 .dots {

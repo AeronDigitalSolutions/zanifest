@@ -27,28 +27,36 @@
 }
 
 .list {
-  margin-top: 50px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  place-items: center;
-  width: 70%;
+  margin-top: 45px;
+    display: grid
+;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 2rem;
+    gap: 1rem;
+
+    width: 84%;
+    align-items: end;
+    justify-items: center;
+    justify-content: space-between;
 }
 
 .item {
-  display: grid;
-  grid-template-columns: 1fr 6fr;
-  place-items: center;
-  width: 60%;
-  gap: 2rem;
-  height: 100%;
-  padding-left: 20px;
-  padding-right: 20px;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  border-radius: 20px;
-  border-style: solid;
-  border-color: white;
-  transition: all 0.3s;
+      display: grid
+;
+    grid-template-columns: 1fr 6fr;
+    place-items: center;
+    width: 84%;
+    grid-gap: 2rem;
+    gap: 2rem;
+
+    height: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-shadow: 0 2px 8px 0 rgba(99, 99, 99, .2);
+    border-radius: 20px;
+    border-style: solid;
+    border-color: white;
+    transition: all .3s;
 }
 
 .item:hover {
@@ -86,21 +94,27 @@
 
 @media screen and (max-width: 900px) {
   .item {
-    padding: 20px 20px;
+    padding: 4px 20px;
     grid-template-columns: 1fr;
     place-items: center;
-    height: 80%;
+    height: 95%;
+    gap:1rem;
+  }
+  .subHeading{
+    width: 63%;
+    text-align: justify;
+    font-size: 14px;
   }
 
   .list {
     width: 90%;
-    gap: 0rem;
+    gap: 1rem;
   }
   .name {
     text-align: center;
   }
   .desc {
-    text-align: center;
+    text-align: justify;
   }
 }
 
