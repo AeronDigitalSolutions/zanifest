@@ -157,7 +157,7 @@ const nationalManagerDashboard = () => {
   );
   const totalClients = agents.reduce((sum, agent) => sum + agent.clients, 0);
   const totalDistrictManagers = 4;
-  const totalStateManagers = 2; // ✅ New data
+  const totalStateManagers = 2; 
 
   const handleFilter = () => {
     if (!startDate || !endDate) return;
