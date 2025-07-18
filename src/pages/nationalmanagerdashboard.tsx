@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import logo from "@/assets/logo.png";
+import { useRouter } from "next/router";  
 import styles from "@/styles/pages/nationalmanager.module.css";
 import {
   FiUsers,
@@ -78,34 +79,6 @@ const monthlySalesData = [
   { month: "Dec 2025", sales: 47000 },
 ];
 
-const AgentProfileView = ({ agent, onBack }) => (
-  <div className={styles.agentProfileView}>
-    <header className={styles.header}>
-      <h2>Viewing {agent.name}'s Profile</h2>
-      <button onClick={onBack} className={styles.backButton}>
-        Back
-      </button>
-    </header>
-    <main className={styles.content}>
-      <div className={styles.cardGrid3}>
-        <div className={styles.infoCard}>
-          <h3>Total Sales</h3>
-          <p className={styles.amount}>₹{agent.totalSales.toLocaleString()}</p>
-        </div>
-        <div className={styles.infoCard}>
-          <h3>Sales This Month</h3>
-          <p className={styles.amount}>
-            ₹{agent.monthlySales.toLocaleString()}
-          </p>
-        </div>
-        <div className={styles.infoCard}>
-          <h3>Number of Clients</h3>
-          <p className={styles.amount}>{agent.clients}</p>
-        </div>
-      </div>
-    </main>
-  </div>
-);
 
 const sidebarMenu = [
   {
@@ -144,6 +117,7 @@ const handleLogout = () => {
 };
 
 const nationalManagerDashboard = () => {
+    const router = useRouter();
   const [showAgentList, setShowAgentList] = useState(false);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -172,15 +146,7 @@ const nationalManagerDashboard = () => {
     setFilteredData(filtered);
   };
 
-  if (selectedAgent) {
-    return (
-      <AgentProfileView
-        agent={selectedAgent}
-        onBack={() => setSelectedAgent(null)}
-      />
-    );
-  }
-
+  
   return (
     <div className={styles.wrapper}>
       <header className={styles.header}>
@@ -255,7 +221,6 @@ const nationalManagerDashboard = () => {
                 <h3>{totalDistrictManagers}</h3>
               </div>
             </div>
-            {/* ✅ New Card for Total State Managers */}
             <div className={styles.card}>
               <FiUser className={styles.cardIcon} />
               <div>
@@ -266,7 +231,7 @@ const nationalManagerDashboard = () => {
 </div>
 
           <div className={styles.agentListToggle} onClick={() => setShowAgentList(!showAgentList)}>
-            <span>List of Agents</span>
+            <span>List of State Manager</span>
           </div>
 
           {showAgentList && (
@@ -294,9 +259,10 @@ const nationalManagerDashboard = () => {
                       <td>₹{agent.monthlySales.toLocaleString()}</td>
                       <td>{agent.clients}</td>
                       <td>
-                        <button
-                          onClick={() => setSelectedAgent(agent)}
-                          className={styles.viewProfileBtn}
+                        
+                         <button
+                          onClick={() =>router.push("/statemanagerdashboard")}
+                          className={styles.viewProfileButton}
                         >
                           View Profile
                         </button>
