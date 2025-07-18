@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import logo from "@/assets/logo.png";
+import { useRouter } from "next/router";
 import styles from "@/styles/pages/districtmanager.module.css";
 import {
   FiUsers,
@@ -18,6 +19,7 @@ import {
   FiLayers,
   FiChevronRight,
 } from "react-icons/fi";
+
 import {
   LineChart,
   Line,
@@ -78,35 +80,6 @@ const monthlySalesData = [
   { month: "Dec 2025", sales: 47000 },
 ];
 
-const AgentProfileView = ({ agent, onBack }) => (
-  <div className={styles.agentProfileView}>
-    <header className={styles.header}>
-      <h2>Viewing {agent.name}'s Profile</h2>
-      <button onClick={onBack} className={styles.backButton}>
-        Back
-      </button>
-    </header>
-    <main className={styles.content}>
-      <div className={styles.cardGrid3}>
-        <div className={styles.infoCard}>
-          <h3>Total Sales</h3>
-          <p className={styles.amount}>₹{agent.totalSales.toLocaleString()}</p>
-        </div>
-        <div className={styles.infoCard}>
-          <h3>Sales This Month</h3>
-          <p className={styles.amount}>
-            ₹{agent.monthlySales.toLocaleString()}
-          </p>
-        </div>
-        <div className={styles.infoCard}>
-          <h3>Number of Clients</h3>
-          <p className={styles.amount}>{agent.clients}</p>
-        </div>
-      </div>
-    </main>
-  </div>
-);
-
 const sidebarMenu = [
   {
     section: "Menu",
@@ -144,6 +117,7 @@ const handleLogout = () => {
 };
 
 const DistricManagerDashboard = () => {
+    const router = useRouter();
   const [showAgentList, setShowAgentList] = useState(false);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -170,14 +144,6 @@ const DistricManagerDashboard = () => {
     setFilteredData(filtered);
   };
 
-  if (selectedAgent) {
-    return (
-      <AgentProfileView
-        agent={selectedAgent}
-        onBack={() => setSelectedAgent(null)}
-      />
-    );
-  }
 
   return (
     <div className={styles.wrapper}>
@@ -292,8 +258,8 @@ const DistricManagerDashboard = () => {
                       <td>{agent.clients}</td>
                       <td>
                         <button
-                          onClick={() => setSelectedAgent(agent)}
-                          className={styles.viewProfileBtn}
+                          onClick={() =>router.push("/agentpage")}
+                          className={styles.viewProfileButton}
                         >
                           View Profile
                         </button>
