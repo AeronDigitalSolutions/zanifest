@@ -104,7 +104,9 @@
     width: 95%;
     justify-content: center;
   }
-
+.serviceItem{
+  margin: 0px 15px;
+}
   .bottom {
     width: 80%;
   }

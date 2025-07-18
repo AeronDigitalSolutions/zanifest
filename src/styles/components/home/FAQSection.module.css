@@ -36,14 +36,14 @@
 
 .list {
   display: grid;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .item {
   width: 100%;
   background-color: white;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  padding: 0px 80px;
+  padding: 0px 28px;
   border-radius: 16px;
   cursor: pointer;
   position: relative;
@@ -52,7 +52,7 @@
 .ques {
   font-size: 20px;
   justify-content: justify;
-  padding: 0 30px 0 30px;
+  padding: 0px;
 
 }
 
@@ -103,6 +103,7 @@
 
   .ans {
     font-size: 16px;
+    text-align: justify;
   }
 
   .ques {
@@ -121,8 +122,22 @@
     font-size: 25px;
   }
 
+}
+
+@media screen and (max-width: 480px) {
+  .item {
+    width: calc(100% - 0px); /* 100% minus 20px on left and right */
+    margin: 0 auto; /* center horizontally */
+    box-sizing: border-box;
+    padding: 0 20px;
+    
+    /* inner padding if needed */
+  }
+}
+
+
   /* .bottom {
     font-size: 14px;
   } */
   
-}
+

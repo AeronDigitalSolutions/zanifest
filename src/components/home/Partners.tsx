@@ -106,18 +106,23 @@ function Partners() {
         ) : (
           <div className={styles.catList}>
             {/* Dropdown Toggle */}
-            <div
-              className={styles.catItem}
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-              style={{ cursor: "pointer" }}
-            >
-              <Image
-                src={selectedCategory.image}
-                alt={selectedCategory.name}
-                className={styles.image}
-              />
-              <p className={styles.catName}>{selectedCategory.name}</p>
-            </div>
+          <div className={styles.mobileDropdownHeader}>
+  <div className={styles.catItem}>
+    <Image
+      src={selectedCategory.image}
+      alt={selectedCategory.name}
+      className={styles.image}
+    />
+    <p className={styles.catName}>{selectedCategory.name}</p>
+  </div>
+  <button
+    className={styles.dropdownBtn}
+    onClick={() => setDropdownOpen(!dropdownOpen)}
+  >
+    {dropdownOpen ? "▲" : "▼"}
+  </button>
+</div>
+
 
             {/* Dropdown Items */}
             {dropdownOpen &&

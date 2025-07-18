@@ -44,7 +44,7 @@
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   display: grid;
   place-items: center;
-  gap: 5rem;
+  gap: 1rem;
 }
 
 
@@ -226,7 +226,7 @@
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   display: grid;
   place-items: center;
-  gap: 5rem;
+  gap: 1rem;
 }
 
 .itemBottom {
@@ -262,7 +262,28 @@
     font-size: 25px;
   }
 
- 
+ .left {
+  left: 20px;
+}
 
+.right {
+  right: 20px;
+}
+.serviceItem{
+  min-width: 345px;
+    max-width: 323px;
+    margin: 4px 20px;
+    flex-shrink: 0;
+    background-color: white;
+    padding: 20px;
+    border-radius: 22px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    display: grid
+;
+    place-items: center;
+    grid-gap: 1rem;
+    gap: 1rem;
+}
   
 }
