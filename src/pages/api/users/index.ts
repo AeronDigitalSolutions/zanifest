@@ -1,9 +1,14 @@
+import { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "@/lib/dbConnect";
 import User from "@/models/User";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
 
-export default async function handler(req, res) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  // Get session to verify user authentication
   const session = await getServerSession(req, res, authOptions);
 
   if (!session) {
@@ -12,14 +17,18 @@ export default async function handler(req, res) {
 
   await dbConnect();
 
-  if (req.method === "GET") {
-    try {
-      const users = await User.find({}, "-password"); // Exclude passwords
-      res.status(200).json(users);
-    } catch (error) {
-      res.status(500).json({ message: "Something went wrong" });
-    }
-  } else {
-    res.status(405).json({ message: "Method not allowed" });
+  switch (req.method) {
+    case "GET":
+      try {
+        const users = await User.find({}, "-password"); // Exclude password field
+        return res.status(200).json(users);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+        return res.status(500).json({ message: "Internal server error" });
+      }
+
+    default:
+      res.setHeader("Allow", ["GET"]);
+      return res.status(405).json({ message: `Method ${req.method} Not Allowed` });
   }
 }
