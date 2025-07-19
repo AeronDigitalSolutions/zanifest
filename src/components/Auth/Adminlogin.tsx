@@ -18,9 +18,9 @@ export default function AdminLogin() {
     event.preventDefault();
     setLoading(true);
 
-    if (userName === "admin" && password === "admin@123") {
+    if (userName === "admin@gmail.com" && password === "admin@123") {
       setError(false);
-      router.push("/dashboard");
+      router.push("/adminpage");
     } else {
       setError(true);
     }

@@ -2,7 +2,7 @@ import React from "react";
 import { FaPhoneAlt, FaInstagram, FaTwitter } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { FaLocationDot } from "react-icons/fa6";
-
+import { signOut } from "next-auth/react";
 import { FiFacebook, FiLinkedin } from "react-icons/fi";
 
 import styles from "@/styles/components/ui/UserDetails.module.css";
@@ -20,6 +20,9 @@ function UserDetails() {
           <MdEmail />
           <h4 className={styles.detailsText}>abc@gmail.com</h4>
         </div>
+        <button onClick={() => signOut()}>
+          Logout
+        </button>
         {/* <div className={styles.line}></div>
         <div className={styles.detailItem}>
           <FaLocationDot />

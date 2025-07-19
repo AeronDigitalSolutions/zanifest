@@ -2,13 +2,15 @@ import React, { useState } from "react";
 
 import styles from "@/styles/components/ui/Navbar.module.css";
 import { useRouter } from "next/router";
-
+import { FaSignInAlt } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoMdMenu } from "react-icons/io";
 import { FaPaperPlane } from "react-icons/fa";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
+
+
 
 const DROPDOWNLIST = [
   "Family Floater Health Insurance",
@@ -180,7 +182,8 @@ function Navbar() {
             }}
           >
             <p className={styles.loginText}>
-              Get A Quote <FaPaperPlane />
+              Login/Register <FaSignInAlt className={styles.loginLogo}/>
+
             </p>
           </div>
         </div>
@@ -252,14 +255,16 @@ function Navbar() {
         >
           <div className={styles.signupButton}
             onClick={() => {
-            router.push("/signup");
+            router.push("/login");
             }}>
                
           
           <p className={styles.loginText}>
-            Get A Quote <FaPaperPlane />
+            Login/Register <FaSignInAlt className={styles.loginLogo}/>
+
           </p>
         </div>
+        
         </div>
       </div>
     </div>

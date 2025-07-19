@@ -18,21 +18,37 @@ export default function SignUp() {
 
   const router = useRouter();
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setLoading(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  const res = await fetch('/api/auth/signup', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userName, email, password }),
+  });
 
-    if (userName.trim() && email.trim() && password.length >= 6) {
-      setError(false);
-      setTimeout(() => {
-        router.push("/dashboard");
-        setLoading(false);
-      }, 1000);
-    } else {
-      setError(true);
-      setLoading(false);
-    }
-  };
+  const data = await res.json();
+  if (res.ok) {
+    alert('Signup successful');
+  } else {
+    alert(data.message);
+  }
+};
+
+  // const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   setLoading(true);
+
+  //   if (userName.trim() && email.trim() && password.length >= 6) {
+  //     setError(false);
+  //     setTimeout(() => {
+  //       router.push("/dashboard");
+  //       setLoading(false);
+  //     }, 1000);
+  //   } else {
+  //     setError(true);
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <div className={styles.cont}>

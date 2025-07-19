@@ -18,9 +18,9 @@ export default function Managerlogin() {
     event.preventDefault();
     setLoading(true);
 
-    if (userName === "admin" && password === "admin@123") {
+    if (userName === "manager@gmail.com" && password === "manager@123") {
       setError(false);
-      router.push("/dashboard");
+      router.push("/nationalmanagerdashboard");
     } else {
       setError(true);
     }
