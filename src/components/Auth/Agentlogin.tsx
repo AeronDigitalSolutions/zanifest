@@ -18,9 +18,9 @@ export default function Agentlogin() {
     event.preventDefault();
     setLoading(true);
 
-    if (userName === "admin@gmail.com" && password === "admin@123") {
+    if (userName === "agent@gmail.com" && password === "agent@123") {
       setError(false);
-      router.push("/adminpage");
+      router.push("/agentpage");
     } else {
       setError(true);
     }
