@@ -2,10 +2,11 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
-import dbConnect from "@/lib/dbConnect"; // custom DB connection helper
-import User from "@/models/User"; // your mongoose User model
+import dbConnect from "@/lib/dbConnect";
+import User from "@/models/User";
 
-export default NextAuth({
+// ✅ Extracted and exported authOptions
+export const authOptions = {
   session: {
     strategy: "jwt",
   },
@@ -19,7 +20,7 @@ export default NextAuth({
       async authorize(credentials) {
         await dbConnect();
 
-        if (!credentials || !credentials.email || !credentials.password) {
+        if (!credentials?.email || !credentials?.password) {
           throw new Error("Missing credentials");
         }
 
@@ -34,7 +35,10 @@ export default NextAuth({
     }),
   ],
   pages: {
-    signIn: "/login", // redirect to your login page
+    signIn: "/login",
   },
   secret: process.env.NEXTAUTH_SECRET,
-});
+};
+
+// ✅ Use the exported config here
+export default NextAuth(authOptions);
