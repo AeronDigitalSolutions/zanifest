@@ -54,6 +54,7 @@ const [email, setEmail] = useState<string>("");
 const onSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
+  //using auth.js callback -> work is being done by [...nextauth].ts
   const res = await signIn("credentials", {
     redirect: false,
     email,
