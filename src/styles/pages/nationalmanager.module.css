@@ -116,8 +116,8 @@
 /* Card Grid */
 .cardGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 5rem;
 }
 
 .card {
@@ -214,31 +214,25 @@
 .dateFilterSection {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 1rem;
+  margin: 2rem 0;
   flex-wrap: wrap;
-  margin: 2rem auto 1rem auto;
-  max-width: 400px;
 }
 
 .dateFilterSection input {
-  padding: 8px 10px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  width: 48%;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .filterButton {
-  display: block;
-  margin: 0.5rem auto 0 auto;
-  padding: 8px 20px;
-  background-color: #2563eb;
+  padding: 6px 16px;
+  background-color: #007bff;
   color: white;
-  font-weight: 500;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 0.9rem;
 }
 .agentListToggle {
   display: flex;

@@ -130,9 +130,12 @@
 // export default AdminDashboard;
 
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import logo from "@/assets/logo.png";
+import CreateAdmin from "@/components/superadminsidebar/createadmin";
+import CreateManager from "@/components/superadminsidebar/createmanager";
+import CreateAgent from "@/components/superadminsidebar/createagent";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/pages/admindashboard.module.css";
 import {
@@ -148,6 +151,7 @@ const AdminDashboard = () => {
     console.log("Logged out");
   };
 const router = useRouter();
+const [activeSection, setActiveSection] = useState("dashboard");
   return (
     <div className={styles.wrapper}>
       {/* Header */}
@@ -172,10 +176,10 @@ const router = useRouter();
         <aside className={styles.sidebar}>
           <ul className={styles.navList}>
             <li><FiUserPlus />dashboard</li>
-            <li onClick={()=>router.push(".../createadmin")}><FiUserPlus />
-             Create Admin</li>
-            <li><FiUserPlus /> Create Manager</li>
-            <li><FiUserPlus /> Create Agent</li>
+              <li onClick={() => setActiveSection("createAdmin")}><FiUserPlus /> Create Admin</li>
+              <li onClick={() => setActiveSection("createManager")}><FiUserPlus /> Create Manager</li>
+
+            <li onClick={() => setActiveSection("createAgent")}><FiUserPlus /> Create Agent</li>
             <li><FiList /> Admin List</li>
             <li><FiList /> Manager List</li>
             <li><FiList /> Agents List</li>
@@ -185,12 +189,21 @@ const router = useRouter();
         </aside>
 
         {/* Main Content */}
-        <main className={styles.mainContent}>
-          <div className={styles.card}>Number of Admins: 5</div>
-          <div className={styles.card}>State Managers: 12</div>
-          <div className={styles.card}>District Managers: 48</div>
-          <div className={styles.card}>Agents: 105</div>
-        </main>
+       <main className={styles.mainContent}>
+  {activeSection === "dashboard" && (
+    <>
+      <div className={styles.card}>Number of Admins: 5</div>
+      <div className={styles.card}>State Managers: 12</div>
+      <div className={styles.card}>District Managers: 48</div>
+      <div className={styles.card}>Agents: 105</div>
+
+    </>
+  )}
+
+  {activeSection === "createAdmin" && <CreateAdmin />}
+  {activeSection === "createManager" && <CreateManager />}
+  {activeSection === "createAgent" && <CreateAgent />}
+</main>
       </div>
     </div>
   );
