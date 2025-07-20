@@ -116,8 +116,8 @@
 /* Card Grid */
 .cardGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 5rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
 }
 
 .card {
@@ -214,25 +214,31 @@
 .dateFilterSection {
   display: flex;
   justify-content: center;
-  align-items: center;
   gap: 1rem;
-  margin: 2rem 0;
   flex-wrap: wrap;
+  margin: 2rem auto 1rem auto;
+  max-width: 400px;
 }
 
 .dateFilterSection input {
-  padding: 6px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  width: 48%;
 }
 
 .filterButton {
-  padding: 6px 16px;
-  background-color: #007bff;
+  display: block;
+  margin: 0.5rem auto 0 auto;
+  padding: 8px 20px;
+  background-color: #2563eb;
   color: white;
+  font-weight: 500;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 0.9rem;
 }
 .agentListToggle {
   display: flex;
@@ -247,4 +253,209 @@
   font-weight: 500;
   margin-top: 10px;
   margin-bottom: 1rem;
+}
+
+.menuToggle {
+  display: none;
+  background: transparent;
+  border: none;
+  color: #374151;
+  cursor: pointer;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 1024px) {
+  .mainArea {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .content {
+    padding: 1rem;
+  }
+
+  .dashboardTitle {
+    font-size: 1.2rem;
+  }
+
+  .cardGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .infoCard {
+    padding: 1rem;
+  }
+
+  .chartContainer {
+    padding: 1rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .menuToggle {
+    display: inline-block;
+    margin-left: auto;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .sidebarMobile {
+    display: block;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 240px;
+    height: calc(100vh - 70px);
+    background-color: #fff;
+    z-index: 999;
+    overflow-y: auto;
+    border-right: 1px solid #e5e7eb;
+    animation: slideIn 0.3s ease forwards;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  .header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem;
+  }
+
+  .logoutButton {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .cardGrid {
+    grid-template-columns: repeat(2fr);
+    gap: 1rem;
+  }
+
+  .agentListToggle {
+    margin: 10px auto 1rem auto;
+    justify-content: center;
+  }
+
+  .dateFilterSection {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .filterButton {
+    display: block;
+    margin: 0.8rem auto 0 auto;
+  }
+
+  .infoCard {
+    font-size: 0.95rem;
+  }
+
+  .chartTitle {
+    font-size: 0.95rem;
+  }
+
+  .amount {
+    font-size: 1rem;
+  }
+
+  .sectionTitle {
+    font-size: 0.7rem;
+  }
+
+  .menuItem {
+    font-size: 13px;
+    padding: 0.4rem 0.5rem;
+  }
+
+  .iconLabel {
+    gap: 0.5rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .logoContainer img {
+    width: 100px;
+    height: auto;
+  }
+
+  .dashboardTitle {
+    font-size: 1rem;
+  }
+
+  .chartContainer {
+    padding: 0.8rem;
+  }
+
+  .cardGrid {
+    gap: 0.8rem;
+  }
+
+  .infoCard {
+    padding: 0.8rem 1rem;
+  }
+
+  .content {
+    padding: 1rem 1rem;
+  }
+}
+
+
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.tableWrapper::-webkit-scrollbar {
+  height: 6px;
+}
+
+.tableWrapper::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 6px;
+}
+
+.tableWrapper::-webkit-scrollbar-track {
+  background-color: #f1f5f9;
+}
+.desktopOnlyLogout {
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (max-width: 768px) {
+  .desktopOnlyLogout {
+    display: none;
+  }
+
+  .mobileOnlyLogout {
+    display: block;
+    margin-top: 1rem;
+  }
+
+  .logoContainer img {
+    width: 160px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .mobileOnlyLogout {
+    display: none;
+  }
 }

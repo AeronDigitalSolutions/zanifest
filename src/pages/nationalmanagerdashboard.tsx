@@ -1,12 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import logo from "@/assets/logo.png";
 import { useRouter } from "next/router";  
 import styles from "@/styles/pages/nationalmanager.module.css";
+
 import {
   FiUsers,
-  FiDollarSign,
   FiBarChart2,
   FiHome,
   FiCalendar,
@@ -18,7 +18,10 @@ import {
   FiPackage,
   FiLayers,
   FiChevronRight,
+  FiMenu,
+  FiX,
 } from "react-icons/fi";
+import { FaRupeeSign } from "react-icons/fa";
 import {
   LineChart,
   Line,
@@ -112,9 +115,7 @@ const sidebarMenu = [
   },
 ];
 
-const handleLogout = () => {
-  console.log("Logged out");
-};
+
 
 const nationalManagerDashboard = () => {
     const router = useRouter();
@@ -123,7 +124,11 @@ const nationalManagerDashboard = () => {
   const [endDate, setEndDate] = useState("");
   const [filteredData, setFilteredData] = useState(monthlySalesData);
   const [selectedAgent, setSelectedAgent] = useState(null);
-
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+const handleLogout = () => {
+  console.log("Logged out");
+    router.push("/managerlogin");
+};
   const totalSales = agents.reduce((sum, agent) => sum + agent.totalSales, 0);
   const monthlySales = agents.reduce(
     (sum, agent) => sum + agent.monthlySales,
@@ -132,6 +137,14 @@ const nationalManagerDashboard = () => {
   const totalClients = agents.reduce((sum, agent) => sum + agent.clients, 0);
   const totalDistrictManagers = 4;
   const totalStateManagers = 2; 
+
+  const [formattedTotalSales, setFormattedTotalSales] = useState("");
+  const [formattedMonthlySales, setFormattedMonthlySales] = useState("");
+
+  useEffect(() => {
+    setFormattedTotalSales(totalSales.toLocaleString("en-IN"));
+    setFormattedMonthlySales(monthlySales.toLocaleString("en-IN"));
+  }, [totalSales, monthlySales]);
 
   const handleFilter = () => {
     if (!startDate || !endDate) return;
@@ -151,15 +164,20 @@ const nationalManagerDashboard = () => {
     <div className={styles.wrapper}>
       <header className={styles.header}>
         <div className={styles.logoContainer}>
-          <Image src={logo} alt="Logo" width={130} height={40} className={styles.logo} />
+          <Image src={logo} alt="Logo" width={150} height={45} className={styles.logo} />
         </div>
-        <button className={styles.logoutButton} onClick={handleLogout}>
-          Logout
+        <button className={styles.menuToggle} onClick={() => setSidebarOpen(!sidebarOpen)}>
+          {sidebarOpen ? <FiX size={22} /> : <FiMenu size={22} />}
         </button>
+        <div className={styles.desktopOnlyLogout}>
+          <button className={styles.logoutButton} onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
       </header>
 
       <div className={styles.mainArea}>
-        <aside className={styles.sidebar}>
+        <aside className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarMobile : ""}`}>
           {sidebarMenu.map((section, index) => (
             <div key={index}>
               <p className={styles.sectionTitle}>{section.section}</p>
@@ -176,6 +194,11 @@ const nationalManagerDashboard = () => {
               </ul>
             </div>
           ))}
+          <div className={styles.mobileOnlyLogout}>
+            <button className={styles.logoutButton} onClick={handleLogout}>
+              Logout
+            </button>
+          </div>
         </aside>
 
         <main className={styles.content}>
@@ -183,17 +206,17 @@ const nationalManagerDashboard = () => {
 
           <div className={styles.cardGrid}>
             <div className={styles.card}>
-              <FiDollarSign className={styles.cardIcon} />
+             <FaRupeeSign className={styles.cardIcon} style={{ fontWeight: 200, fontSize: "25px" }} />
               <div>
                 <p>Total Sales</p>
-                <h3>₹{totalSales.toLocaleString("en-IN")}</h3>
+                <h3>₹{formattedTotalSales}</h3>
               </div>
             </div>
             <div className={styles.card}>
               <FiBarChart2 className={styles.cardIcon} />
               <div>
                 <p>Monthly Sales</p>
-                <h3>₹{monthlySales.toLocaleString()}</h3>
+                <h3>₹{formattedMonthlySales}</h3>
               </div>
             </div>
             <div className={styles.card}>
@@ -237,40 +260,42 @@ const nationalManagerDashboard = () => {
           {showAgentList && (
             <div className={styles.agentTable}>
               <h3 className={styles.tableTitle}>Agent List</h3>
-              <table className={styles.table}>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Location</th>
-                    <th>Total Sales</th>
-                    <th>Monthly Sales</th>
-                    <th>Clients</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {agents.map((agent) => (
-                    <tr key={agent.id}>
-                      <td>{agent.id}</td>
-                      <td>{agent.name}</td>
-                      <td>{agent.location}</td>
-                      <td>₹{agent.totalSales.toLocaleString()}</td>
-                      <td>₹{agent.monthlySales.toLocaleString()}</td>
-                      <td>{agent.clients}</td>
-                      <td>
-                        
-                         <button
-                          onClick={() =>router.push("/statemanagerdashboard")}
-                          className={styles.viewProfileButton}
-                        >
-                          View Profile
-                        </button>
-                      </td>
+              <div className={styles.tableWrapper}>
+                <table className={styles.table}>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Location</th>
+                      <th>Total Sales</th>
+                      <th>Monthly Sales</th>
+                      <th>Clients</th>
+                      <th>Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {agents.map((agent) => (
+                      <tr key={agent.id}>
+                        <td>{agent.id}</td>
+                        <td>{agent.name}</td>
+                        <td>{agent.location}</td>
+                        <td suppressHydrationWarning>₹{agent.totalSales.toLocaleString("en-IN")}</td>
+                        <td suppressHydrationWarning>₹{agent.monthlySales.toLocaleString("en-IN")}</td>
+                        <td>{agent.clients}</td>
+                        <td>
+                          
+                           <button
+                            onClick={() =>router.push("/statemanagerdashboard")}
+                            className={styles.viewProfileButton}
+                          >
+                            View Profile
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
 

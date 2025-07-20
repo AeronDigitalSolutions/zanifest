@@ -20,9 +20,9 @@ function UserDetails() {
           <MdEmail />
           <h4 className={styles.detailsText}>abc@gmail.com</h4>
         </div>
-        <button onClick={() => signOut()}>
+        {/* <button onClick={() => signOut()}>
           Logout
-        </button>
+        </button> */}
         {/* <div className={styles.line}></div>
         <div className={styles.detailItem}>
           <FaLocationDot />

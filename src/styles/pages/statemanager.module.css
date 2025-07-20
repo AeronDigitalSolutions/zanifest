@@ -245,3 +245,195 @@
   margin-top: 10px;
   margin-bottom: 1rem;
 }
+
+.menuToggle {
+  display: none;
+  background: transparent;
+  border: none;
+  color: #374151;
+  cursor: pointer;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 1024px) {
+  .mainArea {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .content {
+    padding: 1rem;
+  }
+
+  .dashboardTitle {
+    font-size: 1.2rem;
+  }
+
+  .cardGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .infoCard {
+    padding: 1rem;
+  }
+
+  .chartContainer {
+    padding: 1rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .menuToggle {
+    display: inline-block;
+    margin-left: auto;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .sidebarMobile {
+    display: block;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 240px;
+    height: calc(100vh - 70px);
+    background-color: #fff;
+    z-index: 999;
+    overflow-y: auto;
+    border-right: 1px solid #e5e7eb;
+    animation: slideIn 0.3s ease forwards;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  .header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .logoutButton {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .cardGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .infoCard {
+    font-size: 0.95rem;
+  }
+
+  .chartTitle {
+    font-size: 0.95rem;
+  }
+
+  .amount {
+    font-size: 1rem;
+  }
+
+  .sectionTitle {
+    font-size: 0.7rem;
+  }
+
+  .menuItem {
+    font-size: 13px;
+    padding: 0.4rem 0.5rem;
+  }
+
+  .iconLabel {
+    gap: 0.5rem;
+  }
+
+  .logoContainer img {
+    width: 150px;
+    height: 45px;
+    display: block;
+    margin: 0 auto;
+  }
+}
+
+.desktopOnlyLogout {
+  display: flex;
+  align-items: center;
+}
+
+.mobileOnlyLogout {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .desktopOnlyLogout {
+    display: none;
+  }
+
+  .mobileOnlyLogout {
+    display: block;
+    margin-top: 1rem;
+  }
+
+  .logoContainer img {
+    width: 160px;
+    height: 45px;
+    display: block;
+    margin: 0 auto;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .logoContainer img {
+    width: 120px;
+    height: auto;
+  }
+
+  .dashboardTitle {
+    font-size: 1rem;
+  }
+
+  .chartContainer {
+    padding: 0.8rem;
+  }
+
+  .cardGrid {
+    gap: 0.8rem;
+  }
+
+  .infoCard {
+    padding: 0.8rem 1rem;
+  }
+
+  .content {
+    padding: 1rem 1rem;
+  }
+}
+
+/* Horizontal scrolling for tables on mobile */
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.tableWrapper::-webkit-scrollbar {
+  height: 6px;
+}
+
+.tableWrapper::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 6px;
+}
+
+.tableWrapper::-webkit-scrollbar-track {
+  background-color: #f1f5f9;
+}

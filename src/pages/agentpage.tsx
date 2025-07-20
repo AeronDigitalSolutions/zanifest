@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import logo from "@/assets/logo.png";
 import styles from "@/styles/pages/agent.module.css";
@@ -14,6 +14,8 @@ import {
   FiPackage,
   FiLayers,
   FiChevronRight,
+  FiMenu,
+  FiX,
 } from "react-icons/fi";
 import { useRouter } from "next/router";
 import {
@@ -40,6 +42,8 @@ const chartData = [
 
 const Header = () => {
   const router = useRouter();
+
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const sidebarMenu = [
     {
@@ -75,6 +79,7 @@ const Header = () => {
 
   const handleLogout = () => {
     console.log("Logged out");
+    router.push("/agentlogin");
   };
 
   return (
@@ -82,17 +87,22 @@ const Header = () => {
       {/* Header */}
       <header className={styles.header}>
         <div className={styles.logoContainer}>
-          <Image src={logo} alt="Logo" width={130} height={40} className={styles.logo} />
+          <Image src={logo} alt="Logo" width={150} height={45} className={styles.logo} />
         </div>
-        <button className={styles.logoutButton} onClick={handleLogout}>
-          Logout
+        <button className={styles.menuToggle} onClick={() => setSidebarOpen(!sidebarOpen)}>
+          {sidebarOpen ? <FiX size={22} /> : <FiMenu size={22} />}
         </button>
+        <div className={styles.desktopOnlyLogout}>
+          <button className={styles.logoutButton} onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
       </header>
 
       {/* Sidebar + Content */}
       <div className={styles.mainArea}>
         {/* Sidebar */}
-        <aside className={styles.sidebar}>
+        <aside className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarMobile : ""}`}>
           {sidebarMenu.map((section, index) => (
             <div key={index}>
               <p className={styles.sectionTitle}>{section.section}</p>
@@ -109,6 +119,11 @@ const Header = () => {
               </ul>
             </div>
           ))}
+          <div className={styles.mobileOnlyLogout}>
+            <button className={styles.logoutButton} onClick={handleLogout}>
+              Logout
+            </button>
+          </div>
         </aside>
 
         {/* Main Content */}
