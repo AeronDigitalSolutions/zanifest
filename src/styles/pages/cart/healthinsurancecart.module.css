@@ -205,3 +205,34 @@ align-items: center
     width: 100%;
   }
 }
+.option {
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  padding: 1rem;
+  flex: 1;
+  cursor: pointer;
+  min-width: 140px;
+  font-size: 0.875rem;
+  background: #fff;
+  transition: all 0.3s ease;
+}
+
+.option input[type="radio"] {
+  display: none;
+}
+
+.option span {
+  font-weight: 500;
+}
+
+.selected {
+  border-color: #00b386;
+  background-color: #e6f9f3;
+}
+
+.option em {
+  display: block;
+  color: #00b386;
+  font-size: 0.75rem;
+  margin-top: 0.3rem;
+}

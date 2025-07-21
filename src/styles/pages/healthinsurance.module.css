@@ -30,6 +30,7 @@
 .selectedSwitch {
   background-color: #37b37e;
   color: white;
+      margin-right: 1rem;
 }
 
 .middle {

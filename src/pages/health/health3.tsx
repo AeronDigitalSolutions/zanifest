@@ -1,15 +1,17 @@
 import userIcon from "@/assets/selectcity/usericon.webp";
 import { FaSearch } from "react-icons/fa";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from "@/styles/pages/health/health3.module.css";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import manicon from "@/assets/health/manicon.webp";
 import Image from "next/image";
 import UserDetails from "@/components/ui/UserDetails";
-import {useRouter} from 'next/router';
+import { useRouter } from "next/router";
 
-const health3 = () => {
+const Health3 = () => {
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
+
   const cities = [
     "Delhi",
     "Bengaluru",
@@ -22,13 +24,14 @@ const health3 = () => {
     "Ghaziabad",
     "Ernakulam",
   ];
- const router=useRouter();
-useEffect(() => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}, []);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   return (
-
     <div>
       <UserDetails />
       <Navbar />
@@ -43,10 +46,25 @@ useEffect(() => {
             </div>
             <div className={styles.popularCities}>
               {cities.map((city, idx) => (
-                <button key={idx}>{city}</button>
+                <button
+                  key={idx}
+                  className={`${styles.cityButton} ${
+                    selectedCity === city ? styles.selectedCity : ""
+                  }`}
+                  onClick={() => setSelectedCity(city)}
+                >
+                  {city}
+                </button>
               ))}
             </div>
-            <button className={styles.continueBtn} onClick={()=>{router.push('./health4')}}>Continue</button>
+            <button
+              className={styles.continueBtn}
+              onClick={() => {
+                router.push("./health4");
+              }}
+            >
+              Continue
+            </button>
           </div>
         </div>
       </div>
@@ -55,4 +73,4 @@ useEffect(() => {
   );
 };
 
-export default health3;
+export default Health3;
