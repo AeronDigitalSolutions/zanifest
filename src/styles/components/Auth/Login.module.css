@@ -65,8 +65,8 @@
   width: 100%;
 }
 
-.logo {
-}
+/* .logo {
+} */
 
 .logoImage {
   width: 200px;
@@ -186,6 +186,12 @@
 
 .loginButton:active {
   transform: scale(0.9);
+}
+
+.signupLink{
+  cursor: pointer;
+  color: #1878bd;
+  text-decoration: none;
 }
 
 @keyframes leftright {

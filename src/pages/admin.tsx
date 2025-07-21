@@ -55,7 +55,6 @@ const AdminDashboard = () => {
 
       {/* Main Area */}
       <div className={styles.mainArea}>
-        {/* Sidebar */}
         <aside
           className={`${styles.sidebar} ${
             sidebarOpen ? styles.sidebarMobile : ""
@@ -74,15 +73,7 @@ const AdminDashboard = () => {
             </li>
             <p className={styles.sectionTitle}>Create</p>
 
-            <li
-              onClick={() => setActiveSection("createAdmin")}
-              className={styles.menuItem}
-            >
-              <span className={styles.iconLabel}>
-                <FiUserPlus className={styles.icon} />
-                <span className={styles.label}>Create Admin</span>
-              </span>
-            </li>
+          
             <li
               onClick={() => setActiveSection("createManager")}
               className={styles.menuItem}
@@ -103,12 +94,7 @@ const AdminDashboard = () => {
             </li>
             <p className={styles.sectionTitle}>List</p>
 
-            <li className={styles.menuItem}>
-              <span className={styles.iconLabel}>
-                <FiList className={styles.icon} />
-                <span className={styles.label}>Admin List</span>
-              </span>
-            </li>
+            
             <li className={styles.menuItem}>
               <span className={styles.iconLabel}>
                 <FiList className={styles.icon} />
@@ -152,15 +138,8 @@ const AdminDashboard = () => {
 
         {/* Main Content */}
         <main className={styles.mainContent}>
-          {/* {activeSection === "dashboard" && (
-            <>
-              <div className={styles.card}>Number of Admins: 5</div>
-              <div className={styles.card}>State Managers: 12</div>
-              <div className={styles.card}>District Managers: 48</div>
-              <div className={styles.card}>Agents: 105</div>
-            </>
-          )} */}
-          {activeSection === "dashboard" && (
+        
+             {activeSection === "dashboard" && (
             <div className={styles.dashboardCards}>
               <div className={styles.card}>
                 <FiUsers size={32} className={styles.cardIcon} />
@@ -184,7 +163,6 @@ const AdminDashboard = () => {
               </div>
             </div>
           )}
-
           {activeSection === "createAdmin" && <CreateAdmin />}
           {activeSection === "createManager" && <CreateManager />}
           {activeSection === "createAgent" && <CreateAgent />}
@@ -197,3 +175,4 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+
