@@ -5,59 +5,73 @@ import { IoIosArrowBack } from "react-icons/io";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import UserDetails from "@/components/ui/UserDetails";
-import {useRouter} from 'next/router';
-import { useEffect } from "react";
-const health4 = () => {
-  const router =useRouter();
-useEffect(() => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}, []);
+import { useRouter } from 'next/router';
+import { useEffect, useState } from "react";
+
+const Health4 = () => {
+  const router = useRouter();
+  const [mobile, setMobile] = useState("");
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  const handleMobileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const numericValue = e.target.value.replace(/\D/g, ""); // Allow only digits
+    if (numericValue.length <= 10) {
+      setMobile(numericValue);
+    }
+  };
+
   return (
-            <div>
-                     <UserDetails />
-          <Navbar />
-           <div className={styles.wrapper}>
-      <div className={styles.inner}>
-        <div className={styles.imageSection}>
-          <button className={styles.backButton} onClick={() => router.push('./health3')}>
-            <IoIosArrowBack size={20} />
-          </button>
-          <div className={styles.avatar}>
-            <Image src={manicon} alt="User Icon" width={120} height={120} />
+    <div>
+      <UserDetails />
+      <Navbar />
+      <div className={styles.wrapper}>
+        <div className={styles.inner}>
+          <div className={styles.imageSection}>
+            <button className={styles.backButton} onClick={() => router.push('./health3')}>
+              <IoIosArrowBack size={20} />
+            </button>
+            <div className={styles.avatar}>
+              <Image src={manicon} alt="User Icon" width={120} height={120} />
+            </div>
           </div>
-        </div>
-        <div className={styles.formSection}>
-          <h2 className={styles.heading}>Save your progress</h2>
-          <p className={styles.subtext}>Get to plans directly next time you visit us</p>
+          <div className={styles.formSection}>
+            <h2 className={styles.heading}>Save your progress</h2>
+            <p className={styles.subtext}>Get to plans directly next time you visit us</p>
 
-          <input
-            type="text"
-            placeholder="Your full name"
-            className={styles.input}
-          />
-
-          <div className={styles.phoneGroup}>
-            <select className={styles.select}>
-              <option>India</option>
-              <option>USA</option>
-              <option>UK</option>
-            </select>
-            <span className={styles.code}>+91</span>
             <input
-              type="tel"
-              placeholder="Enter mobile number"
-              className={styles.mobileInput}
+              type="text"
+              placeholder="Your full name"
+              className={styles.input}
             />
-          </div>
 
-          <button className={styles.continueBtn} onClick={()=>{router.push('./health5')}}>Continue</button>
+            <div className={styles.phoneGroup}>
+              <span className={styles.code}>+91</span>
+              <input
+                type="tel"
+                placeholder="Enter mobile number"
+                className={styles.mobileInput}
+                inputMode="numeric"
+                maxLength={10}
+                value={mobile}
+                onChange={handleMobileChange}
+              />
+            </div>
+
+            <button
+              className={styles.continueBtn}
+              onClick={() => router.push('./health5')}
+            >
+              Continue
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-
-          <Footer />
+      <Footer />
     </div>
   );
 };
 
-export default health4;
+export default Health4;

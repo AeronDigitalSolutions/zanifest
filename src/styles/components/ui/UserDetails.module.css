@@ -39,12 +39,9 @@
 }
 
 .logosCont {
-  width: 100%;
-  margin-left: 20rem;
+ width: 82%;
+justify-content: right;
   display: flex;
-
-  justify-content: center;
-
   gap: 1rem;
   /* color: #1c75bb; */
   color: white;

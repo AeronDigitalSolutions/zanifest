@@ -28,7 +28,6 @@
 
 .planFilter {
   margin-left: 0rem;
-
   padding: 10px 0px 40px 10px;
 }
 
@@ -43,29 +42,31 @@
 
 .cardContainer {
   width: 20%;
-  translate: 120px 0px;
-  z-index: 0;
-  height: 150px;
+  translate: none;
+  height: auto;
 }
 
 .cardContainer1 {
   width: 80%;
-  z-index: 2;
   align-content: flex-start;
   flex-direction: column;
+    height: auto;
+
+
 }
 
 .mainContainer {
   display: flex;
   justify-items: center;
   margin-top: 2rem;
-  gap: 1rem;
+  gap: 0rem;
 }
 
 .card {
   background: white;
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 3rem;
+  padding-left: 4rem;
   display: flex;
   align-content: flex-start;
   flex-direction: column;
@@ -80,12 +81,10 @@
   border-radius: 12px;
   padding: 1.5rem;
   display: flex;
-  width: 80%;
   margin-bottom: 1rem;
   gap: 1rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.06);
   flex-wrap: wrap;
-  position: relative;
 }
 
 .quickFilters {

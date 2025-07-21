@@ -70,7 +70,7 @@
   color: #555;
 }
 
-/* City list buttons */
+/* City list buttons container */
 .popularCities {
   display: flex;
   flex-wrap: wrap;
@@ -79,7 +79,8 @@
   padding-bottom: 0;
 }
 
-.popularCities button {
+/* City button base style */
+.cityButton {
   background-color: #f2f2f2;
   border: none;
   padding: 8px 14px;
@@ -87,11 +88,18 @@
   font-size: 14px;
   cursor: pointer;
   color: #333;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.popularCities button:hover {
+/* Hover effect */
+.cityButton:hover {
   background-color: #e6e6e6;
+}
+
+/* Selected city button style */
+.selectedCity {
+  background-color: #ff5a2c;
+  color: #fff;
 }
 
 /* Continue button */
@@ -116,7 +124,7 @@
 @media (max-width: 991px) {
   .wrapper {
     margin-top: 0vw;
-    margin-bottom:2rem;
+    margin-bottom: 2rem;
   }
 
   .content {
@@ -129,7 +137,7 @@
 
   .userIcon {
     width: 120px;
-    display:none;
+    display: none;
   }
 
   .rightContent h2 {
@@ -145,8 +153,8 @@
 /* Mobile (<= 600px) */
 @media (max-width: 600px) {
   .wrapper {
-        margin-top: 0rem;
-        margin-bottom:2rem;
+    margin-top: 0rem;
+    margin-bottom: 2rem;
   }
 
   .content {
@@ -155,12 +163,11 @@
     gap: 20px;
     height: 25%;
     padding: 20px 15px 0;
-
   }
 
   .userIcon {
     width: 100px;
-    display:none;
+    display: none;
   }
 
   .rightContent h2 {
@@ -177,7 +184,7 @@
     padding-bottom: 0;
   }
 
-  .popularCities button {
+  .cityButton {
     font-size: 13px;
     padding: 6px 12px;
   }
@@ -186,6 +193,6 @@
     font-size: 14px;
     padding: 10px;
     margin-bottom: 0;
-    margin-top:1.5rem;
+    margin-top: 1.5rem;
   }
 }
