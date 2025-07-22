@@ -1,11 +1,10 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100vh; 
   font-family: sans-serif;
 }
 
-/* Header */
 .header {
   background-color: #ffffff;
   padding: 1rem 1.5rem;
@@ -15,50 +14,84 @@
   align-items: center;
 }
 
+
 .logoContainer {
   display: flex;
   align-items: center;
 }
 
-.logoutButton {
-  background-color: #ef4444;
-  color: white;
-  padding: 0.5rem 1rem;
+.menuToggle {
+  display: none;
+  background: transparent;
   border: none;
-  border-radius: 8px;
+  color: #374151;
   cursor: pointer;
 }
 
-/* Container for sidebar + main */
-.container {
+.logoutButton {
+  background-color: #ef4444;
+  color: white;
+  padding: 0.4rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.mainArea {
   display: flex;
   flex: 1;
+  height: calc(100vh - 70px);
+  overflow: hidden;
 }
 
-/* Sidebar */
 .sidebar {
-  width: 230px;
-  background-color: #f5f6f8;
-  color: black;
-  padding: 1rem;
+  width: 260px;
+  background-color: #ffffff;
+  padding: 2rem 1.2rem;
+  border-right: 1px solid #e5e7eb;
+  overflow-y: auto;
 }
 
-.navList {
+.sectionTitle {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #9ca3af;
+  margin-bottom: 0.5rem;
+}
+
+.menu {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.navList li {
+.menuItem {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 1.5rem 0;
+  color: #4b5563;
+  padding: 0.5rem 0.6rem;
+  font-size: 14.5px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 16px;
+  transition: background 0.2s ease;
 }
 
-/* Main Content */
+.menuItem:hover {
+  background-color: #f3f4f6;
+}
+
+.iconLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.label {
+  font-weight: 500;
+}
+
 .mainContent {
   flex: 1;
   display: grid;
@@ -68,16 +101,110 @@
   background-color: #f9fafb;
 }
 
-.card {
-  background-color: white;
-  padding: 1rem;
-  border-radius: 10px;
-  height: 100px; /* Reduced height */
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.06);
+.card{
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 220px;
   text-align: center;
-  font-size: 1.1rem;
-  font-weight: 600;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 25%;
+}
+.desktopOnlyLogout {
+  display: flex;
+  align-items: center;
+}
+
+.mobileOnlyLogout {
+  display: none;
+}
+.dashboardCards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.card {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 220px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+.cardIcon {
+  color: red;
+  font-size: 40px; 
+  margin-bottom: 10px;
+}
+
+
+
+.cardTitle {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+}
+
+.cardValue {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #000;
+  margin-top: 5px;
+}
+
+
+@media screen and (max-width: 768px) {
+  .menuToggle {
+    display: inline-block;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .sidebarMobile {
+    display: block;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 240px;
+    height: calc(100vh - 70px);
+    background-color: #fff;
+    z-index: 999;
+    overflow-y: auto;
+    border-right: 1px solid #e5e7eb;
+    animation: slideIn 0.3s ease forwards;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  .desktopOnlyLogout {
+    display: none;
+  }
+
+  .mobileOnlyLogout {
+    display: block;
+    margin-top: 1rem;
+  }
 }
