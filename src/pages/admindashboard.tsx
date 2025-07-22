@@ -4,10 +4,13 @@ import Image from "next/image";
 import logo from "@/assets/logo.png";
 import CreateAdmin from "@/components/superadminsidebar/createadmin";
 import CreateManager from "@/components/superadminsidebar/createmanager";
+import ManagerList from "@/components/superadminsidebar/managerlist";
+import UserList from "@/components/superadminsidebar/userList";
 import CreateAgent from "@/components/superadminsidebar/createagent";
 import ChangePassword from "@/components/superadminsidebar/changepasswords";
 import ResetPassword from "@/components/superadminsidebar/resetpassword";
 import styles from "@/styles/pages/admindashboard.module.css";
+import withAuth from "@/lib/withAuth";
 
 import {
   FiUsers,
@@ -95,7 +98,8 @@ const AdminDashboard = () => {
             <p className={styles.sectionTitle}>List</p>
 
             
-            <li className={styles.menuItem}>
+            <li className={styles.menuItem}
+            onClick={() => setActiveSection("managerList")}>
               <span className={styles.iconLabel}>
                 <FiList className={styles.icon} />
                 <span className={styles.label}>Manager List</span>
@@ -105,6 +109,14 @@ const AdminDashboard = () => {
               <span className={styles.iconLabel}>
                 <FiList className={styles.icon} />
                 <span className={styles.label}>Agent List</span>
+              </span>
+            </li>
+            <li 
+            className={styles.menuItem}
+            onClick={() => setActiveSection("userList")}>
+              <span className={styles.iconLabel}>
+                <FiList className={styles.icon} />
+                <span className={styles.label}>User List</span>
               </span>
             </li>
             <p className={styles.sectionTitle}>Security</p>
@@ -168,11 +180,13 @@ const AdminDashboard = () => {
           {activeSection === "createAgent" && <CreateAgent />}
           {activeSection === "changepassword" && <ChangePassword />}
           {activeSection === "resetpassword" && <ResetPassword />}
+          {activeSection === "userList" && <UserList />}
+          {activeSection === "managerList" && <ManagerList />}
         </main>
       </div>
     </div>
   );
 };
 
-export default AdminDashboard;
+export default withAuth(AdminDashboard, ["admin"]); ;
 

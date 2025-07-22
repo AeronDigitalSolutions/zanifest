@@ -4,6 +4,7 @@ import Image from "next/image";
 import logo from "@/assets/logo.png";
 import { useRouter } from "next/router";
 import styles from "@/styles/pages/districtmanager.module.css";
+import withAuth from "@/lib/withAuth";
 import {
   FiUsers,
   FiBarChart2,

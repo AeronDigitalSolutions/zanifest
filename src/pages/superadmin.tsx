@@ -6,12 +6,13 @@ import CreateAdmin from "@/components/superadminsidebar/createadmin";
 import CreateManager from "@/components/superadminsidebar/createmanager";
 import CreateAgent from "@/components/superadminsidebar/createagent";
 import AdminList from "@/components/superadminsidebar/adminlist";
+import UserList from "@/components/superadminsidebar/userList";
 import ManagerList from "@/components/superadminsidebar/managerlist";
 import AgentList from "@/components/superadminsidebar/agentlist";
 import ChangePassword from "@/components/superadminsidebar/changepasswords";
 import ResetPassword from "@/components/superadminsidebar/resetpassword";
 import styles from "@/styles/pages/admindashboard.module.css";
-
+import withAuth from "@/lib/withAuth";
 import {
   FiUsers,
   FiUserPlus,
@@ -106,22 +107,35 @@ const AdminDashboard = () => {
             </li>
             <p className={styles.sectionTitle}>List</p>
 
-            <li className={styles.menuItem}>
+            <li className={styles.menuItem}
+            onClick={() => setActiveSection("adminlist")}>
               <span className={styles.iconLabel}>
                 <FiList className={styles.icon} />
                 <span className={styles.label}>Admin List</span>
               </span>
             </li>
-            <li className={styles.menuItem}>
+            <li 
+            className={styles.menuItem}
+            onClick={() => setActiveSection("managerlist")}>
               <span className={styles.iconLabel}>
                 <FiList className={styles.icon} />
                 <span className={styles.label}>Manager List</span>
               </span>
             </li>
-            <li className={styles.menuItem}>
+            <li 
+            className={styles.menuItem}
+            onClick={() => setActiveSection("agentlist")}>
               <span className={styles.iconLabel}>
                 <FiList className={styles.icon} />
                 <span className={styles.label}>Agent List</span>
+              </span>
+            </li>
+             <li 
+            className={styles.menuItem}
+            onClick={() => setActiveSection("userList")}>
+              <span className={styles.iconLabel}>
+                <FiList className={styles.icon} />
+                <span className={styles.label}>User List</span>
               </span>
             </li>
             <p className={styles.sectionTitle}>Security</p>
@@ -193,10 +207,14 @@ const AdminDashboard = () => {
           {activeSection === "createAgent" && <CreateAgent />}
           {activeSection === "changepassword" && <ChangePassword />}
           {activeSection === "resetpassword" && <ResetPassword />}
+          {activeSection === "adminlist" && <AdminList />}
+          {activeSection === "managerlist" && <ManagerList />}
+          {activeSection === "agentlist" && <AgentList />}
+          {activeSection === "userList" && <UserList />}
         </main>
       </div>
     </div>
   );
 };
 
-export default AdminDashboard;
+export default withAuth(AdminDashboard, ["superadmin"]); // Ensure only superadmin or admin can access this page

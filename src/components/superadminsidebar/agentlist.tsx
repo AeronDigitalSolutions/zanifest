@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import styles from '@/styles/components/superadminsidebar/managerlist.module.css';
 
 interface Agent {
   _id: string;
@@ -29,33 +30,36 @@ const AgentsPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-semibold mb-4">All Agents</h2>
-      <table className="table-auto w-full border">
+     <div className={styles.container}>
+      <h2 className={styles.heading}>All Agents</h2>
+      <table className={styles.table}>
         <thead>
-          <tr className="bg-gray-100">
-            <th className="px-4 py-2 border">Name</th>
-            <th className="px-4 py-2 border">Email</th>
-            <th className="px-4 py-2 border">District</th>
-            <th className="px-4 py-2 border">City</th>
-            <th className="px-4 py-2 border">State</th>
-            <th className="px-4 py-2 border">Assigned To</th>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>District</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Assigned To</th>
           </tr>
         </thead>
         <tbody>
-          {agents.map((agent) => (
-            <tr key={agent._id}>
-              <td className="border px-4 py-2">{agent.name}</td>
-              <td className="border px-4 py-2">{agent.email}</td>
-              <td className="border px-4 py-2">{agent.district}</td>
-              <td className="border px-4 py-2">{agent.city}</td>
-              <td className="border px-4 py-2">{agent.state}</td>
-              <td className="border px-4 py-2">{agent.assignedTo}</td>
+          {agents.map((agent, index) => (
+            <tr key={index}>
+              <td>{agent.name}</td>
+              <td>{agent.email}</td>
+              <td>{agent.district}</td>
+              <td>{agent.city}</td>
+              <td>{agent.state}</td>
+              <td className={styles.assignedTo}>
+                {agent.assignedTo} 
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
+
   );
 };
 

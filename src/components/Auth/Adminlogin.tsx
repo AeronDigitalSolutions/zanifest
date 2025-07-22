@@ -1,32 +1,73 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-
-import { IoIosArrowBack } from "react-icons/io";
 import styles from "@/styles/components/Auth/Login.module.css";
 import Image from "next/image";
 
 export default function AdminLogin() {
-  const [userName, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [email, setEmail] = useState("");
+
 
   const router = useRouter();
 
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setLoading(true);
+  // async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+  //   event.preventDefault();
+  //   setLoading(true);
 
-    if (userName === "admin@gmail.com" && password === "admin@123") {
-      setError(false);
-      router.push("/adminpage");
-    } else {
-      setError(true);
+  //   if (userName === "admin@gmail.com" && password === "admin@123") {
+  //     setError(false);
+  //     router.push("/adminpage");
+  //   } else {
+  //     setError(true);
+  //   }
+
+  //   setLoading(false);
+  // }
+
+   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+
+  try {
+    const res = await fetch("/api/admin/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await res.json();
+    console.log("Login response:", data);
+
+    if (!res.ok) {
+      alert(data.message || "Login failed");
+      return;
     }
 
-    setLoading(false);
+    // Save token in localStorage or cookies
+    localStorage.setItem("admin-token", data.token);
+    console.log("Token saved:", data.token);
+
+    // Redirect based on role
+    if (data.role === "superadmin") {
+      // window.location.href = "/superadmin";
+      router.push("/superadmin");
+    } else if (data.role === "admin") {
+      // window.location.href = "/admin";
+      router.push("/admin");
+    } else {
+      alert("Unauthorized Role");
+    }
+  } catch (error) 
+  {
+    console.error("Login error:", error);
+    alert("Something went wrong");
   }
+};
+
 
   return (
     <div className={styles.cont}>
@@ -56,7 +97,7 @@ export default function AdminLogin() {
             industry.
           </p>
 
-          <form className={styles.loginForm} onSubmit={onSubmit}>
+          <form className={styles.loginForm} onSubmit={handleSubmit}>
             <div className={styles.error}>
               {error && <h4>Invalid Credentials</h4>}
             </div>
@@ -64,20 +105,20 @@ export default function AdminLogin() {
             <div className={styles.formInput}>
               <input
                 type="text"
-                name="uname"
-                id="uname"
+                name="email"
+                id="email"
                 placeholder="E-mail Address"
                 required
                 className={styles.input}
-                onChange={(e) => setUserName(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
             <div className={styles.formInput}>
               <input
                 type={showPassword ? "text" : "password"}
-                name="pass"
-                id="pass"
+                name="password"
+                id="password"
                 placeholder="Password"
                 required
                 className={styles.input}

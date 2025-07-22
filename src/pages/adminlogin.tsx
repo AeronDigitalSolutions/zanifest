@@ -9,7 +9,6 @@ function adminlogin() {
     <div>
       <UserDetails />
       <Navbar />
-      
       <AdminLogin/>
       <Footer />
     </div>

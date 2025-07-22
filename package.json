@@ -17,10 +17,12 @@
     "axios": "^1.10.0",
     "bcryptjs": "^3.0.2",
     "chart.js": "^4.5.0",
+    "cookie": "^1.0.2",
     "date-fns": "^4.1.0",
     "dotenv": "^17.2.0",
     "framer-motion": "^12.15.0",
     "insurance": "file:",
+    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.525.0",
     "mongodb": "^6.17.0",
     "mongoose": "^8.16.4",
@@ -37,6 +39,7 @@
     "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/mongoose-sequence": "^3.0.11",
     "@types/node": "^20",
     "@types/react": "19.1.8",
