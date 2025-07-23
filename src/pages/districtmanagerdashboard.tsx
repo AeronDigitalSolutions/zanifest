@@ -32,6 +32,7 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from "recharts";
+import { useUser } from "@/lib/hooks/useUser";
 
 const agents = [
   {
@@ -143,6 +144,9 @@ const DistricManagerDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [formattedTotalSales, setFormattedTotalSales] = useState("");
   const [formattedMonthlySales, setFormattedMonthlySales] = useState("");
+
+  const {user} = useUser();
+
   const handleLogout = () => {
   console.log("Logged out");
     router.push("/managerlogin");
@@ -191,6 +195,7 @@ const DistricManagerDashboard = () => {
     <div className={styles.wrapper}>
       {/* Header */}
       <header className={styles.header}>
+        <h1>Hi {user?.name ?? "District Manager"}</h1>
         <div className={styles.logoContainer}>
           <Image
             src={logo}

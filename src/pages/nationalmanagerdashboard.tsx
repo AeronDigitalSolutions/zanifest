@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import styles from "@/styles/pages/nationalmanager.module.css";
 import axios from 'axios';
 import withAuth from "@/lib/withAuth";
+import { useUser } from '@/lib/hooks/useUser';
 
 import {
   FiUsers,
@@ -135,7 +136,6 @@ type Props = {
 };
 
 
-
 const nationalManagerDashboard = ({managers = []}:Props) => {
     const router = useRouter();
   const [showAgentList, setShowAgentList] = useState(false);
@@ -146,6 +146,11 @@ const nationalManagerDashboard = ({managers = []}:Props) => {
   const [selectedAgent, setSelectedAgent] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+   const { user } = useUser();
+   console.log("user from useUser", user);
+
+
+//table logic to fetch all state managers
  useEffect(() => {
     const fetchStateManagers = async () => {
       try {
@@ -199,6 +204,8 @@ const handleLogout = () => {
   return (
     <div className={styles.wrapper}>
       <header className={styles.header}>
+         <h1>Hi {user?.name ?? "National Manager"}</h1>
+      {/* <p>Welcome to your {user?.role} dashboard</p> */}
         <div className={styles.logoContainer}>
           <Image src={logo} alt="Logo" width={150} height={45} className={styles.logo} />
         </div>
