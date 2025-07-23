@@ -1,6 +1,5 @@
 import connectDB from "@/lib/dbConnect";
 import Manager from "@/models/Manager";
-// import bcrypt from "bcryptjs";
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 import { serialize } from "cookie";
