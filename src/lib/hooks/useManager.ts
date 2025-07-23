@@ -8,15 +8,15 @@ type DecodedToken = {
   email?: string;
 };
 
-export function useUser() {
+export function useManager() {
   const [user, setUser] = useState<DecodedToken | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch("/api/getUserName");
-        console.log("Fetching user data from /api/getUserName");
+        const res = await fetch("/api/manager/getManagerName");
+        console.log("Fetching user data from /api/manager/getManagerName");
         if (res.ok) {
           const data = await res.json();
           console.log("User data fetched successfully:", data);

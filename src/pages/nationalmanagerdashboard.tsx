@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import styles from "@/styles/pages/nationalmanager.module.css";
 import axios from 'axios';
 import withAuth from "@/lib/withAuth";
-import { useUser } from '@/lib/hooks/useUser';
+import { useManager } from '@/lib/hooks/useManager';
 
 import {
   FiUsers,
@@ -146,7 +146,7 @@ const nationalManagerDashboard = ({managers = []}:Props) => {
   const [selectedAgent, setSelectedAgent] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-   const { user } = useUser();
+   const { user } = useManager();
    console.log("user from useUser", user);
 
 

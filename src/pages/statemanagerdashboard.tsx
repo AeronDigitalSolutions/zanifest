@@ -31,7 +31,7 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from "recharts";
-import { useUser } from "@/lib/hooks/useUser";
+import { useManager } from "@/lib/hooks/useManager";
 
 const agents = [
   {
@@ -144,7 +144,7 @@ const stateManagerDashboard = () => {
 
   const [districtManagers, setDistrictManagers] = useState<Manager[]>([]);
 
-  const {user} = useUser();
+  const {user} = useManager();
 
   //table logic to get all district managers
  useEffect(() => {

@@ -4,7 +4,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 import { serialize } from "cookie";
 
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log("Manager login API called");
 

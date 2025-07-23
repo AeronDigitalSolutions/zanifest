@@ -13,6 +13,8 @@ import ChangePassword from "@/components/superadminsidebar/changepasswords";
 import ResetPassword from "@/components/superadminsidebar/resetpassword";
 import styles from "@/styles/pages/admindashboard.module.css";
 import withAuth from "@/lib/withAuth";
+import { useAdmin } from "@/lib/hooks/useAdmin";
+
 import {
   FiUsers,
   FiUserPlus,
@@ -27,6 +29,9 @@ const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const { admin , loading} = useAdmin();
+  console.log("Admin data:", admin?.userName);
+
   const handleLogout = () => {
     console.log("Logged out");
   };
@@ -35,6 +40,7 @@ const AdminDashboard = () => {
     <div className={styles.wrapper}>
       {/* Header */}
       <header className={styles.header}>
+        <h1>Welcome, {admin?.userName}</h1>
         <div className={styles.logoContainer}>
           <Image
             src={logo}

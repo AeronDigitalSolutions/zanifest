@@ -32,7 +32,7 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from "recharts";
-import { useUser } from "@/lib/hooks/useUser";
+import { useManager } from "@/lib/hooks/useManager";
 
 const agents = [
   {
@@ -145,7 +145,7 @@ const DistricManagerDashboard = () => {
   const [formattedTotalSales, setFormattedTotalSales] = useState("");
   const [formattedMonthlySales, setFormattedMonthlySales] = useState("");
 
-  const {user} = useUser();
+  const {user} = useManager();
 
   const handleLogout = () => {
   console.log("Logged out");
