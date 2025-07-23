@@ -57,7 +57,7 @@ export default function AdminLogin() {
       router.push("/superadmin");
     } else if (data.role === "admin") {
       // window.location.href = "/admin";
-      router.push("/admin");
+      router.push("/admindashboard");
     } else {
       alert("Unauthorized Role");
     }

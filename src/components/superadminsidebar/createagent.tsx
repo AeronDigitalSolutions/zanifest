@@ -116,7 +116,7 @@ const fields: FormField[] = ['name', 'email', 'district', 'city', 'state'];
             <option value="">Select Manager</option>
             {districtManagers.map((manager: any) => (
               <option key={manager.id} value={manager.id}>
-                {manager.name} (ID: {manager.id})
+                {manager.id} (ID: {manager.id})
               </option>
             ))}
           </select>

@@ -4,7 +4,7 @@ import Image from "next/image";
 import logo from "@/assets/logo.png";
 import { useRouter } from "next/router";
 import styles from "@/styles/pages/districtmanager.module.css";
-import withAuth from "@/lib/withAuth";
+
 import {
   FiUsers,
   FiBarChart2,
@@ -115,10 +115,27 @@ const sidebarMenu = [
   },
 ];
 
+interface Agent {
+  _id: string;
+  name: string;
+  email: string;
+  assignedTo: string;
+  district: string;
+  city: string;
+  state: string;
+  totalSales?: number;
+  monthlySales?: number;
+  clients?: number;
+}
+
+
+
+
 
 const DistricManagerDashboard = () => {
   const router = useRouter();
   const [showAgentList, setShowAgentList] = useState(false);
+  const [agentData, setAgentData] = useState<Agent[]>([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [filteredData, setFilteredData] = useState(monthlySalesData);
@@ -141,6 +158,21 @@ const DistricManagerDashboard = () => {
     setFormattedTotalSales(totalSales.toLocaleString("en-IN"));
     setFormattedMonthlySales(monthlySales.toLocaleString("en-IN"));
   }, [totalSales, monthlySales]);
+
+  useEffect(() => {
+  const fetchAgents = async () => {
+    try {
+      const res = await fetch('/api/getagent');
+      const data = await res.json();
+      setAgentData(data.agents || []);
+    } catch (err) {
+      console.error('Error fetching agents:', err);
+    }
+  };
+
+  fetchAgents();
+}, []);
+
 
   const handleFilter = () => {
     if (!startDate || !endDate) return;
@@ -254,39 +286,32 @@ const DistricManagerDashboard = () => {
                 <table className={styles.table}>
                   <thead>
                     <tr>
-                      <th>ID</th>
                       <th>Name</th>
-                      <th>Location</th>
-                      <th>Total Sales</th>
-                      <th>Monthly Sales</th>
-                      <th>Clients</th>
-                      <th>Action</th>
+                      <th>Email</th>
+                      <th>District</th>
+                      <th>City</th>
+                      <th>State</th>
+                      <th>Assigned To</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {agents.map((agent) => (
-                      <tr key={agent.id}>
-                        <td>{agent.id}</td>
+                   {agentData.map((agent: Agent) => (
+                      <tr key={agent._id}>
                         <td>{agent.name}</td>
-                        <td>{agent.location}</td>
-                        <td suppressHydrationWarning>₹{agent.totalSales.toLocaleString("en-IN")}</td>
-                        <td suppressHydrationWarning>₹{agent.monthlySales.toLocaleString("en-IN")}</td>
-                        <td>{agent.clients}</td>
-                        <td>
-                          <button
-                            onClick={() =>router.push("/agentpage")}
-                            className={styles.viewProfileButton}
-                          >
-                            View Profile
-                          </button>
-                        </td>
+                        <td>{agent.email}</td>
+                        <td>{agent.district}</td>
+                        <td>{agent.city}</td>
+                        <td>{agent.state}</td>
+                        <td>{agent.assignedTo || "Unassigned"}</td>
                       </tr>
                     ))}
+
                   </tbody>
                 </table>
               </div>
             </div>
           )}
+
 
           <div className={styles.dateFilterSection}>
             <label>

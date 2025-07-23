@@ -4,6 +4,7 @@ import Image from "next/image";
 import logo from "@/assets/logo.png";
 import { useRouter } from "next/router";  
 import styles from "@/styles/pages/nationalmanager.module.css";
+import axios from 'axios';
 import withAuth from "@/lib/withAuth";
 
 import {
@@ -116,16 +117,50 @@ const sidebarMenu = [
   },
 ];
 
+type Manager = {
+  _id: string;
+  name: string;
+  email: string;
+  category: 'national' | 'state' | 'district';
+  location: {
+    district: string;
+    state: string;
+  };
+  assignedTo?: string;
+};
+
+// ✅ Step 2: Define the component props type
+type Props = {
+  managers: Manager[];
+};
 
 
-const nationalManagerDashboard = () => {
+
+const nationalManagerDashboard = ({managers = []}:Props) => {
     const router = useRouter();
   const [showAgentList, setShowAgentList] = useState(false);
+   const [stateManagers, setStateManagers] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [filteredData, setFilteredData] = useState(monthlySalesData);
   const [selectedAgent, setSelectedAgent] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+ useEffect(() => {
+    const fetchStateManagers = async () => {
+      try {
+        const response = await axios.get('/api/manager/state');
+        console.log("State Managers:", response.data.data);
+        setStateManagers(response.data.data);
+      } catch (error) {
+        console.error('Error fetching state managers:', error);
+      }
+    };
+
+    fetchStateManagers();
+  }, []);
+
+
 const handleLogout = () => {
   console.log("Logged out");
     router.push("/managerlogin");
@@ -262,43 +297,34 @@ const handleLogout = () => {
             <div className={styles.agentTable}>
               <h3 className={styles.tableTitle}>Agent List</h3>
               <div className={styles.tableWrapper}>
-                <table className={styles.table}>
+                <table className={styles.table} style={{ borderCollapse: 'collapse', width: '100%' }}>
                   <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Name</th>
-                      <th>Location</th>
-                      <th>Total Sales</th>
-                      <th>Monthly Sales</th>
-                      <th>Clients</th>
-                      <th>Action</th>
+                    <tr style={{ backgroundColor: '#f2f2f2' }}>
+                      <th style={{ border: '1px solid black', padding: '8px' }}>Name</th>
+                      <th style={{ border: '1px solid black', padding: '8px' }}>Email</th>
+                      <th style={{ border: '1px solid black', padding: '8px' }}>State</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {agents.map((agent) => (
-                      <tr key={agent.id}>
-                        <td>{agent.id}</td>
-                        <td>{agent.name}</td>
-                        <td>{agent.location}</td>
-                        <td suppressHydrationWarning>₹{agent.totalSales.toLocaleString("en-IN")}</td>
-                        <td suppressHydrationWarning>₹{agent.monthlySales.toLocaleString("en-IN")}</td>
-                        <td>{agent.clients}</td>
-                        <td>
-                          
-                           <button
-                            onClick={() =>router.push("/statemanagerdashboard")}
-                            className={styles.viewProfileButton}
-                          >
-                            View Profile
-                          </button>
-                        </td>
+                    {stateManagers && stateManagers.length > 0 ? (
+                      stateManagers.map((manager: any) => (
+                        <tr key={manager._id}>
+                          <td style={{ border: '1px solid black', padding: '8px' }}>{manager.name}</td>
+                          <td style={{ border: '1px solid black', padding: '8px' }}>{manager.email}</td>
+                          <td style={{ border: '1px solid black', padding: '8px' }}>{manager.location?.state || ''}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={4} style={{ padding: '10px', textAlign: 'center' }}>No state managers found.</td>
                       </tr>
-                    ))}
+                    )}
                   </tbody>
                 </table>
               </div>
             </div>
           )}
+
 
           <div className={styles.dateFilterSection}>
             <label>
