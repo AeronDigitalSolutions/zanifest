@@ -49,6 +49,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     );
 
     console.log("Token generated for admin:", admin.userName);
+    console.log("Role of admin:", admin.role);
 
     // Set cookie with token
     res.setHeader(
@@ -56,7 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       serialize("adminToken", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
+        sameSite: "none",
         path: "/",
         maxAge: 60 * 60 * 24, // 1 day
       })

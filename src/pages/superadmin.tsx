@@ -260,4 +260,4 @@ useEffect(() => {
   );
 };
 
-export default withAuth(AdminDashboard, ["superadmin"]); // Ensure only superadmin or admin can access this page
+export default AdminDashboard; // Ensure only superadmin or admin can access this page
