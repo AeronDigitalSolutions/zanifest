@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import logo from "@/assets/logo.png";
 import CreateAdmin from "@/components/superadminsidebar/createadmin";
@@ -28,6 +28,11 @@ import {
 const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [adminCount, setAdminCount] = useState(0);
+const [agentCount, setAgentCount] = useState(0);
+const [stateManagerCount, setStateManagerCount] = useState(0);
+const [districtManagerCount, setDistrictManagerCount] = useState(0);
+
 
   const { admin , loading} = useAdmin();
   console.log("Admin data:", admin?.userName);
@@ -36,11 +41,42 @@ const AdminDashboard = () => {
     console.log("Logged out");
   };
 
+  useEffect(() => {
+  const fetchAdminCount = async () => {
+    const res = await fetch("/api/getadmin");
+    const data = await res.json();
+    setAdminCount(data.length); // ✅ update state
+  };
+  fetchAdminCount();
+}, []);
+
+useEffect(() => {
+  const fetchAgentCount = async () => {
+    const res = await fetch("/api/getagent");
+    const data = await res.json();
+    setAgentCount(data.length); 
+    console.log("Agent count:", data.length);
+  };
+  fetchAgentCount();
+}, []);
+
+useEffect(() => {
+  const fetchManagerCounts = async () => {
+    const res = await fetch("/api/getmanager");
+    const managers = await res.json();
+
+    setStateManagerCount(managers.filter((m: { category: string }) => m.category === "state").length);
+    setDistrictManagerCount(managers.filter((m: { category: string }) => m.category === "district").length);
+  };
+  fetchManagerCounts();
+}, []);
+
+
   return (
     <div className={styles.wrapper}>
       {/* Header */}
       <header className={styles.header}>
-        <h1>Welcome, {admin?.userName}</h1>
+        <h1>Welcome, {admin?.userName ?? "super Admin"}</h1>
         <div className={styles.logoContainer}>
           <Image
             src={logo}
@@ -184,29 +220,30 @@ const AdminDashboard = () => {
             </>
           )} */}
           {activeSection === "dashboard" && (
-            <div className={styles.dashboardCards}>
-              <div className={styles.card}>
-                <FiUsers size={32} className={styles.cardIcon} />
-                <p className={styles.cardTitle}>Number of Admins</p>
-                <p className={styles.cardValue}>5</p>
-              </div>
-              <div className={styles.card}>
-                <FiUserPlus size={32} className={styles.cardIcon} />
-                <p className={styles.cardTitle}>State Managers</p>
-                <p className={styles.cardValue}>12</p>
-              </div>
-              <div className={styles.card}>
-                <FiUsers size={32} className={styles.cardIcon} />
-                <p className={styles.cardTitle}>District Managers</p>
-                <p className={styles.cardValue}>48</p>
-              </div>
-              <div className={styles.card}>
-                <FiUserPlus size={32} className={styles.cardIcon} />
-                <p className={styles.cardTitle}>Agents</p>
-                <p className={styles.cardValue}>105</p>
-              </div>
-            </div>
-          )}
+  <div className={styles.dashboardCards}>
+    <div className={styles.card}>
+      <FiUsers size={32} className={styles.cardIcon} />
+      <p className={styles.cardTitle}>Number of Admins</p>
+      <p className={styles.cardValue}>{adminCount}</p>
+    </div>
+    <div className={styles.card}>
+      <FiUserPlus size={32} className={styles.cardIcon} />
+      <p className={styles.cardTitle}>State Managers</p>
+      <p className={styles.cardValue}>{stateManagerCount}</p>
+    </div>
+    <div className={styles.card}>
+      <FiUsers size={32} className={styles.cardIcon} />
+      <p className={styles.cardTitle}>District Managers</p>
+      <p className={styles.cardValue}>{districtManagerCount}</p>
+    </div>
+    <div className={styles.card}>
+      <FiUserPlus size={32} className={styles.cardIcon} />
+      <p className={styles.cardTitle}>Agents</p>
+      <p className={styles.cardValue}>{agentCount}</p>
+    </div>
+  </div>
+)}
+
 
           {activeSection === "createAdmin" && <CreateAdmin />}
           {activeSection === "createManager" && <CreateManager />}

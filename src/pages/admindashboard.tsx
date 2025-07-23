@@ -39,7 +39,7 @@ const AdminDashboard = () => {
     <div className={styles.wrapper}>
       {/* Header */}
       <header className={styles.header}>
-        <h1>Welcome, {admin?.userName}</h1>
+        <h1>Welcome, {admin?.userName ?? "Admin"}</h1>
         <div className={styles.logoContainer}>
           <Image
             src={logo}

@@ -44,6 +44,8 @@ const Header = () => {
   const router = useRouter();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const agentName = typeof window !== "undefined" ? localStorage.getItem("agentName") : null;
+
 
   const sidebarMenu = [
     {
@@ -128,7 +130,7 @@ const Header = () => {
 
         {/* Main Content */}
         <main className={styles.content}>
-          <h2 className={styles.dashboardTitle}>Agent Dashboard</h2>
+          <h2 className={styles.dashboardTitle}>hello {agentName}</h2>
 
           {/* Summary Cards */}
           <div className={styles.cardGrid3}>

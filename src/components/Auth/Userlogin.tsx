@@ -15,18 +15,46 @@ export default function UserLogin() {
   const router = useRouter();
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setLoading(true);
+  event.preventDefault();
+  setLoading(true);
+  setError(false);
 
-    if (userName === "admin" && password === "admin@123") {
-      setError(false);
-      router.push("/dashboard");
+  try {
+    const res = await fetch("/api/users/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userName, password }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      router.push("/dashboard"); // Redirect after successful login
     } else {
       setError(true);
     }
-
-    setLoading(false);
+  } catch (err) {
+    console.error("Login failed:", err);
+    setError(true);
   }
+
+  setLoading(false);
+}
+
+
+  // async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+  //   event.preventDefault();
+  //   setLoading(true);
+
+  //   if (userName === "admin" && password === "admin@123") {
+  //     setError(false);
+  //     router.push("/dashboard");
+  //   } else {
+  //     setError(true);
+  //   }
+
+  //   setLoading(false);
+  // }
 
   return (
     <div className={styles.cont}>

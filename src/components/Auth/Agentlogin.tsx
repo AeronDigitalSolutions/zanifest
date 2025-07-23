@@ -14,19 +14,41 @@ export default function Agentlogin() {
 
   const router = useRouter();
 
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setLoading(true);
+ async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+  event.preventDefault();
+  setLoading(true);
 
-    if (userName === "agent@gmail.com" && password === "agent@123") {
-      setError(false);
-      router.push("/agentpage");
-    } else {
+  try {
+    const res = await fetch("/api/agent/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: userName, password }),
+    });
+
+    if (!res.ok) {
+      alert("Login failed. Please check your credentials.");
       setError(true);
+      setLoading(false);
+      return;
     }
 
+    const data = await res.json();
+
+    // Optional: Save token in localStorage or cookie
+    localStorage.setItem("agentToken", data.token);
+    localStorage.setItem("agentName", data.agent.name);
+
+    setError(false);
+    router.push("/agentpage");
+  } catch (err) {
+    console.error("Login failed:", err);
+    setError(true);
+  } finally {
     setLoading(false);
   }
+}
+
+
 
   return (
     <div className={styles.cont}>
