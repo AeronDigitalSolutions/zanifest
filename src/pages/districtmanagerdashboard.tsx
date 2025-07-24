@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
@@ -5,24 +6,8 @@ import logo from "@/assets/logo.png";
 import { useRouter } from "next/router";
 import styles from "@/styles/pages/districtmanager.module.css";
 
-import {
-  FiUsers,
-  FiBarChart2,
-  FiHome,
-  FiCalendar,
-  FiFileText,
-  FiFolder,
-  FiClipboard,
-  FiGrid,
-  FiUser,
-  FiPackage,
-  FiLayers,
-  FiChevronRight,
-  FiMenu,
-  FiX,
-} from "react-icons/fi";
+import { FiUsers, FiBarChart2, FiHome, FiUser, FiMenu, FiX } from "react-icons/fi";
 import { FaRupeeSign } from "react-icons/fa";
-
 import {
   LineChart,
   Line,
@@ -84,38 +69,6 @@ const monthlySalesData = [
   { month: "Dec 2025", sales: 47000 },
 ];
 
-const sidebarMenu = [
-  {
-    section: "Menu",
-    items: [{ icon: <FiHome />, label: "Dashboard" }],
-  },
-  {
-    section: "Apps",
-    items: [
-      { icon: <FiCalendar />, label: "Calendar" },
-      { icon: <FiFileText />, label: "Tickets" },
-      { icon: <FiFolder />, label: "File Manager" },
-      { icon: <FiClipboard />, label: "Kanban Board" },
-      { icon: <FiGrid />, label: "Project", expandable: true },
-    ],
-  },
-  {
-    section: "Custom",
-    items: [
-      { icon: <FiUser />, label: "Auth Pages", expandable: true },
-      { icon: <FiLayers />, label: "Extra Pages", expandable: true },
-    ],
-  },
-  {
-    section: "Elements",
-    items: [
-      { icon: <FiGrid />, label: "Components", expandable: true },
-      { icon: <FiPackage />, label: "Extended UI", expandable: true },
-      { icon: <FiFileText />, label: "Forms", expandable: true },
-    ],
-  },
-];
-
 interface Agent {
   _id: string;
   name: string;
@@ -129,10 +82,6 @@ interface Agent {
   clients?: number;
 }
 
-
-
-
-
 const DistricManagerDashboard = () => {
   const router = useRouter();
   const [showAgentList, setShowAgentList] = useState(false);
@@ -140,22 +89,18 @@ const DistricManagerDashboard = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [filteredData, setFilteredData] = useState(monthlySalesData);
-  const [selectedAgent, setSelectedAgent] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [formattedTotalSales, setFormattedTotalSales] = useState("");
   const [formattedMonthlySales, setFormattedMonthlySales] = useState("");
 
-  const {user} = useManager();
+  const { user } = useManager();
 
   const handleLogout = () => {
-  console.log("Logged out");
     router.push("/managerlogin");
-};
+  };
+
   const totalSales = agents.reduce((sum, agent) => sum + agent.totalSales, 0);
-  const monthlySales = agents.reduce(
-    (sum, agent) => sum + agent.monthlySales,
-    0
-  );
+  const monthlySales = agents.reduce((sum, agent) => sum + agent.monthlySales, 0);
   const totalClients = agents.reduce((sum, agent) => sum + agent.clients, 0);
 
   useEffect(() => {
@@ -164,19 +109,18 @@ const DistricManagerDashboard = () => {
   }, [totalSales, monthlySales]);
 
   useEffect(() => {
-  const fetchAgents = async () => {
-    try {
-      const res = await fetch('/api/getagent');
-      const data = await res.json();
-      setAgentData(data.agents || []);
-    } catch (err) {
-      console.error('Error fetching agents:', err);
-    }
-  };
+    const fetchAgents = async () => {
+      try {
+        const res = await fetch("/api/getagent");
+        const data = await res.json();
+        setAgentData(data.agents || []);
+      } catch (err) {
+        console.error("Error fetching agents:", err);
+      }
+    };
 
-  fetchAgents();
-}, []);
-
+    fetchAgents();
+  }, []);
 
   const handleFilter = () => {
     if (!startDate || !endDate) return;
@@ -188,6 +132,7 @@ const DistricManagerDashboard = () => {
       const monthIndex = new Date(`${monthName} 1, ${year}`).getTime();
       return monthIndex >= start.getTime() && monthIndex <= end.getTime();
     });
+
     setFilteredData(filtered);
   };
 
@@ -197,13 +142,7 @@ const DistricManagerDashboard = () => {
       <header className={styles.header}>
         <h1>Hi {user?.name ?? "District Manager"}</h1>
         <div className={styles.logoContainer}>
-          <Image
-            src={logo}
-            alt="Logo"
-            width={150}
-            height={45}
-            className={styles.logo}
-          />
+          <Image src={logo} alt="Logo" width={150} height={45} className={styles.logo} />
         </div>
         <button className={styles.menuToggle} onClick={() => setSidebarOpen(!sidebarOpen)}>
           {sidebarOpen ? <FiX size={22} /> : <FiMenu size={22} />}
@@ -219,22 +158,17 @@ const DistricManagerDashboard = () => {
       <div className={styles.mainArea}>
         {/* Sidebar */}
         <aside className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarMobile : ""}`}>
-          {sidebarMenu.map((section, index) => (
-            <div key={index}>
-              <p className={styles.sectionTitle}>{section.section}</p>
-              <ul className={styles.menu}>
-                {section.items.map((item, idx) => (
-                  <li key={idx} className={styles.menuItem}>
-                    <div className={styles.iconLabel}>
-                      <span className={styles.icon}>{item.icon}</span>
-                      <span className={styles.label}>{item.label}</span>
-                    </div>
-                    {item.expandable && <FiChevronRight size={14} />}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <ul className={styles.menu}>
+            <li className={styles.menuItem}>
+              <div className={styles.iconLabel}>
+                <span className={styles.icon}>
+                  <FiHome />
+                </span>
+                <span className={styles.label}>Dashboard</span>
+              </div>
+            </li>
+          </ul>
+
           <div className={styles.mobileOnlyLogout}>
             <button className={styles.logoutButton} onClick={handleLogout}>
               Logout
@@ -248,7 +182,7 @@ const DistricManagerDashboard = () => {
 
           <div className={styles.cardGrid}>
             <div className={styles.card}>
-              <FaRupeeSign className={styles.cardIcon} style={{ fontWeight: 400, fontSize: "20px" }} />
+              <FaRupeeSign className={styles.cardIcon} />
               <div>
                 <p>Total Sales</p>
                 <h3>₹{formattedTotalSales}</h3>
@@ -277,10 +211,7 @@ const DistricManagerDashboard = () => {
             </div>
           </div>
 
-          <div
-            className={styles.agentListToggle}
-            onClick={() => setShowAgentList(!showAgentList)}
-          >
+          <div className={styles.agentListToggle} onClick={() => setShowAgentList(!showAgentList)}>
             <span>List of Agents</span>
           </div>
 
@@ -300,7 +231,7 @@ const DistricManagerDashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                   {agentData.map((agent: Agent) => (
+                    {agentData.map((agent: Agent) => (
                       <tr key={agent._id}>
                         <td>{agent.name}</td>
                         <td>{agent.email}</td>
@@ -310,30 +241,20 @@ const DistricManagerDashboard = () => {
                         <td>{agent.assignedTo || "Unassigned"}</td>
                       </tr>
                     ))}
-
                   </tbody>
                 </table>
               </div>
             </div>
           )}
 
-
           <div className={styles.dateFilterSection}>
             <label>
               Start Date:{" "}
-              <input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
+              <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
             </label>
             <label>
               End Date:{" "}
-              <input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
+              <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
             </label>
             <button className={styles.filterButton} onClick={handleFilter}>
               Show
@@ -348,12 +269,7 @@ const DistricManagerDashboard = () => {
                 <XAxis dataKey="month" />
                 <YAxis />
                 <Tooltip />
-                <Line
-                  type="monotone"
-                  dataKey="sales"
-                  stroke="#007bff"
-                  strokeWidth={2}
-                />
+                <Line type="monotone" dataKey="sales" stroke="#007bff" strokeWidth={2} />
               </LineChart>
             </ResponsiveContainer>
           </div>
