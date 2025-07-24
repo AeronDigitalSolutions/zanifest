@@ -88,9 +88,7 @@ function healthinsurance() {
             );
           })}
         </div>
-        <button className={styles.moreButton}>
-          more members <FaAngleDown size={10} />
-        </button>
+
         <button className={styles.continueButton} onClick={()=>{router.push('./health1')}}>
           Continue <FaChevronRight size={10} />
         </button>
