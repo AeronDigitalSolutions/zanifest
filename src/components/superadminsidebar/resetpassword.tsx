@@ -22,9 +22,9 @@ const resetpassword = () => {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <div className={styles.logoContainer}>
+        {/* <div className={styles.logoContainer}>
           <Image src={logo} alt="Logo" width={100} />
-        </div>
+        </div> */}
 
         <h2 className={styles.title}>Reset Password</h2>
 

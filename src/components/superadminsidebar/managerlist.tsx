@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import styles from '@/styles/components/superadminsidebar/managerlist.module.css'; // Make sure path is correct
+import styles from '@/styles/components/superadminsidebar/managerlist.module.css';
 
 interface Manager {
   _id: string;
@@ -29,9 +29,10 @@ export default function ManagersTable() {
         const res = await fetch('/api/getmanager');
         const data = await res.json();
         setManagers(data);
-        setLoading(false);
       } catch (err) {
         console.error('Error fetching managers:', err);
+        alert('Something went wrong!');
+      } finally {
         setLoading(false);
       }
     };
@@ -39,41 +40,44 @@ export default function ManagersTable() {
     fetchManagers();
   }, []);
 
-  if (loading) return <p className={styles.loading}>Loading managers...</p>;
-
   return (
     <div className={styles.container}>
-      <h2 className={styles.heading}>All Managers</h2>
-      <table className={styles.table}>
-        <thead className={styles.thead}>
-          <tr>
-            <th className={styles.th}>ID</th>
-            <th className={styles.th}>Name</th>
-            <th className={styles.th}>Email</th>
-            <th className={styles.th}>Category</th>
-            <th className={styles.th}>State</th>
-            <th className={styles.th}>District</th>
-            <th className={styles.th}>Assigned To</th>
-          </tr>
-        </thead>
-        <tbody>
-          {managers.map((manager, index) => (
-            <tr key={manager._id}>
-              <td className={styles.td}>{index + 1}</td>
-              <td className={styles.td}>{manager.name}</td>
-              <td className={styles.td}>{manager.email}</td>
-              <td className={styles.td}>{manager.category}</td>
-              <td className={styles.td}>{manager.location?.state}</td>
-              <td className={styles.td}>{manager.location?.district}</td>
-              <td className={styles.td}>
-                {manager.assignedTo
-                  ? `${manager.assignedTo.name} (${manager.assignedTo.category})`
-                  : '—'}
-              </td>
+      <h1 className={styles.heading}>All Managers</h1>
+
+      {loading ? (
+        <p className={styles.loading}>Loading managers...</p>
+      ) : (
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th className={styles.th}>ID</th>
+              <th className={styles.th}>Name</th>
+              <th className={styles.th}>Email</th>
+              <th className={styles.th}>Category</th>
+              <th className={styles.th}>State</th>
+              <th className={styles.th}>District</th>
+              <th className={styles.th}>Assigned To</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {managers.map((manager, index) => (
+              <tr key={manager._id} className={styles.row}>
+                <td className={styles.td}>{index + 1}</td>
+                <td className={styles.td}>{manager.name}</td>
+                <td className={styles.td}>{manager.email}</td>
+                <td className={styles.td}>{manager.category}</td>
+                <td className={styles.td}>{manager.location?.state}</td>
+                <td className={styles.td}>{manager.location?.district}</td>
+                <td className={styles.td}>
+                  {manager.assignedTo
+                    ? `${manager.assignedTo.name} (${manager.assignedTo.category})`
+                    : '—'}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

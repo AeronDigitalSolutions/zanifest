@@ -1,5 +1,7 @@
-// pages/adminList.tsx
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
+import styles from '@/styles/components/superadminsidebar/adminlist.module.css';
+
 
 type Admin = {
   _id: string;
@@ -20,6 +22,7 @@ export default function AdminList() {
         setAdmins(data);
       } catch (error) {
         console.error('Failed to fetch admins:', error);
+        alert('Something went wrong!');
       } finally {
         setLoading(false);
       }
@@ -29,28 +32,28 @@ export default function AdminList() {
   }, []);
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>Admin List</h1>
+    <div className={styles.container}>
+      <h1 className={styles.heading}>Admin List</h1>
 
       {loading ? (
-        <p>Loading...</p>
+        <p className={styles.loading}>Loading admins...</p>
       ) : admins.length === 0 ? (
-        <p>No admins found.</p>
+        <p className={styles.noData}>No admins found.</p>
       ) : (
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <table className={styles.table}>
           <thead>
             <tr>
-              <th style={{ border: '1px solid #ccc', padding: '8px' }}>Name</th>
-              <th style={{ border: '1px solid #ccc', padding: '8px' }}>Email</th>
-              <th style={{ border: '1px solid #ccc', padding: '8px' }}>Role</th>
+              <th className={styles.th}>Name</th>
+              <th className={styles.th}>Email</th>
+              <th className={styles.th}>Role</th>
             </tr>
           </thead>
           <tbody>
             {admins.map((admin) => (
-              <tr key={admin._id}>
-                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{admin.userName}</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{admin.email}</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{admin.role}</td>
+              <tr key={admin._id} className={styles.row}>
+                <td className={styles.td}>{admin.userName}</td>
+                <td className={styles.td}>{admin.email}</td>
+                <td className={styles.td}>{admin.role}</td>
               </tr>
             ))}
           </tbody>

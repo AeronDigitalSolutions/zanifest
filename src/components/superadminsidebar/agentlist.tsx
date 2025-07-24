@@ -1,5 +1,6 @@
+
 import React, { useEffect, useState } from 'react';
-import styles from '@/styles/components/superadminsidebar/managerlist.module.css';
+import styles from '@/styles/components/superadminsidebar/agentlist.module.css';
 
 interface Agent {
   _id: string;
@@ -7,13 +8,13 @@ interface Agent {
   email: string;
   assignedTo: string;
   district: string;
-    city: string;
-    state: string;
-  // add other fields if needed
+  city: string;
+  state: string;
 }
 
 const AgentsPage: React.FC = () => {
   const [agents, setAgents] = useState<Agent[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchAgents = async () => {
     try {
@@ -22,6 +23,8 @@ const AgentsPage: React.FC = () => {
       setAgents(data.agents);
     } catch (err) {
       console.error('Error fetching agents:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -30,36 +33,40 @@ const AgentsPage: React.FC = () => {
   }, []);
 
   return (
-     <div className={styles.container}>
-      <h2 className={styles.heading}>All Agents</h2>
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>District</th>
-            <th>City</th>
-            <th>State</th>
-            <th>Assigned To</th>
-          </tr>
-        </thead>
-        <tbody>
-          {agents.map((agent, index) => (
-            <tr key={index}>
-              <td>{agent.name}</td>
-              <td>{agent.email}</td>
-              <td>{agent.district}</td>
-              <td>{agent.city}</td>
-              <td>{agent.state}</td>
-              <td className={styles.assignedTo}>
-                {agent.assignedTo} 
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <div className={styles.container}>
+      <h1 className={styles.heading}>All Agents</h1>
 
+      {loading ? (
+        <p>Loading agents...</p>
+      ) : (
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th className={styles.th}>Name</th>
+              <th className={styles.th}>Email</th>
+              <th className={styles.th}>District</th>
+              <th className={styles.th}>City</th>
+              <th className={styles.th}>State</th>
+              <th className={styles.th}>Assigned To</th>
+            </tr>
+          </thead>
+          <tbody>
+            {agents.map((agent) => (
+              <tr key={agent._id} className={styles.row}>
+                <td className={styles.td}>{agent.name}</td>
+                <td className={styles.td}>{agent.email}</td>
+                <td className={styles.td}>{agent.district}</td>
+                <td className={styles.td}>{agent.city}</td>
+                <td className={styles.td}>{agent.state}</td>
+                <td className={`${styles.td} ${styles.assignedTo}`}>
+                  {agent.assignedTo}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
   );
 };
 

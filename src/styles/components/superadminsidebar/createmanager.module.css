@@ -1,3 +1,5 @@
+
+
 .container {
   width: calc(100% - 20px);
   margin: 2rem auto;
@@ -24,7 +26,7 @@
 
 .row {
   display: flex;
-  gap: 1rem;
+  gap: 1.2rem;
   flex-wrap: wrap;
 }
 
@@ -67,9 +69,8 @@
 }
 
 .radioRow {
-  flex-wrap: nowrap;
   justify-content: space-between;
-  align-items: center;
+  flex-wrap: wrap;
 }
 
 .radioLabel {
