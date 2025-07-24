@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import logo from "@/assets/logo.png";
 import CreateAdmin from "@/components/superadminsidebar/createadmin";
@@ -10,6 +10,7 @@ import CreateAgent from "@/components/superadminsidebar/createagent";
 import ChangePassword from "@/components/superadminsidebar/changepasswords";
 import ResetPassword from "@/components/superadminsidebar/resetpassword";
 import styles from "@/styles/pages/admindashboard.module.css";
+import { useRouter } from "next/router";
 // import withAuth from "@/lib/withAuth";
 import { useAdmin } from "@/lib/hooks/useAdmin";
 
@@ -28,6 +29,14 @@ import axios from "axios";
 const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+const router = useRouter();
+  useEffect(() => {
+    const token = localStorage.getItem("adminToken");
+
+    if (!token) {
+      router.replace("/adminlogin");
+    }
+  }, []);
 
    const { admin, loading } = useAdmin();
    console.log("Admin data:", admin?.userName);

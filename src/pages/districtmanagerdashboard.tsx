@@ -93,7 +93,13 @@ const DistricManagerDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [formattedTotalSales, setFormattedTotalSales] = useState("");
   const [formattedMonthlySales, setFormattedMonthlySales] = useState("");
+  useEffect(() => {
+    const token = localStorage.getItem("managerToken");
 
+    if (!token) {
+      router.replace("/managerlogin");
+    }
+  }, []);
   const { user } = useManager();
 
   const handleLogout = () => {

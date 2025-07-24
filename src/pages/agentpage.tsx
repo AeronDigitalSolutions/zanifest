@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import logo from "@/assets/logo.png";
 import styles from "@/styles/pages/agent.module.css";
@@ -46,7 +46,13 @@ const Header = () => {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const agentName = typeof window !== "undefined" ? localStorage.getItem("agentName") : null;
+  useEffect(() => {
+    const token = localStorage.getItem("agentToken");
 
+    if (!token) {
+      router.replace("/agentlogin");
+    }
+  }, []);
 
   const sidebarMenu = [
     {

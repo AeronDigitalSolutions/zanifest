@@ -81,7 +81,13 @@ const StateManagerDashboard = () => {
   const [formattedTotalSales, setFormattedTotalSales] = useState("");
   const [formattedMonthlySales, setFormattedMonthlySales] = useState("");
   const [districtManagers, setDistrictManagers] = useState<Manager[]>([]);
+  useEffect(() => {
+    const token = localStorage.getItem("managerToken");
 
+    if (!token) {
+      router.replace("/managerlogin");
+    }
+  }, []);
   const { user } = useManager();
 
   useEffect(() => {

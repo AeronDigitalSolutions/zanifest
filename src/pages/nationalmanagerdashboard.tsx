@@ -452,7 +452,13 @@ const nationalManagerDashboard = () => {
   const [endDate, setEndDate] = useState("");
   const [filteredData, setFilteredData] = useState(monthlySalesData);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  useEffect(() => {
+    const token = localStorage.getItem("managerToken");
 
+    if (!token) {
+      router.replace("/managerlogin");
+    }
+  }, []);
   const { user } = useManager();
 
   useEffect(() => {
