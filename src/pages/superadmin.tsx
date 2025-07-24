@@ -12,9 +12,8 @@ import AgentList from "@/components/superadminsidebar/agentlist";
 import ChangePassword from "@/components/superadminsidebar/changepasswords";
 import ResetPassword from "@/components/superadminsidebar/resetpassword";
 import styles from "@/styles/pages/admindashboard.module.css";
-import withAuth from "@/lib/withAuth";
 import { useAdmin } from "@/lib/hooks/useAdmin";
-
+import axios from "axios";
 import {
   FiUsers,
   FiUserPlus,
@@ -24,6 +23,7 @@ import {
   FiMenu,
   FiX,
 } from "react-icons/fi";
+import {  useRouter } from "next/router";
 
 const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
@@ -33,10 +33,22 @@ const AdminDashboard = () => {
   const [stateManagerCount, setStateManagerCount] = useState(0);
   const [districtManagerCount, setDistrictManagerCount] = useState(0);
 
-  const { admin, loading } = useAdmin();
+  const router = useRouter();
+  const { admin , loading} = useAdmin();
+ 
+  console.log("Admin data:", admin?.userName);
 
   const handleLogout = () => {
-    console.log("Logged out");
+    try{
+       axios.post("/api/admin/logout");
+      localStorage.removeItem("adminToken");
+      window.location.href = "/"; // Redirect to login page after logout
+
+    }
+    catch(error){
+      console.error("Logout failed:", error);
+
+    }
   };
 
   useEffect(() => {
@@ -71,6 +83,7 @@ const AdminDashboard = () => {
     <div className={styles.wrapper}>
       {/* Header */}
       <header className={styles.header}>
+        <h1>Welcome, {admin?.userName ?? "SuperAdmin"}</h1>
         <div className={styles.logoContainer}>
           <Image src={logo} alt="Logo" width={130} height={40} className={styles.logo} />
         </div>

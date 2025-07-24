@@ -241,12 +241,13 @@ const CreateAgent = () => {
           <div className={styles.formGroup}>
             <label htmlFor="state">State</label>
             <input
-              type="text"
-              id="state"
+              type={field === 'email' ? 'email' : 'text'}  // 👈 This line enables email validation
+              id={field}
               className={styles.input}
               placeholder="Enter state"
               value={formData.state}
               onChange={handleChange}
+              required
             />
           </div>
 
@@ -289,6 +290,7 @@ const CreateAgent = () => {
               </option>
             ))}
           </select>
+
         </div>
 
         <button type="submit" className={styles.submitButton}>Create</button>

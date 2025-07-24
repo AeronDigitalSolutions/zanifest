@@ -72,6 +72,7 @@ const CreateAdmin = () => {
             <label htmlFor="email">Email</label>
             <input type="email" id="email" className={styles.input} placeholder="Enter email" 
              value={email}
+             required
             onChange={(e) => setEmail(e.target.value)}/>
           </div>
           <div className={styles.formGroup}>

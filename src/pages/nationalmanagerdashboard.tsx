@@ -372,9 +372,8 @@ import Image from "next/image";
 import logo from "@/assets/logo.png";
 import { useRouter } from "next/router";
 import styles from "@/styles/pages/nationalmanager.module.css";
-import axios from "axios";
-import withAuth from "@/lib/withAuth";
-import { useManager } from "@/lib/hooks/useManager";
+import axios from 'axios';
+import { useManager } from '@/lib/hooks/useManager';
 
 import {
   FiUsers,
@@ -469,10 +468,19 @@ const nationalManagerDashboard = () => {
     fetchStateManagers();
   }, []);
 
-  const handleLogout = () => {
-    router.push("/managerlogin");
-  };
 
+const handleLogout = () => {
+    try{
+       axios.post("/api/manager/logout");
+      localStorage.removeItem("managerToken");
+      window.location.href = "/"; // Redirect to login page after logout
+
+    }
+    catch(error){
+      console.error("Logout failed:", error);
+
+    }
+  };
   const totalSales = agents.reduce((sum, agent) => sum + agent.totalSales, 0);
   const monthlySales = agents.reduce(
     (sum, agent) => sum + agent.monthlySales,
@@ -600,7 +608,7 @@ const nationalManagerDashboard = () => {
 
           {showAgentList && (
             <div className={styles.agentTable}>
-              <h3 className={styles.tableTitle}>Agent List</h3>
+              <h3 className={styles.tableTitle}>State Managers List</h3>
               <div className={styles.tableWrapper}>
                 <table className={styles.table}>
                   <thead>

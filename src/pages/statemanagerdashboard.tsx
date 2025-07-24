@@ -479,10 +479,20 @@ const StateManagerDashboard = () => {
     fetchDistrictManagers();
   }, []);
 
-  const handleLogout = () => {
-    router.push("/managerlogin");
+const handleLogout = () => {
+    try{
+       axios.post("/api/manager/logout");
+      localStorage.removeItem("managerToken");
+      window.location.href = "/"; // Redirect to login page after logout
+
+    }
+    catch(error){
+      console.error("Logout failed:", error);
+
+    }
   };
 
+  
   const totalSales = agents.reduce((sum, agent) => sum + agent.totalSales, 0);
   const monthlySales = agents.reduce((sum, agent) => sum + agent.monthlySales, 0);
   const totalClients = agents.reduce((sum, agent) => sum + agent.clients, 0);
@@ -596,7 +606,7 @@ const StateManagerDashboard = () => {
 
           {showAgentList && (
             <div className={styles.agentTable}>
-              <h3 className={styles.tableTitle}>Agent List</h3>
+              <h3 className={styles.tableTitle}>District Manager's List</h3>
               <div className={styles.tableWrapper}>
                 <table className={styles.table}>
                   <thead>
