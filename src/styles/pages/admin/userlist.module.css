@@ -1,63 +1,19 @@
+
+
 .container {
-  margin: 2rem;
+  padding: 1rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.heading {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: #1a1a1a;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.table th,
-.table td {
-  padding: 12px 16px;
-  text-align: left;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.table th {
-  background-color: #f3f6f9;
-  font-weight: 600;
-  color: #374151;
-}
-
-.table tr:hover {
-  background-color: #f9fafb;
-}
-
-.actionBtn {
-  padding: 6px 12px;
-  background-color: #f5f5f5;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 0.9rem;
-  color: #333;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.actionBtn:hover {
-  background-color: #e2e8f0;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
   background-color: #ffffff;
   border-bottom: 1px solid #e5e7eb;
+  padding: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .logoContainer {
@@ -68,7 +24,7 @@
 .logoutButton {
   background-color: #ef4444;
   color: white;
-  padding: 0.4rem 1rem;
+  padding: 0.5rem 1rem;
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -79,4 +35,73 @@
 
 .logoutButton:hover {
   background-color: #dc2626;
+}
+
+.heading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 1rem 0;
+  color: #1a1a1a;
+  text-align: center;
+}
+
+.loadingText {
+  text-align: center;
+  font-size: 1rem;
+  color: #666;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.table {
+  width: 100%;
+  min-width: 400px;
+  border-collapse: collapse;
+  background-color: #ffffff;
+}
+
+.th,
+.td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.th {
+  background-color: #f3f6f9;
+  font-weight: 600;
+  color: #374151;
+}
+
+.tr:hover {
+  background-color: #f9fafb;
+}
+
+@media screen and (max-width: 640px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .heading {
+    font-size: 1.25rem;
+  }
+
+  .table {
+    font-size: 0.85rem;
+  }
+
+  .th,
+  .td {
+    padding: 10px;
+  }
+
+  .logoutButton {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+  }
 }
