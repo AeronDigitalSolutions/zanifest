@@ -12,7 +12,6 @@ import AgentList from "@/components/superadminsidebar/agentlist";
 import ChangePassword from "@/components/superadminsidebar/changepasswords";
 import ResetPassword from "@/components/superadminsidebar/resetpassword";
 import styles from "@/styles/pages/admindashboard.module.css";
-import withAuth from "@/lib/withAuth";
 import { useAdmin } from "@/lib/hooks/useAdmin";
 import axios from "axios";
 import {

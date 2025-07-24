@@ -9,7 +9,6 @@ interface Agent {
   district: string;
     city: string;
     state: string;
-  // add other fields if needed
 }
 
 const AgentsPage: React.FC = () => {
@@ -17,7 +16,7 @@ const AgentsPage: React.FC = () => {
 
   const fetchAgents = async () => {
     try {
-      const res = await fetch('/api/getagent');
+      const res = await fetch('/api/getallagents');
       const data = await res.json();
       setAgents(data.agents);
     } catch (err) {
