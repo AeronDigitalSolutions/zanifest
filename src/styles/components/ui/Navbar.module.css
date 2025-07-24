@@ -121,19 +121,20 @@
 }
 
 .dropDown {
-  display: none;
-  position: fixed;
-  translate: 0rem 1.5rem;
-  background-color: white;
-  border-color: #101010;
-  border:1px solid;
-  padding: 8px 0px;
-  font-size: 1rem;
-  color: #494949;
-  z-index: 4;
-  border-radius: 10px;
-  gap: 0.4rem;
-  animation: dropdownAnimation 0.3s ease-in;
+display: none;
+position: absolute;
+top: 100%;
+width:14vw;
+left: 0;
+background-color: white;
+border: 1px solid #101010;
+padding: 8px 0;
+font-size: 1rem;
+color: #494949;
+z-index: 4;
+border-radius: 10px;
+gap: 0.4rem;
+animation: dropdownAnimation 0.3s ease-in;
 }
 
 .dropItem {
