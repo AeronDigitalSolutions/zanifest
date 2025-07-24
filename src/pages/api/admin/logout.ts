@@ -2,8 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { serialize } from "cookie";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  localStorage.removeItem("adminToken"); // or whatever key you use
-  localStorage.removeItem("token"); // or whatever key you use
   res.setHeader(
     'Set-Cookie',
     serialize('adminToken', '', {

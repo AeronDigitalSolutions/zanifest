@@ -46,13 +46,7 @@ const Header = () => {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const agentName = typeof window !== "undefined" ? localStorage.getItem("agentName") : null;
-  useEffect(() => {
-    const token = localStorage.getItem("agentToken");
-
-    if (!token) {
-      router.replace("/agentlogin");
-    }
-  }, []);
+ 
 
   const sidebarMenu = [
     {

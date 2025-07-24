@@ -35,13 +35,7 @@ const AdminDashboard = () => {
 
   const router = useRouter();
   const { admin , loading} = useAdmin();
-  useEffect(() => {
-      const token = localStorage.getItem("adminToken");
   
-      if (!token) {
-        router.replace("/adminlogin");
-      }
-    }, []);
   // console.log("Admin data:", admin?.userName);
 
   const handleLogout = () => {

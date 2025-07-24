@@ -30,13 +30,7 @@ const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 const router = useRouter();
-  useEffect(() => {
-    const token = localStorage.getItem("adminToken");
-
-    if (!token) {
-      router.replace("/adminlogin");
-    }
-  }, []);
+  
 
    const { admin, loading } = useAdmin();
    console.log("Admin data:", admin?.userName);
