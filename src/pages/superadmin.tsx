@@ -36,7 +36,7 @@ const AdminDashboard = () => {
   const router = useRouter();
   const { admin , loading} = useAdmin();
  
-  console.log("Admin data:", admin?.userName);
+  // console.log("Admin data:", admin?.userName);
 
   const handleLogout = () => {
     try{

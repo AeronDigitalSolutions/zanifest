@@ -52,7 +52,8 @@ const AgentsPage: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {agents.map((agent) => (
+              
+              {Array.isArray(agents) && agents.map((agent, index) => (
                 <tr key={agent._id} className={styles.row}>
                   <td className={styles.td}>{agent.name}</td>
                   <td className={styles.td}>{agent.email}</td>
