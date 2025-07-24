@@ -10,16 +10,16 @@ export function middleware(req: NextRequest) {
   || req.cookies.get('managerToken')?.value 
   || req.cookies.get('agentToken')?.value;
 
-  console.log("Token from cookies:", token);
+  // Token from cookies: token
 
-  console.log("MIDDLEWAREEE");
+  // MIDDLEWAREEE
 
   const url = req.nextUrl;
-  console.log("Request URL:", url.pathname);
+  // Request URL: url.pathname
 
   // No token: redirect based on path
-  if (token=== undefined || token === null || token === '') {
-    console.log("No token found, redirecting...");
+  if (!token) {
+    // No token found, redirecting...
     if (url.pathname.startsWith('/superadmin') || url.pathname.startsWith('/admindashboard')) {
       return NextResponse.redirect(new URL('/adminlogin', req.url));
     } else if (
@@ -36,14 +36,14 @@ export function middleware(req: NextRequest) {
   }
 
   try {
-    console.log("Verifying token...");
+    // Verifying token...
     verifyToken(token);
-    console.log("Token is valid according to middleware");
+    // Token is valid according to middleware
     return NextResponse.next();
   } 
   
   catch (err) {
-    console.log("Token verification failed:");
+    // Token verification failed:
     // Invalid token: redirect based on path
     if (url.pathname.startsWith('/superadmin') || url.pathname.startsWith('/admindashboard')) {
       return NextResponse.redirect(new URL('/adminlogin', req.url));
@@ -63,13 +63,12 @@ export function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-     '/admindashboard',
-    '/superadmin',
-    '/nationalmanagerdashboard',
-    '/statemanagerdashboard',
-    '/districtmanagerdashboard',
-    '/agentpage',
+    '/admindashboard/:path*',
+    '/superadmin/:path*',
+    '/nationalmanagerdashboard/:path*',
+    '/statemanagerdashboard/:path*',
+    '/districtmanagerdashboard/:path*',
+    '/agentpage/:path*',
     // add others
   ]
 };
-
