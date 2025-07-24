@@ -3,6 +3,7 @@ import dbConnect from "@/lib/dbConnect";
 import Agent from "@/models/Agent";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { serialize } from 'cookie';
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -36,8 +37,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       { expiresIn: "1d" }
     );
 
+
+// Inside your try block (after generating the token)
+res.setHeader('Set-Cookie', serialize('agentToken', token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'none',
+  path: '/',
+  maxAge: 60 * 60 * 24, // 1 day
+}));
+
+
     res.status(200).json({ token, agent: { name: agent.name, email: agent.email, role: "agent" } });
-  } catch (err) {
+  } 
+  
+  catch (err) {
     console.error("Login error:", err);
     res.status(500).json({ message: "Something went wrong" });
   }

@@ -27,6 +27,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import axios from "axios";
 
 // Mock chart data
 const chartData = [
@@ -79,9 +80,17 @@ const Header = () => {
     },
   ];
 
-  const handleLogout = () => {
-    console.log("Logged out");
-    router.push("/agentlogin");
+ const handleLogout = () => {
+    try{
+       axios.post("/api/agent/logout");
+      localStorage.removeItem("agentToken");
+      window.location.href = "/"; // Redirect to login page after logout
+
+    }
+    catch(error){
+      console.error("Logout failed:", error);
+
+    }
   };
 
   return (

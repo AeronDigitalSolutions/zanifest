@@ -139,6 +139,7 @@ console.log("Assigned to _id:", formData.assignedTo);
           type="email" 
           id="email" 
           name='email'
+          required
           className={styles.input} 
           placeholder="Enter email" 
           value={formData.email} 

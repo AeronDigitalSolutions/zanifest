@@ -33,6 +33,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useManager } from "@/lib/hooks/useManager";
+import axios from "axios";
 
 const agents = [
   {
@@ -131,8 +132,6 @@ interface Agent {
 
 
 
-
-
 const DistricManagerDashboard = () => {
   const router = useRouter();
   const [showAgentList, setShowAgentList] = useState(false);
@@ -148,9 +147,18 @@ const DistricManagerDashboard = () => {
   const {user} = useManager();
 
   const handleLogout = () => {
-  console.log("Logged out");
-    router.push("/managerlogin");
-};
+    try{
+       axios.post("/api/manager/logout");
+      localStorage.removeItem("managerToken");
+      window.location.href = "/"; // Redirect to login page after logout
+
+    }
+    catch(error){
+      console.error("Logout failed:", error);
+
+    }
+  };
+
   const totalSales = agents.reduce((sum, agent) => sum + agent.totalSales, 0);
   const monthlySales = agents.reduce(
     (sum, agent) => sum + agent.monthlySales,

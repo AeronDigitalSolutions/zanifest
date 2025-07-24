@@ -23,6 +23,7 @@ import {
   FiMenu,
   FiX,
 } from "react-icons/fi";
+import axios from "axios";
 
 const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
@@ -31,15 +32,29 @@ const AdminDashboard = () => {
    const { admin, loading } = useAdmin();
    console.log("Admin data:", admin?.userName);
 
-  const handleLogout = () => {
-    console.log("Logged out");
+     const adminName = typeof window !== "undefined" ? localStorage.getItem("adminName") : null;
+
+
+   const handleLogout = () => {
+    try{
+       axios.post("/api/admin/logout");
+      localStorage.removeItem("adminToken");
+      window.location.href = "/"; // Redirect to login page after logout
+
+    }
+    catch(error){
+      console.error("Logout failed:", error);
+
+    }
   };
+
 
   return (
     <div className={styles.wrapper}>
       {/* Header */}
       <header className={styles.header}>
         <h1>Welcome, {admin?.userName ?? "Admin"}</h1>
+        <h1>  {adminName}</h1>
         <div className={styles.logoContainer}>
           <Image
             src={logo}

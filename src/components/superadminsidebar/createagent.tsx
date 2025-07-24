@@ -65,12 +65,13 @@ const CreateAgent = () => {
           <div className={styles.formGroup} key={field}>
             <label htmlFor={field}>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
             <input
-              type="text"
+              type={field === 'email' ? 'email' : 'text'}  // 👈 This line enables email validation
               id={field}
               className={styles.input}
               placeholder={`Enter ${field}`}
               value={formData[field]}
               onChange={handleChange}
+              required
             />
           </div>
         ))}
@@ -101,18 +102,18 @@ const CreateAgent = () => {
         <div className={styles.formGroup}>
           <label htmlFor="assignedTo">Assign to District Manager</label>
           <select
-  id="assignedTo"
-  value={formData.assignedTo}
-  onChange={handleChange}
-  className={styles.input}
->
-  <option value="">Select Manager</option>
-  {districtManagers.map((manager: any) => (
-    <option key={manager.managerId} value={manager.managerId}>
-      {manager.name} ({manager.managerId})
-    </option>
-  ))}
-</select>
+            id="assignedTo"
+            value={formData.assignedTo}
+            onChange={handleChange}
+            className={styles.input}
+          >
+            <option value="">Select Manager</option>
+            {districtManagers.map((manager: any) => (
+              <option key={manager.managerId} value={manager.managerId}>
+                {manager.name} ({manager.managerId})
+              </option>
+            ))}
+          </select>
 
         </div>
 

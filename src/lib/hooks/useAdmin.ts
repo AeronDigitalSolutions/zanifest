@@ -12,10 +12,13 @@ export function useAdmin() {
 
   useEffect(() => {
     const fetchAdmin = async () => {
+      console.log("Fetching admin info...decoding token");
       try {
         const res = await fetch("/api/admin/getAdminName");
+        console.log("Response status for admin:", res.status);
         if (res.ok) {
           const data = await res.json();
+          console.log("Admin data fetched:", data);
           setAdmin({
             userName: data.user.name, // 👈 Correctly mapped
             email: data.user.email,
