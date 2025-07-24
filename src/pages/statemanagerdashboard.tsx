@@ -100,8 +100,13 @@ const handleLogout = () => {
     try{
        axios.post("/api/manager/logout");
       localStorage.removeItem("managerToken");
-      window.location.href = "/"; // Redirect to login page after logout
+// 3. Force full page reload
+    window.location.reload();
 
+    // 4. Redirect to home after a short delay (after reload completes)
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 100); // enough time to ensure reload completes first
     }
     catch(error){
       console.error("Logout failed:", error);
