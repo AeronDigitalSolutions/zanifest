@@ -101,7 +101,7 @@ const AdminDashboard = () => {
         </div>
       </header>
 
-      {/* Main Area */}
+      {/* Main Areas */}
       <div className={styles.mainArea}>
         {/* Sidebar */}
         <aside
