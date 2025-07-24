@@ -29,63 +29,52 @@ const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [adminCount, setAdminCount] = useState(0);
-const [agentCount, setAgentCount] = useState(0);
-const [stateManagerCount, setStateManagerCount] = useState(0);
-const [districtManagerCount, setDistrictManagerCount] = useState(0);
+  const [agentCount, setAgentCount] = useState(0);
+  const [stateManagerCount, setStateManagerCount] = useState(0);
+  const [districtManagerCount, setDistrictManagerCount] = useState(0);
 
-
-  const { admin , loading} = useAdmin();
-  console.log("Admin data:", admin?.userName);
+  const { admin, loading } = useAdmin();
 
   const handleLogout = () => {
     console.log("Logged out");
   };
 
   useEffect(() => {
-  const fetchAdminCount = async () => {
-    const res = await fetch("/api/getadmin");
-    const data = await res.json();
-    setAdminCount(data.length); // ✅ update state
-  };
-  fetchAdminCount();
-}, []);
+    const fetchAdminCount = async () => {
+      const res = await fetch("/api/getadmin");
+      const data = await res.json();
+      setAdminCount(data.length);
+    };
+    fetchAdminCount();
+  }, []);
 
-useEffect(() => {
-  const fetchAgentCount = async () => {
-    const res = await fetch("/api/getagent");
-    const data = await res.json();
-    setAgentCount(data.length); 
-    console.log("Agent count:", data.length);
-  };
-  fetchAgentCount();
-}, []);
+  useEffect(() => {
+    const fetchAgentCount = async () => {
+      const res = await fetch("/api/getagent");
+      const data = await res.json();
+      setAgentCount(data.length);
+    };
+    fetchAgentCount();
+  }, []);
 
-useEffect(() => {
-  const fetchManagerCounts = async () => {
-    const res = await fetch("/api/getmanager");
-    const managers = await res.json();
-
-    setStateManagerCount(managers.filter((m: { category: string }) => m.category === "state").length);
-    setDistrictManagerCount(managers.filter((m: { category: string }) => m.category === "district").length);
-  };
-  fetchManagerCounts();
-}, []);
-
+  useEffect(() => {
+    const fetchManagerCounts = async () => {
+      const res = await fetch("/api/getmanager");
+      const managers = await res.json();
+      setStateManagerCount(managers.filter((m: { category: string }) => m.category === "state").length);
+      setDistrictManagerCount(managers.filter((m: { category: string }) => m.category === "district").length);
+    };
+    fetchManagerCounts();
+  }, []);
 
   return (
     <div className={styles.wrapper}>
       {/* Header */}
       <header className={styles.header}>
-        <h1>Welcome, {admin?.userName ?? "super Admin"}</h1>
         <div className={styles.logoContainer}>
-          <Image
-            src={logo}
-            alt="Logo"
-            width={130}
-            height={40}
-            className={styles.logo}
-          />
+          <Image src={logo} alt="Logo" width={130} height={40} className={styles.logo} />
         </div>
+        <h2>Welcome, {admin?.userName ?? "Super Admin"}</h2>
         <button
           className={styles.menuToggle}
           onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -103,9 +92,7 @@ useEffect(() => {
       <div className={styles.mainArea}>
         {/* Sidebar */}
         <aside
-          className={`${styles.sidebar} ${
-            sidebarOpen ? styles.sidebarMobile : ""
-          }`}
+          className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarMobile : ""}`}
         >
           <p className={styles.sectionTitle}>Menu</p>
           <ul className={styles.menu}>
@@ -121,6 +108,7 @@ useEffect(() => {
                 <span className={styles.label}>Dashboard</span>
               </span>
             </li>
+
             <p className={styles.sectionTitle}>Create</p>
 
             <li
@@ -159,6 +147,7 @@ useEffect(() => {
                 <span className={styles.label}>Create Agent</span>
               </span>
             </li>
+
             <p className={styles.sectionTitle}>List</p>
 
             <li
@@ -205,6 +194,7 @@ useEffect(() => {
                 <span className={styles.label}>User List</span>
               </span>
             </li>
+
             <p className={styles.sectionTitle}>Security</p>
             <li
               onClick={() => {
@@ -215,7 +205,7 @@ useEffect(() => {
             >
               <span className={styles.iconLabel}>
                 <FiLock className={styles.icon} />
-                <span className={styles.label}>Reset password</span>
+                <span className={styles.label}>Reset Password</span>
               </span>
             </li>
 
@@ -232,7 +222,6 @@ useEffect(() => {
               </span>
             </li>
           </ul>
-
           <div className={styles.mobileOnlyLogout}>
             <button className={styles.logoutButton} onClick={handleLogout}>
               Logout
@@ -242,39 +231,30 @@ useEffect(() => {
 
         {/* Main Content */}
         <main className={styles.mainContent}>
-          {/* {activeSection === "dashboard" && (
-            <>
-              <div className={styles.card}>Number of Admins: 5</div>
-              <div className={styles.card}>State Managers: 12</div>
-              <div className={styles.card}>District Managers: 48</div>
-              <div className={styles.card}>Agents: 105</div>
-            </>
-          )} */}
           {activeSection === "dashboard" && (
-  <div className={styles.dashboardCards}>
-    <div className={styles.card}>
-      <FiUsers size={32} className={styles.cardIcon} />
-      <p className={styles.cardTitle}>Number of Admins</p>
-      <p className={styles.cardValue}>{adminCount}</p>
-    </div>
-    <div className={styles.card}>
-      <FiUserPlus size={32} className={styles.cardIcon} />
-      <p className={styles.cardTitle}>State Managers</p>
-      <p className={styles.cardValue}>{stateManagerCount}</p>
-    </div>
-    <div className={styles.card}>
-      <FiUsers size={32} className={styles.cardIcon} />
-      <p className={styles.cardTitle}>District Managers</p>
-      <p className={styles.cardValue}>{districtManagerCount}</p>
-    </div>
-    <div className={styles.card}>
-      <FiUserPlus size={32} className={styles.cardIcon} />
-      <p className={styles.cardTitle}>Agents</p>
-      <p className={styles.cardValue}>{agentCount}</p>
-    </div>
-  </div>
-)}
-
+            <div className={styles.dashboardCards}>
+              <div className={styles.card}>
+                <FiUsers size={32} className={styles.cardIcon} />
+                <p className={styles.cardTitle}>Number of Admins</p>
+                <p className={styles.cardValue}>{adminCount}</p>
+              </div>
+              <div className={styles.card}>
+                <FiUserPlus size={32} className={styles.cardIcon} />
+                <p className={styles.cardTitle}>State Managers</p>
+                <p className={styles.cardValue}>{stateManagerCount}</p>
+              </div>
+              <div className={styles.card}>
+                <FiUsers size={32} className={styles.cardIcon} />
+                <p className={styles.cardTitle}>District Managers</p>
+                <p className={styles.cardValue}>{districtManagerCount}</p>
+              </div>
+              <div className={styles.card}>
+                <FiUserPlus size={32} className={styles.cardIcon} />
+                <p className={styles.cardTitle}>Agents</p>
+                <p className={styles.cardValue}>{agentCount}</p>
+              </div>
+            </div>
+          )}
 
           {activeSection === "createAdmin" && <CreateAdmin />}
           {activeSection === "createManager" && <CreateManager />}
@@ -291,4 +271,4 @@ useEffect(() => {
   );
 };
 
-export default AdminDashboard; // Ensure only superadmin or admin can access this page
+export default AdminDashboard;

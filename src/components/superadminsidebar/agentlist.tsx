@@ -37,34 +37,36 @@ const AgentsPage: React.FC = () => {
       <h1 className={styles.heading}>All Agents</h1>
 
       {loading ? (
-        <p>Loading agents...</p>
+        <p className={styles.loading}>Loading agents...</p>
       ) : (
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th className={styles.th}>Name</th>
-              <th className={styles.th}>Email</th>
-              <th className={styles.th}>District</th>
-              <th className={styles.th}>City</th>
-              <th className={styles.th}>State</th>
-              <th className={styles.th}>Assigned To</th>
-            </tr>
-          </thead>
-          <tbody>
-            {agents.map((agent) => (
-              <tr key={agent._id} className={styles.row}>
-                <td className={styles.td}>{agent.name}</td>
-                <td className={styles.td}>{agent.email}</td>
-                <td className={styles.td}>{agent.district}</td>
-                <td className={styles.td}>{agent.city}</td>
-                <td className={styles.td}>{agent.state}</td>
-                <td className={`${styles.td} ${styles.assignedTo}`}>
-                  {agent.assignedTo}
-                </td>
+        <div className={styles.tableWrapper}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th className={styles.th}>Name</th>
+                <th className={styles.th}>Email</th>
+                <th className={styles.th}>District</th>
+                <th className={styles.th}>City</th>
+                <th className={styles.th}>State</th>
+                <th className={styles.th}>Assigned To</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {agents.map((agent) => (
+                <tr key={agent._id} className={styles.row}>
+                  <td className={styles.td}>{agent.name}</td>
+                  <td className={styles.td}>{agent.email}</td>
+                  <td className={styles.td}>{agent.district}</td>
+                  <td className={styles.td}>{agent.city}</td>
+                  <td className={styles.td}>{agent.state}</td>
+                  <td className={`${styles.td} ${styles.assignedTo}`}>
+                    {agent.assignedTo}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

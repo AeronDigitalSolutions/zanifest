@@ -1,7 +1,6 @@
+
 import React, { useEffect, useState } from 'react';
-
 import styles from '@/styles/components/superadminsidebar/adminlist.module.css';
-
 
 type Admin = {
   _id: string;
@@ -40,24 +39,26 @@ export default function AdminList() {
       ) : admins.length === 0 ? (
         <p className={styles.noData}>No admins found.</p>
       ) : (
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th className={styles.th}>Name</th>
-              <th className={styles.th}>Email</th>
-              <th className={styles.th}>Role</th>
-            </tr>
-          </thead>
-          <tbody>
-            {admins.map((admin) => (
-              <tr key={admin._id} className={styles.row}>
-                <td className={styles.td}>{admin.userName}</td>
-                <td className={styles.td}>{admin.email}</td>
-                <td className={styles.td}>{admin.role}</td>
+        <div className={styles.tableWrapper}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th className={styles.th}>Name</th>
+                <th className={styles.th}>Email</th>
+                <th className={styles.th}>Role</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {admins.map((admin) => (
+                <tr key={admin._id} className={styles.row}>
+                  <td className={styles.td}>{admin.userName}</td>
+                  <td className={styles.td}>{admin.email}</td>
+                  <td className={styles.td}>{admin.role}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
