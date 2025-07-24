@@ -1,4 +1,3 @@
-
 .container {
   margin: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -41,8 +40,14 @@
   color: #4b5563;
 }
 
-.assignedTo {
+.loading {
+  text-align: center;
   font-weight: 500;
-  color: #4b5563;
+  padding: 1rem;
 }
 
+.noData {
+  color: #6b7280;
+  text-align: center;
+  padding: 1rem;
+}

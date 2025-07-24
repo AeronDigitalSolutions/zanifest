@@ -13,7 +13,7 @@ const CreateAdmin = () => {
     e.preventDefault();
 
     const data = {
-      userName, // ✅ change from `name` to `userName`
+      userName, 
       email,
       password,
       role: isSuperAdmin ? 'superadmin' : 'admin'
