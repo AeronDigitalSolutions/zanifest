@@ -5,12 +5,12 @@ import Image from "next/image";
 import { FaChevronDown } from "react-icons/fa";
 
 const LIST = [
-  { id: 0, name: "Dashboard", image: require("@/assets/dashboard/list/1.png") },
-  { id: 1, name: "Profile", image: require("@/assets/dashboard/list/1.png") },
-  { id: 2, name: "My Policy", image: require("@/assets/dashboard/list/1.png") },
-  { id: 3, name: "Claims", image: require("@/assets/dashboard/list/1.png") },
-  { id: 4, name: "KYC", image: require("@/assets/dashboard/list/1.png") },
-  { id: 5, name: "Get help", image: require("@/assets/dashboard/list/1.png") },
+  { id: 0, name: "Dashboard", image: require("@/assets/dashboard/list/dashboard.png") },
+  { id: 1, name: "Profile", image: require("@/assets/dashboard/list/profile.png") },
+  { id: 2, name: "My Policy", image: require("@/assets/dashboard/list/policy.png") },
+  { id: 3, name: "Claims", image: require("@/assets/dashboard/list/claim.png") },
+  { id: 4, name: "KYC", image: require("@/assets/dashboard/list/kyc.png") },
+  { id: 5, name: "Get help", image: require("@/assets/dashboard/list/help.png") },
 ];
 
 function DashboardSelector({
