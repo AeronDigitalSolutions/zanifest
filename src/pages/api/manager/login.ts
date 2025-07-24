@@ -50,6 +50,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.setHeader("Set-Cookie", serialize("managerToken", token, {
         httpOnly: true, // safer, not accessible via JS
         path: "/",
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         maxAge: 60 * 60 * 24, // 1 day
       }));
 

@@ -41,8 +41,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 // Inside your try block (after generating the token)
 res.setHeader('Set-Cookie', serialize('agentToken', token, {
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: 'none',
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   path: '/',
   maxAge: 60 * 60 * 24, // 1 day
 }));
