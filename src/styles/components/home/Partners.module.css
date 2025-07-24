@@ -43,6 +43,7 @@
   height: 100px;
   transition: all 0.3s;
   border-radius: 22px;
+  margin-top: 10px;
 }
 
 .catItem:hover {

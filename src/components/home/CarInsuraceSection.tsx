@@ -14,12 +14,12 @@ const INSURANCELIST = [
   {
     name: "Critical Illness",
     image: require("@/assets/home/car/2.png"),
-    link: "/insurance/critical-illness",
+    link: "#",
   },
   {
     name: "Personal Accident",
     image: require("@/assets/home/car/3.png"),
-    link: "/insurance/personal-accident",
+    link: "#",
   },
   {
     name: "Car",
@@ -34,27 +34,27 @@ const INSURANCELIST = [
   {
     name: "Pay As you Drive",
     image: require("@/assets/home/car/6.png"),
-    link: "/insurance/pay-as-you-drive",
+    link: "#",
   },
   {
     name: "Third Party",
     image: require("@/assets/home/car/7.png"),
-    link: "/insurance/third-party",
+    link: "#",
   },
   {
     name: "Commercial Vehicle",
     image: require("@/assets/home/car/8.png"),
-    link: "/insurance/commercial-vehicle",
+    link: "#",
   },
   {
     name: "Home",
     image: require("@/assets/home/car/9.png"),
-    link: "/insurance/home",
+    link: "#",
   },
   {
     name: "Home Loan",
     image: require("@/assets/home/car/10.png"),
-    link: "/insurance/home-loan",
+    link: "#",
   },
 ];
 

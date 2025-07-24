@@ -15,8 +15,6 @@
   font-size: 40px;
 }
 
-.switchCont {
-}
 
 .switch {
   all: unset;
@@ -25,6 +23,7 @@
   background-color: #eef5ff;
   cursor: pointer;
   transition: all 0.5s;
+    margin-right: 1rem;
 }
 
 .selectedSwitch {
@@ -77,22 +76,12 @@
   cursor: pointer;
 }
 
-.moreButton {
-  all: unset;
-  color: #45b786;
-  border-style: none none dotted none;
-  cursor: pointer;
-  transition: all 0.5s;
-}
 
-.moreButton:active {
-  transform: scale(0.9);
-}
 
 .continueButton {
   all: unset;
   background-color: #ff5631;
-  margin-top: 50px;
+  margin-top: 15px;
   margin-bottom: 50px;
   color: white;
   padding: 10px 100px;
