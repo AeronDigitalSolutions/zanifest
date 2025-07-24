@@ -110,7 +110,10 @@ useEffect(() => {
           <p className={styles.sectionTitle}>Menu</p>
           <ul className={styles.menu}>
             <li
-              onClick={() => setActiveSection("dashboard")}
+              onClick={() => {
+                setActiveSection("dashboard");
+                setSidebarOpen(false);
+              }}
               className={styles.menuItem}
             >
               <span className={styles.iconLabel}>
@@ -121,7 +124,10 @@ useEffect(() => {
             <p className={styles.sectionTitle}>Create</p>
 
             <li
-              onClick={() => setActiveSection("createAdmin")}
+              onClick={() => {
+                setActiveSection("createAdmin");
+                setSidebarOpen(false);
+              }}
               className={styles.menuItem}
             >
               <span className={styles.iconLabel}>
@@ -130,7 +136,10 @@ useEffect(() => {
               </span>
             </li>
             <li
-              onClick={() => setActiveSection("createManager")}
+              onClick={() => {
+                setActiveSection("createManager");
+                setSidebarOpen(false);
+              }}
               className={styles.menuItem}
             >
               <span className={styles.iconLabel}>
@@ -139,7 +148,10 @@ useEffect(() => {
               </span>
             </li>
             <li
-              onClick={() => setActiveSection("createAgent")}
+              onClick={() => {
+                setActiveSection("createAgent");
+                setSidebarOpen(false);
+              }}
               className={styles.menuItem}
             >
               <span className={styles.iconLabel}>
@@ -149,32 +161,45 @@ useEffect(() => {
             </li>
             <p className={styles.sectionTitle}>List</p>
 
-            <li className={styles.menuItem}
-            onClick={() => setActiveSection("adminlist")}>
+            <li
+              className={styles.menuItem}
+              onClick={() => {
+                setActiveSection("adminlist");
+                setSidebarOpen(false);
+              }}>
               <span className={styles.iconLabel}>
                 <FiList className={styles.icon} />
                 <span className={styles.label}>Admin List</span>
               </span>
             </li>
-            <li 
-            className={styles.menuItem}
-            onClick={() => setActiveSection("managerlist")}>
+            <li
+              className={styles.menuItem}
+              onClick={() => {
+                setActiveSection("managerlist");
+                setSidebarOpen(false);
+              }}>
               <span className={styles.iconLabel}>
                 <FiList className={styles.icon} />
                 <span className={styles.label}>Manager List</span>
               </span>
             </li>
-            <li 
-            className={styles.menuItem}
-            onClick={() => setActiveSection("agentlist")}>
+            <li
+              className={styles.menuItem}
+              onClick={() => {
+                setActiveSection("agentlist");
+                setSidebarOpen(false);
+              }}>
               <span className={styles.iconLabel}>
                 <FiList className={styles.icon} />
                 <span className={styles.label}>Agent List</span>
               </span>
             </li>
-             <li 
-            className={styles.menuItem}
-            onClick={() => setActiveSection("userList")}>
+             <li
+              className={styles.menuItem}
+              onClick={() => {
+                setActiveSection("userList");
+                setSidebarOpen(false);
+              }}>
               <span className={styles.iconLabel}>
                 <FiList className={styles.icon} />
                 <span className={styles.label}>User List</span>
@@ -182,7 +207,10 @@ useEffect(() => {
             </li>
             <p className={styles.sectionTitle}>Security</p>
             <li
-              onClick={() => setActiveSection("resetpassword")}
+              onClick={() => {
+                setActiveSection("resetpassword");
+                setSidebarOpen(false);
+              }}
               className={styles.menuItem}
             >
               <span className={styles.iconLabel}>
@@ -192,7 +220,10 @@ useEffect(() => {
             </li>
 
             <li
-              onClick={() => setActiveSection("changepassword")}
+              onClick={() => {
+                setActiveSection("changepassword");
+                setSidebarOpen(false);
+              }}
               className={styles.menuItem}
             >
               <span className={styles.iconLabel}>

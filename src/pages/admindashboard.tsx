@@ -72,7 +72,10 @@ const AdminDashboard = () => {
           <p className={styles.sectionTitle}>Menu</p>
           <ul className={styles.menu}>
             <li
-              onClick={() => setActiveSection("dashboard")}
+              onClick={() => {
+                setActiveSection("dashboard");
+                setSidebarOpen(false);
+              }}
               className={styles.menuItem}
             >
               <span className={styles.iconLabel}>
@@ -84,7 +87,10 @@ const AdminDashboard = () => {
 
           
             <li
-              onClick={() => setActiveSection("createManager")}
+              onClick={() => {
+                setActiveSection("createManager");
+                setSidebarOpen(false);
+              }}
               className={styles.menuItem}
             >
               <span className={styles.iconLabel}>
@@ -93,7 +99,10 @@ const AdminDashboard = () => {
               </span>
             </li>
             <li
-              onClick={() => setActiveSection("createAgent")}
+              onClick={() => {
+                setActiveSection("createAgent");
+                setSidebarOpen(false);
+              }}
               className={styles.menuItem}
             >
               <span className={styles.iconLabel}>
@@ -104,8 +113,12 @@ const AdminDashboard = () => {
             <p className={styles.sectionTitle}>List</p>
 
             
-            <li className={styles.menuItem}
-            onClick={() => setActiveSection("managerList")}>
+            <li
+              className={styles.menuItem}
+              onClick={() => {
+                setActiveSection("managerList");
+                setSidebarOpen(false);
+              }}>
               <span className={styles.iconLabel}>
                 <FiList className={styles.icon} />
                 <span className={styles.label}>Manager List</span>
@@ -117,9 +130,12 @@ const AdminDashboard = () => {
                 <span className={styles.label}>Agent List</span>
               </span>
             </li>
-            <li 
-            className={styles.menuItem}
-            onClick={() => setActiveSection("userList")}>
+            <li
+              className={styles.menuItem}
+              onClick={() => {
+                setActiveSection("userList");
+                setSidebarOpen(false);
+              }}>
               <span className={styles.iconLabel}>
                 <FiList className={styles.icon} />
                 <span className={styles.label}>User List</span>
@@ -127,7 +143,10 @@ const AdminDashboard = () => {
             </li>
             <p className={styles.sectionTitle}>Security</p>
             <li
-              onClick={() => setActiveSection("resetpassword")}
+              onClick={() => {
+                setActiveSection("resetpassword");
+                setSidebarOpen(false);
+              }}
               className={styles.menuItem}
             >
               <span className={styles.iconLabel}>
@@ -137,7 +156,10 @@ const AdminDashboard = () => {
             </li>
 
             <li
-              onClick={() => setActiveSection("changepassword")}
+              onClick={() => {
+                setActiveSection("changepassword");
+                setSidebarOpen(false);
+              }}
               className={styles.menuItem}
             >
               <span className={styles.iconLabel}>
