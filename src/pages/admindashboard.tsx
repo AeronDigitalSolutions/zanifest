@@ -38,6 +38,7 @@ const AdminDashboard = () => {
    const handleLogout = () => {
     try{
        axios.post("/api/admin/logout");
+       console.log("logout")
       localStorage.removeItem("adminToken");
       window.location.href = "/"; // Redirect to login page after logout
 
