@@ -8,8 +8,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     'Set-Cookie',
     serialize('agentToken', '', {
       httpOnly: true,
-secure: process.env.NODE_ENV === "production",
-  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
       path: '/',
       expires: new Date(0),
     })
