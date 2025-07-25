@@ -1,8 +1,6 @@
 import React from "react";
 import { FaPhoneAlt, FaInstagram, FaTwitter } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
-import { FaLocationDot } from "react-icons/fa6";
-import { signOut } from "next-auth/react";
 import { FiFacebook, FiLinkedin } from "react-icons/fi";
 
 import styles from "@/styles/components/ui/UserDetails.module.css";
