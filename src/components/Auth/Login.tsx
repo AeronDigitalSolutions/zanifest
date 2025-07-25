@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { IoIosArrowBack } from "react-icons/io";
 import styles from "@/styles/components/Auth/Login.module.css";
 import Image from "next/image";
-import { signIn } from "next-auth/react";
+import { useAuth } from "@/context/AuthContext";
 
 
 
@@ -13,59 +13,38 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-const [email, setEmail] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const router = useRouter();
+  const { setUser } = useAuth();
 
-  // async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-  //   event.preventDefault();
-  //   setLoading(true);
-
-  //   if (userName === "admin" && password === "admin@123") {
-  //     setError(false);
-  //     router.push("/dashboard");
-  //   } else {
-  //     setError(true);
-  //   }
-
-  //   setLoading(false);
-  // }
-
-
-  //added by ashwina
-//   const onSubmit = async (e: React.FormEvent) => {
-//   e.preventDefault();
-//   const res = await fetch('/api/auth/login', {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify({ email, password }),
-//   });
-
-//   const data = await res.json();
-//   console.log(data);
-//   if (res.ok) {
-//     router.push("/dashboard");
-//   } else {
-//     alert(data.message);
-//   }
-// };
-
-//letting nextauth handle 
-
-const onSubmit = async (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
+  setLoading(true);
+  setError(false);
 
-  //using auth.js callback -> work is being done by [...nextauth].ts
-  const res = await signIn("credentials", {
-    redirect: false,
-    email,
-    password,
-  });
+  try {
+    const res = await fetch("/api/users/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ email, password }),
+    });
 
-  if (res?.ok) {
-    router.push("/dashboard");
-  } else {
-    alert("Invalid credentials");
+    const data = await res.json();
+
+    if (res.ok) {
+      setUser({ name: data.name || "", email: data.email || "" }); // update AuthContext with user data in a structured way
+      router.push("/dashboard");
+    } else {
+      setError(true);
+      console.error("Login error:", data.message);
+    }
+  } catch (err) {
+    setError(true);
+    console.error("Unexpected error:", err);
   }
+
+  setLoading(false);
 };
 
   return (

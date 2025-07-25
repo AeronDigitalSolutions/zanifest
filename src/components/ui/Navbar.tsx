@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+
+import { useAuth } from "@/context/AuthContext";
 
 import styles from "@/styles/components/ui/Navbar.module.css";
 import { useRouter } from "next/router";
@@ -20,39 +22,9 @@ const DROPDOWNLIST = [
 
 function Navbar() {
   const router = useRouter();
-
-  const checkLogin = () => {
-    if (typeof window !== "undefined") {
-      const cookie = document.cookie.split("; ").find((c) => c.startsWith("userToken="));
-      return Boolean(cookie);
-    }
-    return false;
-  };
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isHydrated, setIsHydrated] = useState(false);
+  const { isLoggedIn, logout } = useAuth();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [listIndex, setListIndex] = useState<number>(0);
-
-  useEffect(() => {
-    setIsHydrated(true);
-    setIsLoggedIn(checkLogin());
-    const handleRouteChange = () => {
-      setTimeout(() => {
-        setIsLoggedIn(checkLogin());
-      }, 200);
-    };
-    router.events.on("routeChangeComplete", handleRouteChange);
-    return () => {
-      router.events.off("routeChangeComplete", handleRouteChange);
-    };
-  }, [router]);
-
-  useEffect(() => {
-    if (isHydrated) {
-      setIsLoggedIn(checkLogin());
-    }
-  }, [isHydrated]);
 
   return (
     <div className={styles.cont}>
@@ -221,11 +193,7 @@ function Navbar() {
           {isLoggedIn && (
             <div
               className={styles.loginButton}
-              onClick={async () => {
-                await fetch("/api/users/logout", { method: "POST" });
-                setIsLoggedIn(false);
-                router.replace("/login");
-              }}
+              onClick={logout}
             >
               <p className={styles.loginText}>Logout</p>
             </div>
@@ -303,11 +271,7 @@ function Navbar() {
         </div>
         <div
           className={`${styles.loginButton} ${!isLoggedIn ? styles.hidden : ""}`}
-          onClick={async () => {
-            await fetch("/api/users/logout", { method: "POST" });
-            setIsLoggedIn(false);
-            router.replace("/login");
-          }}
+          onClick={logout}
         >
           <p className={styles.loginText}>Logout</p>
         </div>

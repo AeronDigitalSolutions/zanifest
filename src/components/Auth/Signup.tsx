@@ -29,6 +29,7 @@ export default function SignUp() {
   const data = await res.json();
   if (res.ok) {
     alert('Signup successful');
+    router.push("/login");
   } else {
     alert(data.message);
   }

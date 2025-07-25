@@ -1,3 +1,4 @@
+import { useAuth } from "@/context/AuthContext";
 import React from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import { FaArrowRight, FaArrowRightLong } from "react-icons/fa6";
@@ -25,10 +26,14 @@ const LIST = [
 ];
 
 function DashboardDetails() {
+  const { user } = useAuth();
+  console.log ("usename is",user?.name)
   return (
     <div className={styles.cont}>
       <div className={styles.top}>
-        <div className={styles.topLeft}>Hi, Demo User</div>
+        <div className={styles.topLeft}>
+          Hi, {user?.name || "User"}
+        </div>
         <div className={styles.topRight}>
           Active Policy
           <div className={styles.policyButton}>1</div>

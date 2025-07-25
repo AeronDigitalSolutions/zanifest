@@ -1,16 +1,11 @@
-
-
-import { getSession } from "next-auth/react";
 import DashboardMain from "@/components/dashboard/DashboardMain";
 import Footer from "@/components/ui/Footer";
 import Navbar from "@/components/ui/Navbar";
 import UserDetails from "@/components/ui/UserDetails";
 import React from "react";
-import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
-import { Session } from "next-auth";
+import { GetServerSidePropsContext } from "next";
+import { verify } from "jsonwebtoken";
 
-
-// 1. Accept the session as a prop (optional)
 function DashboardPage() {
   return (
     <div>
@@ -24,30 +19,28 @@ function DashboardPage() {
 
 export default DashboardPage;
 
-// 2. Protect the page using getServerSideProps
-interface ServerSideProps {
-  session: Session;
-}
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const { req } = context;
+  const token = req.cookies.userToken; // or managerToken/adminToken based on your role setup
 
-export async function getServerSideProps(
-  context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<ServerSideProps>> {
-  const session = await getSession(context);
-
-  if (!session) {
-    // If not logged in, redirect to login page
+  if (!token) {
     return {
       redirect: {
-        destination: "/login", // or your custom login route
+        destination: "/login",
         permanent: false,
       },
     };
   }
 
-  // Optional: Pass session as props if needed
-  return {
-    props: {
-      session,
-    },
-  };
+  try {
+    verify(token, process.env.JWT_SECRET!);
+    return { props: {} };
+  } catch (err) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
 }
