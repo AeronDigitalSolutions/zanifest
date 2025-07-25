@@ -40,8 +40,10 @@ const [districtManagerCount, setDistrictManagerCount] = useState(0);
 
   const handleLogout = () => {
     try{
-       axios.post("/api/admin/logout");
+      localStorage.removeItem("token");
       localStorage.removeItem("adminToken");
+       axios.post("/api/admin/logout");
+      
       window.location.href = "/"; // Redirect to login page after logout
 
     }
