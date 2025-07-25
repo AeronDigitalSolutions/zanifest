@@ -259,28 +259,18 @@ function Navbar() {
         </div>
       </div>
       <div className={styles.loginCont}>
-        <div
-          className={`${styles.loginButton} ${isLoggedIn ? styles.hidden : ""}`}
-          onClick={() => {
-            router.push("/login");
-          }}
-        >
-          <div className={styles.signupButton}
-            onClick={() => {
-            router.push("/signup");
-            }}>
-               
-          
-          <p className={styles.loginText}>
-            Login/Register <FaSignInAlt className={styles.loginLogo} />
-          </p>
-        </div>
-        <div
-          className={`${styles.loginButton} ${!isLoggedIn ? styles.hidden : ""}`}
-          onClick={logout}
-        >
-          <p className={styles.loginText}>Logout</p>
-        </div>
+        {!isLoggedIn && (
+          <div className={styles.loginButton} onClick={() => router.push("/login")}>
+            <p className={styles.loginText}>
+              Login/Register <FaSignInAlt className={styles.loginLogo} />
+            </p>
+          </div>
+        )}
+        {isLoggedIn && (
+          <div className={styles.loginButton} onClick={logout}>
+            <p className={styles.loginText}>Logout</p>
+          </div>
+        )}
       </div>
     </div>
   );
