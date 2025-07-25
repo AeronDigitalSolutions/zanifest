@@ -22,22 +22,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const user = await User.findOne({ userName });
 
     if (!user) {
-      return res.status(401).json({ message: "Invalid username or password" });
+      return res.status(401).json({ message: "User does not exist." });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(401).json({ message: "Invalid username or password" });
+      return res.status(401).json({ message: "Password does not match." });
     }
 
     // Create JWT
     const token = jwt.sign(
       {
         id: user._id,
-        userName: user.userName,
         email: user.email,
-        role: "user",
       },
       process.env.JWT_SECRET as string,
       { expiresIn: "1d" }

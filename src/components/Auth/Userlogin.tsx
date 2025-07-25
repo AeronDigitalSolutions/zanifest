@@ -6,7 +6,7 @@ import styles from "@/styles/components/Auth/Login.module.css";
 import Image from "next/image";
 
 export default function UserLogin() {
-  const [userName, setUserName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
@@ -23,7 +23,7 @@ export default function UserLogin() {
     const res = await fetch("/api/users/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userName, password }),
+      body: JSON.stringify({ email, password }),
     });
 
     const data = await res.json();
@@ -91,13 +91,13 @@ export default function UserLogin() {
 
             <div className={styles.formInput}>
               <input
-                type="text"
-                name="uname"
-                id="uname"
+                type="email"
+                name="email"
+                id="email"
                 placeholder="E-mail Address"
                 required
                 className={styles.input}
-                onChange={(e) => setUserName(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 

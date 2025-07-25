@@ -19,25 +19,41 @@ const DROPDOWNLIST = [
 ];
 
 function Navbar() {
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [listIndex, setListIndex] = useState<number>(0);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
 
+  const checkLogin = () => {
+    if (typeof window !== "undefined") {
+      const cookie = document.cookie.split("; ").find((c) => c.startsWith("userToken="));
+      return Boolean(cookie);
+    }
+    return false;
+  };
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [listIndex, setListIndex] = useState<number>(0);
+
   useEffect(() => {
-    const checkLogin = () => {
-      const token = document.cookie.split("; ").find(row => row.startsWith("userToken="));
-      setIsLoggedIn(!!token);
+    setIsHydrated(true);
+    setIsLoggedIn(checkLogin());
+    const handleRouteChange = () => {
+      setTimeout(() => {
+        setIsLoggedIn(checkLogin());
+      }, 200);
     };
-
-    checkLogin(); // Check on mount
-
-    router.events.on("routeChangeComplete", checkLogin); // Re-check after route change
-
+    router.events.on("routeChangeComplete", handleRouteChange);
     return () => {
-      router.events.off("routeChangeComplete", checkLogin); // Clean up
+      router.events.off("routeChangeComplete", handleRouteChange);
     };
   }, [router]);
+
+  useEffect(() => {
+    if (isHydrated) {
+      setIsLoggedIn(checkLogin());
+    }
+  }, [isHydrated]);
+
   return (
     <div className={styles.cont}>
       <div
@@ -190,17 +206,7 @@ function Navbar() {
           <div className={styles.menuItem}>
             <div className={`${styles.heading} `}>Raise a Claim</div>
           </div>
-          {isLoggedIn ? (
-            <div
-              className={styles.loginButton}
-              onClick={async () => {
-                await fetch("/api/users/logout", { method: "POST" });
-                router.replace("/login");
-              }}
-            >
-              <p className={styles.loginText}>Logout</p>
-            </div>
-          ) : (
+          {!isLoggedIn && (
             <div
               className={styles.loginButton}
               onClick={() => {
@@ -210,6 +216,18 @@ function Navbar() {
               <p className={styles.loginText}>
                 Login/Register <FaSignInAlt className={styles.loginLogo} />
               </p>
+            </div>
+          )}
+          {isLoggedIn && (
+            <div
+              className={styles.loginButton}
+              onClick={async () => {
+                await fetch("/api/users/logout", { method: "POST" });
+                setIsLoggedIn(false);
+                router.replace("/login");
+              }}
+            >
+              <p className={styles.loginText}>Logout</p>
             </div>
           )}
         </div>
@@ -273,33 +291,26 @@ function Navbar() {
         </div>
       </div>
       <div className={styles.loginCont}>
-        {isLoggedIn ? (
-          <div
-            className={styles.loginButton}
-            onClick={async () => {
-              await fetch("/api/users/logout", { method: "POST" });
-              router.replace("/login");
-            }}
-          >
-            <p className={styles.loginText}>Logout</p>
-          </div>
-        ) : (
-          <div
-            className={styles.loginButton}
-            onClick={() => {
-              router.push("/login");
-            }}
-          >
-            <div className={styles.signupButton}
-              onClick={() => {
-                router.push("/login");
-              }}>
-              <p className={styles.loginText}>
-                Login/Register <FaSignInAlt className={styles.loginLogo}/>
-              </p>
-            </div>
-          </div>
-        )}
+        <div
+          className={`${styles.loginButton} ${isLoggedIn ? styles.hidden : ""}`}
+          onClick={() => {
+            router.push("/login");
+          }}
+        >
+          <p className={styles.loginText}>
+            Login/Register <FaSignInAlt className={styles.loginLogo} />
+          </p>
+        </div>
+        <div
+          className={`${styles.loginButton} ${!isLoggedIn ? styles.hidden : ""}`}
+          onClick={async () => {
+            await fetch("/api/users/logout", { method: "POST" });
+            setIsLoggedIn(false);
+            router.replace("/login");
+          }}
+        >
+          <p className={styles.loginText}>Logout</p>
+        </div>
       </div>
     </div>
   );

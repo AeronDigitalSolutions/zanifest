@@ -11,6 +11,9 @@
   top: 0;
 }
 
+.hidden {
+  display: none !important;
+}
 
 .totalLine {
   border-style: solid;
@@ -205,7 +208,9 @@ animation: dropdownAnimation 0.3s ease-in;
   }
 
   .loginCont {
-    display: none;
+    justify-content: flex-end;
+    padding-right: 2rem;
+    display: flex;
   }
 }
 @media screen and (max-width: 1200px) {
