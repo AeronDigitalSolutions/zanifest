@@ -255,7 +255,7 @@ function Navbar() {
         >
           <div className={styles.signupButton}
             onClick={() => {
-            router.push("/login");
+            router.push("/signup");
             }}>
                
           

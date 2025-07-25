@@ -1,15 +1,16 @@
+
 .cont {
   background-color: #f7f7f7;
-  padding: 20px;
+  padding: 20px;  
 }
 
 .inner {
   background-color: white;
-  height: 90%;
   padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  border-radius: 8px;
 }
 
 .head1 {
@@ -17,15 +18,39 @@
   align-items: center;
   gap: 1rem;
   font-size: 1.6rem;
+  margin-bottom: 20px;
 }
 
 .middle {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input {
+  padding: 12px 16px;
+  font-size: 18px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #555;
+  gap: 6px;
 }
 
 .bottom {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 20px;
 }
 
 .button {
@@ -34,8 +59,17 @@
   color: white;
   padding: 10px 40px;
   border-radius: 22px;
+  cursor: pointer;
+  margin-bottom: 25px;
+}
+
+.button:hover {
+  background-color: #a9daff;
+  color: #1c75bb;
 }
 
 .bottom > p {
   font-size: 12px;
+  text-align: center;
+  margin-bottom: 20px;
 }
