@@ -205,8 +205,8 @@ const AdminDashboard = () => {
               </span>
             </li>
 
-            <p className={styles.sectionTitle}>Security</p>
-            <li
+            {/* <p className={styles.sectionTitle}>Security</p> */}
+            {/* <li
               onClick={() => {
                 setActiveSection("resetpassword");
                 setSidebarOpen(false);
@@ -230,7 +230,7 @@ const AdminDashboard = () => {
                 <FiLock className={styles.icon} />
                 <span className={styles.label}>Change Password</span>
               </span>
-            </li>
+            </li> */}
           </ul>
           <div className={styles.mobileOnlyLogout}>
             <button className={styles.logoutButton} onClick={handleLogout}>
