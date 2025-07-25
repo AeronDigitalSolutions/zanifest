@@ -265,6 +265,12 @@ function Navbar() {
             router.push("/login");
           }}
         >
+          <div className={styles.signupButton}
+            onClick={() => {
+            router.push("/signup");
+            }}>
+               
+          
           <p className={styles.loginText}>
             Login/Register <FaSignInAlt className={styles.loginLogo} />
           </p>

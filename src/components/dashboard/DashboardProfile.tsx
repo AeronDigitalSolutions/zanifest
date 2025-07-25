@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-
 import { LuUser } from "react-icons/lu";
-
 import styles from "@/styles/components/dashboard/DashboardProfile.module.css";
 import FloatingLabelInput from "../ui/FloatingLabelInput";
 
@@ -15,14 +13,16 @@ function DashboardProfile() {
   const [maritalStatus, setMaritalStatus] = useState<any>();
   const [city, setCity] = useState<any>();
   const [annualIncome, setAnnualIncome] = useState<any>();
+
   return (
     <div className={styles.cont}>
-      <div>
+      <div className={styles.greet}>
         Hi, Demo user <LuUser />
       </div>
       <div className={styles.inner}>
         <div className={styles.header}>Personal Details</div>
         <div className={styles.line}></div>
+
         <div className={styles.form}>
           <FloatingLabelInput
             label="First Name"
@@ -57,7 +57,7 @@ function DashboardProfile() {
             value={DOB}
             onChange={setDOB}
             id="dob"
-            type="Date"
+            type="date"
           />
           <FloatingLabelInput
             label="Annual Income"
@@ -88,6 +88,7 @@ function DashboardProfile() {
             type="number"
           />
         </div>
+
         <div className={styles.bottomButton}>
           <button className={styles.button}>Save Details</button>
         </div>
