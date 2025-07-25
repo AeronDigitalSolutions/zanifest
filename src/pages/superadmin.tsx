@@ -38,17 +38,13 @@ const AdminDashboard = () => {
   
   // console.log("Admin data:", admin?.userName);
 
-  const handleLogout = () => {
-    try{
-       axios.post("/api/admin/logout");
+  const handleLogout = async () => {
+    try {
+      await axios.post("/api/admin/logout");
       localStorage.removeItem("adminToken");
-      // 3. Force full page reload
-    window.location.reload();
-
-    }
-    catch(error){
+      router.replace("/adminlogin");
+    } catch (error) {
       console.error("Logout failed:", error);
-
     }
   };
 

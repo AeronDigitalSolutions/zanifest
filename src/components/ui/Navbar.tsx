@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import styles from "@/styles/components/ui/Navbar.module.css";
 import { useRouter } from "next/router";
@@ -21,7 +21,23 @@ const DROPDOWNLIST = [
 function Navbar() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [listIndex, setListIndex] = useState<number>(0);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const checkLogin = () => {
+      const token = document.cookie.split("; ").find(row => row.startsWith("userToken="));
+      setIsLoggedIn(!!token);
+    };
+
+    checkLogin(); // Check on mount
+
+    router.events.on("routeChangeComplete", checkLogin); // Re-check after route change
+
+    return () => {
+      router.events.off("routeChangeComplete", checkLogin); // Clean up
+    };
+  }, [router]);
   return (
     <div className={styles.cont}>
       <div
@@ -174,18 +190,28 @@ function Navbar() {
           <div className={styles.menuItem}>
             <div className={`${styles.heading} `}>Raise a Claim</div>
           </div>
-
-          <div
-            className={styles.loginButton}
-            onClick={() => {
-              router.push("/login");
-            }}
-          >
-            <p className={styles.loginText}>
-              Login/Register <FaSignInAlt className={styles.loginLogo}/>
-
-            </p>
-          </div>
+          {isLoggedIn ? (
+            <div
+              className={styles.loginButton}
+              onClick={async () => {
+                await fetch("/api/users/logout", { method: "POST" });
+                router.replace("/login");
+              }}
+            >
+              <p className={styles.loginText}>Logout</p>
+            </div>
+          ) : (
+            <div
+              className={styles.loginButton}
+              onClick={() => {
+                router.push("/login");
+              }}
+            >
+              <p className={styles.loginText}>
+                Login/Register <FaSignInAlt className={styles.loginLogo} />
+              </p>
+            </div>
+          )}
         </div>
       )}
       <div className={styles.menuCont}>
@@ -247,25 +273,33 @@ function Navbar() {
         </div>
       </div>
       <div className={styles.loginCont}>
-        <div
-          className={styles.loginButton}
-          onClick={() => {
-            router.push("/login");
-          }}
-        >
-          <div className={styles.signupButton}
+        {isLoggedIn ? (
+          <div
+            className={styles.loginButton}
+            onClick={async () => {
+              await fetch("/api/users/logout", { method: "POST" });
+              router.replace("/login");
+            }}
+          >
+            <p className={styles.loginText}>Logout</p>
+          </div>
+        ) : (
+          <div
+            className={styles.loginButton}
             onClick={() => {
-            router.push("/login");
-            }}>
-               
-          
-          <p className={styles.loginText}>
-            Login/Register <FaSignInAlt className={styles.loginLogo}/>
-
-          </p>
-        </div>
-        
-        </div>
+              router.push("/login");
+            }}
+          >
+            <div className={styles.signupButton}
+              onClick={() => {
+                router.push("/login");
+              }}>
+              <p className={styles.loginText}>
+                Login/Register <FaSignInAlt className={styles.loginLogo}/>
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

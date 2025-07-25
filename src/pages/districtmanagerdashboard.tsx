@@ -96,21 +96,13 @@ const DistricManagerDashboard = () => {
   
   const { user } = useManager();
 
-  const handleLogout = () => {
-    try{
-       axios.post("/api/manager/logout");
+  const handleLogout = async () => {
+    try {
+      await axios.post("/api/manager/logout");
       localStorage.removeItem("managerToken");
-// 3. Force full page reload
-    window.location.reload();
-
-    // 4. Redirect to home after a short delay (after reload completes)
-    setTimeout(() => {
-      window.location.href = "/";
-    }, 100); // enough time to ensure reload completes first
-    }
-    catch(error){
+      router.replace("/managerlogin");
+    } catch (error) {
       console.error("Logout failed:", error);
-
     }
   };
 

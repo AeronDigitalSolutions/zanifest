@@ -20,7 +20,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await dbConnect();
 
     const user = await User.findOne({ userName });
-    console.log("User found:", user);
 
     if (!user) {
       return res.status(401).json({ message: "Invalid username or password" });
@@ -56,9 +55,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       })
     );
 
-    return res.status(200).json({ message: "Login successful" });
+    return res.status(200).json({ message: "Login successful", token });
   } catch (err) {
     console.error("Login error:", err);
-    return res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({ message: "An error occurred during login. Please try again later." });
   }
 }

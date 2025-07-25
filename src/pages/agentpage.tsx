@@ -80,16 +80,13 @@ const Header = () => {
     },
   ];
 
- const handleLogout = () => {
-    try{
-       axios.post("/api/agent/logout");
+  const handleLogout = async () => {
+    try {
+      await axios.post("/api/agent/logout");
       localStorage.removeItem("agentToken");
-// 3. Force full page reload
-    window.location.reload();
-    }
-    catch(error){
+      router.replace("/agentlogin");
+    } catch (error) {
       console.error("Logout failed:", error);
-
     }
   };
 
