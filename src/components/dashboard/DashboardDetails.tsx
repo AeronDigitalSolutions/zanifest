@@ -4,6 +4,7 @@ import { FaArrowRight, FaArrowRightLong } from "react-icons/fa6";
 
 import { MdPersonAddAlt } from "react-icons/md";
 import { PiCarProfileFill } from "react-icons/pi";
+import { useSession } from "next-auth/react";
 
 import styles from "@/styles/components/dashboard/DashboardDetails.module.css";
 import Image from "next/image";
@@ -25,10 +26,16 @@ const LIST = [
 ];
 
 function DashboardDetails() {
+  const { data: session, status } = useSession();
+  console.log("session obtained from dasdboard details" , session);
+
+  if (status === "loading") return <p>Loading...</p>;
+  if (!session?.user) return <p>Access Denied</p>;
+
   return (
     <div className={styles.cont}>
       <div className={styles.top}>
-        <div className={styles.topLeft}>Hi, Demo User</div>
+        <div className={styles.topLeft}>Hi, {session!.user.name || "User"}</div>
         <div className={styles.topRight}>
           Active Policy
           <div className={styles.policyButton}>1</div>

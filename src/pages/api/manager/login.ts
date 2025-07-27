@@ -39,7 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         id: manager._id,
         role: manager.category, 
         name: manager.name,
-    email: manager.email,
+        email: manager.email,
     // assuming 'category' is the field for role
       },
       process.env.JWT_SECRET as string,

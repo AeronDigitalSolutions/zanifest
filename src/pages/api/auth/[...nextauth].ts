@@ -41,7 +41,7 @@ export const authOptions: AuthOptions = {
 
         // User authenticated
         return {
-          id: user._id.toString(),
+          // id: user._id.toString(),
           name: user.name,
           email: user.email,
         };
@@ -53,7 +53,26 @@ export const authOptions: AuthOptions = {
     signIn: "/login", // your custom login page
   },
 
-  secret: process.env.NEXTAUTH_SECRET, // should be set in your .env file
+  secret: process.env.NEXTAUTH_SECRET,
+  
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.name = user.name;
+        token.email = user.email;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user = {
+          name: token.name as string,
+          email: token.email as string,
+        };
+      }
+      return session;
+    },
+  },
 };
 
 export default NextAuth(authOptions);

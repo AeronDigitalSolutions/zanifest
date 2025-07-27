@@ -16,39 +16,6 @@ export default function Login() {
 const [email, setEmail] = useState<string>("");
   const router = useRouter();
 
-  // async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-  //   event.preventDefault();
-  //   setLoading(true);
-
-  //   if (userName === "admin" && password === "admin@123") {
-  //     setError(false);
-  //     router.push("/dashboard");
-  //   } else {
-  //     setError(true);
-  //   }
-
-  //   setLoading(false);
-  // }
-
-
-  //added by ashwina
-//   const onSubmit = async (e: React.FormEvent) => {
-//   e.preventDefault();
-//   const res = await fetch('/api/auth/login', {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify({ email, password }),
-//   });
-
-//   const data = await res.json();
-//   console.log(data);
-//   if (res.ok) {
-//     router.push("/dashboard");
-//   } else {
-//     alert(data.message);
-//   }
-// };
-
 //letting nextauth handle 
 
 const onSubmit = async (e: React.FormEvent) => {
@@ -61,9 +28,13 @@ const onSubmit = async (e: React.FormEvent) => {
     password,
   });
 
+  console.log("Response from signIn:", res);
+
   if (res?.ok) {
+    console.log("Login successful");
     router.push("/dashboard");
   } else {
+    console.error("Login failed:", res?.error);
     alert("Invalid credentials");
   }
 };
