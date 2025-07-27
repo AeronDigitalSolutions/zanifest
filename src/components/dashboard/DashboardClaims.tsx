@@ -3,13 +3,17 @@ import React from "react";
 
 import styles from "@/styles/components/dashboard/DashboardClaims.module.css";
 import { LuUser } from "react-icons/lu";
+import { useAuth } from "@/context/AuthContext";
 
 function DashboardClaims() {
+  const { user } = useAuth();
   return (
     <div className={styles.cont}>
-      <div>
-        Hi, Demo user <LuUser />
-      </div>
+      
+        <div>
+          Hi, {user?.name || "User"} <LuUser />
+        </div>
+      
       <div className={styles.inner}>
         <div className={styles.item}>
           <div className={styles.imageCont}>

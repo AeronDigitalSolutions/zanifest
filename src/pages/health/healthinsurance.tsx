@@ -33,7 +33,12 @@ function healthinsurance() {
   const [selectedMember, setSelectedMember] = useState<number>(0);
   const router = useRouter();
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (typeof window !== "undefined") {
+      window.history.scrollRestoration = "manual";
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+      }, 0);
+    }
   }, []);
   return (
     <div>

@@ -63,7 +63,6 @@ const router = useRouter();
       {/* Header */}
       <header className={styles.header}>
         <h1>Welcome, {admin?.userName ?? "Admin"}</h1>
-        <h1>  {adminName}</h1>
         <div className={styles.logoContainer}>
           <Image
             src={logo}
@@ -241,4 +240,3 @@ const router = useRouter();
 };
 
 export default AdminDashboard;
-

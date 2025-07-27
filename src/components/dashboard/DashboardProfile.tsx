@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { LuUser } from "react-icons/lu";
 import styles from "@/styles/components/dashboard/DashboardProfile.module.css";
 import FloatingLabelInput from "../ui/FloatingLabelInput";
+import { useAuth } from "@/context/AuthContext";
 
 function DashboardProfile() {
+  const { user } = useAuth();
+
   const [firstName, setFirstName] = useState<any>();
   const [lastName, setLastName] = useState<any>();
   const [email, setEmail] = useState<any>();
@@ -17,7 +20,7 @@ function DashboardProfile() {
   return (
     <div className={styles.cont}>
       <div className={styles.greet}>
-        Hi, Demo user <LuUser />
+        Hi, {user?.name || "User"} <LuUser />
       </div>
       <div className={styles.inner}>
         <div className={styles.header}>Personal Details</div>

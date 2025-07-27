@@ -84,7 +84,6 @@ const AdminDashboard = () => {
         <div className={styles.logoContainer}>
           <Image src={logo} alt="Logo" width={130} height={40} className={styles.logo} />
         </div>
-        <h2>Welcome, {admin?.userName ?? "Super Admin"}</h2>
         <button
           className={styles.menuToggle}
           onClick={() => setSidebarOpen(!sidebarOpen)}

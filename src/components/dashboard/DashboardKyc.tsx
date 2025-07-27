@@ -1,3 +1,4 @@
+import { useAuth } from "@/context/AuthContext";
 import React, { useState } from "react";
 import { LuUser } from "react-icons/lu";
 import { RiBarChartBoxLine } from "react-icons/ri";
@@ -7,6 +8,7 @@ import styles from "@/styles/components/dashboard/DashboardKyc.module.css";
 
 function DashboardKyc() {
   const [aadhar, setAadhar] = useState("");
+  const { user } = useAuth();
 
   const handleAadharChange = (value: string) => {
     const raw = value.replace(/\D/g, "").slice(0, 12); // digits only, max 12
@@ -17,7 +19,7 @@ function DashboardKyc() {
   return (
     <div className={styles.cont}>
       <div>
-        Hi, Demo user <LuUser />
+        Hi, {user?.name || "User"} <LuUser />
       </div>
       <div className={styles.inner}>
         <div>

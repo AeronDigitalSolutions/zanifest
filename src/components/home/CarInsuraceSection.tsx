@@ -62,7 +62,9 @@ function CarInsuraceSection() {
   const router = useRouter();
 
   const handleClick = (link: string) => {
-    router.push(link);
+    router.push(link).then(() => {
+      window.scrollTo(0, 0);
+    });
   };
 
   return (

@@ -5,12 +5,15 @@ import Image from "next/image";
 import { LuUser } from "react-icons/lu";
 
 import { FaChevronRight } from "react-icons/fa";
+import { useAuth } from "@/context/AuthContext";
 
 function DashboardPolicies() {
+  const { user } = useAuth();
+
   return (
     <div className={styles.cont}>
-      <div>
-        Hi, Demo user <LuUser />
+      <div className={styles.greeting}>
+        Hi, {user?.name || "User"} <LuUser />
       </div>
       <div className={styles.inner}>
         <div className={styles.item}>

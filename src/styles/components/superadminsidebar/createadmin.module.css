@@ -108,3 +108,27 @@
     padding: 0.65rem;
   }
 }
+
+@media (max-width: 370px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .heading {
+    font-size: 1.3rem;
+  }
+
+  .input {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .submitButton {
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .checkboxLabel {
+    font-size: 0.9rem;
+  }
+}
