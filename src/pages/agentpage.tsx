@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
@@ -5,14 +6,6 @@ import logo from "@/assets/logo.png";
 import styles from "@/styles/pages/agent.module.css";
 import {
   FiHome,
-  FiCalendar,
-  FiFileText,
-  FiFolder,
-  FiClipboard,
-  FiGrid,
-  FiUser,
-  FiPackage,
-  FiLayers,
   FiChevronRight,
   FiMenu,
   FiX,
@@ -29,7 +22,6 @@ import {
 } from "recharts";
 import axios from "axios";
 
-// Mock chart data
 const chartData = [
   { month: "Jan", price: 30 },
   { month: "Feb", price: 40 },
@@ -43,42 +35,10 @@ const chartData = [
 
 const Header = () => {
   const router = useRouter();
-
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const agentName = typeof window !== "undefined" ? localStorage.getItem("agentName") : null;
- 
+  const [activeSection, setActiveSection] = useState("dashboard");
 
-  const sidebarMenu = [
-    {
-      section: "Menu",
-      items: [{ icon: <FiHome />, label: "Dashboard" }],
-    },
-    {
-      section: "Apps",
-      items: [
-        { icon: <FiCalendar />, label: "Calendar" },
-        { icon: <FiFileText />, label: "Tickets" },
-        { icon: <FiFolder />, label: "File Manager" },
-        { icon: <FiClipboard />, label: "Kanban Board" },
-        { icon: <FiGrid />, label: "Project", expandable: true },
-      ],
-    },
-    {
-      section: "Custom",
-      items: [
-        { icon: <FiUser />, label: "Auth Pages", expandable: true },
-        { icon: <FiLayers />, label: "Extra Pages", expandable: true },
-      ],
-    },
-    {
-      section: "Elements",
-      items: [
-        { icon: <FiGrid />, label: "Components", expandable: true },
-        { icon: <FiPackage />, label: "Extended UI", expandable: true },
-        { icon: <FiFileText />, label: "Forms", expandable: true },
-      ],
-    },
-  ];
+  const agentName = typeof window !== "undefined" ? localStorage.getItem("agentName") : null;
 
   const handleLogout = async () => {
     try {
@@ -111,22 +71,27 @@ const Header = () => {
       <div className={styles.mainArea}>
         {/* Sidebar */}
         <aside className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarMobile : ""}`}>
-          {sidebarMenu.map((section, index) => (
-            <div key={index}>
-              <p className={styles.sectionTitle}>{section.section}</p>
-              <ul className={styles.menu}>
-                {section.items.map((item, idx) => (
-                  <li key={idx} className={styles.menuItem}>
-                    <div className={styles.iconLabel}>
-                      <span className={styles.icon}>{item.icon}</span>
-                      <span className={styles.label}>{item.label}</span>
-                    </div>
-                    {item.expandable && <FiChevronRight size={14} />}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <div>
+            <p className={styles.sectionTitle}>Menu</p>
+            <ul className={styles.menu}>
+              <li className={styles.menuItem}>
+                <div className={styles.iconLabel}>
+                  <span className={styles.icon}><FiHome /></span>
+                  <span
+                    className={styles.label}
+                    onClick={() => {
+                      setActiveSection("dashboard");
+                      setSidebarOpen(false);
+                    }}
+                  >
+                    Dashboard
+                  </span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          {/* Mobile Logout at Bottom */}
           <div className={styles.mobileOnlyLogout}>
             <button className={styles.logoutButton} onClick={handleLogout}>
               Logout
@@ -136,7 +101,7 @@ const Header = () => {
 
         {/* Main Content */}
         <main className={styles.content}>
-          <h2 className={styles.dashboardTitle}>hello {agentName}</h2>
+          <h2 className={styles.dashboardTitle}>Hello {agentName}</h2>
 
           {/* Summary Cards */}
           <div className={styles.cardGrid3}>
