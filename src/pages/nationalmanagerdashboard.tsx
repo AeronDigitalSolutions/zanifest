@@ -84,6 +84,8 @@ const nationalManagerDashboard = () => {
   const [endDate, setEndDate] = useState("");
   const [filteredData, setFilteredData] = useState(monthlySalesData);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("dashboard");
+  
   
   const { user } = useManager();
 
@@ -143,7 +145,7 @@ const handleLogout = async () => {
   return (
     <div className={styles.wrapper}>
       <header className={styles.header}>
-        <h1>Hi {user?.name ?? "National Manager"}</h1>
+        <h3>Hi {user?.name ?? "National Manager"}</h3>
         <div className={styles.logoContainer}>
           <Image src={logo} alt="Logo" width={150} height={45} className={styles.logo} />
         </div>
@@ -168,15 +170,24 @@ const handleLogout = async () => {
               <li className={styles.menuItem}>
                 <div className={styles.iconLabel}>
                   <span className={styles.icon}><FiHome /></span>
-                  <span className={styles.label}>Dashboard</span>
+                  <span className={styles.label}
+                  onClick={() => {
+                setActiveSection("dashboard");
+                setSidebarOpen(false);
+              }}
+                  
+                  >Dashboard</span>
                 </div>
               </li>
             </ul>
           </div>
           <div className={styles.mobileOnlyLogout}>
-            <button className={styles.logoutButton} onClick={handleLogout}>
+            {/* <button className={styles.logoutButton} onClick={handleLogout}>
               Logout
-            </button>
+            </button> */}
+            <button className={`${styles.logoutButton} ${styles.mobileOnlyLogout}`} onClick={handleLogout}>
+    Logout
+  </button>
           </div>
         </aside>
 
@@ -269,19 +280,31 @@ const handleLogout = async () => {
             </div>
           )}
 
+         
           <div className={styles.dateFilterSection}>
-            <label>
-              Start Date:
-              <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-            </label>
-            <label>
-              End Date:
-              <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-            </label>
-            <button className={styles.filterButton} onClick={handleFilter}>
-              Show
-            </button>
-          </div>
+  <label className={styles.dateLabel}>
+    Start Date:
+    <input
+      type="date"
+      value={startDate}
+      onChange={(e) => setStartDate(e.target.value)}
+    />
+  </label>
+  <label className={styles.dateLabel}>
+    End Date:
+    <input
+      type="date"
+      value={endDate}
+      onChange={(e) => setEndDate(e.target.value)}
+    />
+  </label>
+  <div className={styles.buttonWrapper}>
+    <button className={styles.filterButton} onClick={handleFilter}>
+      Show
+    </button>
+  </div>
+</div>
+
 
           <div className={styles.chartContainer}>
             <h3 className={styles.chartTitle}>Monthly Sales Chart</h3>
