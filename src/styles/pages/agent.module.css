@@ -30,6 +30,14 @@
   font-weight: 500;
 }
 
+.menuToggle {
+  display: none;
+  background: transparent;
+  border: none;
+  color: #374151;
+  cursor: pointer;
+}
+
 /* Main layout with sidebar + content */
 .mainArea {
   display: flex;
@@ -38,8 +46,7 @@
   overflow: hidden;
 }
 
-
-/* sidebar */
+/* Sidebar styles */
 .sidebar {
   width: 260px;
   background-color: #ffffff;
@@ -93,83 +100,14 @@
   font-weight: 500;
 }
 
-.content {
-  
-  flex: 1;
-  padding: 2rem;
-  background-color: #f9fafb;
-}
-
-.dashboardTitle {
-  font-size: 1.4rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-}
-
-.cardGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 1.5rem;
-}
-
-.card {
-  background-color: white;
-  padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-  transition: all 0.2s ease;
-}
-
-.cardHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 600;
-  color: #374151;
-}
-
-.subText {
-  color: #6b7280;
-  font-size: 0.875rem;
-  margin: 0.5rem 0;
-}
-
-.cardFooter {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 0.5rem;
-}
-
-.time {
-  font-size: 0.75rem;
-  color: #9ca3af;
-}
-
-.avatars {
-  display: flex;
-  gap: -0.5rem;
-}
-
-.avatar {
-  border-radius: 9999px;
-  border: 2px solid white;
-  margin-left: -10px;
-}
-
-.dots {
-  font-size: 1.25rem;
-  cursor: pointer;
-}
-
 /* Content Area */
 .content {
   flex: 1;
   padding: 1.5rem 2rem;
   background-color: #f9fafb;
   overflow-y: auto;
-  width: auto;          /* Fills the remaining horizontal space */
-  max-width: none;      /* Removes any fixed max width */
+  width: auto;
+  max-width: none;
 }
 
 .dashboardTitle {
@@ -178,7 +116,7 @@
   margin-bottom: 1.5rem;
 }
 
-/* Card Grid */
+/* Summary Cards Grid */
 .cardGrid3 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -197,7 +135,7 @@
   font-size: 1.2rem;
   font-weight: 600;
   margin-top: 0.5rem;
-  color: #2563eb;
+  color: #e72e0e;
 }
 
 /* Chart container */
@@ -215,12 +153,15 @@
   color: #374151;
 }
 
-.menuToggle {
+/* Desktop logout (top right) */
+.desktopOnlyLogout {
+  display: flex;
+  align-items: center;
+}
+
+/* Hidden by default on desktop */
+.mobileOnlyLogout {
   display: none;
-  background: transparent;
-  border: none;
-  color: #374151;
-  cursor: pointer;
 }
 
 /* Mobile Responsive Styles */
@@ -262,18 +203,33 @@
     display: none;
   }
 
+  /* Mobile Sidebar Styling */
   .sidebarMobile {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     position: absolute;
     top: 70px;
     left: 0;
-    width: 240px;
+    width: 100%;
+    max-width: 380px;
     height: calc(100vh - 70px);
     background-color: #fff;
     z-index: 999;
     overflow-y: auto;
     border-right: 1px solid #e5e7eb;
     animation: slideIn 0.3s ease forwards;
+    padding-bottom: 1rem;
+  }
+
+  .sidebarMobile > div:first-child {
+    flex: 1;
+  }
+
+  .mobileOnlyLogout {
+    display: block;
+    padding: 1rem 1.2rem;
+    border-top: 1px solid #e5e7eb;
   }
 
   @keyframes slideIn {
@@ -325,11 +281,22 @@
   .iconLabel {
     gap: 0.5rem;
   }
+
+  .desktopOnlyLogout {
+    display: none;
+  }
+
+  .logoContainer img {
+    width: 150px;
+    height: 45px;
+    display: block;
+    margin: 0 auto;
+  }
 }
 
 @media screen and (max-width: 480px) {
   .logoContainer img {
-    width: 100px;
+    width: 120px;
     height: auto;
   }
 
@@ -351,39 +318,5 @@
 
   .content {
     padding: 1rem 1rem;
-  }
-}
-
-.desktopOnlyLogout {
-  display: flex;
-  align-items: center;
-}
-
-.mobileOnlyLogout {
-  display: none;
-}
-
-@media screen and (max-width: 768px) {
-  .desktopOnlyLogout {
-    display: none;
-  }
-
-  .mobileOnlyLogout {
-    display: block;
-    margin-top: 1rem;
-  }
-
-  .logoContainer img {
-    width: 150px;
-    height: 45px;
-    display: block;
-    margin: 0 auto;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .logoContainer img {
-    width: 120px;
-    height: auto;
   }
 }

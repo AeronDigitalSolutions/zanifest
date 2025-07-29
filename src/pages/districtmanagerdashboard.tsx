@@ -93,6 +93,8 @@ const DistricManagerDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [formattedTotalSales, setFormattedTotalSales] = useState("");
   const [formattedMonthlySales, setFormattedMonthlySales] = useState("");
+    const [activeSection, setActiveSection] = useState("dashboard");
+  
   
   const { user } = useManager();
 
@@ -148,7 +150,7 @@ const DistricManagerDashboard = () => {
     <div className={styles.wrapper}>
       {/* Header */}
       <header className={styles.header}>
-        <h1>Hi {user?.name ?? "District Manager"}</h1>
+        <h3>Hi {user?.name ?? "District Manager"}</h3>
         <div className={styles.logoContainer}>
           <Image src={logo} alt="Logo" width={150} height={45} className={styles.logo} />
         </div>
@@ -172,7 +174,12 @@ const DistricManagerDashboard = () => {
                 <span className={styles.icon}>
                   <FiHome />
                 </span>
-                <span className={styles.label}>Dashboard</span>
+                <span className={styles.label}
+                  onClick={() => {
+                setActiveSection("dashboard");
+                setSidebarOpen(false);
+              }}
+              >Dashboard</span>
               </div>
             </li>
           </ul>
@@ -255,19 +262,31 @@ const DistricManagerDashboard = () => {
             </div>
           )}
 
-          <div className={styles.dateFilterSection}>
-            <label>
-              Start Date:{" "}
-              <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-            </label>
-            <label>
-              End Date:{" "}
-              <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-            </label>
-            <button className={styles.filterButton} onClick={handleFilter}>
-              Show
-            </button>
-          </div>
+<div className={styles.dateFilterSection}>
+  <div className={styles.dateInputsWrapper}>
+    <label className={styles.dateLabel}>
+      Start Date:
+      <input
+        type="date"
+        value={startDate}
+        onChange={(e) => setStartDate(e.target.value)}
+      />
+    </label>
+    <label className={styles.dateLabel}>
+      End Date:
+      <input
+        type="date"
+        value={endDate}
+        onChange={(e) => setEndDate(e.target.value)}
+      />
+    </label>
+  </div>
+  <div className={styles.buttonWrapper}>
+    <button className={styles.filterButton} onClick={handleFilter}>
+      Show
+    </button>
+  </div>
+</div>
 
           <div className={styles.chartContainer}>
             <h3 className={styles.chartTitle}>Monthly Sales Chart</h3>

@@ -81,13 +81,15 @@ const StateManagerDashboard = () => {
   const [formattedTotalSales, setFormattedTotalSales] = useState("");
   const [formattedMonthlySales, setFormattedMonthlySales] = useState("");
   const [districtManagers, setDistrictManagers] = useState<Manager[]>([]);
+    const [activeSection, setActiveSection] = useState("dashboard");
+  
   
   const { user } = useManager();
 
   useEffect(() => {
     const fetchDistrictManagers = async () => {
       try {
-        const res = await axios.get("/api/manager/getdistrictmanagers");
+        const res = await axios.get("./api/manager/getdistrictmanagers");
         setDistrictManagers(res.data.data);
       } catch (error) {
         console.error("Error fetching district managers:", error);
@@ -133,7 +135,7 @@ const handleLogout = async () => {
   return (
     <div className={styles.wrapper}>
       <header className={styles.header}>
-        <h1>Hi {user?.name ?? "State Manager"}</h1>
+        <h3>Hi {user?.name ?? "State Manager"}</h3>
         <div className={styles.logoContainer}>
           <Image src={logo} alt="Logo" width={160} height={45} className={styles.logo} />
         </div>
@@ -150,22 +152,24 @@ const handleLogout = async () => {
           {sidebarMenu.map((section, index) => (
             <div key={index}>
               <p className={styles.sectionTitle}>{section.section}</p>
+             
               <ul className={styles.menu}>
-                {section.items.map((item, idx) => (
-                  <li key={idx} className={styles.menuItem}>
-                    <div className={styles.iconLabel}>
-                      {item.label === "Dashboard" ? (
-                        <>
-                          <span className={styles.icon}><FiHome /></span>
-                          <span className={styles.label}>{item.label}</span>
-                        </>
-                      ) : (
-                        <span className={styles.label}>{item.label}</span>
-                      )}
-                    </div>
-                  </li>
-                ))}
-              </ul>
+  {section.items.map((item, idx) => (
+    <li key={idx} className={styles.menuItem}>
+      <div
+        className={styles.iconLabel}
+        onClick={() => {
+          setActiveSection("dashboard");
+          setSidebarOpen(false);
+        }}
+      >
+        <span className={styles.icon}>{item.icon}</span>
+        <span className={styles.label}>{item.label}</span>
+      </div>
+    </li>
+  ))}
+</ul>
+
             </div>
           ))}
           <div className={styles.mobileOnlyLogout}>
@@ -259,11 +263,34 @@ const handleLogout = async () => {
             </div>
           )}
 
-          <div className={styles.dateFilterSection}>
+          {/* <div className={styles.dateFilterSection}>
             <label>Start Date: <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} /></label>
             <label>End Date: <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} /></label>
             <button className={styles.filterButton} onClick={handleFilter}>Show</button>
-          </div>
+          </div> */}
+                    <div className={styles.dateFilterSection}>
+  <label className={styles.dateLabel}>
+    Start Date:
+    <input
+      type="date"
+      value={startDate}
+      onChange={(e) => setStartDate(e.target.value)}
+    />
+  </label>
+  <label className={styles.dateLabel}>
+    End Date:
+    <input
+      type="date"
+      value={endDate}
+      onChange={(e) => setEndDate(e.target.value)}
+    />
+  </label>
+  <div className={styles.buttonWrapper}>
+    <button className={styles.filterButton} onClick={handleFilter}>
+      Show
+    </button>
+  </div>
+</div>
 
           <div className={styles.chartContainer}>
             <h3 className={styles.chartTitle}>Monthly Sales Chart</h3>
