@@ -59,7 +59,7 @@
 
 .ans {
   font-size: 16px;
-  animation: open 0.5s forwards ease-in;
+  /* animation: open 0.5s forwards ease-in; */
   overflow: hidden;
   margin: 0;
   margin-bottom: 20px;
