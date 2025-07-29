@@ -217,7 +217,7 @@
 .serviceItem {
   min-width: 300px;
   max-width: 300px;
-  margin: 20px 10px;
+  margin: 0px 10px;
   flex-shrink: 0;
   background-color: white;
   padding: 20px;
@@ -286,4 +286,24 @@
     gap: 1rem;
 }
   
+}
+
+@media screen and (max-width: 370px) {
+
+.serviceItem{
+  min-width: 300px;
+    max-width: 323px;
+    margin: 4px 16px;
+    flex-shrink: 0;
+    background-color: white;
+    padding: 20px;
+    border-radius: 22px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    display: grid
+;
+    place-items: center;
+    grid-gap: 1rem;
+    gap: 1rem;
+}
 }
