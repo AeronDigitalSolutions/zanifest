@@ -105,6 +105,8 @@
   .ans {
     font-size: 16px;
     text-align: justify;
+    max-height: 140px; /* 🔶 Updated height for mobile view */
+    overflow-y: auto;  /* Optional: scroll if content exceeds */
   }
 
   .ques {
