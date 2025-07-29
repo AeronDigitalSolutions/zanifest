@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
 import dbConnect from "@/lib/dbConnect";
-import User from "@/models/User"; // adjust to your actual user model
+import Manager from "@/models/Manager";
+import Agent from "@/models/Agent";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -9,6 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const { email, newPassword } = req.body;
+  console.log("Change password API called:", req.body);
 
   if (!email || !newPassword) {
     return res.status(400).json({ message: "Email and new password are required." });
@@ -17,23 +19,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     await dbConnect();
 
-    const user = await User.findOne({ email });
+    const person = (await Agent.findOne({ email })) || (await Manager.findOne({email})) ;
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found." });
+    if (!person) {
+      console.log("Admin/Agent/Manager not found with email:", email);
+      return res.status(404).json({ message: "Admin/Agent/Manager not found." });
     }
 
-    // ❌ Prevent changing password of a "user" role
-    if (user.role === "user") {
-      return res.status(403).json({ message: "You are not allowed to change password of a regular user." });
-    }
-
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    user.password = hashedPassword;
-    await user.save();
+    person.password = newPassword;
+    await person.save();
 
     return res.status(200).json({ message: "Password updated successfully." });
-  } catch (error) {
+  } 
+  
+  catch (error) {
     console.error("Password change error:", error);
     return res.status(500).json({ message: "Server error. Try again later." });
   }

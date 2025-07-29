@@ -11,8 +11,6 @@ import { AuthProvider } from "@/context/AuthContext";
 
 import type { AppProps } from "next/app";
 
-
-
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 

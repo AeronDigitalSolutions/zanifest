@@ -59,8 +59,11 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     const fetchAgentCount = async () => {
-      const res = await fetch("/api/getagent");
+      const res = await fetch("/api/getallagents");
+      console.log("res for count of agents: ", res);
       const data = await res.json();
+      console.log("data for agent count:", data);
+      console.log("Data length for agent count:", data.length);
       setAgentCount(data.length);
     };
     fetchAgentCount();
@@ -204,8 +207,8 @@ const AdminDashboard = () => {
               </span>
             </li>
 
-            {/* <p className={styles.sectionTitle}>Security</p> */}
-            {/* <li
+             <p className={styles.sectionTitle}>Security</p> 
+             <li
               onClick={() => {
                 setActiveSection("resetpassword");
                 setSidebarOpen(false);
@@ -229,7 +232,7 @@ const AdminDashboard = () => {
                 <FiLock className={styles.icon} />
                 <span className={styles.label}>Change Password</span>
               </span>
-            </li> */}
+            </li> 
           </ul>
           <div className={styles.mobileOnlyLogout}>
             <button className={styles.logoutButton} onClick={handleLogout}>

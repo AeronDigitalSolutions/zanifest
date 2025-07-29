@@ -20,7 +20,7 @@ const AgentsPage: React.FC = () => {
     try {
       const res = await fetch('/api/getallagents');
       const data = await res.json();
-      setAgents(data.agents);
+      setAgents(data);
     } catch (err) {
       console.error('Error fetching agents:', err);
     } finally {

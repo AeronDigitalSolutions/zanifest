@@ -10,22 +10,7 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState<boolean>(false);
   const [email, setEmail] = useState("");
 
-
   const router = useRouter();
-
-  // async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-  //   event.preventDefault();
-  //   setLoading(true);
-
-  //   if (userName === "admin@gmail.com" && password === "admin@123") {
-  //     setError(false);
-  //     router.push("/adminpage");
-  //   } else {
-  //     setError(true);
-  //   }
-
-  //   setLoading(false);
-  // }
 
    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -40,11 +25,11 @@ export default function AdminLogin() {
     });
 
     const data = await res.json();
-    console.log("Login response:", data);
+    // console.log("Login response:", data);
 
     if (data.token) {
       localStorage.setItem('token', data.token);  // ✅ Save it
-      console.log('Token saved:', data.token);
+      // console.log('Token saved:', data.token);
     }
 
     if (!res.ok) {

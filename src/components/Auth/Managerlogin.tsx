@@ -47,7 +47,7 @@ const [email,setEmail] = useState<string>("");
   // ✅ No need to store token in localStorage
   // ✅ The backend already sets a secure cookie
 document.cookie = `managerToken=${data.token}; path=/;`;
-console.log("Manager token set in cookie:", data.token);
+// console.log("Manager token set in cookie:", data.token);
   // ✅ Redirect based on role
   if (data.role === "national") {
     router.push("/nationalmanagerdashboard");

@@ -29,6 +29,10 @@ import axios from "axios";
 const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+   const [adminCount, setAdminCount] = useState(0);
+    const [agentCount, setAgentCount] = useState(0);
+    const [stateManagerCount, setStateManagerCount] = useState(0);
+    const [districtManagerCount, setDistrictManagerCount] = useState(0);
 const router = useRouter();
   
 
@@ -56,6 +60,38 @@ const router = useRouter();
 
     }
   };
+
+  //to get the count of agents
+    useEffect(() => {
+      const fetchAdminCount = async () => {
+        const res = await fetch("/api/getadmin");
+        const data = await res.json();
+        setAdminCount(data.length);
+      };
+      fetchAdminCount();
+    }, []);
+  
+    useEffect(() => {
+      const fetchAgentCount = async () => {
+        const res = await fetch("/api/getallagents");
+        console.log("res for count of agents: ", res);
+        const data = await res.json();
+        console.log("data for agent count:", data);
+        console.log("Data length for agent count:", data.length);
+        setAgentCount(data.length);
+      };
+      fetchAgentCount();
+    }, []);
+  
+    useEffect(() => {
+      const fetchManagerCounts = async () => {
+        const res = await fetch("/api/getmanager");
+        const managers = await res.json();
+        setStateManagerCount(managers.filter((m: { category: string }) => m.category === "state").length);
+        setDistrictManagerCount(managers.filter((m: { category: string }) => m.category === "district").length);
+      };
+      fetchManagerCounts();
+    }, []);
 
 
   return (
@@ -207,22 +243,22 @@ const router = useRouter();
               <div className={styles.card}>
                 <FiUsers size={32} className={styles.cardIcon} />
                 <p className={styles.cardTitle}>Number of Admins</p>
-                <p className={styles.cardValue}>5</p>
+                <p className={styles.cardValue}>{adminCount}</p>
               </div>
               <div className={styles.card}>
                 <FiUserPlus size={32} className={styles.cardIcon} />
                 <p className={styles.cardTitle}>State Managers</p>
-                <p className={styles.cardValue}>12</p>
+                <p className={styles.cardValue}>{stateManagerCount}</p>
               </div>
               <div className={styles.card}>
                 <FiUsers size={32} className={styles.cardIcon} />
                 <p className={styles.cardTitle}>District Managers</p>
-                <p className={styles.cardValue}>48</p>
+                <p className={styles.cardValue}>{districtManagerCount}</p>
               </div>
               <div className={styles.card}>
                 <FiUserPlus size={32} className={styles.cardIcon} />
                 <p className={styles.cardTitle}>Agents</p>
-                <p className={styles.cardValue}>105</p>
+                <p className={styles.cardValue}>{agentCount}</p>
               </div>
             </div>
           )}

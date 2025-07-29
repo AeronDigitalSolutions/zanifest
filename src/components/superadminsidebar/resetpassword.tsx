@@ -30,12 +30,17 @@ const resetpassword = () => {
         }),
       });
 
+      console.log("response from reset password ->", res);
+
       const data = await res.json();
+      console.log("Reset password response:", data);
 
       if (!res.ok) throw new Error(data.message || "Failed to reset password");
 
       alert("Password reset successful");
-    } catch (err: any) {
+    } 
+    
+    catch (err: any) {
       alert(err.message || "Something went wrong");
     }
   };
