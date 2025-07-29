@@ -10,8 +10,8 @@ import { AuthProvider } from "@/context/AuthContext";
 // }
 
 import type { AppProps } from "next/app";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+// import { useRouter } from "next/router";
+// import { useEffect } from "react";
 
 // ✅ Scroll to top on route change
 function ScrollToTop() {
@@ -34,6 +34,8 @@ function ScrollToTop() {
   return null;
 }
 
+
+
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
@@ -54,8 +56,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [router]);
 
   return (
-    <SessionProvider session={(pageProps as any).session}>
-      <ScrollToTop />
+    <AuthProvider>
       <Component {...pageProps} />
     </AuthProvider>
   );
