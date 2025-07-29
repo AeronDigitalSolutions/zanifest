@@ -232,10 +232,8 @@
   cursor: pointer;
 }
 .agentListToggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+  display: block;
+  margin: 10px 0 1rem 0; 
   background-color: #ef4444;
   color: white;
   padding: 0.75rem 1rem;
@@ -243,10 +241,9 @@
   border-radius: 8px;
   cursor: pointer;
   font-weight: 500;
-  margin-top: 10px;
-  margin-bottom: 1rem;
-  
+  text-align: center;
 }
+
 
 .menuToggle {
   display: none;
@@ -541,4 +538,12 @@
   .card:nth-child(3) { grid-area: card3; } /* No. of Agents */
   .card:nth-child(4) { grid-area: card4; } /* Total Clients */
   .card:nth-child(5) { grid-area: card5; } /* Total District Managers */
+}
+
+@media screen and (max-width: 768px) {
+  .agentListToggleWrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
 }
