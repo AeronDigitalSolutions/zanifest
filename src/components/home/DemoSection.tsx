@@ -6,7 +6,7 @@ import styles from "@/styles/components/home/DemoSection.module.css";
 const DEMOLIST = [
   {
     name: "Over 9 Million",
-    desc: "customers trust us & have bought t heir insurance on Policybazaar",
+    desc: "customers trust us and have bought t heir insurance on Policybazaar",
     image: require("@/assets/home/demo/1.png"),
     color: "#e7f9f7",
   },

@@ -12,7 +12,7 @@ const INSURANCELIST = [
     link: "./health/healthinsurance",
   },
   {
-    name: "Critical Illness",
+    name: "Critical Illnes",//one s removed for a specific purpose
     image: require("@/assets/home/car/2.png"),
     link: "#",
   },
