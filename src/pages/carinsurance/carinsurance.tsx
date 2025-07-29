@@ -10,9 +10,7 @@ import {useRouter} from 'next/router';
 
 function carinsurance() {
   const router =useRouter();
-React.useEffect(() => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}, []);
+
   return (
     <div>
       <UserDetails />
@@ -36,9 +34,12 @@ React.useEffect(() => {
               placeholder="Enter car number (eg - DL-10-CB-1234)"
               className={styles.input}
             />
-            <button className={styles.button} onClick={()=>{router.push('./carinsurance2')}}>
-              View Prices <FaArrowRight />
-            </button>
+           <button
+  className={styles.button}
+  onClick={() => router.push("./carinsurance2")}
+>
+  View Prices <FaArrowRight />
+</button>
           </div>
         </div>
       </div>
