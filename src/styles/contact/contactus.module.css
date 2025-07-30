@@ -4,12 +4,14 @@
   box-shadow: 0 5px 2px rgba(0, 0, 0, 0.1); 
   padding: 1.5rem;
   width: 100%;
-  margin-left: 100px;
+  max-width: 400px;
+  margin: 2rem auto; /* Center on all screen sizes */
 }
 
+/* Desktop enhancement */
 @media screen and (min-width: 1024px) {
   .card {
-    width: 93.333333%;
+    max-width: 700px;
   }
 }
 
@@ -22,6 +24,7 @@
 .subtext {
   color: #4b5563; 
   margin-bottom: 1.5rem;
+  font-size: 0.95rem;
 }
 
 .optionsWrapper {
@@ -52,6 +55,7 @@
 
 .label {
   font-weight: 500;
+  font-size: 0.95rem;
 }
 
 .iconYellow {
@@ -74,11 +78,34 @@
   align-items: center;
   gap: 0.75rem;
   margin-top: 1.5rem;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   color: #4b5563;
+  flex-wrap: wrap;
 }
 
 .whatsappNumber {
   color: #2563eb; 
   font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Optional: Add spacing for very small screens */
+@media screen and (max-width: 400px) {
+  .card {
+    padding: 1rem;
+  }
+
+  .heading {
+    font-size: 1.1rem;
+  }
+
+  .label {
+    font-size: 0.9rem;
+  }
+
+  .whatsapp {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
 }

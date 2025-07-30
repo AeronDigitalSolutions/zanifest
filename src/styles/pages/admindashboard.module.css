@@ -126,7 +126,7 @@
   display: none;
 }
 .dashboardCards {
-  display: flex;
+  display: grid;
   flex-wrap: wrap;
   gap: 12px;
   justify-content: center;
@@ -233,23 +233,6 @@ width: 120px;
 }
 
 }
-/* @media screen and (max-width: 370px) {
-  .mainContent {
-    display: grid;
-  }
-   .dashboardCards {
-  grid-template-columns: repeat(2, 1fr);
- 
-  justify-content: center;
-  margin: 0%;
-  padding: 0%;
-}
-.card {
-width: 120px;  
-
-}
- 
-} */
 
 
 @media screen and (max-width: 370px) {
