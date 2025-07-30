@@ -1,5 +1,4 @@
 // pages/api/admin/login.ts
-
 import { NextApiRequest, NextApiResponse } from "next";
 import Admin from "@/models/Admin";
 import dbConnect from "@/lib/dbConnect";
@@ -16,14 +15,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { email, password } = req.body;
   console.log("Admin login API called with email:", email);
-  console.log('Received password:', password);
+  // console.log('Received password:', password);
 
   if (!email || !password) {
     return res.status(400).json({ message: "Email and password are required" });
   }
 
   try {
-     await dbConnect();
+    await dbConnect();
     const admin = await Admin.findOne({ email }).select("userName email role password");
     console.log("Admin found:", admin);
 

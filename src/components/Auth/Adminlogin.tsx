@@ -27,10 +27,10 @@ export default function AdminLogin() {
     const data = await res.json();
     // console.log("Login response:", data);
 
-    if (data.token) {
-      localStorage.setItem('token', data.token);  // ✅ Save it
-      // console.log('Token saved:', data.token);
-    }
+    // if (data.token) {
+    //   localStorage.setItem('token', data.token);  // ✅ Save it
+    //   // console.log('Token saved:', data.token);
+    // }
 
     if (!res.ok) {
       alert(data.message || "Login failed");

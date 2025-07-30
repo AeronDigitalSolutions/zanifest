@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === 'GET') {
     try {
       const stateManagers = await Manager.find({ category: 'state' });
-      console.log("Fetched state managers:", stateManagers);
+      // console.log("Fetched state managers:", stateManagers);
       res.status(200).json({ success: true, data: stateManagers });
     } catch (error) {
         console.error("Error fetching state managers:", error);
