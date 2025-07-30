@@ -4,8 +4,8 @@ import Image from "next/image";
 import logo from "@/assets/logo.png";
 import { useRouter } from "next/router";
 import styles from "@/styles/pages/nationalmanager.module.css";
-import axios from 'axios';
-import { useManager } from '@/lib/hooks/useManager';
+import axios from "axios";
+import { useManager } from "@/lib/hooks/useManager";
 
 import {
   FiUsers,
@@ -85,8 +85,7 @@ const nationalManagerDashboard = () => {
   const [filteredData, setFilteredData] = useState(monthlySalesData);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("dashboard");
-  
-  
+
   const { user } = useManager();
 
   useEffect(() => {
@@ -102,16 +101,15 @@ const nationalManagerDashboard = () => {
     fetchStateManagers();
   }, []);
 
-
-const handleLogout = async () => {
-  try {
-    await axios.post("/api/manager/logout");
-    localStorage.removeItem("managerToken");
-    router.replace("/managerlogin");
-  } catch (error) {
-    console.error("Logout failed:", error);
-  }
-};
+  const handleLogout = async () => {
+    try {
+      await axios.post("/api/manager/logout");
+      localStorage.removeItem("managerToken");
+      router.replace("/managerlogin");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
   const totalSales = agents.reduce((sum, agent) => sum + agent.totalSales, 0);
   const monthlySales = agents.reduce(
     (sum, agent) => sum + agent.monthlySales,
@@ -147,7 +145,13 @@ const handleLogout = async () => {
       <header className={styles.header}>
         <h3>Hi {user?.name ?? "National Manager"}</h3>
         <div className={styles.logoContainer}>
-          <Image src={logo} alt="Logo" width={150} height={45} className={styles.logo} />
+          <Image
+            src={logo}
+            alt="Logo"
+            width={150}
+            height={45}
+            className={styles.logo}
+          />
         </div>
         <button
           className={styles.menuToggle}
@@ -163,20 +167,28 @@ const handleLogout = async () => {
       </header>
 
       <div className={styles.mainArea}>
-        <aside className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarMobile : ""}`}>
+        <aside
+          className={`${styles.sidebar} ${
+            sidebarOpen ? styles.sidebarMobile : ""
+          }`}
+        >
           <div>
             <p className={styles.sectionTitle}>Menu</p>
             <ul className={styles.menu}>
               <li className={styles.menuItem}>
                 <div className={styles.iconLabel}>
-                  <span className={styles.icon}><FiHome /></span>
-                  <span className={styles.label}
-                  onClick={() => {
-                setActiveSection("dashboard");
-                setSidebarOpen(false);
-              }}
-                  
-                  >Dashboard</span>
+                  <span className={styles.icon}>
+                    <FiHome />
+                  </span>
+                  <span
+                    className={styles.label}
+                    onClick={() => {
+                      setActiveSection("dashboard");
+                      setSidebarOpen(false);
+                    }}
+                  >
+                    Dashboard
+                  </span>
                 </div>
               </li>
             </ul>
@@ -185,64 +197,118 @@ const handleLogout = async () => {
             {/* <button className={styles.logoutButton} onClick={handleLogout}>
               Logout
             </button> */}
-            <button className={`${styles.logoutButton} ${styles.mobileOnlyLogout}`} onClick={handleLogout}>
-    Logout
-  </button>
+            <button
+              className={`${styles.logoutButton} ${styles.mobileOnlyLogout}`}
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
           </div>
         </aside>
 
         <main className={styles.content}>
           <h2 className={styles.title}>National Manager Dashboard</h2>
+          <div className={styles.cardGridDesktop}>
+            <div className={styles.cardGrid}>
+              <div className={styles.card}>
+                <FaRupeeSign className={styles.cardIcon} />
+                <div>
+                  <p>Total Sales</p>
+                  <h3>₹{formattedTotalSales}</h3>
+                </div>
+              </div>
+              <div className={styles.card}>
+                <FiBarChart2 className={styles.cardIcon} />
+                <div>
+                  <p>Monthly Sales</p>
+                  <h3>₹{formattedMonthlySales}</h3>
+                </div>
+              </div>
+              <div className={styles.card}>
+                <FiUsers className={styles.cardIcon} />
+                <div>
+                  <p>Number of Agents</p>
+                  <h3>{agents.length}</h3>
+                </div>
+              </div>
+            </div>
 
-          <div className={styles.cardGrid}>
-            <div className={styles.card}>
-              <FaRupeeSign className={styles.cardIcon} />
-              <div>
-                <p>Total Sales</p>
-                <h3>₹{formattedTotalSales}</h3>
+            <div className={styles.cardGrid}>
+              <div className={styles.card}>
+                <FiUser className={styles.cardIcon} />
+                <div>
+                  <p>Total Clients</p>
+                  <h3>{totalClients}</h3>
+                </div>
+              </div>
+              <div className={styles.card}>
+                <FiUser className={styles.cardIcon} />
+                <div>
+                  <p>Total District Managers</p>
+                  <h3>{totalDistrictManagers}</h3>
+                </div>
+              </div>
+              <div className={styles.card}>
+                <FiUser className={styles.cardIcon} />
+                <div>
+                  <p>Total State Managers</p>
+                  <h3>{totalStateManagers}</h3>
+                </div>
               </div>
             </div>
-            <div className={styles.card}>
-              <FiBarChart2 className={styles.cardIcon} />
-              <div>
-                <p>Monthly Sales</p>
-                <h3>₹{formattedMonthlySales}</h3>
+          </div>
+          {/* ✅ Mobile Responsive Cards */}
+          <div className={styles.mobileCardWrapper}>
+            <div className={styles.cardGrid}>
+              <div className={styles.card}>
+                <FaRupeeSign className={styles.cardIcon} />
+                <div>
+                  <p>Total Sales</p>
+                  <h3>₹{formattedTotalSales}</h3>
+                </div>
               </div>
-            </div>
-            <div className={styles.card}>
-              <FiUsers className={styles.cardIcon} />
-              <div>
-                <p>Number of Agents</p>
-                <h3>{agents.length}</h3>
+              <div className={styles.card}>
+                <FiBarChart2 className={styles.cardIcon} />
+                <div>
+                  <p>Monthly Sales</p>
+                  <h3>₹{formattedMonthlySales}</h3>
+                </div>
+              </div>
+              <div className={styles.card}>
+                <FiUsers className={styles.cardIcon} />
+                <div>
+                  <p>Number of Agents</p>
+                  <h3>{agents.length}</h3>
+                </div>
+              </div>
+              <div className={styles.card}>
+                <FiUser className={styles.cardIcon} />
+                <div>
+                  <p>Total Clients</p>
+                  <h3>{totalClients}</h3>
+                </div>
+              </div>
+              <div className={styles.card}>
+                <FiUser className={styles.cardIcon} />
+                <div>
+                  <p>Total District Managers</p>
+                  <h3>{totalDistrictManagers}</h3>
+                </div>
+              </div>
+              <div className={styles.card}>
+                <FiUser className={styles.cardIcon} />
+                <div>
+                  <p>Total State Managers</p>
+                  <h3>{totalStateManagers}</h3>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className={styles.cardGrid}>
-            <div className={styles.card}>
-              <FiUser className={styles.cardIcon} />
-              <div>
-                <p>Total Clients</p>
-                <h3>{totalClients}</h3>
-              </div>
-            </div>
-            <div className={styles.card}>
-              <FiUser className={styles.cardIcon} />
-              <div>
-                <p>Total District Managers</p>
-                <h3>{totalDistrictManagers}</h3>
-              </div>
-            </div>
-            <div className={styles.card}>
-              <FiUser className={styles.cardIcon} />
-              <div>
-                <p>Total State Managers</p>
-                <h3>{totalStateManagers}</h3>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.agentListToggle} onClick={() => setShowAgentList(!showAgentList)}>
+          <div
+            className={styles.agentListToggle}
+            onClick={() => setShowAgentList(!showAgentList)}
+          >
             <span>List of State Manager</span>
           </div>
 
@@ -269,7 +335,10 @@ const handleLogout = async () => {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan={3} style={{ textAlign: "center", padding: "10px" }}>
+                        <td
+                          colSpan={3}
+                          style={{ textAlign: "center", padding: "10px" }}
+                        >
                           No state managers found.
                         </td>
                       </tr>
@@ -280,31 +349,29 @@ const handleLogout = async () => {
             </div>
           )}
 
-         
           <div className={styles.dateFilterSection}>
-  <label className={styles.dateLabel}>
-    Start Date:
-    <input
-      type="date"
-      value={startDate}
-      onChange={(e) => setStartDate(e.target.value)}
-    />
-  </label>
-  <label className={styles.dateLabel}>
-    End Date:
-    <input
-      type="date"
-      value={endDate}
-      onChange={(e) => setEndDate(e.target.value)}
-    />
-  </label>
-  <div className={styles.buttonWrapper}>
-    <button className={styles.filterButton} onClick={handleFilter}>
-      Show
-    </button>
-  </div>
-</div>
-
+            <label className={styles.dateLabel}>
+              Start Date:
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+            </label>
+            <label className={styles.dateLabel}>
+              End Date:
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+              />
+            </label>
+            <div className={styles.buttonWrapper}>
+              <button className={styles.filterButton} onClick={handleFilter}>
+                Show
+              </button>
+            </div>
+          </div>
 
           <div className={styles.chartContainer}>
             <h3 className={styles.chartTitle}>Monthly Sales Chart</h3>
@@ -314,7 +381,12 @@ const handleLogout = async () => {
                 <XAxis dataKey="month" />
                 <YAxis />
                 <Tooltip />
-                <Line type="monotone" dataKey="sales" stroke="#007bff" strokeWidth={2} />
+                <Line
+                  type="monotone"
+                  dataKey="sales"
+                  stroke="#007bff"
+                  strokeWidth={2}
+                />
               </LineChart>
             </ResponsiveContainer>
           </div>

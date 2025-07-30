@@ -435,7 +435,7 @@
     width: 150px;
     height: 45px;
     display: block;
-    margin: 0 auto;
+    margin: 0 25px;
   }
 }
 
@@ -527,7 +527,7 @@
   grid-auto-rows: auto;
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 370px) {
   .cardGrid {
     display: grid;
     grid-template-columns: 1fr;
