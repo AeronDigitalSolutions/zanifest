@@ -419,7 +419,7 @@
     width: 160px;
     height: auto;
     display: block;
-    margin: 0 auto;
+    margin: 0 30px;
   }
 }
 
@@ -503,25 +503,51 @@
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   gap: 1.5rem;
 }
+.mobileCardWrapper{
+  display: none;
+}
 
-/* Mobile: 2 rows with 3 cards per row */
-@media screen and (max-width: 768px) {
-  .agentListToggle{
-    align-items: right;
+@media (max-width: 768px) {
+  .menuIcon {
+    display: block;
   }
-  .cardGrid {
+
+  .cardGridDesktop {
+    display: none;
+  }
+
+  .mobileCardWrapper {
+    padding: 1rem;
+  }
+
+.mobileCardWrapper {
     display: grid;
-    grid-template-columns: 1fr 1fr ;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+
+    gap: 1.5rem;
+    justify-content: center;
+  }
+
+}
+@media screen and (max-width: 768px) {
+  .cardGrid {
+    
+    grid-template-columns: 1fr 1fr;
     gap: 1rem;
     grid-template-areas:
-      "card1 card2 card3"
-      "card4 card5 card6";
+      "card1 card2"
+      "card3 card4"
+      "card5 card6";
   }
 
-  .cardGrid > div:nth-child(1) { grid-area: card1; } /* Total Sales */
-  .cardGrid > div:nth-child(2) { grid-area: card2; } /* Monthly Sales */
-  .cardGrid > div:nth-child(3) { grid-area: card3; } /* No. of Agents */
-  .cardGrid > div:nth-child(4) { grid-area: card4; } /* Total Clients */
-  .cardGrid > div:nth-child(5) { grid-area: card5; } /* District Managers */
-  .cardGrid > div:nth-child(6) { grid-area: card6; } /* State Managers */
+  .card:nth-child(1) { grid-area: card1; } /* Total Sales */
+  .card:nth-child(2) { grid-area: card2; } /* Monthly Sales */
+  .card:nth-child(3) { grid-area: card3; } /* No. of Agents */
+  .card:nth-child(4) { grid-area: card4; } /* Total Clients */
+  .card:nth-child(5) { grid-area: card5; } /* Total District Managers */
+  .card:nth-child(6) { grid-area: card6; } /* Total District Managers */
+
 }
+
+
+

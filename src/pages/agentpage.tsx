@@ -104,7 +104,7 @@ const Header = () => {
           <h2 className={styles.dashboardTitle}>Hello {agentName}</h2>
 
           {/* Summary Cards */}
-          <div className={styles.cardGrid3}>
+          <div className={styles.cardGrid}>
             <div className={styles.infoCard}>
               <h3>Total Sales</h3>
               <p className={styles.amount}>₹1,25,000</p>

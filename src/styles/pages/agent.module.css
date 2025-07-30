@@ -117,18 +117,24 @@
 }
 
 /* Summary Cards Grid */
-.cardGrid3 {
+/* .cardGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.2rem;
+  gap: 1.5rem;
   margin-bottom: 2rem;
-}
+} */
 
 .infoCard {
   background-color: white;
   padding: 1rem 1.2rem;
   border-radius: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
 }
 
 .amount {
@@ -179,7 +185,7 @@
     font-size: 1.2rem;
   }
 
-  .cardGrid3 {
+  .cardGrid {
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
   }
@@ -253,7 +259,7 @@
     font-size: 0.85rem;
   }
 
-  .cardGrid3 {
+  .cardGrid {
     grid-template-columns: 1fr;
   }
 
@@ -308,7 +314,7 @@
     padding: 0.8rem;
   }
 
-  .cardGrid3 {
+  .cardGrid {
     gap: 0.8rem;
   }
 
@@ -319,4 +325,38 @@
   .content {
     padding: 1rem 1rem;
   }
+}
+/* Summary Cards Grid */
+.cardGrid {
+  display: grid;
+ 
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  grid-template-columns: repeat(3, 1fr); /* 3 columns for desktop */
+}
+
+@media screen and (max-width: 768px) {
+  .cardGrid {
+    grid-template-columns: repeat(2, 1fr); /* 2 per row for tablet/mobile */
+    gap: 1rem;
+    
+  }
+  .cardGrid .infoCard:nth-child(3) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .cardGrid {
+    grid-template-columns: repeat(2, 1fr); /* keep 2 per row on small mobile too */
+    gap: 0.8rem;
+  }
+  .cardGrid .infoCard:nth-child(3) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: 50%;
+  }
+  
 }

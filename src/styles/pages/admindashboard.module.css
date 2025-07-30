@@ -97,7 +97,7 @@
 
 .mainContent {
   flex: 1;
-  display: grid;
+  /* display: grid; */
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1.5rem;
   padding: 2rem;
@@ -116,7 +116,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 25%;
 }
 .desktopOnlyLogout {
   display: flex;
@@ -129,7 +128,7 @@
 .dashboardCards {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 12px;
   justify-content: center;
   padding: 1rem;
 }
@@ -143,7 +142,6 @@
   text-align: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
 }
 
@@ -222,11 +220,98 @@
     margin-top: 1rem;
   
   }
+  .dashboardCards {
+  grid-template-columns: repeat(2, 1fr);
+ 
+  justify-content: center;
+  margin: 0%;
+  padding: 0%;
 }
-@media screen and (max-width: 370px) {
-  .mainContent {
-    display: grid;
-    /* grid-template-columns: repeat(2, 1fr); */
-  }
+.card {
+width: 120px;  
+
 }
 
+}
+/* @media screen and (max-width: 370px) {
+  .mainContent {
+    display: grid;
+  }
+   .dashboardCards {
+  grid-template-columns: repeat(2, 1fr);
+ 
+  justify-content: center;
+  margin: 0%;
+  padding: 0%;
+}
+.card {
+width: 120px;  
+
+}
+ 
+} */
+
+
+@media screen and (max-width: 370px) {
+  .menuToggle {
+    display: inline-block;
+  }
+
+  .sidebar {
+    display: none;
+  }
+  .header{
+   font-size: 8px;
+   text-align: left;
+    padding: 1rem;
+  }
+
+  .sidebarMobile {
+    display: block;
+    position: absolute;
+    left: 0;
+    width: 340px;
+    height: 100vh;
+    background-color: #fff;
+    z-index: 999;
+    overflow-y: auto;
+    border-right: 1px solid #e5e7eb;
+    animation: slideIn 0.3s ease forwards;
+  }
+ 
+  .sidebarMobile .menuItem {
+    padding: 0.5rem 1rem;
+    font-size: 16px;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  .desktopOnlyLogout {
+    display: none;
+  }
+
+  .mobileOnlyLogout {
+    display: block;
+    margin-top: 1rem;
+  
+  }
+  .dashboardCards {
+  grid-template-columns: repeat(2, 1fr);
+ 
+  justify-content: center;
+  margin: 0%;
+  padding: 0%;
+}
+.card {
+width: 120px;  
+
+}
+
+}
