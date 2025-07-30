@@ -178,7 +178,7 @@ const handleLogout = async () => {
         </aside>
 
         <main className={styles.content}>
-          <h2 className={styles.title}>State Manager Dashboard</h2>
+          <h2 className={styles.title}> {user?.name ?? "State Manager"}'s Dashboard</h2>
 
           <div className={styles.cardGrid}>
             <div className={styles.card}>
@@ -198,8 +198,8 @@ const handleLogout = async () => {
             <div className={styles.card}>
               <FiUsers className={styles.cardIcon} />
               <div>
-                <p>Number of Agents</p>
-                <h3>{agents.length}</h3>
+                <p>Number of District Managers</p>
+                <h3>{districtManagers.length}</h3>
               </div>
             </div>
             <div className={styles.card}>

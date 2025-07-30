@@ -121,6 +121,7 @@ const DistricManagerDashboard = () => {
     const fetchAgents = async () => {
       try {
         const res = await fetch("/api/getagent");
+        console.log("number of agents for district manager:", res);
         const data = await res.json();
         setAgentData(data.agents || []);
       } catch (err) {
@@ -192,7 +193,7 @@ const DistricManagerDashboard = () => {
 
         {/* Main Content */}
         <main className={styles.content}>
-          <h2 className={styles.title}>District Manager Dashboard</h2>
+          <h2 className={styles.title}>{user?.name ?? "District Manager"}'s Dashboard</h2>
 
           <div className={styles.cardGrid}>
             <div className={styles.card}>
@@ -213,7 +214,7 @@ const DistricManagerDashboard = () => {
               <FiUsers className={styles.cardIcon} />
               <div>
                 <p>Number of Agents</p>
-                <h3>{agents.length}</h3>
+                <h3>{agentData.length}</h3>
               </div>
             </div>
             <div className={styles.card}>

@@ -5,10 +5,15 @@ import {verifyToken} from '@/utils/verifyToken'
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const token = req.cookies.get('adminToken')?.value 
   || req.cookies.get('managerToken')?.value 
   || req.cookies.get('agentToken')?.value;
+
+  console.log("token recieved in middleware:", token);
+  console.log("All cookies:", req.cookies.getAll());
+
+
 
   console.log("Token from cookies:", token);
 
@@ -22,25 +27,73 @@ export function middleware(req: NextRequest) {
     console.log("No token found, redirecting...");
     if (url.pathname.startsWith('/superadmin') || url.pathname.startsWith('/admindashboard')) {
       return NextResponse.redirect(new URL('/adminlogin', req.url));
-    } else if (
+    } 
+    
+    else if (
       url.pathname.startsWith('/nationalmanagerdashboard') ||
       url.pathname.startsWith('/statemanagerdashboard') ||
       url.pathname.startsWith('/districtmanagerdashboard')
-    ) {
+    ) 
+    {
       return NextResponse.redirect(new URL('/managerlogin', req.url));
-    } else if (url.pathname.startsWith('/agentpage')) {
+    } 
+    else if (url.pathname.startsWith('/agentpage')) {
       return NextResponse.redirect(new URL('/agentlogin', req.url));
-    } else {
+    } 
+    else {
       return NextResponse.redirect(new URL('/', req.url)); // fallback
     }
   }
 
   try {
-    console.log("Verifying token...");
-    verifyToken(token);
-    console.log("Token is valid according to middleware");
+    console.log("Raw token from cookies:", token);
+
+  const decoded = await verifyToken(token ?? "") as { role?: string } | null;
+  console.log("Decoded token:", decoded);
+
+  if (!decoded || !decoded.role) {
+    console.log("Invalid token or role not found");
+    return NextResponse.redirect(new URL('/', req.url));
+  }
+
+  const role = decoded.role;
+  console.log("Decoded role:", role);
+  const pathname = req.nextUrl.pathname;
+  console.log("Requested path:", pathname);
+
+  console.log("Decoded role:", role, "Requested path:", pathname);
+
+  // Role-based access logic
+  if (role === "superadmin" && pathname.startsWith("/superadmin")) {
     return NextResponse.next();
-  } 
+  } else if (role === "admin" && pathname.startsWith("/admindashboard")) {
+    return NextResponse.next();
+  }  else if (role === "state" && pathname.startsWith("/statemanagerdashboard")) {
+  return NextResponse.next();
+  } else if (role === "district" && pathname.startsWith("/districtmanagerdashboard")) {
+    return NextResponse.next();
+  } else if (role === "national" && pathname.startsWith("/nationalmanagerdashboard")) {
+    return NextResponse.next();
+  } else if (role === "agent" && pathname.startsWith("/agentpage")) {
+    return NextResponse.next();
+  } else {
+    console.log("Unauthorized access attempt by:", role);
+    return NextResponse.redirect(new URL('/', req.url));
+  }
+} 
+// catch (error) {
+//   console.error("Token verification failed:", error);
+//     return NextResponse.redirect(new URL('/', req.url));
+// }
+
+
+  // try {
+  //   console.log("Verifying token...");
+  //   verifyToken(token);
+  //   console.log("Token is valid according to middleware");
+
+  //   return NextResponse.next();
+  // } 
   
   catch (err) {
     console.log("Token verification failed:");

@@ -1,8 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import Image from "next/image";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import logo from "@/assets/logo.png"; 
 import styles from '@/styles/components/superadminsidebar/changepassword.module.css';
 
 
@@ -15,9 +13,35 @@ const ChangePassword = () => {
     setShowPassword((prev) => !prev);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Email:", email, "Password:", password);
+    
+    try{
+
+      const res = await fetch("api/admin/change-password",  {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          newPassword: password,
+        }),
+      });
+
+       console.log("response from change password ->", res);
+
+      const data = await res.json();
+      console.log("change password response:", data);
+
+      if (!res.ok) throw new Error(data.message || "Failed to change password");
+
+      alert("Password reset successful");
+
+    }
+    catch (err: any) {
+      alert(err.message || "Something went wrong");
+    }
   };
 
   return (
@@ -51,7 +75,7 @@ const ChangePassword = () => {
             </label>
             <div className={styles.passwordWrapper}>
               <input
-                type={showPassword ? "text" : "password"}
+                type="password"
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

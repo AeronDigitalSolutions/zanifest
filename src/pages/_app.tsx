@@ -34,8 +34,6 @@ function ScrollToTop() {
   return null;
 }
 
-
-
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 

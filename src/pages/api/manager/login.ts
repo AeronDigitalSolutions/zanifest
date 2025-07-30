@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const { email, password } = req.body;
-
+  console.log("Received data:", { email, password });
   if (!email || !password) {
     return res.status(400).json({ message: "Email and password are required" });
   }
@@ -62,7 +62,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       
     });
 
-  } catch (error) {
+  } 
+  
+  catch (error) {
     console.error("Login error:", error);
     return res.status(500).json({ message: "Something went wrong" });
   }
