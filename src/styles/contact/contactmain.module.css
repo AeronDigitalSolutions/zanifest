@@ -44,7 +44,6 @@
   flex-direction: column;
   gap: 1.5rem;
   margin-top: -10vh; 
-  z-index: 20;
   position: relative;
 }
 
