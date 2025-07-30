@@ -506,6 +506,9 @@
 
 /* Mobile: 2 rows with 3 cards per row */
 @media screen and (max-width: 768px) {
+  .agentListToggle{
+    align-items: right;
+  }
   .cardGrid {
     display: grid;
     grid-template-columns: 1fr 1fr ;

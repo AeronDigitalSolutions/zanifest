@@ -225,9 +225,10 @@ const DistricManagerDashboard = () => {
             </div>
           </div>
 
-          <div className={styles.agentListToggle} onClick={() => setShowAgentList(!showAgentList)}>
-            <span>List of Agents</span>
-          </div>
+         
+                  <div className={styles.agentListToggleWrapper}>
+  <div className={styles.agentListToggle} onClick={() => setShowAgentList(!showAgentList)}>List of Agents</div>
+</div>
 
           {showAgentList && (
             <div className={styles.agentTable}>

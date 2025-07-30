@@ -115,38 +115,35 @@
 
 @media screen and (max-width: 550px) {
   .list {
-    display: grid;
-    grid-template-columns: 50% 50%;
     place-items: center;
-    justify-content: center;
-    /* gap: 0; */
+    width: 90%;
   }
 
   .item {
-    width: 90%;
-    margin: 0 auto;
+    width: 80%;
   }
 
   .imageCont {
+  }
+
+  .top {
     width: 100%;
   }
 
+  .imageCont {
+    width: auto;
+  }
+
   .image {
-    width: 100px;
-    height: 100px;
     object-fit: contain;
   }
 
   .rightCont {
-    font-size: 12px;
+    font-size: 10px;
   }
 
   .bottom {
-    font-size: 14px;
-    overflow-x: auto;
-    white-space: nowrap;
-    text-align: center;
-    justify-content: center;
+    overflow: scroll;
   }
 }
 

@@ -218,9 +218,13 @@ const handleLogout = async () => {
             </div>
           </div>
 
-          <div className={styles.agentListToggle} onClick={() => setShowAgentList(!showAgentList)}>
+          {/* <div className={styles.agentListToggle} onClick={() => setShowAgentList(!showAgentList)}>
             <span>List of District Manager</span>
-          </div>
+          </div> */}
+          <div className={styles.agentListToggleWrapper}>
+  <div className={styles.agentListToggle} onClick={() => setShowAgentList(!showAgentList)}>List of District Manager</div>
+</div>
+
 
           {showAgentList && (
             <div className={styles.agentTable}>
