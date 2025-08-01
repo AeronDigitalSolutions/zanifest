@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useState } from "react";
 import styles from "@/styles/components/superadminsidebar/changepassword.module.css"; 
@@ -5,6 +6,17 @@ import styles from "@/styles/components/superadminsidebar/changepassword.module.
 const CreateUser = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+
+  const capitalizeEachWord = (value: string) => {
+    return value
+      .toLowerCase()
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+  };
+
+  const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = capitalizeEachWord(e.target.value);
+    setFullName(formatted);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +55,7 @@ const CreateUser = () => {
               type="text"
               id="fullname"
               value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
+              onChange={handleFullNameChange}
               className={styles.input}
               required
             />

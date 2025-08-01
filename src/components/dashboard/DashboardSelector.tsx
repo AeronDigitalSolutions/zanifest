@@ -11,6 +11,8 @@ const LIST = [
   { id: 3, name: "Claims", image: require("@/assets/dashboard/list/claim.png") },
   { id: 4, name: "KYC", image: require("@/assets/dashboard/list/kyc.png") },
   { id: 5, name: "Get help", image: require("@/assets/dashboard/list/help.png") },
+  { id: 6, name: "Reset Password", image: require("@/assets/dashboard/list/profile.png") },
+
 ];
 
 function DashboardSelector({

@@ -30,10 +30,10 @@ import styles from '@/styles/contact/accountcard.module.css';
 import Image from 'next/image';
 import { FaStar } from 'react-icons/fa';
 import contactimg from "@/assets/pageImages/contacticons.png"
-
+import { useRouter } from "next/router";
 
 const features = [
-  'Download policy',
+  'Download policy', 
   'Raise a query',
   'Share feedback',
   'Track policy status',
@@ -42,6 +42,7 @@ const features = [
 ];
 
 export default function AccountCard() {
+    const router = useRouter();
   return (
     <div className={styles.cardContainer}>
       <div className={styles.cardContent}>
@@ -67,7 +68,10 @@ export default function AccountCard() {
             ))}
           </div>
 
-          <button className={styles.loginButton}>Login to my account</button>
+          <button className={styles.loginButton} onClick={() => {
+                router.push("/login");
+              }}
+           >Login to my account</button>
         </div>
       </div>
     </div>

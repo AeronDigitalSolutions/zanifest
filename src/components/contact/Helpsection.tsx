@@ -62,11 +62,12 @@
 
 // export default HelpSection;
 
-
+import { useRouter } from "next/router";
 import React from 'react';
 import styles from '@/styles/contact/helpsection.module.css';
 
 const HelpSection = () => {
+  const router =useRouter();
   return (
     <div className={styles.container}>
       <div className={styles.leftSection}>
@@ -77,7 +78,9 @@ const HelpSection = () => {
           <div>
             <p className={styles.boldText}>Login to My Account to raise a Service Request</p>
             <p>If you have any query regarding your policies, kindly log in to My Account to raise a Service Request.</p>
-            <button className={styles.loginBtn}>LOGIN</button>
+            <button className={styles.loginBtn}  onClick={() => {
+                router.push("/login");
+              }}>LOGIN</button>
           </div>
         </div>
 

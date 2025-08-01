@@ -13,7 +13,7 @@ const Contactmain = () => {
             <span className={styles.link}>Contact Us</span>
           </div>
           <h2 className={styles.heading}>
-            At Policybazaar, it is our constant endeavour to provide great customer experience.
+            At Zanifest, it is our constant endeavour to provide great customer experience.
           </h2>
           <p className={styles.subtext}>
             In case you require assistance, we have created multiple ways to reach out to us. <br />

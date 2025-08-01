@@ -1,7 +1,163 @@
+// import { useState, FormEvent } from "react";
+// import { useRouter } from "next/router";
+
+// import { IoIosArrowBack } from "react-icons/io";
+// import Image from "next/image";
+// import styles from "@/styles/components/Auth/Login.module.css";
+
+// import loginBanner from "@/assets/loginbanner.png";
+// import logo from "@/assets/logo.png";
+
+// export default function SignUp() {
+//   const [userName, setUserName] = useState("");
+//   const [email, setEmail] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [showPassword, setShowPassword] = useState(false);
+//   const [error, setError] = useState(false);
+//   const [loading, setLoading] = useState(false);
+
+//   const router = useRouter();
+
+//   const handleSubmit = async (e: React.FormEvent) => {
+//   e.preventDefault();
+//   const res = await fetch('/api/auth/signup', {
+//     method: 'POST',
+//     headers: { 'Content-Type': 'application/json' },
+//     body: JSON.stringify({ userName, email, password }),
+//   });
+
+//   const data = await res.json();
+//   if (res.ok) {
+//     alert('Signup successful');
+//     router.push("/login");
+//   } else {
+//     alert(data.message);
+//   }
+// };
+
+//   // const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+//   //   event.preventDefault();
+//   //   setLoading(true);
+
+//   //   if (userName.trim() && email.trim() && password.length >= 6) {
+//   //     setError(false);
+//   //     setTimeout(() => {
+//   //       router.push("/dashboard");
+//   //       setLoading(false);
+//   //     }, 1000);
+//   //   } else {
+//   //     setError(true);
+//   //     setLoading(false);
+//   //   }
+//   // };
+
+//   return (
+//     <div className={styles.cont}>
+//       <div className={styles.left}>
+//         <Image src={loginBanner} alt="signup-banner" className={styles.leftImage} />
+//       </div>
+
+//       <div className={styles.loginCont}>
+//         {/* <button className={styles.goback} onClick={() => router.push("/")}>
+//           <IoIosArrowBack size="30px" /> Back to Home
+//         </button> */}
+
+//         <div className={styles.formDiv}>
+//           <div className={styles.logo}>
+//             <Image src={logo} alt="logo" className={styles.logoImage} />
+//           </div>
+
+//           <h1 className={styles.heading}>Join the Loggin Platform</h1>
+//           <p className={styles.headingp}>
+//             Create your account to unlock the full potential of our tools.
+//           </p>
+
+//           <form onSubmit={handleSubmit} className={styles.loginForm}>
+//             {error && (
+//               <div className={styles.error}>
+//                 <h4>Please fill all fields properly</h4>
+//               </div>
+//             )}
+// {/* 
+//             <div className={styles.formInput}>
+//               <input
+//                 type="text"
+//                 placeholder="Full Name"
+//                 value={userName}
+//                 onChange={(e) => setUserName(e.target.value)}
+//                 className={styles.input}
+//                 required
+//               />
+//             </div> */}
+//             <div className={styles.formInput}>
+//   <input
+//     type="text"
+//     placeholder="Full Name"
+//     value={userName}
+//     onChange={(e) => {
+//       const input = e.target.value;
+//       const capitalized = input.charAt(0).toUpperCase() + input.slice(1);
+//       setUserName(capitalized);
+//     }}
+//     className={styles.input}
+//     required
+//   />
+// </div>
+
+
+//             <div className={styles.formInput}>
+//               <input
+//                 type="email"
+//                 placeholder="E-mail Address"
+//                 value={email}
+//                 onChange={(e) => setEmail(e.target.value)}
+//                 className={styles.input}
+//                 required
+//               />
+//             </div>
+
+//             <div className={styles.formInput}>
+//               <input
+//                 type={showPassword ? "text" : "password"}
+//                 placeholder="Password"
+//                 value={password}
+//                 onChange={(e) => setPassword(e.target.value)}
+//                 className={styles.input}
+//                 required
+//               />
+//             </div>
+
+//             <div className={styles.showPasswordDiv}>
+//               <input
+//                 type="checkbox"
+//                 id="showPass"
+//                 checked={showPassword}
+//                 onChange={() => setShowPassword(!showPassword)}
+//                 className={styles.passCheck}
+//               />
+//               <label htmlFor="showPass">Show Password</label>
+//             </div>
+
+//             <button
+//               className={styles.loginButton}
+//               disabled={loading}
+//               type="submit"
+//             >
+//               {loading ? "Registering..." : "Sign Up"}
+//             </button>
+//           </form>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/router";
 
-import { IoIosArrowBack } from "react-icons/io";
+// import { IoIosArrowBack } from "react-icons/io";
+
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import Image from "next/image";
 import styles from "@/styles/components/Auth/Login.module.css";
 
@@ -18,38 +174,22 @@ export default function SignUp() {
 
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  const res = await fetch('/api/auth/signup', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ userName, email, password }),
-  });
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    const res = await fetch("/api/auth/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userName, email, password }),
+    });
 
-  const data = await res.json();
-  if (res.ok) {
-    alert('Signup successful');
-    router.push("/login");
-  } else {
-    alert(data.message);
-  }
-};
-
-  // const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   setLoading(true);
-
-  //   if (userName.trim() && email.trim() && password.length >= 6) {
-  //     setError(false);
-  //     setTimeout(() => {
-  //       router.push("/dashboard");
-  //       setLoading(false);
-  //     }, 1000);
-  //   } else {
-  //     setError(true);
-  //     setLoading(false);
-  //   }
-  // };
+    const data = await res.json();
+    if (res.ok) {
+      alert("Signup successful");
+      router.push("/login");
+    } else {
+      alert(data.message);
+    }
+  };
 
   return (
     <div className={styles.cont}>
@@ -58,10 +198,6 @@ export default function SignUp() {
       </div>
 
       <div className={styles.loginCont}>
-        {/* <button className={styles.goback} onClick={() => router.push("/")}>
-          <IoIosArrowBack size="30px" /> Back to Home
-        </button> */}
-
         <div className={styles.formDiv}>
           <div className={styles.logo}>
             <Image src={logo} alt="logo" className={styles.logoImage} />
@@ -84,7 +220,11 @@ export default function SignUp() {
                 type="text"
                 placeholder="Full Name"
                 value={userName}
-                onChange={(e) => setUserName(e.target.value)}
+                onChange={(e) => {
+                  const input = e.target.value;
+                  const capitalized = input.charAt(0).toUpperCase() + input.slice(1);
+                  setUserName(capitalized);
+                }}
                 className={styles.input}
                 required
               />
@@ -101,7 +241,8 @@ export default function SignUp() {
               />
             </div>
 
-            <div className={styles.formInput}>
+            {/* Password Input with Icon */}
+            <div className={styles.formInput} style={{ position: "relative" }}>
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
@@ -110,17 +251,19 @@ export default function SignUp() {
                 className={styles.input}
                 required
               />
-            </div>
-
-            <div className={styles.showPasswordDiv}>
-              <input
-                type="checkbox"
-                id="showPass"
-                checked={showPassword}
-                onChange={() => setShowPassword(!showPassword)}
-                className={styles.passCheck}
-              />
-              <label htmlFor="showPass">Show Password</label>
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  right: "10px",
+                  transform: "translateY(-50%)",
+                  cursor: "pointer",
+                  color: "#555",
+                }}
+              >
+                {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+              </span>
             </div>
 
             <button

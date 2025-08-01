@@ -85,9 +85,9 @@ function Footer() {
         <div className={styles.bottomItem}>
           © 2025 Zenifest, All Rights Reserved.
         </div>
-        <div className={`${styles.bottomItem} ${styles.loginagent}`}>
+        {/* <div className={`${styles.bottomItem} ${styles.loginagent}`}>
           Login as Agent
-        </div>
+        </div> */}
         <div className={styles.bottomLinks}>
           <div className={styles.bottomItem}>Privacy Policy</div>
           <div className={styles.bottomItem}>Terms & Conditions</div>
