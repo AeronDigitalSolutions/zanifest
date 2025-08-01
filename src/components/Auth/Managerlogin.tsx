@@ -135,7 +135,7 @@ console.log("Manager token set in cookie:", data.token);
               {loading ? "Loading" : "Login"}
             </button>
 
-            <p className={styles.signupLink}>
+            {/* <p className={styles.signupLink}>
               Don't have an account?{" "}
               <span
                 className={styles.signupText}
@@ -143,7 +143,7 @@ console.log("Manager token set in cookie:", data.token);
               >
                 Sign Up
               </span>
-            </p>
+            </p> */}
           </form>
         </div>
       </div>

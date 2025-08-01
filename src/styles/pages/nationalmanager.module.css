@@ -113,14 +113,16 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   gap: 5rem;
+  
 }
 
 .card {
   background-color: white;
   margin-bottom: 1rem;
-  padding: 1rem;
+  padding: 1rem  4rem;
+  /* padding-left: 5rem; */
   text-align: center;
-  font-size: large;
+  font-size: 18px;
  
   border-radius: 12px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
@@ -501,7 +503,7 @@
 .cardGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 1.5rem;
+  gap: 3.5rem;
 }
 .mobileCardWrapper{
   display: none;
@@ -522,7 +524,7 @@
 
 .mobileCardWrapper {
     display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      /* grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); */
 
     gap: 1.5rem;
     justify-content: center;

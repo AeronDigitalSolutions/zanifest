@@ -31,6 +31,7 @@ import Image from 'next/image';
 import { FaStar } from 'react-icons/fa';
 import contactimg from "@/assets/pageImages/contacticons.png"
 
+
 const features = [
   'Download policy',
   'Raise a query',

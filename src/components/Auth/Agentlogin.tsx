@@ -125,7 +125,7 @@ export default function Agentlogin() {
               {loading ? "Loading" : "Login"}
             </button>
 
-            <p className={styles.signupLink}>
+            {/* <p className={styles.signupLink}>
               Don't have an account?{" "}
               <span
                 className={styles.signupText}
@@ -133,7 +133,7 @@ export default function Agentlogin() {
               >
                 Sign Up
               </span>
-            </p>
+            </p> */}
           </form>
         </div>
       </div>

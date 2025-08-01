@@ -22,7 +22,7 @@ const Header = () => {
   const sidebarMenu = [
     {
       section: "Menu",
-      items: [{ icon: <FiHome />, label: "Dashboard" }],
+      items: [{ icon: <FiHome/>, label: "Dashboard" }],
     },
     {
       section: "Apps",
