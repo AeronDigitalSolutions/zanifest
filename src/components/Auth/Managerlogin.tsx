@@ -135,7 +135,7 @@ document.cookie = `managerToken=${data.token}; path=/;`;
               {loading ? "Loading" : "Login"}
             </button>
 
-            <p className={styles.signupLink}>
+            {/* <p className={styles.signupLink}>
               Don't have an account?{" "}
               <span
                 className={styles.signupText}
@@ -143,7 +143,7 @@ document.cookie = `managerToken=${data.token}; path=/;`;
               >
                 Sign Up
               </span>
-            </p>
+            </p> */}
           </form>
         </div>
       </div>

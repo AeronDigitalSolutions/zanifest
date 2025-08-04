@@ -6,6 +6,7 @@ import DashboardClaims from "./DashboardClaims";
 import DashboardPolicies from "./DashboardPolicies";
 import DashboardKyc from "./DashboardKyc";
 import DashboardHelp from "./DashboardHelp";
+import ResetPassword from "./ResetPassword";
 
 import styles from "@/styles/components/dashboard/DashboardMain.module.css";
 
@@ -24,6 +25,9 @@ function DashboardMain() {
       {componentToShow == 3 && <DashboardClaims />}
       {componentToShow == 4 && <DashboardKyc />}
       {componentToShow == 5 && <DashboardHelp />}
+      {componentToShow == 6 && <ResetPassword/>}
+
+
     </div>
   );
 }

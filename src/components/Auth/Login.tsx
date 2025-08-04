@@ -4,6 +4,8 @@ import { IoIosArrowBack } from "react-icons/io";
 import styles from "@/styles/components/Auth/Login.module.css";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
+import { FiEye, FiEyeOff } from 'react-icons/fi';
+
 
 
 
@@ -92,7 +94,7 @@ export default function Login() {
               />
             </div>
 
-            <div className={styles.formInput}>
+            {/* <div className={styles.formInput}>
               <input
                 type={showPassword ? "text" : "password"}
                 name="pass"
@@ -102,9 +104,31 @@ export default function Login() {
                 className={styles.input}
                 onChange={(e) => setPassword(e.target.value)}
               />
+            </div> */}
+ <div className={styles.formInput} style={{ position: "relative" }}>
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={styles.input}
+                required
+              />
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  right: "10px",
+                  transform: "translateY(-50%)",
+                  cursor: "pointer",
+                  color: "#555",
+                }}
+              >
+                {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+              </span>
             </div>
-
-            <div className={styles.showPasswordDiv}>
+            {/* <div className={styles.showPasswordDiv}>
               <input
                 type="checkbox"
                 id="showP"
@@ -112,7 +136,7 @@ export default function Login() {
                 onClick={() => setShowPassword(!showPassword)}
               />
               <label htmlFor="showP">Show Password</label>
-            </div>
+            </div> */}
 
             <button
               className={styles.loginButton}

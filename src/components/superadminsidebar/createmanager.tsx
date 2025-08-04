@@ -1,5 +1,7 @@
+
 import React, { useEffect, useState } from 'react';
 import styles from '@/styles/components/superadminsidebar/createmanager.module.css';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 const CreateManager = () => {
   const [formData, setFormData] = useState({
@@ -36,7 +38,14 @@ const CreateManager = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    let updatedValue = value;
+    if (
+      (name === 'managerId' || name === 'name' || name === 'state' || name === 'district') &&
+      value.length > 0
+    ) {
+      updatedValue = value.charAt(0).toUpperCase() + value.slice(1);
+    }
+    setFormData((prev) => ({ ...prev, [name]: updatedValue }));
   };
 
   const handleRoleChange = (e: React.FormEvent) => {
@@ -48,7 +57,7 @@ const CreateManager = () => {
     e.preventDefault();
 
     if (formData.category !== 'national' && formData.assignedTo === '') {
-      alert("State and district managers must be assigned to a manager.");
+      alert('State and district managers must be assigned to a manager.');
       return;
     }
 
@@ -64,21 +73,21 @@ const CreateManager = () => {
         assignedTo: formData.assignedTo,
       };
 
-      const response = await fetch("/api/createmanager", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/createmanager', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
-        console.log("Failed to create manager");
+        console.log('Failed to create manager');
         return;
       }
 
-      alert("Manager created successfully!");
+      alert('Manager created successfully!');
     } catch (err) {
-      console.error("Error:", err);
-      alert("Error creating manager");
+      console.error('Error:', err);
+      alert('Error creating manager');
     }
   };
 
@@ -125,10 +134,11 @@ const CreateManager = () => {
               placeholder="Enter email"
               value={formData.email}
               onChange={handleChange}
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
             />
           </div>
 
-          <div className={styles.formGroup}>
+          <div className={styles.formGroup} style={{ position: 'relative' }}>
             <label htmlFor="password">Password</label>
             <input
               type={showPassword ? 'text' : 'password'}
@@ -139,6 +149,13 @@ const CreateManager = () => {
               value={formData.password}
               onChange={handleChange}
             />
+            <span
+              className={styles.eyeIcon}
+              onClick={() => setShowPassword(!showPassword)}
+              style={{ position: 'absolute', right: 10, top: 38, cursor: 'pointer' }}
+            >
+              {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+            </span>
           </div>
         </div>
 
@@ -172,15 +189,33 @@ const CreateManager = () => {
 
         <div className={`${styles.row} ${styles.radioRow}`}>
           <label className={styles.radioLabel}>
-            <input type="radio" name="managerRole" value="national" checked={formData.category === 'national'} onChange={handleRoleChange} />
+            <input
+              type="radio"
+              name="managerRole"
+              value="national"
+              checked={formData.category === 'national'}
+              onChange={handleRoleChange}
+            />
             National Manager
           </label>
           <label className={styles.radioLabel}>
-            <input type="radio" name="managerRole" value="state" checked={formData.category === 'state'} onChange={handleRoleChange} />
+            <input
+              type="radio"
+              name="managerRole"
+              value="state"
+              checked={formData.category === 'state'}
+              onChange={handleRoleChange}
+            />
             State Manager
           </label>
           <label className={styles.radioLabel}>
-            <input type="radio" name="managerRole" value="district" checked={formData.category === 'district'} onChange={handleRoleChange} />
+            <input
+              type="radio"
+              name="managerRole"
+              value="district"
+              checked={formData.category === 'district'}
+              onChange={handleRoleChange}
+            />
             District Manager
           </label>
         </div>
@@ -206,14 +241,9 @@ const CreateManager = () => {
           </div>
         )}
 
-        <div className={styles.checkboxGroup}>
-          <label className={styles.checkboxLabel}>
-            <input type="checkbox" checked={showPassword} onChange={() => setShowPassword(!showPassword)} />
-            Show Password
-          </label>
-        </div>
-
-        <button type="submit" className={styles.submitButton}>Create</button>
+        <button type="submit" className={styles.submitButton}>
+          Create
+        </button>
       </form>
     </div>
   );

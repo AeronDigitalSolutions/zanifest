@@ -126,7 +126,7 @@
   display: none;
 }
 .dashboardCards {
-  display: grid;
+  display: flex;
   flex-wrap: wrap;
   gap: 12px;
   justify-content: center;

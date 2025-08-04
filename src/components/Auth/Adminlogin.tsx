@@ -130,7 +130,7 @@ export default function AdminLogin() {
               {loading ? "Loading" : "Login"}
             </button>
 
-            <p className={styles.signupLink}>
+            {/* <p className={styles.signupLink}>
               Don't have an account?{" "}
               <span
                 className={styles.signupText}
@@ -138,7 +138,7 @@ export default function AdminLogin() {
               >
                 Sign Up
               </span>
-            </p>
+            </p> */}
           </form>
         </div>
       </div>
