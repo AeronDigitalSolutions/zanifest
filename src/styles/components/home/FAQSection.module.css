@@ -59,7 +59,7 @@
 
 .ans {
   font-size: 16px;
-  /* animation: open 0.5s forwards ease-in; */
+  animation: open 0.5s forwards ease-in;
   overflow: hidden;
   margin: 0;
   margin-bottom: 20px;
@@ -105,7 +105,7 @@
   .ans {
     font-size: 16px;
     text-align: justify;
-    max-height: 140px; /* 🔶 Updated height for mobile view */
+    max-height: auto; /* 🔶 Updated height for mobile view */
     overflow-y: auto;  /* Optional: scroll if content exceeds */
   }
 
@@ -133,7 +133,8 @@
     margin: 0 auto; /* center horizontally */
     box-sizing: border-box;
     padding: 0 20px;
-    
+      -webkit-tap-highlight-color: transparent; /* 🔧 removes blue flash on tap */
+
     /* inner padding if needed */
   }
 }
