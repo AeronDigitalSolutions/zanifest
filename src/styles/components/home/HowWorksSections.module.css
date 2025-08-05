@@ -12,12 +12,13 @@
 }
 
 .heading {
-  font-size: 35px;
+  font-size: 30px;
   font-weight: 600;
   display: flex;
   gap: 0.7rem;
   flex-wrap: wrap;
   text-align: center;
+  margin-bottom: 2rem;
 }
 
 .orange {
@@ -111,8 +112,8 @@
   padding: 5px 12px;
   transition: all 0.3s;
 
-  border-radius: 8px; /* 🔵 Rounded corners */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* 🟤 Subtle shadow */
+  border-radius: 8px; 
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); 
 }
 
 
@@ -176,8 +177,6 @@
     gap: 1rem;
   }
 
-  /* .bottom {
-    font-size: 14px;
-  } */
+ 
   
 }

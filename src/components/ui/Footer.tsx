@@ -53,7 +53,7 @@ function Footer() {
             />
           </div>
           <div className={styles.desc}>
-            The Zenifest is India's largest insurance aggregator, and has
+            The Zanifest is India's largest insurance aggregator, and has
             expanded its operations to the India.
           </div>
           <div className={styles.icons}>
@@ -83,7 +83,7 @@ function Footer() {
       </div>
       <div className={styles.bottom}>
         <div className={styles.bottomItem}>
-          © 2025 Zenifest, All Rights Reserved.
+          © 2025 Zanifest, All Rights Reserved.
         </div>
         {/* <div className={`${styles.bottomItem} ${styles.loginagent}`}>
           Login as Agent

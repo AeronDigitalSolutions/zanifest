@@ -3,6 +3,12 @@
   width: 100vw;
   height: 70px;
 }
+.overlay {
+  /* if height is fixed or overflow is hidden */
+  overflow: hidden; 
+  height: 80vh;
+}
+
 
 .hero_container {
   margin: 17px;

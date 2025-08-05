@@ -1,5 +1,5 @@
 import React from "react";
-import {useRouter} from 'next/router';
+import { useRouter } from "next/router";
 import styles from "@/styles/pages/bikeinsurance.module.css";
 import UserDetails from "@/components/ui/UserDetails";
 import Navbar from "@/components/ui/Navbar";
@@ -13,7 +13,9 @@ import {
 import { FaArrowRight } from "react-icons/fa6";
 
 function bikeinsurance() {
-  const router =useRouter();
+  const router = useRouter();
+  const [carNumber, setCarNumber] = React.useState("");
+
   React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
@@ -22,7 +24,7 @@ function bikeinsurance() {
       <UserDetails />
       <Navbar />
       <div className={styles.cont}>
-         <div className={styles.imageCont}>
+        <div className={styles.imageCont}>
           <Image
             src={require("@/assets/pageImages/scooter.png")}
             alt="car Image"
@@ -56,10 +58,19 @@ function bikeinsurance() {
             <div className={styles.form}>
               <input
                 type="text"
+                value={carNumber}
+                onChange={(e) => setCarNumber(e.target.value.toUpperCase())}
                 placeholder="Your bike number ex - DL-10-CB-1234"
                 className={styles.input}
               />
-              <button className={styles.button} onClick={()=>{router.push('./twowheeler')}}>Check Prices</button>
+              <button
+                className={styles.button}
+                onClick={() => {
+                  router.push("./twowheeler");
+                }}
+              >
+                Check Prices
+              </button>
             </div>
             <p>
               By clicking, I agree to{" "}
@@ -72,7 +83,6 @@ function bikeinsurance() {
             </button>
           </div>
         </div>
-       
       </div>
       <Footer />
     </div>

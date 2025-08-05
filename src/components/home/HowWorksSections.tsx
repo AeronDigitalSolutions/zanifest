@@ -24,41 +24,50 @@ const LIST = [
 
 const SERVICES = [
   {
+    heading: "Pay Less Cover More",
     image: require("@/assets/home/works/4.png"),
     name: "Lorem Ipsum is simply dummy text",
     desc: "999 / Month",
   },
   {
+    heading: "Pay Less Cover More",
+
     image: require("@/assets/home/works/4.png"),
     name: "Lorem Ipsum is simply dummy text",
     desc: "999 / Month",
   },
   {
+    heading: "Pay Less Cover More",
     image: require("@/assets/home/works/4.png"),
     name: "Lorem Ipsum is simply dummy text",
     desc: "999 / Month",
   },
   {
+    heading: "Pay Less Cover More",
     image: require("@/assets/home/works/4.png"),
     name: "Lorem Ipsum is simply dummy text",
     desc: "999 / Month",
   },
   {
+    heading: "Pay Less Cover More",
     image: require("@/assets/home/works/4.png"),
     name: "Lorem Ipsum is simply dummy text",
     desc: "999 / Month",
   },
   {
+    heading: "Pay Less Cover More",
     image: require("@/assets/home/works/4.png"),
     name: "Lorem Ipsum is simply dummy text",
     desc: "999 / Month",
   },
   {
+    heading: "Pay Less Cover More",
     image: require("@/assets/home/works/4.png"),
     name: "Lorem Ipsum is simply dummy text",
     desc: "999 / Month",
   },
   {
+    heading: "Pay Less Cover More",
     image: require("@/assets/home/works/4.png"),
     name: "Lorem Ipsum is simply dummy text",
     desc: "999 / Month",
@@ -70,7 +79,7 @@ function HowWorksSections() {
     <div className={styles.cont}>
       <div className={styles.head}>
         <div className={styles.heading}>
-          How We <div className={styles.orange}>Works?</div>
+          How We <div className={styles.orange}>Work?</div>
         </div>
       </div>
       <div className={styles.bottom}>
@@ -88,7 +97,11 @@ function HowWorksSections() {
           );
         })}
       </div>
+      
       <div className={styles.servciesCont}>
+        <div className={styles.heading}>
+          Pay<div className={styles.orange}>Less</div> Cover More
+        </div>
         <div className={styles.services}>
           {SERVICES.map((item, index) => {
             return (

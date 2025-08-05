@@ -35,13 +35,11 @@ function DemoSection() {
     <div className={styles.cont}>
       <div className={styles.head}>
         <div className={styles.heading}>
-          Why is <div style={{ color: "#fa621a" }}>ZENIFEST</div> India's go-to for
+          Why is <div style={{ color: "#fa621a" }}>ZANIFEST</div> India's go-to for
           insurance?
         </div>
         <div className={styles.subHeading}>
-          Demo Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500
+          Zanifest is your trusted partner in insurance — providing transparent comparisons, affordable policies, and dedicated support. We simplify your insurance journey with easy access to top insurers and seamless claim support.
         </div>
       </div>
       <div className={styles.list}>

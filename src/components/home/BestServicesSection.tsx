@@ -9,17 +9,17 @@ import { LiaMoneyBillSolid } from "react-icons/lia";
 const LIST = [
   {
     name: "24X7 Support",
-    desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industr",
+    desc: "Our dedicated customer support team is available 24/7 to guide you at every step of your insurance journey.",
     image: <MdHeadsetMic size={40} />,
   },
   {
     name: "Easy Clain System",
-    desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industr",
+    desc: "Hassle-free claim process designed to get you quick resolutions when you need them the most.",
     image: <LuNotebookPen size={40} />,
   },
   {
     name: "Easy Installments",
-    desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industr",
+    desc: "Flexible and easy premium installment options to suit every budget and keep you worry-free.",
     image: <LiaMoneyBillSolid size={40} />,
   },
 ];

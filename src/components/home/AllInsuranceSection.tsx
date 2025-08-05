@@ -9,17 +9,17 @@ import styles from "@/styles/components/home/AllInsuranceSection.module.css";
 const SERVICESLIST = [
   {
     name: "Family Insurance",
-    desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+    desc: "Protect your loved ones with comprehensive family coverage designed to secure health, future, and peace of mind.",
     image: require("@/assets/home/services/1.png"),
   },
   {
     name: "Travel Insurance",
-    desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+    desc: "Stay worry-free on your journeys with travel insurance that covers medical emergencies, delays, and unexpected cancellations.",
     image: require("@/assets/home/services/2.png"),
   },
   {
     name: "Home Insurance",
-    desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+    desc: "Safeguard your home and belongings from natural disasters, theft, and unforeseen events with our reliable home insurance plans.",
     image: require("@/assets/home/services/3.png"),
   },
 ];
