@@ -217,7 +217,7 @@
 .serviceItem {
   min-width: 300px;
   max-width: 300px;
-  margin: 0px 10px;
+  margin: 10px 10px;
   flex-shrink: 0;
   background-color: white;
   padding: 20px;
