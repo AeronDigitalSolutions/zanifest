@@ -12,13 +12,8 @@ const INSURANCELIST = [
     link: "./health/healthinsurance",
   },
   {
-<<<<<<< HEAD
-    name: "Critical Illnes",//one s removed for a specific purpose
-    image: require("@/assets/home/car/2.png"),
-=======
     name: "Marine Insurance",
     image: require("@/assets/ship.png"),
->>>>>>> origin/khushiinsurance20
     link: "#",
   },
   {
