@@ -22,30 +22,30 @@ const CATEGORYLIST = [
       require("@/assets/home/partners/6.png"),
     ],
   },
-  {
-    name: "Travel Insurance",
-    image: require("@/assets/home/car/3.png"),
-    partners: [
-      require("@/assets/home/partners/7.png"),
-      require("@/assets/home/partners/8.png"),
-    ],
-  },
-  {
-    name: "Shop Insurance",
-    image: require("@/assets/home/car/4.png"),
-    partners: [
-      require("@/assets/home/partners/9.png"),
-      require("@/assets/home/partners/10.png"),
-    ],
-  },
-  {
-    name: "Home Insurance",
-    image: require("@/assets/home/car/5.png"),
-    partners: [
-      require("@/assets/home/partners/11.png"),
-      require("@/assets/home/partners/12.png"),
-    ],
-  },
+  // {
+  //   name: "Travel Insurance",
+  //   image: require("@/assets/home/car/3.png"),
+  //   partners: [
+  //     require("@/assets/home/partners/7.png"),
+  //     require("@/assets/home/partners/8.png"),
+  //   ],
+  // },
+  // {
+  //   name: "Shop Insurance",
+  //   image: require("@/assets/home/car/4.png"),
+  //   partners: [
+  //     require("@/assets/home/partners/9.png"),
+  //     require("@/assets/home/partners/10.png"),
+  //   ],
+  // },
+  // {
+  //   name: "Home Insurance",
+  //   image: require("@/assets/home/car/5.png"),
+  //   partners: [
+  //     require("@/assets/home/partners/11.png"),
+  //     require("@/assets/home/partners/12.png"),
+  //   ],
+  // },
   {
     name: "Fire Insurance",
     image: require("@/assets/home/car/6.png"),

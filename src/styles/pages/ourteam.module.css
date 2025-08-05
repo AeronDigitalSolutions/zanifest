@@ -1,0 +1,118 @@
+/* src/components/OurOrigin.module.css */
+
+.originSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 80px 10%;
+  background-color: #fff;
+  position: relative;
+}
+
+.content {
+  max-width: 50%;
+}
+
+.subtitle {
+  color: #7b61ff;
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.subtitle::after {
+  content: "";
+  display: inline-block;
+  width: 40px;
+  height: 2px;
+  background-color: #7b61ff;
+  margin-left: 12px;
+  vertical-align: middle;
+}
+
+.title {
+  font-size: 48px;
+  font-weight: 600;
+  color: #223344;
+  margin-bottom: 24px;
+}
+
+.description {
+  font-size: 18px;
+  color: #445566;
+  line-height: 1.6;
+}
+
+.imagesContainer {
+  position: relative;
+/* width: 40vw; */
+height: 40vh;
+  width: 35%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mainImage {
+  width: 40%;
+  height: 50vh;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.smallImageWrapper {
+  position: absolute;
+  width: 80%;
+  height: 30vh;
+  bottom: -30px;
+  left: -30px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.smallImage {
+  width: 150px;
+  border-radius: 15px;
+}
+
+/* Decorative Shape */
+.decorativeShape {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 100px;
+  height: 100px;
+  background: #e0f7fa;
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  opacity: 0.5;
+  z-index: -1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .originSection {
+    flex-direction: column;
+    text-align: center;
+    padding: 50px 5%;
+  }
+
+  .content {
+    max-width: 100%;
+  }
+
+  .imagesContainer {
+    width: 100%;
+    margin-top: 30px;
+  }
+
+  .smallImage {
+    width: 100px;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+}

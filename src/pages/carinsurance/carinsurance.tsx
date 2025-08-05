@@ -6,13 +6,15 @@ import UserDetails from "@/components/ui/UserDetails";
 import styles from "@/styles/pages/carinsurance.module.css";
 import Image from "next/image";
 import { FaArrowRight } from "react-icons/fa6";
-import {useRouter} from 'next/router';
+import { useRouter } from "next/router";
 
 function carinsurance() {
-  const router =useRouter();
-React.useEffect(() => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}, []);
+  const router = useRouter();
+  const [carNumber, setCarNumber] = React.useState("");
+
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
   return (
     <div>
       <UserDetails />
@@ -33,10 +35,18 @@ React.useEffect(() => {
           <div className={styles.form}>
             <input
               type="text"
+              value={carNumber}
+              onChange={(e) => setCarNumber(e.target.value.toUpperCase())}
               placeholder="Enter car number (eg - DL-10-CB-1234)"
               className={styles.input}
             />
-            <button className={styles.button} onClick={()=>{router.push('./carinsurance2')}}>
+
+            <button
+              className={styles.button}
+              onClick={() => {
+                router.push("./carinsurance2");
+              }}
+            >
               View Prices <FaArrowRight />
             </button>
           </div>
