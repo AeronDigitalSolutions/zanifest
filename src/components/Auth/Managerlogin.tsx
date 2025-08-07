@@ -46,12 +46,7 @@ const [email,setEmail] = useState<string>("");
 
  
 document.cookie = `managerToken=${data.token}; path=/;`;
-<<<<<<< HEAD
-// console.log("Manager token set in cookie:", data.token);
-  // ✅ Redirect based on role
-=======
 console.log("Manager token set in cookie:", data.token);
->>>>>>> origin/khushiinsurance20
   if (data.role === "national") {
     router.push("/nationalmanagerdashboard");
   } else if (data.role === "state") {
