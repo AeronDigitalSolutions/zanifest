@@ -76,10 +76,10 @@ export default function AdminLogin() {
           </div>
 
           <h1 className={styles.heading}>
-            AdminLogin 
+            Admin Login 
           </h1>
           <p className={styles.headingp}>
-            Access to the most powerfull tool in the entire design and web
+            Access to the most powerful tool in the entire design and web
             industry.
           </p>
 
