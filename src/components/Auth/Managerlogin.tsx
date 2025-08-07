@@ -44,11 +44,9 @@ const [email,setEmail] = useState<string>("");
     return;
   }
 
-  // ✅ No need to store token in localStorage
-  // ✅ The backend already sets a secure cookie
+ 
 document.cookie = `managerToken=${data.token}; path=/;`;
 console.log("Manager token set in cookie:", data.token);
-  // ✅ Redirect based on role
   if (data.role === "national") {
     router.push("/nationalmanagerdashboard");
   } else if (data.role === "state") {
@@ -81,10 +79,10 @@ console.log("Manager token set in cookie:", data.token);
           </div>
 
           <h1 className={styles.heading}>
-             ManagerLogin
+             Manager Login
           </h1>
           <p className={styles.headingp}>
-            Access to the most powerfull tool in the entire design and web
+            Access to the most powerful tool in the entire design and web
             industry.
           </p>
 

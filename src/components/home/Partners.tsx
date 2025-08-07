@@ -72,9 +72,11 @@ function Partners() {
   return (
     <div className={styles.cont}>
       <div className={styles.head}>
-        <div className={`${styles.heading} ${styles.orange}`}>Insurance</div>
-        <div className={styles.heading}>Partner</div>
-      </div>
+  <p className={styles.heading}>
+    <span className={styles.orange}>Insurance</span> Partner
+  </p>
+</div>
+
 
       <div className={styles.bottom}>
         {/* Category List */}

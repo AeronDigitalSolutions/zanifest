@@ -20,7 +20,12 @@ function carinsurance2() {
     <div>
       <UserDetails />
       <Navbar />
-
+ {/* <button
+    className={styles.backBtn}
+    onClick={() => router.push("./carinsurance")} // or use router.back() for dynamic back
+  >
+    <IoIosArrowBack className={styles.arrowBack} />
+  </button> */}
       <div className={styles.cont}>
         
         <div className={styles.formWrapper}>
@@ -53,7 +58,7 @@ function carinsurance2() {
             />
           </div>
 
-          <button className={styles.submitButton} onClick={()=>{router.push('./carinsurance3')}}  aria-label="View Prices">
+          <button className={styles.submitButton} onClick={()=>{router.push('./carinsurance4')}}  aria-label="View Prices">
             View Prices <FaArrowRight />
           </button>
 

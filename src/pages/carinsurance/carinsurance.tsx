@@ -1,8 +1,9 @@
 import React from "react";
+import Link from 'next/link';
+
 import Footer from "@/components/ui/Footer";
 import Navbar from "@/components/ui/Navbar";
 import UserDetails from "@/components/ui/UserDetails";
-
 import styles from "@/styles/pages/carinsurance.module.css";
 import Image from "next/image";
 import { FaArrowRight } from "react-icons/fa6";
@@ -33,7 +34,7 @@ function carinsurance() {
             insurance
           </p>
           <div className={styles.form}>
-            <input
+            <input 
               type="text"
               value={carNumber}
               onChange={(e) => setCarNumber(e.target.value.toUpperCase())}
@@ -49,6 +50,10 @@ function carinsurance() {
             >
               View Prices <FaArrowRight />
             </button>
+
+<div className={styles.newCar}>
+  Brand new car? <Link href="#">click here</Link>
+</div>
           </div>
         </div>
       </div>
@@ -58,3 +63,4 @@ function carinsurance() {
 }
 
 export default carinsurance;
+

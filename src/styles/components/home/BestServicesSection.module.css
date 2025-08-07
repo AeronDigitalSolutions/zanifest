@@ -14,8 +14,13 @@
   font-size: 35px;
 }
 
+
+.heading1 {
+  font-size: 36px;
+  font-weight: bold;
+}
+
 .heading2 {
-  font-size: 35px;
   color: #fa621a;
 }
 

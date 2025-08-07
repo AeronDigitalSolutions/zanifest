@@ -76,7 +76,15 @@
   cursor: pointer;
 }
 
-
+    .backBtn {
+        left: 1rem;
+        top: 16%;
+        width: 36px;
+        height: 36px;
+        border: none;
+        border-radius: 50%;
+        
+    }
 
 .continueButton {
   all: unset;

@@ -6,6 +6,7 @@ import styles from "@/styles/pages/carinsurance5.module.css";
 import carImage from "@/assets/pageImages/blackcar.png";
 import UserDetails from "@/components/ui/UserDetails";
 import {useRouter} from 'next/router';
+import { IoIosArrowBack } from "react-icons/io";
 
 const CarInsurance5 = () => {
     const router =useRouter();
@@ -14,7 +15,12 @@ const CarInsurance5 = () => {
     <div>
              <UserDetails />
       <Navbar />
-
+ {/* <button
+    className={styles.backBtn}
+    onClick={() => router.push("./carinsurance4")} // or use router.back() for dynamic back
+  >
+    <IoIosArrowBack className={styles.arrowBack} />
+  </button> */}
       <div className={styles.pageContainer}>
         <div className={styles.leftSection}>
           <div className={styles.outerBox}>
@@ -27,9 +33,9 @@ const CarInsurance5 = () => {
               </p>
 
               <div className={styles.options}>
-                <button className={styles.optionButton} onClick={()=>{router.push('/cart/carinsurancecart')}} >Yes</button>
-                <button className={styles.optionButton} onClick={()=>{router.push('/cart/carinsurancecart')}}>No</button>
-                <button className={styles.optionButton} onClick={()=>{router.push('/cart/carinsurancecart')}}>Not sure</button>
+                <button className={styles.optionButton} onClick={()=>{router.push('./carinsurance3')}} >Yes</button>
+                <button className={styles.optionButton} onClick={()=>{router.push('./carinsurance3')}}>No</button>
+                <button className={styles.optionButton} onClick={()=>{router.push('./carinsurance3')}}>Not sure</button>
               </div>
             </div>
           </div>
