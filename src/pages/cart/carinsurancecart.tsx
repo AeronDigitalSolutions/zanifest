@@ -5,12 +5,15 @@ import Footer from "@/components/ui/Footer";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import UserDetails from "@/components/ui/UserDetails";
 import { FaRegFileVideo } from "react-icons/fa";
+import { IoIosArrowBack } from "react-icons/io";
+import { useRouter } from 'next/router';
 
 const carinsurancecart = () => {
   const [owner, setOwner] = useState('individual');
   const [hasCng, setHasCng] = useState('no');
   const [isChecked, setIsChecked] = useState(false);
 
+  const router = useRouter();
 
   return (
     <div>
@@ -18,9 +21,14 @@ const carinsurancecart = () => {
       <Navbar />
     
     <div className={styles.container}>
+            {/* <button
+    className={styles.backBtn}
+    onClick={() => router.push("./carinsurance/carinsurancecar3")} 
+  >
+    <IoIosArrowBack className={styles.arrowBack} />
+  </button> */}
         <div className={styles.summary}>
-          <FaArrowLeftLong  className={styles.backArrow}/>
-              <h3 className={styles.backSummary}> Back</h3>
+   
       <h3 className={styles.pageTitle}>Summary</h3>
 </div>
       <div className={styles.main}>

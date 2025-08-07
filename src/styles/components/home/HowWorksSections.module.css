@@ -12,14 +12,13 @@
 }
 
 .heading {
-  font-size: 30px;
-  font-weight: 600;
-  display: flex;
-  gap: 0.7rem;
-  flex-wrap: wrap;
-  text-align: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #000; 
   margin-bottom: 2rem;
 }
+
+
 
 .orange {
   color: #fa621a;

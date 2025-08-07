@@ -7,6 +7,8 @@ import { FaAngleDown, FaChevronRight } from "react-icons/fa6";
 import {useRouter} from 'next/router'
 import styles from "@/styles/pages/healthinsurance.module.css";
 import { useEffect } from "react";
+import { IoIosArrowBack } from "react-icons/io";
+
 const MEMBERLIST = [
   { id: 1, name: "Self", image: require("@/assets/pageImages/health/1.webp") },
   { id: 2, name: "Spouse", image: require("@/assets/pageImages/health/2.webp") },
@@ -44,10 +46,14 @@ function healthinsurance() {
     <div>
       <UserDetails />
       <Navbar />
+      
       <div className={styles.cont}>
         <div className={styles.head}>
           <h2 className={styles.heading}>Find top plans for you</h2>
           <div className={styles.switchCont}>
+              {/* <button className={styles.backBtn} onClick={() => router.push('./healthinsurance')}>
+          <IoIosArrowBack className={styles.arrowBack} />
+        </button> */}
             <button
               className={`${styles.switch} ${
                 selectedMan ? styles.selectedSwitch : ""
@@ -104,6 +110,7 @@ function healthinsurance() {
           <b className={styles.terms}> Disclaimer</b>
         </p>
       </div>
+     
       <Footer />
     </div>
   );

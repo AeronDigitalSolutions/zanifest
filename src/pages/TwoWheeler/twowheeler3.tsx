@@ -33,7 +33,7 @@ export default function Twowheeler3() {
       <div className={styles.wrapper}>
         <div className={styles.container}>
           <div className={styles.left}>
-            <button className={styles.backButton}>
+            <button className={styles.backButton} onClick={() => router.push("./twowheeler")}>
               <FaArrowLeft />
             </button>
             <h3>Select two wheeler make</h3>

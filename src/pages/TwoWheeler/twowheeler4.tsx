@@ -27,7 +27,7 @@ export default function twowheeler4() {
     <div className={styles.wrapper}>
       <div className={styles.container}>
         <div className={styles.left}>
-          <button className={styles.backButton}>
+          <button className={styles.backButton} onClick={() => router.push("./twowheeler3")}>
             <FaArrowLeft />
           </button>
           <h3 className={styles.title}>Select two wheeler model</h3>

@@ -78,9 +78,10 @@ function HowWorksSections() {
   return (
     <div className={styles.cont}>
       <div className={styles.head}>
-        <div className={styles.heading}>
-          How We <div className={styles.orange}>Work?</div>
-        </div>
+       <div className={styles.heading}>
+  How We <span className={styles.orange}>Work?</span>
+</div>
+
       </div>
       <div className={styles.bottom}>
         {LIST.map((item, index) => {
@@ -100,7 +101,7 @@ function HowWorksSections() {
       
       <div className={styles.servciesCont}>
         <div className={styles.heading}>
-          Pay<div className={styles.orange}>Less</div> Cover More
+          Pay <span className={styles.orange}> Less </span>Cover More
         </div>
         <div className={styles.services}>
           {SERVICES.map((item, index) => {

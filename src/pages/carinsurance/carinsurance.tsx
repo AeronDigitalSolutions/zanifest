@@ -1,12 +1,13 @@
-  import React from "react";
-  import Footer from "@/components/ui/Footer";
-  import Navbar from "@/components/ui/Navbar";
-  import UserDetails from "@/components/ui/UserDetails";
+import React from "react";
+import Link from 'next/link';
 
-  import styles from "@/styles/pages/carinsurance.module.css";
-  import Image from "next/image";
-  import { FaArrowRight } from "react-icons/fa6";
-  import {useRouter} from 'next/router';
+import Footer from "@/components/ui/Footer";
+import Navbar from "@/components/ui/Navbar";
+import UserDetails from "@/components/ui/UserDetails";
+import styles from "@/styles/pages/carinsurance.module.css";
+import Image from "next/image";
+import { FaArrowRight } from "react-icons/fa6";
+import { useRouter } from "next/router";
 
   function carinsurance() {
     const router =useRouter();

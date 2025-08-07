@@ -35,9 +35,9 @@ function FAQSection() {
       <div className={styles.cont}>
         <div className={styles.head}>
           <div className={styles.heading}>
-            Frequently Asked
-            <div className={styles.orange}>Questions</div>
-          </div>
+  Frequently Asked <span className={styles.orange}>Questions</span>
+</div>
+
         </div>
         <div className={styles.bottom}>
           <div className={styles.list}>

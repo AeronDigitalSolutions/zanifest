@@ -7,6 +7,8 @@ import { FaFilter, FaPlus, FaVideo, FaTrophy, FaCircle, FaBars, FaTimes } from "
 import { RiArrowRightWideLine } from "react-icons/ri";
 import UserDetails from "@/components/ui/UserDetails";
 import {useRouter} from 'next/router';
+import { IoIosArrowBack } from "react-icons/io";
+
 
 const CarInsurance3 = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -121,7 +123,12 @@ const CarInsurance3 = () => {
             </div>
           </div>
         </div>
-
+ {/* <button
+    className={styles.backBtn}
+    onClick={() => router.push("./carinsurance5")} // or use router.back() for dynamic back
+  >
+    <IoIosArrowBack className={styles.arrowBack} />
+  </button> */}
         {/* Main Content */}
         <div className={styles.mainContent}>
           <h2>13 Own Damage plans</h2>
@@ -141,7 +148,7 @@ const CarInsurance3 = () => {
                   </div>
                 </div>
                 <div className={styles.actions}>
-                  <div className={styles.price} onClick={()=>{router.push('./carinsurance4')}}>₹2,520 →</div>
+                  <div className={styles.price} onClick={()=>{router.push('/cart/carinsurancecart')}}>₹2,520 →</div>
                 </div>
               </div>
               <div className={styles.inspectionNote}>

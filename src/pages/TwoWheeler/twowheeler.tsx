@@ -28,7 +28,7 @@ export default function twowheeler() {
       </div>
 
       <div className={styles.rightSection}>
-        <button className={styles.backButton}>❮</button>
+        {/* <button className={styles.backButton}>❮</button> */}
         <h2 className={styles.question}>When did you buy your Bike/Scooter?</h2>
         <div className={styles.yearGrid}>
           {years.map((year) => (
