@@ -8,7 +8,8 @@ import { RiArrowRightWideLine } from "react-icons/ri";
 import UserDetails from "@/components/ui/UserDetails";
 import {useRouter} from 'next/router';
 import { IoIosArrowBack } from "react-icons/io";
-
+import Image from "next/image";
+import img from "@/assets/images.jpeg";
 
 const CarInsurance3 = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -141,7 +142,7 @@ const CarInsurance3 = () => {
                 Cashless Claim Guarantee
               </div>
               <div className={styles.planDetails}>
-                <img src="/tataaig-logo.png" alt="TATA AIG" className={styles.logo} />
+                <Image src={img} alt="TATA AIG" className={styles.logo} />
                 <div>
                   <div style={{ color: "#5a5959" }}>
                     IDV Cover <strong>₹10,74,428</strong>
