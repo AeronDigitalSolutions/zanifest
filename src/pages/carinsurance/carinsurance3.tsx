@@ -8,8 +8,9 @@ import { RiArrowRightWideLine } from "react-icons/ri";
 import UserDetails from "@/components/ui/UserDetails";
 import {useRouter} from 'next/router';
 import { IoIosArrowBack } from "react-icons/io";
-import img from "@/assets/images.jpeg"
 import Image from "next/image";
+import img from "@/assets/images.jpeg";
+
 const CarInsurance3 = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);

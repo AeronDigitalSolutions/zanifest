@@ -199,8 +199,8 @@
 .backBtn {
   /* position: absolute; */
   left: 25rem;
-  top: 50%;
-  /* transform: translateY(-50%); */
+  top: 48%;
+  transform: translateY(-50%);
   background: transparent;
   border: none;
   cursor: pointer;
@@ -233,6 +233,9 @@
     top: 16%;
     width: 36px;
     height: 36px;
+  }
+  .wrapper{
+    height: 100vh;
   }
 
   .arrowBack {

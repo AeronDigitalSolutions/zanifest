@@ -285,24 +285,20 @@
 }
 
 @media screen and (max-width: 370px) {
-
-.serviceItem{
-  min-width: 300px;
-    max-width: 323px;
-    margin: 4px 16px;
+ .heading{
+    font-size: 23px;
+  }
+  .serviceItem {
+    min-width: 293px;
+    max-width: 300px;
+    margin: 4px 20px;
     flex-shrink: 0;
     background-color: white;
     padding: 20px;
     border-radius: 22px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    display: grid
-;
+    display: grid;
     place-items: center;
-    grid-gap: 1rem;
     gap: 1rem;
-}
-.heading{
-  font-size: 23px;
-}
+  }
 }
