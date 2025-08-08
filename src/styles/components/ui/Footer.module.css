@@ -184,3 +184,34 @@
     padding: 20px 0px;
   }
 }
+
+.bottomLinks {
+  display: flex;
+  gap: 8px;   
+  align-items: center;
+  margin-right: 5rem;
+}
+
+.bottomItem {
+  font-size: 14px;
+  color: white;
+}
+
+.footerBottomWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 93vw;
+
+  margin: 0;
+  padding: 15px 30px;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 768px) {
+  .footerBottomWrapper {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+}

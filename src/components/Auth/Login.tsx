@@ -70,7 +70,7 @@ export default function Login() {
           </div>
 
           <h1 className={styles.heading}>
-            Get more things done with Login platform.
+            Get more things done with login platform.
           </h1>
           <p className={styles.headingp}>
             Access to the most powerful tool in the entire design and web

@@ -28,16 +28,16 @@ const QUESTIONS = [
 ];
 
 function FAQSection() {
-  const [ansIndex, setAnsIndex] = useState(0);
+  const [ansIndex, setAnsIndex] = useState<number | null>(null);
 
   return (
     <div>
       <div className={styles.cont}>
         <div className={styles.head}>
           <div className={styles.heading}>
-            Frequently Asked
-            <div className={styles.orange}>Questions</div>
-          </div>
+  Frequently Asked <span className={styles.orange}>Questions</span>
+</div>
+
         </div>
         <div className={styles.bottom}>
           <div className={styles.list}>

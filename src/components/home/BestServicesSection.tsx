@@ -27,10 +27,12 @@ const LIST = [
 function BestServicesSection() {
   return (
     <div className={styles.cont}>
-      <div className={styles.head}>
-        <h1 className={styles.heading1}>Best</h1>
-        <h1 className={styles.heading2}>Service</h1>
-      </div>
+     <div className={styles.head}>
+  <h1 className={styles.heading1}>
+    Best <span className={styles.heading2}>Service</span>
+  </h1>
+</div>
+
       <div className={styles.list}>
         {LIST.map((item, index) => {
           return (

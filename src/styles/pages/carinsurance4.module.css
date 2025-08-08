@@ -1,6 +1,4 @@
-/* ===================== COMPONENT ROOT WRAPPER ===================== */
-.wrapper {
-}
+
 .wrapper :global(*) {
   box-sizing: border-box;
 }
@@ -36,7 +34,7 @@
 .outerBox {
   background-color: #fa4e1b;
   border-radius: 20px;
-  padding: 3rem;
+  padding: 2rem;
   max-width: 48vw;
   display: flex;
   justify-content: center;
@@ -52,7 +50,7 @@
   text-align: center;
   width: 50vw;
   height: 30vw;
-  border: 1px solid #e0e0e0;
+  /* border: 1px solid #e0e0e0; */
   overflow: hidden;
 }
 
@@ -209,7 +207,7 @@
   .innerBox {
     width: 100%;
     height: auto;
-    border: 1px solid #e0e0e0;
+    /* border: 1px solid #e0e0e0; */
     border-radius: 16px;
   }
 
@@ -291,7 +289,7 @@
   .innerBox {
     padding-bottom: 1.5rem;
     border-radius: 12px;
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
   }
 
   .headingBox {
@@ -350,7 +348,7 @@
 
   .innerBox {
     border-radius: 12px;
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
     padding:1vw;
   }
 
@@ -368,5 +366,133 @@
     width: 1.6rem;
     height: 1.6rem;
     line-height: 1.6rem;
+  }
+}
+
+
+
+
+
+.calendarWrapper {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  padding: 20px;
+  background-color: white;
+  font-family: Arial, sans-serif;
+}
+
+.calendar {
+  display: flex;
+  flex-direction: column;
+  border-radius: 6px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.monthYear {
+  color: #3366cc;
+  font-size: 16px;
+   text-align: center;
+  flex-grow: 1;
+}
+
+.arrow {
+  font-size: 18px;
+  color: #555;
+  cursor: pointer;
+}
+
+.daysRow {
+  display: grid;
+  grid-template-columns: repeat(7, 32px);
+  gap: 5px;
+}
+
+.day {
+  font-weight: bold;
+  color: #777;
+  text-align: center;
+  font-size: 12px;
+}
+
+.date {
+  text-align: center;
+  padding: 4px 0;
+  font-size: 13px;
+  color: #000;
+  cursor: pointer;
+  
+}
+.date:hover{
+  background-color: #f0f0f0;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .header {
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .monthYear {
+    flex: 1;
+    text-align: center;
+    font-size: 16px;
+  }
+
+  .arrow {
+    font-size: 20px;
+    padding: 0 10px;
+    cursor: pointer;
+  }
+}
+.backBtn {
+  position: fixed;
+  left: 2rem;
+  top: 30%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgb(230, 230, 229);
+  z-index: 10;
+}
+
+.arrowBack {
+  color: #000;
+  font-size: 20px;
+  margin: 4px 3px 0px 0px;
+  justify-items: center;
+}
+
+/* Tablet */
+@media screen and (max-width: 1024px) {
+  .backBtn {
+    left: 5rem;
+    top: 18%;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 768px) {
+  .backBtn {
+    left: 1rem;
+    top: 16%;
+    width: 36px;
+    height: 36px;
+  }
+
+  .arrowBack {
+    font-size: 18px;
   }
 }

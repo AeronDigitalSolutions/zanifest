@@ -11,9 +11,12 @@
 }
 
 .heading {
-  font-size: 35px;
-  font-weight: 600;
+  font-size: 36px;
+  font-weight: bold;
+  margin: 0;
 }
+
+
 
 .orange {
   color: #fa621a;

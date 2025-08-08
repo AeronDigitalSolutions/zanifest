@@ -29,12 +29,11 @@ function AllInsuranceSection() {
     <div className={styles.cont}>
       <div className={styles.head}>
         <div className={styles.heading}>
-          <div className={styles.text}>
-            We're Giving all the
-            <div className={styles.orange}>Insurance</div>
-            Services to you
-          </div>
-        </div>
+  <p className={styles.text}>
+    We're Giving all the <span className={styles.orange}>Insurance</span> Services to you
+  </p>
+</div>
+
       </div>
       <div className={styles.bottom}>
         {SERVICESLIST.map((item, index) => {

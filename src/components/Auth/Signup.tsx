@@ -48,7 +48,7 @@ export default function SignUp() {
             <Image src={logo} alt="logo" className={styles.logoImage} />
           </div>
 
-          <h1 className={styles.heading}>Join the Loggin Platform</h1>
+          <h1 className={styles.heading}>Join the login Platform</h1>
           <p className={styles.headingp}>
             Create your account to unlock the full potential of our tools.
           </p>

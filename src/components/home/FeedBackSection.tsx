@@ -64,9 +64,10 @@ function FeedBackSection() {
     <div>
       <div className={styles.cont}>
         <div className={styles.head}>
-          <div className={styles.heading}>
-            What Our Customers <div className={styles.orange}>Are Saying?</div>
-          </div>
+         <div className={styles.heading}>
+  What Our Customers <span className={styles.orange}>Are Saying?</span>
+</div>
+
         </div>
         <div className={styles.bottom}>
           {/* mobile screen carousal - testimonial*/}
