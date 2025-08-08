@@ -49,12 +49,13 @@ const [formData, setFormData] = useState({
 });
 
 const [attachments, setAttachments] = useState({
-  managerPanAttachment: null,
-  managerAadharAttachment: null,
-  nomineePanAttachment: null,
-  nomineeAadharAttachment: null,
-  cancelledChequeAttachment: null,
+  managerPanAttachment: '',
+  managerAadharAttachment: '',
+  nomineePanAttachment: '',
+  nomineeAadharAttachment: '',
+  cancelledChequeAttachment: '',
 });
+
 
 
   const [assignedToOptions, setAssignedToOptions] = useState([]);
@@ -91,60 +92,70 @@ const [attachments, setAttachments] = useState({
   };
 
 
-const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+};
+
+const MAX_FILE_SIZE_MB = 5; // Limit to 5MB
+
+const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
   const { name, files } = e.target;
   if (files && files[0]) {
-    setFormData((prev) => ({
+    const file = files[0];
+
+    if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+      alert(`File size should be less than ${MAX_FILE_SIZE_MB}MB`);
+      return;
+    }
+
+    if (!file.type.match(/(image|pdf)/)) {
+      alert('Only images or PDFs are allowed');
+      return;
+    }
+
+    const base64 = await fileToBase64(file);
+    setAttachments((prev) => ({
       ...prev,
-      [name]: files[0],
+      [name]: base64,
     }));
   }
 };
+
 
 //  if (formData.category !== 'national' && formData.assignedTo === '') {
 //       alert('State and district managers must be assigned to a manager.');
 //       return;
 //     }
 
- const handleSubmit = async (e: React.FormEvent) => {
+const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
-  const formDataToSend = new FormData();
-
-  // Append other fields
-  for (const key in formData) {
-    formDataToSend.append(key, formData[key as keyof typeof formData]);
-  }
-
-  // Append files
-  Object.entries(attachments).forEach(([key, file]) => {
-    if (file) {
-      formDataToSend.append(key, file);
-    }
-  });
+  const payload = {
+    ...formData,
+    ...attachments // Merge files as Base64 into the same object
+  };
 
   try {
-    console.log("in try block for creating manager")
-    const res = await axios.post('/api/createmanager', formDataToSend, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+    const res = await axios.post('/api/createmanager', payload, {
+      headers: { 'Content-Type': 'application/json' }
     });
-
-    console.log("response recieved", res)
 
     if (res.status === 200 || res.status === 201) {
       alert('Manager created successfully!');
     } else {
       alert('Error creating manager.');
     }
-  } 
-  
-  catch (err) {
+  } catch (err) {
     console.error('Submission error:', err);
     alert('Failed to create manager.');
   }
 };
+
 
   const handleRoleChange = (e: React.FormEvent) => {
     const { value } = e.target as HTMLInputElement;
