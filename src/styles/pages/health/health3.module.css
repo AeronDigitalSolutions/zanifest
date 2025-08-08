@@ -197,10 +197,10 @@
   }
 }
 .backBtn {
-  position: absolute;
+  /* position: absolute; */
   left: 25rem;
-  top: 27%;
-  transform: translateY(-50%);
+  top: 50%;
+  /* transform: translateY(-50%); */
   background: transparent;
   border: none;
   cursor: pointer;
@@ -208,7 +208,7 @@
   height: 40px;
   border-radius: 50%;
   background-color: rgb(230, 230, 229);
-  z-index: 10;
+  /* z-index: 10; */
 }
 
 .arrowBack {

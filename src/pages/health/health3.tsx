@@ -116,6 +116,9 @@ const Health3 = () => {
       <Navbar />
       <div className={styles.wrapper}>
         <div className={styles.content}>
+           <button className={styles.backBtn} onClick={() => router.push('./health1')}>
+          <IoIosArrowBack className={styles.arrowBack} />
+        </button>
           <Image src={manicon} alt="User Icon" className={styles.userIcon} />
           <div className={styles.rightContent}>
             <h2>Select your city</h2>

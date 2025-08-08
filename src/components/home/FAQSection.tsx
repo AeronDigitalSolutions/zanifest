@@ -28,7 +28,7 @@ const QUESTIONS = [
 ];
 
 function FAQSection() {
-  const [ansIndex, setAnsIndex] = useState(0);
+  const [ansIndex, setAnsIndex] = useState<number | null>(null);
 
   return (
     <div>
