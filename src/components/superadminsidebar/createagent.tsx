@@ -31,19 +31,20 @@ const CreateAgent = () => {
 });
 
 const [attachments, setAttachments] = useState<{
-  [key: string]: File | null;
-  panAttachment: File | null;
-  adhaarAttachment: File | null;
-  nomineePanAttachment: File | null;
-  nomineeAdhaarAttachment: File | null;
-  cancelledChequeAttachment: File | null;
+  [key: string]: File | string | null;
+  panAttachment: File | string | null;
+  adhaarAttachment: File | string | null;
+  nomineePanAttachment: File | string | null;
+  nomineeAadhaarAttachment: File | string | null;
+  cancelledChequeAttachment: File | string | null;
 }>({
   panAttachment: null,
   adhaarAttachment: null,
   nomineePanAttachment: null,
-  nomineeAdhaarAttachment: null,
+  nomineeAadhaarAttachment: null,
   cancelledChequeAttachment: null,
 });
+
 
 
     const [panFile, setPanFile] = useState<File | null>(null);
@@ -67,6 +68,16 @@ const [attachments, setAttachments] = useState<{
     fetchManagers();
   }, []);
 
+  const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file); // Converts to Base64 data URL
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+};
+
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -81,24 +92,19 @@ const [attachments, setAttachments] = useState<{
      setFormData((prev) => ({ ...prev, [id]: updatedValue }));
   };
 
-const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const { id, files } = e.target;
+// const [attachments, setAttachments] = useState<Record<string, string>>({});
 
-  setAttachments((prev) => {
-    // If no file is selected, remove this field from state (make it optional)
-    if (!files || files.length === 0) {
-      const updated = { ...prev };
-      delete updated[id];
-      return updated;
-    }
-
-    // Otherwise, store the selected file
-    return {
+const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const { name, files } = e.target;
+  if (files && files[0]) {
+    const base64 = await fileToBase64(files[0]);
+    setAttachments((prev) => ({
       ...prev,
-      [id]: files[0],
-    };
-  });
+      [name]: base64, // store Base64 string
+    }));
+  }
 };
+
 
 
 //   const handleSubmit = async (e: React.FormEvent) => {
@@ -169,41 +175,23 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
-  const formDataToSend = new FormData();
-
-  // Append all other fields from formData
-  for (const key in formData) {
-    formDataToSend.append(key, formData[key as keyof typeof formData]);
-  }
-
-  // Append all files under the same "files" key (array-style)
-  const fileInputs = document.querySelectorAll<HTMLInputElement>('input[type="file"][name="files"]');
-  
-  fileInputs.forEach((input) => {
-    if (input.files && input.files.length > 0) {
-      Array.from(input.files).forEach((file) => {
-        formDataToSend.append('files', file); // Append all files to the 'files' key
-      });
-    }
+  const res = await fetch('/api/createagent', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      ...formData,
+      attachments // already contains Base64 strings
+    })
   });
 
-  try {
-    const res = await axios.post('/api/createagent', formDataToSend, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-
-    if (res.status === 200 || res.status === 201) {
-      alert('Agent created successfully!');
-    } else {
-      alert('Error creating agent.');
-    }
-  } catch (err) {
-    console.error('Submission error:', err);
-    alert('Failed to create agent.');
+  if (res.ok) {
+    alert('Agent created successfully!');
+  } else {
+    alert('Error creating agent.');
   }
 };
+
+
 
 
 
@@ -370,7 +358,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             />
             <input
               type="file"
-              name="files"
+              name="panAttachment"
               id="panAttachment"
               onChange={handleFileChange}
               accept="image/*,application/pdf"
@@ -389,7 +377,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             <input
               type="file"
               id="adhaarAttachment"
-              name="files"
+              name="adhaarAttachment"
               onChange={handleFileChange}
               accept="image/*,application/pdf"
               multiple
@@ -435,7 +423,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               type="file"
               id="nomineePanAttachment"
               onChange={handleFileChange}
-              name="files"
+              name="nomineePanAttachment"
               accept="image/*,application/pdf"
             />
           </div>
@@ -450,7 +438,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             />
             <input
               type="file"
-              name="files"
+              name="nomineeAadhaarAttachment"
               id="nomineeAadhaarAttachment"
               onChange={handleFileChange}
               accept="image/*,application/pdf"
@@ -500,7 +488,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <label htmlFor="cancelledCheque">Upload Cancelled Cheque (Optional)</label>
               <input
               id="cancelledChequeAttachment" 
-              name="files" 
+              name="cancelledChequeAttachment" 
               type="file"
               onChange={handleFileChange}
               
