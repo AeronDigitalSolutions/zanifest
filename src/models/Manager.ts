@@ -3,18 +3,57 @@ import mongoose from 'mongoose';
 // import Counter from './Counter';
 
 const managerSchema = new mongoose.Schema({
- managerId: {
+ 
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+
+  email: { type: String, required: true, unique: true },
+  phone: {type: String},
+  managerId: {
     type: String,
     required: true,
     unique: true, // now you enter 'NM1', 'SM2', etc. manually
   },
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
+  dateOfJoining: {type: Date,   default: Date.now},
   password: { type: String, required: true },
-  location: {
-    district: { type: String },
-    state: { type: String },
+  
+
+    pinCode: {
+    type: String,
+    required: true,
   },
+  city: {
+    type: String,
+    required: true,
+  },
+    district: { type: String, required: true},
+    state: { type: String, required: true},
+  
+
+  managerPanNumber: {type: String},
+  managerAadharNumber:{type: String},
+    managerPanAttachment: {
+    type: String, // path or filename for uploaded PAN
+  },
+  managerAadharAttachment: {
+    type: String,
+  },
+
+  nomineeName: {type: String},
+  nomineeRelation : {type: String},
+  nomineePanNumber: { type: String},
+  nomineeAadharNumber: { type: String},
+  nomineePanAttachment: { type: String},
+  nomineeAadharAttachment: { type: String},
+
+  //bank details 
+  accountHoldername:{ type: String},
+  bankName: { type: String},
+  accountNumber: { type: String},
+  ifscCode: { type: String},
+  branchLoaction: { type: String},
+  cancelledChequeAttachment: { type: String},
+
   category: {
     type: String,
     enum: ['national', 'state', 'district'],

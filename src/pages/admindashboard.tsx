@@ -37,7 +37,7 @@ const router = useRouter();
   
 
    const { admin, loading } = useAdmin();
-   console.log("Admin data:", admin?.userName);
+   console.log("Admin data:", admin?.userFirstName);
 
      const adminName = typeof window !== "undefined" ? localStorage.getItem("adminName") : null;
 
@@ -98,7 +98,7 @@ const router = useRouter();
     <div className={styles.wrapper}>
       {/* Header */}
       <header className={styles.header}>
-        <h1>Welcome, {admin?.userName ?? "Admin"}</h1>
+        <h1>Welcome, {admin?.userFirstName ?? "Admin"}</h1>
         <div className={styles.logoContainer}>
           <Image
             src={logo}

@@ -3,7 +3,8 @@ import bcrypt from "bcryptjs";
 
 // Interface for type safety (optional but good practice)
 export interface IAdmin extends Document {
-  userName: string;
+  userFirstName: string;
+  userLastName: String;
   email: string;
   password: string;
   role: "admin" | "superadmin";
@@ -11,10 +12,13 @@ export interface IAdmin extends Document {
 
 const AdminSchema = new Schema<IAdmin>(
   {
-    userName: {
+    userFirstName: {
       type: String,
       required: true,
       trim: true,
+    },
+    userLastName: {
+      type: String,      trim: true,
     },
     email: {
       type: String,

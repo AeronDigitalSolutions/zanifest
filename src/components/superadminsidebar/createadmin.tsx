@@ -7,7 +7,8 @@ const CreateAdmin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
 
-  const [userName, setUserName] = useState('');
+  const [userFirstName, setUserFirstName] = useState('');
+  const [userLastName, setUserLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -15,16 +16,23 @@ const CreateAdmin = () => {
     return value.charAt(0).toUpperCase() + value.slice(1);
   };
 
-  const handleUserNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const capitalized = capitalizeFirstLetter(e.target.value);
-    setUserName(capitalized);
-  };
+  const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const capitalized =e.target.value;
+  setUserFirstName(capitalized);
+};
+
+const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const capitalized = e.target.value;
+  setUserLastName(capitalized);
+};
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const data = {
-      userName,
+      userFirstName,
+      userLastName,
       email,
       password,
       role: isSuperAdmin ? 'superadmin' : 'admin',
@@ -43,7 +51,8 @@ const CreateAdmin = () => {
 
       if (res.ok) {
         alert('Admin created successfully!');
-        setUserName('');
+        setUserFirstName('');
+        setUserLastName('');
         setEmail('');
         setPassword('');
         setIsSuperAdmin(false);
@@ -63,14 +72,28 @@ const CreateAdmin = () => {
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.row}>
           <div className={styles.formGroup}>
-            <label htmlFor="userName">First Name</label>
+            <label htmlFor="userFirstName">First Name</label>
             <input
               type="text"
-              id="userName"
+              id="userFirstName"
+              name="userFirstName"
               className={styles.input}
-              placeholder="Enter full name"
-              value={userName}
-              onChange={handleUserNameChange}
+              placeholder="Enter first name"
+              value={userFirstName}
+              onChange={handleFirstNameChange}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="userLastName">Last Name</label>
+            <input
+              type="text"
+              id="userLastName"
+              name="userLastName"
+              className={styles.input}
+              placeholder="Enter last name"
+              value={userLastName}
+              onChange={handleLastNameChange}
             />
           </div>
         </div>
