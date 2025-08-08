@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import styles from "@/styles/components/ui/Carousal.module.css";
@@ -9,7 +9,24 @@ interface CarouselProps {
 
 const Carousel: React.FC<CarouselProps> = ({ images }) => {
   const [current, setCurrent] = useState(0);
-  const [direction, setDirection] = useState(0); // 1 for next, -1 for prev
+  const [direction, setDirection] = useState(0);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const carouselRef = useRef<HTMLDivElement | null>(null);
+  const isHoveredRef = useRef(false);
+
+  const startAutoSlide = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      if (!isHoveredRef.current) {
+        setDirection(1);
+        setCurrent((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+      }
+    }, 3000);
+  };
+
+  const stopAutoSlide = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+  };
 
   const prevSlide = () => {
     setDirection(-1);
@@ -22,15 +39,25 @@ const Carousel: React.FC<CarouselProps> = ({ images }) => {
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setDirection(1);
-      setCurrent((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-    }, 3000);
-    return () => clearInterval(interval);
+    startAutoSlide();
+    return () => stopAutoSlide();
   }, [images.length]);
 
+  const handleMouseEnter = () => {
+    isHoveredRef.current = true;
+  };
+
+  const handleMouseLeave = () => {
+    isHoveredRef.current = false;
+  };
+
   return (
-    <div className={styles.carousel}>
+    <div
+      className={styles.carousel}
+      ref={carouselRef}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <AnimatePresence initial={false} custom={direction} mode="popLayout">
         <motion.div
           key={current}
@@ -46,6 +73,9 @@ const Carousel: React.FC<CarouselProps> = ({ images }) => {
             alt={`Slide ${current}`}
             className={styles.image}
             priority
+            fill
+            sizes="100vw"
+            style={{ objectFit: "cover" }}
           />
         </motion.div>
       </AnimatePresence>

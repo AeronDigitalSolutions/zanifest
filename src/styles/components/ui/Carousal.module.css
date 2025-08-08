@@ -2,28 +2,25 @@
   display: grid;
   place-items: center;
   width: 100%;
-  /* height: 600px; */
   margin: 0;
-  overflow:hidden;
-    position: relative; /* ✅ Add this line */
-
-  /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); */
+  overflow: hidden;
+  position: relative;
 }
 
 .imageWrapper {
   width: 100%;
+  position: relative;
+  height: 600px;
 }
 
 .image {
   border-radius: 16px;
-  width: 100vw;
-  /* object-fit: fill; */
-  /* height: 600px; */
-  height: auto;
+  width: 100%;
+  height: 100%;
 }
 
 .navButton {
-  position: absolute; /* ✅ stays inside .carousel */
+  position: absolute;
   top: 50%;
   transform: translateY(-50%);
   background-color: rgb(255, 255, 255);
@@ -32,12 +29,7 @@
   padding: 30px 10px;
   cursor: pointer;
   z-index: 2;
-
 }
-
-
-
-
 
 .navButton:hover {
   background-color: rgba(246, 246, 246, 0.4);
@@ -73,41 +65,31 @@
 .activeDot {
   background-color: white;
 }
+
 @media screen and (max-width: 1000px) {
   .navButton {
     padding: 10px 4px;
   }
-}
-/* 
-@media screen and (max-width: 1000px) {
-  .carousel {
-    height: 400px;
-  }
-  .image {
+
+  .imageWrapper {
     height: 400px;
   }
 }
+
 @media screen and (max-width: 700px) {
-  .carousel {
-    height: 300px;
-  }
-  .image {
+  .imageWrapper {
     height: 300px;
   }
 }
+
 @media screen and (max-width: 500px) {
-  .carousel {
-    height: 200px;
-  }
-  .image {
+  .imageWrapper {
     height: 200px;
   }
 }
+
 @media screen and (max-width: 400px) {
-  .carousel {
+  .imageWrapper {
     height: 150px;
   }
-  .image {
-    height: 150px;
-  }
-} */
+}
