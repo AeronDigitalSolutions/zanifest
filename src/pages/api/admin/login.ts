@@ -23,7 +23,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     await dbConnect();
-    const admin = await Admin.findOne({ email }).select("userName email role password");
+const admin = await Admin.findOne({ email })
+  .select("userFirstName userLastName email role password");
     console.log("Admin found:", admin);
 
     if (!admin) {
@@ -44,7 +45,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const token = jwt.sign(
       {
         id: admin._id,
-        name: admin.userName,
+        userFirstName: admin.userFirstName,
+        userLastName: admin.userLastName || "",
         email: admin.email,
         role: admin.role,
       },
@@ -52,7 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       { expiresIn: "1d" }
     );
 
-    console.log("Token generated for admin:", admin.userName);
+    console.log("Token generated for admin:", admin.userFirstName);
     console.log("Role of admin:", admin.role);
 
     // Set cookie with token
@@ -67,7 +69,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       })
     );
 
-    console.log("Token set in cookie for admin:", admin.userName);
+    console.log("Token set in cookie for admin:", admin.userFirstName);
 
     // Respond with minimal info
  return res.status(200).json({ token, role: admin.role });

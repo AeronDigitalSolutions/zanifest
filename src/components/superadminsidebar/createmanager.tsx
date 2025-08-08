@@ -2,18 +2,60 @@
 import React, { useEffect, useState } from 'react';
 import styles from '@/styles/components/superadminsidebar/createmanager.module.css';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
+import axios from 'axios';
 
 const CreateManager = () => {
-  const [formData, setFormData] = useState({
-    managerId: '',
-    name: '',
-    email: '',
-    password: '',
+  // const [formData, setFormData] = useState({
+  //   managerId: '',
+  //   name: '',
+  //   email: '',
+  //   password: '',
+  //   district: '',
+  //   state: '',
+  //   category: '',
+  //   assignedTo: '',
+  // });
+
+const [formData, setFormData] = useState({
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+  managerId: '',
+  dateOfJoining: '',
+
+  password: '',
+  
+    pinCode: '',
+    city: '',
     district: '',
     state: '',
-    category: '',
-    assignedTo: '',
-  });
+  
+
+  managerPanNumber: '',
+  managerAadharNumber: '',
+
+  nomineeName: '',
+  nomineeRelation: '',
+  nomineePanNumber: '',
+  nomineeAadharNumber: '',
+  accountHoldername: '',
+  bankName: '',
+  accountNumber: '',
+  ifscCode: '',
+  branchLoaction: '',
+  category: '',
+  assignedTo: '',
+});
+
+const [attachments, setAttachments] = useState({
+  managerPanAttachment: null,
+  managerAadharAttachment: null,
+  nomineePanAttachment: null,
+  nomineeAadharAttachment: null,
+  cancelledChequeAttachment: null,
+});
+
 
   const [assignedToOptions, setAssignedToOptions] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
@@ -40,7 +82,7 @@ const CreateManager = () => {
     const { name, value } = e.target;
     let updatedValue = value;
     if (
-      (name === 'managerId' || name === 'name' || name === 'state' || name === 'district') &&
+      (name === 'managerId' || name === 'firstName' ||name === 'lastName' || name === 'state' || name === 'district') &&
       value.length > 0
     ) {
       updatedValue = value.charAt(0).toUpperCase() + value.slice(1);
@@ -48,48 +90,67 @@ const CreateManager = () => {
     setFormData((prev) => ({ ...prev, [name]: updatedValue }));
   };
 
+
+const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const { name, files } = e.target;
+  if (files && files[0]) {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: files[0],
+    }));
+  }
+};
+
+//  if (formData.category !== 'national' && formData.assignedTo === '') {
+//       alert('State and district managers must be assigned to a manager.');
+//       return;
+//     }
+
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  const formDataToSend = new FormData();
+
+  // Append other fields
+  for (const key in formData) {
+    formDataToSend.append(key, formData[key as keyof typeof formData]);
+  }
+
+  // Append files
+  Object.entries(attachments).forEach(([key, file]) => {
+    if (file) {
+      formDataToSend.append(key, file);
+    }
+  });
+
+  try {
+    console.log("in try block for creating manager")
+    const res = await axios.post('/api/createmanager', formDataToSend, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    console.log("response recieved", res)
+
+    if (res.status === 200 || res.status === 201) {
+      alert('Manager created successfully!');
+    } else {
+      alert('Error creating manager.');
+    }
+  } 
+  
+  catch (err) {
+    console.error('Submission error:', err);
+    alert('Failed to create manager.');
+  }
+};
+
   const handleRoleChange = (e: React.FormEvent) => {
     const { value } = e.target as HTMLInputElement;
     setFormData((prev) => ({ ...prev, category: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (formData.category !== 'national' && formData.assignedTo === '') {
-      alert('State and district managers must be assigned to a manager.');
-      return;
-    }
-
-    try {
-      const payload = {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        state: formData.state,
-        district: formData.district,
-        managerId: formData.managerId,
-        category: formData.category,
-        assignedTo: formData.assignedTo,
-      };
-
-      const response = await fetch('/api/createmanager', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        console.log('Failed to create manager');
-        return;
-      }
-
-      alert('Manager created successfully!');
-    } catch (err) {
-      console.error('Error:', err);
-      alert('Error creating manager');
-    }
-  };
 
   return (
     <div className={styles.container}>
@@ -97,27 +158,39 @@ const CreateManager = () => {
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.row}>
           <div className={styles.formGroup}>
-            <label htmlFor="managerId">Manager ID</label>
+            <label htmlFor="managerId">Employee Code </label>
             <input
               type="text"
               name="managerId"
               id="managerId"
               className={styles.input}
-              placeholder="Enter manager ID (e.g., NM1, SM1)"
+              placeholder="Enter Employee Code"
               value={formData.managerId}
               onChange={handleChange}
             />
           </div>
 
           <div className={styles.formGroup}>
-            <label htmlFor="name">Full Name</label>
+            <label htmlFor="firstName">First Name</label>
             <input
               type="text"
-              name="name"
-              id="name"
+              name="firstName"
+              id="firstName"
               className={styles.input}
-              placeholder="Enter full name"
-              value={formData.name}
+              placeholder="Enter first name"
+              value={formData.firstName}
+              onChange={handleChange}
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="lastName">Last Name</label>
+            <input
+              type="text"
+              name="lastName"
+              id="lastName"
+              className={styles.input}
+              placeholder="Enter last name"
+              value={formData.lastName}
               onChange={handleChange}
             />
           </div>
@@ -135,6 +208,20 @@ const CreateManager = () => {
               value={formData.email}
               onChange={handleChange}
               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="name">Phone Number</label>
+            <input
+              type="number"
+              name="phone"
+              id="phone"
+              className={styles.input}
+              placeholder="Enter your cell number"
+              value={formData.phone}
+              onChange={handleChange}
+              required
             />
           </div>
 
@@ -159,7 +246,48 @@ const CreateManager = () => {
           </div>
         </div>
 
+        <div className={styles.formGroup}>
+          <label htmlFor="dateOfJoining">Date of Joining</label>
+          <input
+            type="date"
+            name="dateOfJoining"
+            id="dateOfJoining"
+            className={styles.input}
+            value={formData.dateOfJoining}
+            onChange={handleChange}
+          />
+        </div>
+
+
         <div className={styles.row}>
+          <div className={styles.formGroup}>
+            <label htmlFor="pinCode">Pincode</label>
+            <input
+              type="text"
+              name="pinCode"
+              id="pinCode"
+              inputMode="numeric"
+              maxLength={6}
+              className={styles.input}
+              placeholder="Enter district"
+              value={formData.pinCode}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="city">City</label>
+            <input
+              type="text"
+              name="city"
+              id="city"
+              className={styles.input}
+              placeholder="Enter district"
+              value={formData.city}
+              onChange={handleChange}
+            />
+          </div>
+
           <div className={styles.formGroup}>
             <label htmlFor="district">District</label>
             <input
@@ -185,6 +313,200 @@ const CreateManager = () => {
               onChange={handleChange}
             />
           </div>
+        </div>
+
+         <div className={styles.formGroup}>
+            <label htmlFor="managerPanNumber">PAN number</label>
+            <input
+              type="text"
+              name="managerPanNumber"
+              id="managerPanNumber"
+              className={styles.input}
+              placeholder="Enter Nominee PAN number"
+              value={formData.managerPanNumber}
+              onChange={handleChange}
+            />
+            <input
+              type="file"
+              name="managerPanAttachment"
+              id="managerPanAttachment"
+              onChange={handleFileChange}
+              accept="image/*,application/pdf"
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="managerAadharNumber">Aadhar number</label>
+            <input
+              type="text"
+              name="managerAadharNumber"
+              id="managerAadharNumber"
+              className={styles.input}
+              placeholder="Enter Nominee Aadhar number"
+              value={formData.managerAadharNumber}
+              onChange={handleChange}
+            />
+            <input
+              type="file"
+              name="managerAadharAttachment"
+              id="managerAadharAttachment"
+              onChange={handleFileChange}
+              accept="image/*,application/pdf"
+            />
+          </div>
+
+
+
+
+        {/* //nominee details  */}
+        <div className={styles.row}>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="nomineeName">Nominee Name</label>
+            <input
+              type="text"
+              name="nomineeName"
+              id="nomineeName"
+              className={styles.input}
+              placeholder="Enter Nominee Name"
+              value={formData.nomineeName}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="nomineeRelation">Nominee Relation</label>
+            <input
+              type="text"
+              name="nomineeRelation"
+              id="nomineeRelation"
+              className={styles.input}
+              placeholder="Enter Nominee Relation"
+              value={formData.nomineeRelation}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="nomineePanNumber">Nominee PAN number</label>
+            <input
+              type="text"
+              name="nomineePanNumber"
+              id="nomineePanNumber"
+              className={styles.input}
+              placeholder="Enter Nominee PAN number"
+              value={formData.nomineePanNumber}
+              onChange={handleChange}
+            />
+            <input
+              type="file"
+              name="nomineePanAttachment"
+              id="nomineePanAttachment"
+              onChange={handleFileChange}
+              accept="image/*,application/pdf"
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="nomineeAadharNumber">Nominee Aadhar number</label>
+            <input
+              type="text"
+              name="nomineeAadharNumber"
+              id="nomineeAadharNumber"
+              className={styles.input}
+              placeholder="Enter Nominee Aadhar number"
+              value={formData.nomineeAadharNumber}
+              onChange={handleChange}
+            />
+            <input
+              type="file"
+              name="nomineeAadharAttachment"
+              id="nomineeAadharAttachment"
+              onChange={handleFileChange}
+              accept="image/*,application/pdf"
+            />
+          </div>
+
+        </div>
+
+        {/* //bank details  */}
+        <div className={styles.row}>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="accountHoldername">Account Holder Name</label>
+            <input
+              type="text"
+              name="accountHoldername"
+              id="accountHoldername"
+              className={styles.input}
+              placeholder="Enter Account Holder Name"
+              value={formData.accountHoldername}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="bankName">Bank Name</label>
+            <input
+              type="text"
+              name="bankName"
+              id="nabankNameme"
+              className={styles.input}
+              placeholder="Enter Bank Name"
+              value={formData.bankName}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="accountNumber">Account Number</label>
+            <input
+              type="text"
+              name="accountNumber"
+              id="accountNumber"
+              className={styles.input}
+              placeholder="Enter Account Number"
+              value={formData.accountNumber}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="ifscCode">IFSC code</label>
+            <input
+              type="text"
+              name="ifscCode"
+              id="ifscCode"
+              className={styles.input}
+              placeholder="Enter IFSC code"
+              value={formData.ifscCode}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="branchLoaction">Branch Location</label>
+            <input
+              type="text"
+              name="branchLoaction"
+              id="branchLoaction"
+              className={styles.input}
+              placeholder="Enter Branch Location"
+              value={formData.branchLoaction}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+              <label htmlFor="cancelledCheque">Upload Cancelled Cheque (Optional)</label>
+              <input
+              id="cancelledChequeAttachment" 
+              name="cancelledChequeAttachment" 
+              type="file"
+              onChange={handleFileChange}
+              accept="image/*,application/pdf" />
+            </div>
+
         </div>
 
         <div className={`${styles.row} ${styles.radioRow}`}>

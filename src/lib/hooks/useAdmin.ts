@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 
 type DecodedToken = {
-  userName: string;
+  userFirstName: string;
+  userLastName?: string;
   email: string;
   role: string;
 };
@@ -20,7 +21,8 @@ export function useAdmin() {
           const data = await res.json();
           console.log("Admin data fetched:", data);
           setAdmin({
-            userName: data.user.name, // 👈 Correctly mapped
+            userFirstName: data.user.userFirstName, // ✅ correct key
+            userLastName: data.user.userLastName ?? "", // optional handling
             email: data.user.email,
             role: data.user.role,
           });

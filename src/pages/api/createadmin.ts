@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  const { userName, email, password, role } = req.body;
+  const { userFirstName, userLastName, email, password, role } = req.body;
   // console.log('Received data:', { userName, email, password, role });
   try {
     await dbConnect();
@@ -20,7 +20,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const newAdmin = new Admin({
-      userName,
+      userFirstName,
+      userLastName: userLastName || "",
       email,
       password, // hash before saving in production
       role

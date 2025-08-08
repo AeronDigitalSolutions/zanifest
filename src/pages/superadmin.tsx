@@ -35,9 +35,8 @@ const AdminDashboard = () => {
 
   const router = useRouter();
   const { admin , loading} = useAdmin();
+  console.log("user first name",admin?.userFirstName);
   
-  // console.log("Admin data:", admin?.userName);
-
   const handleLogout = async () => {
     try {
       await axios.post("/api/admin/logout");
@@ -83,7 +82,7 @@ const AdminDashboard = () => {
     <div className={styles.wrapper}>
       {/* Header */}
       <header className={styles.header}>
-        <h1>Welcome, {admin?.userName ?? "SuperAdmin"}</h1>
+        <h1>Welcome, {admin?.userFirstName ?? "SuperAdmin"}</h1>
         <div className={styles.logoContainer}>
           <Image src={logo} alt="Logo" width={130} height={40} className={styles.logo} />
         </div>
