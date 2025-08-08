@@ -8,6 +8,7 @@
 .head {
   display: flex;
   gap: 0.7rem;
+  text-decoration: underline;
 }
 
 .heading1 {

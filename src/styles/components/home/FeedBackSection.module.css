@@ -9,6 +9,7 @@
   display: flex;
   gap: 0.7rem;
   justify-content: center;
+  text-decoration: underline;
 }
 
 .heading {
@@ -286,12 +287,30 @@
 
 @media screen and (max-width: 370px) {
  .heading{
-    font-size: 23px;
+    font-size: 20px;
   }
   .serviceItem {
     min-width: 293px;
     max-width: 300px;
-    margin: 4px 20px;
+    margin: 4px 18px;
+    flex-shrink: 0;
+    background-color: white;
+    padding: 20px;
+    border-radius: 22px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    display: grid;
+    place-items: center;
+    gap: 1rem;
+  }
+}
+@media screen and (max-width: 420px) {
+ .heading{
+    font-size: 20px;
+  }
+  .serviceItem {
+    min-width: 293px;
+    max-width: 300px;
+    margin: 4px 18px;
     flex-shrink: 0;
     background-color: white;
     padding: 20px;

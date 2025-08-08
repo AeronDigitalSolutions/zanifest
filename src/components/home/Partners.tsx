@@ -10,7 +10,6 @@ const CATEGORYLIST = [
       require("@/assets/home/partners/1.png"),
       require("@/assets/home/partners/2.png"),
       require("@/assets/home/partners/3.png"),
-      
     ],
   },
   {
@@ -22,30 +21,6 @@ const CATEGORYLIST = [
       require("@/assets/home/partners/6.png"),
     ],
   },
-  // {
-  //   name: "Travel Insurance",
-  //   image: require("@/assets/home/car/3.png"),
-  //   partners: [
-  //     require("@/assets/home/partners/7.png"),
-  //     require("@/assets/home/partners/8.png"),
-  //   ],
-  // },
-  // {
-  //   name: "Shop Insurance",
-  //   image: require("@/assets/home/car/4.png"),
-  //   partners: [
-  //     require("@/assets/home/partners/9.png"),
-  //     require("@/assets/home/partners/10.png"),
-  //   ],
-  // },
-  // {
-  //   name: "Home Insurance",
-  //   image: require("@/assets/home/car/5.png"),
-  //   partners: [
-  //     require("@/assets/home/partners/11.png"),
-  //     require("@/assets/home/partners/12.png"),
-  //   ],
-  // },
   {
     name: "Fire Insurance",
     image: require("@/assets/home/car/6.png"),
@@ -58,9 +33,9 @@ const CATEGORYLIST = [
 ];
 
 function Partners() {
+  // start desktop; updates after mount so no SSR errors
   const [isMobile, setIsMobile] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(CATEGORYLIST[0]);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
@@ -72,14 +47,13 @@ function Partners() {
   return (
     <div className={styles.cont}>
       <div className={styles.head}>
-  <p className={styles.heading}>
-    <span className={styles.orange}>Insurance</span> Partner
-  </p>
-</div>
-
+        <p className={styles.heading}>
+          <span className={styles.orange}>Insurance</span> Partner
+        </p>
+      </div>
 
       <div className={styles.bottom}>
-        {/* Category List */}
+        {/* DESKTOP: exactly the same structure as before */}
         {!isMobile ? (
           <div className={styles.catList}>
             {CATEGORYLIST.map((item, index) => (
@@ -106,62 +80,36 @@ function Partners() {
             ))}
           </div>
         ) : (
-          <div className={styles.catList}>
-            {/* Dropdown Toggle */}
-          <div className={styles.mobileDropdownHeader}>
-  <div className={styles.catItem}>
-    <Image
-      src={selectedCategory.image}
-      alt={selectedCategory.name}
-      className={styles.image}
-    />
-    <p className={styles.catName}>{selectedCategory.name}</p>
-  </div>
-  <button
-    className={styles.dropdownBtn}
-    onClick={() => setDropdownOpen(!dropdownOpen)}
-  >
-    {dropdownOpen ? "▲" : "▼"}
-  </button>
-</div>
-
-
-            {/* Dropdown Items */}
-            {dropdownOpen &&
-              CATEGORYLIST.map((item, index) => (
-                <div
+          /* MOBILE: horizontal image + name tabs (from CATEGORYLIST) */
+          <div className={styles.mobileTabs} role="tablist" aria-label="categories">
+            {CATEGORYLIST.map((item, index) => {
+              const active = selectedCategory.name === item.name;
+              return (
+                <button
                   key={index}
-                  className={styles.catItem}
-                  onClick={() => {
-                    setSelectedCategory(item);
-                    setDropdownOpen(false);
-                  }}
-                  style={{
-                    cursor: "pointer",
-                    backgroundColor:
-                      selectedCategory.name === item.name ? "#dcf1ff" : "",
-                    borderLeft:
-                      selectedCategory.name === item.name
-                        ? "4px solid #4991c9"
-                        : "none",
-                  }}
+                  className={`${styles.mobileTab} ${active ? styles.active : ""}`}
+                  onClick={() => setSelectedCategory(item)}
+                  aria-pressed={active}
+                  role="tab"
+                  type="button"
                 >
-                  <Image
-                    src={item.image}
-                    alt={item.name}
-                    className={styles.image}
-                  />
-                  <p className={styles.catName}>{item.name}</p>
-                </div>
-              ))}
+                 
+                  <span className={styles.mobileTabName}>{item.name}</span>
+                </button>
+              );
+            })}
           </div>
         )}
 
-        {/* Partner List for Selected Category */}
+        {/* partners grid (updates from selectedCategory) */}
         <div className={styles.partList}>
           {selectedCategory.partners.map((img, index) => (
             <div key={index} className={styles.partItem}>
-              <Image src={img} alt="partner" className={styles.imagePartner} />
+              <Image
+                src={img}
+                alt={`partner-${index}`}
+                className={styles.imagePartner}
+              />
             </div>
           ))}
         </div>

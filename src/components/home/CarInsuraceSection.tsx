@@ -7,7 +7,7 @@ import styles from "@/styles/components/home/CarInsuranceSection.module.css";
 
 const INSURANCELIST = [
   {
-    name: "Family",
+    name: "Family Health Insurance",
     image: require("@/assets/home/car/1.png"),
     link: "./health/healthinsurance",
   },
@@ -22,12 +22,12 @@ const INSURANCELIST = [
     link: "#",
   },
   {
-    name: "Car",
+    name: "Car Insurance",
     image: require("@/assets/home/car/4.png"),
     link: "./carinsurance/carinsurance",
   },
   {
-    name: "Two Wheeler",
+    name: "⁠2 wheeler Insurance",
     image: require("@/assets/home/car/5.png"),
     link: "./TwoWheeler/bikeinsurance",
   },
@@ -37,7 +37,7 @@ const INSURANCELIST = [
     link: "#",
   },
   {
-    name: "Third Party",
+    name: "Third Party Insurance",
     image: require("@/assets/home/car/7.png"),
     link: "#",
   },
@@ -47,7 +47,7 @@ const INSURANCELIST = [
     link: "#",
   },
   {
-    name: "Home",
+    name: "Home Insurance",
     image: require("@/assets/home/car/9.png"),
     link: "#",
   },
@@ -57,12 +57,12 @@ const INSURANCELIST = [
     link: "#",
   },
    {
-    name: "Doctors Indemnity Insurance",
+    name: "Doctor Indemnity Insurance",
     image: require("@/assets/medical-team.png"),
     link: "#",
   },
    {
-    name: "Director & Officier Liability Insurance",
+    name: "Director & Officer Liability Insurance",
     image: require("@/assets/workspace.png"),
     link: "#",
   },
