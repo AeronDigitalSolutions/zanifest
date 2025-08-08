@@ -1,77 +1,33 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { createRouter } from 'next-connect';
-import upload from '@/utils/multer';
 import dbConnect from '@/lib/dbConnect';
 import Agent from '@/models/Agent';
-import { IncomingFormFields, MulterFile } from '@/types/agent'; // custom types
 
-// Extend the types for req.files from multer
-interface ExtendedRequest extends NextApiRequest {
-  files: MulterFile[];
-  body: IncomingFormFields;
-}
-
-const handler = createRouter<ExtendedRequest, NextApiResponse>();
-
-// Helper to convert multer middleware to a promise for Next.js
-const runMiddleware = (req: NextApiRequest, res: NextApiResponse, fn: Function) => {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result: any) => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
-      return resolve(result);
-    });
-  });
-};
-
-// Middleware for handling multipart/form-data
-handler.use(async (req, res, next) => {
-  await runMiddleware(req, res, upload.any());
-  next();
-});
-
-handler.post(async (req, res) => {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await dbConnect();
 
-  const formFields = req.body;
-  const files = req.files;
-  
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method not allowed' });
+  }
 
   try {
+      const { attachments, ...formFields } = req.body; // parsed JSON
+    if (!attachments) {
+      return res.status(400).json({ error: 'No attachments provided' });
+    }
+
     const agent = new Agent({
       ...formFields,
-      attachments: files.map((file) => {
-  const filePath = `/uploads/${file.originalname}`; // public path where the file is served
-
-  return {
-    filename: file.originalname,
-    data: file.buffer,
-    mimetype: file.mimetype,
-    url: filePath, // ✅ Add this field to store URL
-  };
-}),
+      ...attachments
     });
 
     await agent.save();
     return res.status(201).json({ message: 'Agent created', agent });
-  } 
-  
-  catch (error: any) {
+  } catch (error: any) {
     console.error('Error creating agent:', error);
     return res.status(400).json({ error: error.message || 'Failed to create agent' });
   }
-});
+}
 
-// Required for multer to work with Next.js API routes
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
-// ✅ This is the correct way to export next-connect handler
-export default handler.handler();
 
 
 
