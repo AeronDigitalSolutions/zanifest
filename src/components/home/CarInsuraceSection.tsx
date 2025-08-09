@@ -80,8 +80,9 @@ function CarInsuraceSection() {
   return (
     <div className={styles.cont}>
       <div className={styles.head}>
-        <div className={styles.heading}>Click to buy an </div>
-        <div className={`${styles.heading} ${styles.orange}`}>Insurance</div>
+        <div className={styles.heading}>
+          Click to buy an <span className={styles.orange}>Insurance</span>
+        </div>
       </div>
 
       <div className={styles.list}>

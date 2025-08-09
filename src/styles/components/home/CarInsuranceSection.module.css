@@ -11,9 +11,10 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.5rem;
+  /* gap: 0.5rem; */
   margin-bottom: 20px;
   text-decoration: underline;
+  text-underline-offset: 7px;
 }
 
 /* .heading {
@@ -154,6 +155,8 @@
   }
 .cont{
 padding: 0 4rem;
+  padding-top: 40px;
+
 }
   .imageCont {
     height: 100px;
@@ -180,6 +183,8 @@ padding: 0 4rem;
   }
 .cont{
 padding: 0 2.5rem;
+  padding-top: 40px;
+
 }
   .imageCont {
     height: 100px;
