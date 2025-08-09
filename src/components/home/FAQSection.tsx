@@ -18,7 +18,7 @@ const QUESTIONS = [
     ans: "Yes, there is an age limit . The age span is between 18-50 for this product. This age groups are important for some critical illnesses. Insurers can renew their policies every other year till 51 years old.",
   },
   {
-    ques: "How  i use 3 year freemium option?",
+    ques: "How  i use 3 year premium option?",
     ans: "Yes, there is an age limit . The age span is between 18-50 for this product. This age groups are important for some critical illnesses. Insurers can renew their policies every other year till 51 years old.",
   },
   {

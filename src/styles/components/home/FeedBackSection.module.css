@@ -10,15 +10,12 @@
   gap: 0.7rem;
   justify-content: center;
   text-decoration: underline;
-    text-underline-offset: 7px;
-
 }
 
 .heading {
-  font-size: 2.5rem;
+  font-size: 36px;
   font-weight: bold;
   margin: 0;
-  padding-bottom: 10px;
 }
 
 .orange {
