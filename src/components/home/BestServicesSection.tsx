@@ -13,7 +13,7 @@ const LIST = [
     image: <MdHeadsetMic size={40} />,
   },
   {
-    name: "Easy Clain System",
+    name: "Easy Claim System",
     desc: "Hassle-free claim process designed to get you quick resolutions when you need them the most.",
     image: <LuNotebookPen size={40} />,
   },
