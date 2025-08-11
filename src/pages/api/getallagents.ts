@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (!agents || agents.length === 0) {
         console.log("No agents found");
         // Return a 404 status if no agents are found
-        return res.status(404).json({ message: 'No agents found' });
+        return res.status(404).json({ message: 'No agents found :(' });
 
       }
       return res.status(200).json(agents);

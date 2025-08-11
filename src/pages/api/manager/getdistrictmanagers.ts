@@ -13,6 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const token = req.cookies.managerToken;
+    console.log("token of state manager is here -> ", token)
 
     if (!token) {
       return res.status(401).json({ success: false, error: 'Not authenticated' });
@@ -24,6 +25,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     };
 
     const { id, role } = decoded;
+
+    console.log("the id that is decoded ->", id)
+    console.log("role decoded ->", role)
 
     if (role !== 'state') {
       return res.status(403).json({ success: false, error: 'Only state managers can access this data' });

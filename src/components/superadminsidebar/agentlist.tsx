@@ -4,7 +4,9 @@ import Image from 'next/image';
 
 interface Agent {
   _id: string;
-  name: string;
+  agentCode: string;
+  firstName: string;
+  lastName: string;
   email: string;
   assignedTo: string;
   district: string;
@@ -67,6 +69,8 @@ const AgentsPage: React.FC = () => {
             <table className={styles.table}>
               <thead>
                 <tr>
+                  <th className={styles.th}>S.No</th>
+                  <th className={styles.th}>Agent code</th>
                   <th className={styles.th}>Name</th>
                   <th className={styles.th}>Email</th>
                   <th className={styles.th}>District</th>
@@ -76,9 +80,11 @@ const AgentsPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {currentAgents.map((agent) => (
+                {currentAgents.map((agent, index) => (
                   <tr key={agent._id} className={styles.row}>
-                    <td className={styles.td}>{agent.name}</td>
+                    <td className={styles.td}>{(currentPage - 1) * agentsPerPage + index + 1}</td>
+                    <td className={styles.td}>{agent.agentCode}</td>
+                    <td className={styles.td}>{`${agent.firstName}` + " "+ `${agent.lastName}`}</td>
                     <td className={styles.td}>{agent.email}</td>
                     <td className={styles.td}>{agent.district}</td>
                     <td className={styles.td}>{agent.city}</td>

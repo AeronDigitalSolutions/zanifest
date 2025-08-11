@@ -171,6 +171,35 @@ const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 //     alert('Failed to create agent.');
 //   }
 // };
+const handlePincodeChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const value = e.target.value;
+
+  // Update pin code immediately
+  setFormData((prev) => ({ ...prev, pinCode: value }));
+
+  // If valid 6-digit pincode, fetch city & state
+  if (value.length === 6 && /^\d{6}$/.test(value)) {
+    try {
+      const res = await fetch(`https://api.postalpincode.in/pincode/${value}`);
+      const data = await res.json();
+
+      if (data[0]?.Status === "Success") {
+        const postOffice = data[0]?.PostOffice?.[0];
+        setFormData((prev) => ({
+          ...prev,
+          city: postOffice?.District || "",
+          district: postOffice?.Name || "",
+          state: postOffice?.State || ""
+        }));
+      } else {
+        console.warn("Invalid pincode or no data found");
+      }
+    } catch (error) {
+      console.error("Error fetching city/state from pincode:", error);
+    }
+  }
+};
+
 
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
@@ -190,10 +219,6 @@ const handleSubmit = async (e: React.FormEvent) => {
     alert('Error creating agent.');
   }
 };
-
-
-
-
 
   return (
     <div className={styles.container}>
@@ -301,7 +326,8 @@ const handleSubmit = async (e: React.FormEvent) => {
               inputMode="numeric"
               maxLength={6}
               value={formData.pinCode}
-              onChange={handleChange}
+             onChange={handlePincodeChange}
+
               required
             />
           </div>

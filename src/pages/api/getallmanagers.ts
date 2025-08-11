@@ -7,7 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await dbConnect();
 
     if (req.method === 'GET') {
-      const managers = await Manager.find().populate('assignedTo', 'name email category');
+      const managers = await Manager.find().populate('assignedTo', 'firstName lastName managerId');
       return res.status(200).json(managers);
     } else {
       return res.status(405).json({ message: 'Method not allowed' });

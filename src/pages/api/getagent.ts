@@ -1,6 +1,3 @@
-// /pages/api/getagents.ts
-// /pages/api/getagents.ts
-
 import { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '@/lib/dbConnect';
 import Agent from '@/models/Agent';
@@ -37,14 +34,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const Manager = (await import('@/models/Manager')).default;
     console.log("Decoded manager ID:", decoded.id);
     const managerDoc = await Manager.findById(decoded.id);
-    console.log("Manager document:", managerDoc);
+    // console.log("Manager document:", managerDoc);
     if (!managerDoc) {
       return res.status(404).json({ message: 'Manager not found' });
     }
 
     // Now fetch only the agents assigned to this district manager
     const agents = await Agent.find({ assignedTo: managerDoc.managerId });
-    console.log("Fetched agents:", agents);
+    console.log("Fetched agents:", agents.map(a=> a.firstName));
 
     return res.status(200).json({ agents });
 
