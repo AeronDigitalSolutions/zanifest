@@ -10,17 +10,21 @@
   gap: 0.7rem;
   justify-content: center;
   align-items: center;
+  text-decoration: underline;
+    text-underline-offset: 8px;
+
 }
 
 .heading { 
-  font-size: 35px;
+  font-size: 2.5rem;
   font-weight: 600;
   display: flex;
   text-align: center;
   justify-content: center;
+  padding-bottom: 10px;
 }
 .text {
-  font-size: 2.5rem;
+  /* font-size: 1.5rem; */
   font-weight: 600;
   margin: 0;
 }
@@ -93,6 +97,10 @@
     width: 60%;
     display: none;
   }
+  .head{
+      text-underline-offset: 7px;
+
+}
   .bottomCarousal {
     display: block;
   }
@@ -105,6 +113,10 @@
     width: 95%;
     justify-content: center;
   }
+.head{
+      text-underline-offset: 7px;
+
+}
 .serviceItem{
   margin: 0px 15px;
 }
@@ -117,7 +129,10 @@
   .heading{
     font-size: 25px;
   }
+.head{
+      text-underline-offset: 7px;
 
+}
   .desc{
     justify-content: justify;
   }

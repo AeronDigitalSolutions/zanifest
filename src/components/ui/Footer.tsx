@@ -93,7 +93,7 @@ function Footer() {
   <div className={styles.bottomItem}>© 2025 Zanifest, All Rights Reserved.</div>
 
   <span className={styles.bottomLinks}>
-    <div className={styles.bottomItem}>Privacy Policy</div>
+    <div className={styles.bottomItem}>Privacy Policy</div><span className={styles.break}>|</span>
     <div className={styles.bottomItem}>Terms & Conditions</div>
   </span>
 </div>

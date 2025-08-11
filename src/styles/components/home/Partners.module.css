@@ -8,20 +8,20 @@
 .head {
   display: flex;
   gap: 0.7rem;
+  text-decoration: underline;
+  text-underline-offset: 7px;
+
 }
 
 .heading {
-  font-size: 36px;
+  font-size: 2.5rem;
   font-weight: bold;
   margin: 0;
 }
 
-
-
 .orange {
   color: #fa621a;
 }
-
 
 .bottom {
   display: grid;
@@ -83,10 +83,10 @@
 .imagePartner {
   width: 95%;
   height: 73px;
-
   border-radius: 22px;
 }
 
+/* 1200px breakpoint (kept as-is) */
 @media screen and (max-width: 1200px) {
   .bottom {
     grid-template-columns: 1fr;
@@ -102,77 +102,117 @@
     gap: 2rem;
   }
 }
+
+/* MOBILE: ONLY overrides below (max-width: 768px) */
+/* Desktop rules above remain unchanged */
 @media screen and (max-width: 768px) {
+  /* hide desktop category column (left) on mobile */
   .catList {
+    display: none;
+  }
+
+  /* ensure main layout is single-column on mobile */
+  .bottom {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    width: 95%;
+    margin-top: 1rem;
+  }
+
+  /* Top: horizontal image + name tabs (scrollable) */
+  .mobileTabs {
     display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0.25rem;
+    margin-bottom: 0.5rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: auto;
+  }
+
+  /* Tab button */
+  .mobileTab {
+    display: inline-flex;
     flex-direction: column;
     align-items: center;
-    border:none;
-  }
-  .image1{
-    width: 100%;
-    height: 50px;
-  }
-.bottom{
-  gap: 0rem;
-}
-  .catItem {
-    width: 100%;
     justify-content: center;
-  }
-  .cont{
-    display: grid;
-    width: 100%;
-    place-items: center;
-    margin-top: 28px;
-  }
-
-  .catName {
-    font-size: 16px;
+    min-width: 78px;
+    padding: 6px 10px;
+    border-radius: 12px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    position: relative; /* for underline */
+    white-space: nowrap;
   }
 
+  .mobileTab:focus {
+    outline: none;
+    /* box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.12); */
+  }
+
+  .mobileTabImage {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    margin-bottom: 6px;
+  }
+
+  .mobileTabName {
+    font-size: 13px;
+    line-height: 1;
+    color: #333;
+    text-align: center;
+    display: block;
+    padding: 0 2px;
+  }
+
+  /* ACTIVE state: green text + centered compact underline */
+  .active .mobileTabName {
+    color: #0fae60; /* green */
+    font-weight: 600;
+  }
+
+  .mobileTab.active::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 3px;
+    width: 80%;
+    height: 3px;
+    border-radius: 2px;
+    background-color: #0fae60;
+  }
+
+  /* Partners grid for mobile */
   .partList {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
-    justify-content: center;
-    padding: 20px;
+    padding: 16px;
+    border-radius: 12px;
   }
 
   .partItem {
     height: auto;
-    padding: 5px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .imagePartner {
-    width: 100%;
+    width: 105%;
     height: auto;
     object-fit: contain;
-    border-radius: 22px;
+    border-radius: 12px;
+    display: block;
   }
 
   .heading {
-    font-size: 25px;
+    font-size: 24px;
+    text-align: center;
   }
-.mobileDropdownHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #ffffff;;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  margin-bottom: 0.5rem;
 }
-
-.dropdownBtn {
-  background: none;
-  border: none;
-  font-size: 1.25rem;
-  cursor: pointer;
-  padding: 0;
-  margin-left: 1rem;
-  color: #333;
-}
-
-}
-

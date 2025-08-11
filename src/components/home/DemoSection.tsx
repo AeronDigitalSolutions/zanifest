@@ -34,9 +34,9 @@ function DemoSection() {
   return (
     <div className={styles.cont}>
       <div className={styles.head}>
-       <div className={styles.heading}>
-       Why is <span style={{ color: "#fa621a" }}>ZANIFEST</span> India's go-to for insurance?
-   </div>
+        <div className={styles.heading}>
+          Why is&nbsp;<span style={{ color: "#fa621a" }}>ZANIFEST</span>&nbsp;India's go-to for insurance?
+        </div>
 
         <div className={styles.subHeading}>
           Zanifest is your trusted partner in insurance — providing transparent comparisons, affordable policies, and dedicated support. We simplify your insurance journey with easy access to top insurers and seamless claim support.

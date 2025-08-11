@@ -9,6 +9,9 @@
   display: flex;
   gap: 0.7rem;
   justify-content: center;
+  text-decoration: underline;
+  text-underline-offset: 7px;
+
 }
 
 .heading {
@@ -16,6 +19,9 @@
   font-weight: bold;
   color: #000; 
   margin-bottom: 2rem;
+  text-decoration: underline;
+  text-underline-offset: 7px;
+
 }
 
 
