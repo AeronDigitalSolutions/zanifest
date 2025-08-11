@@ -1561,6 +1561,7 @@ const CreateManager = () => {
               name="pinCode"
               value={formData.pinCode}
               placeholder="Enter Pincode"
+              className={styles.input}
 onChange={handlePincodeChange}
             />
           </div>

@@ -967,12 +967,12 @@ const handleSubmit = async (e: React.FormEvent) => {
               id="pinCode"
               value={formData.pinCode}
              onChange={handlePincodeChange}
-
+              className={styles.input}
               required
             />
           </div>
 
-          <div className={styles.formGroup}>
+          {/* <div className={styles.formGroup}>
             <label htmlFor="district">District</label>
             <input
               type="text"
@@ -980,7 +980,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               className={styles.input}
               required
             />
-          </div>
+          </div> */}
           <div className={styles.formGroup}>
             <label>City</label>
             <input
