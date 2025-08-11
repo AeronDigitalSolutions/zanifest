@@ -8,9 +8,18 @@
 .head {
   display: flex;
   gap: 0.7rem;
-  text-decoration: underline;
-  text-underline-offset: 7px;
+  justify-content: center;
+  position: relative;
+}
 
+.head::after {
+  content: "";
+  position: absolute;
+  bottom: -7px; /* offset */
+  width: 90%; /* underline length */
+  height: 6px; /* double thickness */
+  background-color: #fa621a; /* underline color */
+  border-radius: 3px;
 }
 
 .heading {

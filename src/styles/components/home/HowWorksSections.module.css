@@ -9,9 +9,17 @@
   display: flex;
   gap: 0.7rem;
   justify-content: center;
-  text-decoration: underline;
-  text-underline-offset: 7px;
+  position: relative;
+}
 
+.head::after {
+  /* content: ""; */
+  position: absolute;
+  bottom: -7px; /* consistent 7px offset below text */
+  width: 90%; /* underline length */
+  height: 6px; /* double thickness */
+  background-color: #fa621a; /* underline color */
+  border-radius: 3px;
 }
 
 .heading {
@@ -19,9 +27,19 @@
   font-weight: bold;
   color: #000; 
   margin-bottom: 2rem;
-  text-decoration: underline;
-  text-underline-offset: 7px;
+  position: relative;
+}
 
+.heading::after {
+  content: "";
+  position: absolute;
+  bottom: -7px;
+  width: 90%;
+  height: 6px;
+  background-color: #fa621a;
+  border-radius: 3px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 

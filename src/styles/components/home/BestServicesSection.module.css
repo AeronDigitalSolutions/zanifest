@@ -8,9 +8,18 @@
 .head {
   display: flex;
   gap: 0.7rem;
-  text-decoration: underline;
-  text-underline-offset: 7px;
+  justify-content: center;
+  position: relative;
+}
 
+.head::after {
+  content: "";
+  position: absolute;
+  bottom: 14px;
+  width: 90%;
+  height: 6px;
+  background-color: #fa621a;
+  border-radius: 3px;
 }
 
 .heading1 {
@@ -143,6 +152,7 @@
 
   .heading1, .heading2{
     font-size: 25px;
+    margin-bottom: 20px;
   }
   .list {
     grid-template-columns: 1fr;

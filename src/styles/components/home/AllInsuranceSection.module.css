@@ -10,9 +10,17 @@
   gap: 0.7rem;
   justify-content: center;
   align-items: center;
-  text-decoration: underline;
-    text-underline-offset: 8px;
+  position: relative;
+}
 
+.head::after {
+  content: "";
+  position: absolute;
+  bottom: 0px; /* offset */
+  width: 90%; /* length of underline */
+  height: 6px; /* double thickness */
+  background-color: #fa621a; /* underline color */
+  border-radius: 3px;
 }
 
 .heading { 
@@ -97,45 +105,52 @@
     width: 60%;
     display: none;
   }
-  .head{
-      text-underline-offset: 7px;
-
-}
+  
   .bottomCarousal {
     display: block;
   }
+  .head::after {
+  
+  width: 65%; /* length of underline */
+  
+}
 }
 
 @media screen and (max-width: 560px) {
   .text {
     text-align: center;
     flex-wrap: wrap;
-    width: 95%;
+    width: 80%;
     justify-content: center;
   }
-.head{
-      text-underline-offset: 7px;
-
-}
-.serviceItem{
-  margin: 0px 15px;
-}
+  
+  .serviceItem{
+    margin: 0px 15px;
+  }
+  
   .bottom {
     width: 80%;
   }
+  .head::after {
+  
+  width: 65%; /* length of underline */
+  
+}
 }
 @media screen and (max-width: 768px) {
 
   .heading{
     font-size: 25px;
   }
-.head{
-      text-underline-offset: 7px;
 
-}
   .desc{
     justify-content: justify;
   }
+  .head::after {
+  
+  width: 65%; /* length of underline */
+  
+}
 
   /* .bottom {
     font-size: 14px;

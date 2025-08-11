@@ -11,10 +11,18 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  /* gap: 0.5rem; */
   margin-bottom: 20px;
-  text-decoration: underline;
-  text-underline-offset: 7px;
+  position: relative;
+}
+
+.head::after {
+  content: "";
+  position: absolute;
+  bottom: -7px;
+  width: 90%;
+  height: 6px; /* double the default underline thickness */
+  background-color: #fa621a;
+  border-radius: 3px;
 }
 
 /* .heading {

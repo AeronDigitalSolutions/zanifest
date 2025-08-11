@@ -9,13 +9,24 @@
   display: flex;
   gap: 0.7rem;
   justify-content: center;
-  text-decoration: underline;
+  position: relative;
+}
+
+.head::after {
+  content: "";
+  position: absolute;
+  bottom: 10px;
+  width: 90%;
+  height: 6px;
+  background-color: #fa621a;
+  border-radius: 3px;
 }
 
 .heading {
-  font-size: 36px;
+  font-size: 2.5rem;
   font-weight: bold;
   margin: 0;
+  padding-bottom: 17px;
 }
 
 .orange {
