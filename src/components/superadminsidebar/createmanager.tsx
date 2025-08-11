@@ -1560,6 +1560,7 @@ const CreateManager = () => {
               type="text"
               name="pinCode"
               value={formData.pinCode}
+              placeholder="Enter Pincode"
 onChange={handlePincodeChange}
             />
           </div>
