@@ -7,18 +7,19 @@ import Image from 'next/image';
 
 interface Manager {
   _id: string;
-  name: string;
+  managerId: string;
+  firstName: string;
+  lastName: string;
   email: string;
   category: string;
-  location: {
+    city: string;
     district: string;
     state: string;
-  };
   assignedTo?: {
-    name: string;
-    email: string;
-    category: string;
-  };
+    managerId: string;
+    firstName: string;
+    lastName: string;
+  }
 }
 
 export default function ManagersTable() {
@@ -30,7 +31,7 @@ export default function ManagersTable() {
   useEffect(() => {
     const fetchManagers = async () => {
       try {
-        const res = await fetch('/api/getmanager');
+        const res = await fetch('/api/getallmanagers');
         const data = await res.json();
         setManagers(data);
       } catch (err) {
@@ -78,10 +79,12 @@ export default function ManagersTable() {
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th className={styles.th}>ID</th>
+                  <th className={styles.th}>S.No</th>
+                  <th className={styles.th}>Employee Code</th>
                   <th className={styles.th}>Name</th>
                   <th className={styles.th}>Email</th>
                   <th className={styles.th}>Category</th>
+                  <th className={styles.th}>City</th>
                   <th className={styles.th}>State</th>
                   <th className={styles.th}>District</th>
                   <th className={styles.th}>Assigned To</th>
@@ -93,14 +96,20 @@ export default function ManagersTable() {
                     <td className={styles.td}>
                       {(currentPage - 1) * itemsPerPage + index + 1}
                     </td>
-                    <td className={styles.td}>{manager.name}</td>
+                    <td className={styles.td}>{manager.managerId}</td>
+                    <td className={styles.td}>{`${manager.firstName} ${manager.lastName}`}</td>
                     <td className={styles.td}>{manager.email}</td>
-                    <td className={styles.td}>{manager.category}</td>
-                    <td className={styles.td}>{manager.location?.state}</td>
-                    <td className={styles.td}>{manager.location?.district}</td>
+                    <td className={styles.td}>{`${manager.category.charAt(0).toUpperCase() + manager.category.slice(1)}` + " " + "Manager"}</td>
+                    <td className={styles.td}>{manager.city}</td>
+                    <td className={styles.td}>{manager.state}</td>
+                    <td className={styles.td}>{manager.district}</td>
                     <td className={styles.td}>
+                      {/* fix This expression is not callable.
+Type 'String' has no call signatures.
+
+You need to concatenate the strings using the + operator or template literals, not by placing them next to each other. */}
                       {manager.assignedTo
-                        ? `${manager.assignedTo.name} (${manager.assignedTo.category})`
+                        ? `${manager.assignedTo.managerId}`
                         : '—'}
                     </td>
                   </tr>

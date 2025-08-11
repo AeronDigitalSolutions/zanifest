@@ -21,7 +21,11 @@ const DistrictManagerHeader: React.FC<DistrictManagerHeaderProps> = ({
   sidebarOpen,
   setSidebarOpen,
   handleLogout,
-}) => {  return (
+}) => {  
+  
+  console.log("name of dm -> ", user)
+  
+  return (
     <header className={styles.header}>
       <h3>Hi {user?.name ?? "District Manager"}</h3>
       <div className={styles.logoContainer}>

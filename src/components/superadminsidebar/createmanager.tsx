@@ -1397,21 +1397,53 @@ const CreateManager = () => {
         headers: { "Content-Type": "application/json" },
       });
 
-      if (res.status === 200 || res.status === 201) {
-        alert("Manager created successfully!");
-      } else {
-        alert("Error creating manager.");
-      }
-    } catch (err) {
-      console.error("Submission error:", err);
-      alert("Failed to create manager.");
+    if (res.status === 200 || res.status === 201) {
+      alert('Manager created successfully!');
+      
+    } else {
+      alert('Error creating manager.');
     }
-  };
+  } catch (err) {
+    console.error('Submission error:', err);
+    alert('Failed to create manager.');
+  }
+};
+
 
   const handleRoleChange = (e: React.FormEvent) => {
     const { value } = e.target as HTMLInputElement;
     setFormData((prev) => ({ ...prev, category: value }));
   };
+
+  const handlePincodeChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const value = e.target.value;
+
+  // Update pin code immediately
+  setFormData((prev) => ({ ...prev, pinCode: value }));
+
+  // If valid 6-digit pincode, fetch city & state
+  if (value.length === 6 && /^\d{6}$/.test(value)) {
+    try {
+      const res = await fetch(`https://api.postalpincode.in/pincode/${value}`);
+      const data = await res.json();
+
+      if (data[0]?.Status === "Success") {
+        const postOffice = data[0]?.PostOffice?.[0];
+        setFormData((prev) => ({
+          ...prev,
+          city: postOffice?.District || "",
+          district: postOffice?.Name || "",
+          state: postOffice?.State || ""
+        }));
+      } else {
+        console.warn("Invalid pincode or no data found");
+      }
+    } catch (error) {
+      console.error("Error fetching city/state from pincode:", error);
+    }
+  }
+};
+
 
   return (
     <div className={styles.container}>
@@ -1528,9 +1560,9 @@ const CreateManager = () => {
               type="text"
               name="pinCode"
               value={formData.pinCode}
-              onChange={handleChange}
-              className={styles.input}
               placeholder="Enter Pincode"
+              className={styles.input}
+onChange={handlePincodeChange}
             />
           </div>
           <div className={styles.formGroup}>

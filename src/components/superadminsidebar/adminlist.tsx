@@ -89,7 +89,8 @@ import Image from 'next/image';
 
 type Admin = {
   _id: string;
-  userName: string;
+  userFirstName: string;
+  userLastName: string;
   email: string;
   role: string;
 };
@@ -152,15 +153,17 @@ export default function AdminList() {
             <table className={styles.table}>
               <thead>
                 <tr>
+                  <th className={styles.th}>S.No</th>
                   <th className={styles.th}>Name</th>
                   <th className={styles.th}>Email</th>
                   <th className={styles.th}>Role</th>
                 </tr>
               </thead>
               <tbody>
-                {currentAdmins.map((admin) => (
+                {currentAdmins.map((admin, index) => (
                   <tr key={admin._id} className={styles.row}>
-                    <td className={styles.td}>{admin.userName}</td>
+                    <td className={styles.td}>{(currentPage - 1) * ITEMS_PER_PAGE + index + 1}</td>
+                    <td className={styles.td}>{`${admin.userFirstName}` +" "+ `${admin.userLastName}`}</td>
                     <td className={styles.td}>{admin.email}</td>
                     <td className={styles.td}>{admin.role}</td>
                   </tr>

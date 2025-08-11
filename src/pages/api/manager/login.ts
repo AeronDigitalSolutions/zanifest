@@ -3,6 +3,7 @@ import Manager from "@/models/Manager";
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 import { serialize } from "cookie";
+import bcrypt from "bcryptjs";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log("Manager login API called");
@@ -28,8 +29,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // const isMatch = await bcrypt.compare(password, manager.password);
-    if (password!==manager.password) {
+    const isMatch = await bcrypt.compare(password, manager.password);
+    if (!isMatch) {
       console.log("Password mismatch for manager:", email);
       return res.status(401).json({ message: "Invalid credentials" });
     }
@@ -38,7 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       {
         id: manager._id,
         role: manager.category, 
-        name: manager.name,
+        name: `${manager.firstName} ${manager.lastName}`,
     email: manager.email,
     // assuming 'category' is the field for role
       },
@@ -46,7 +47,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       { expiresIn: "1d" }
     );
 
-    // After you generate the token:
+    console.log("manager's id in token", manager._id)
+
+    // After you generate mthe token:
       res.setHeader("Set-Cookie", serialize("managerToken", token, {
         httpOnly: true, // safer, not accessible via JS
         path: "/",
@@ -58,7 +61,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json({
       token,
       role: manager.category,
-      name: manager.name,
+      name: `${manager.firstName} ${manager.lastName}`,
       
     });
 

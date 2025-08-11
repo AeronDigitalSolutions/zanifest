@@ -738,33 +738,133 @@ const CreateAgent: React.FC = () => {
     setFormData((prev) => ({ ...prev, [id]: updatedValue }));
   };
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, files } = e.target;
-    if (files && files[0]) {
-      const base64 = await fileToBase64(files[0]);
-      setAttachments((prev) => ({
-        ...prev,
-        [name]: base64,
-      }));
-    }
-  };
+// const [attachments, setAttachments] = useState<Record<string, string>>({});
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const res = await fetch("/api/createagent", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...formData,
-        attachments,
-      }),
-    });
-    if (res.ok) {
-      alert("Agent created successfully!");
-    } else {
-      alert("Error creating agent.");
+const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const { name, files } = e.target;
+  if (files && files[0]) {
+    const base64 = await fileToBase64(files[0]);
+    setAttachments((prev) => ({
+      ...prev,
+      [name]: base64, // store Base64 string
+    }));
+  }
+};
+
+
+
+//   const handleSubmit = async (e: React.FormEvent) => {
+//   e.preventDefault();
+//   try {
+//     const data = new FormData();
+
+//     // Append text data
+//     Object.entries(formData).forEach(([key, value]) => {
+//       data.append(key, value);
+//     });
+
+//     // Append files
+//     Object.entries(fileData).forEach(([key, file]) => {
+//       if (file) data.append(key, file);
+//     });
+
+//     await axios.post('/api/createagent', data, {
+//       headers: {
+//         'Content-Type': 'multipart/form-data',
+//       },
+//     });
+
+//     alert('Agent created successfully!');
+//     // reset if needed
+//   } catch (err) {
+//     console.error('Error creating agent:', err);
+//     alert('Failed to create agent');
+//   }
+// };
+
+//submit handler -> but no url being stored in db
+//  const handleSubmit = async (e: React.FormEvent) => {
+//   e.preventDefault();
+
+//   const formDataToSend = new FormData();
+
+//   // Append all other fields from formData
+//   for (const key in formData) {
+//     formDataToSend.append(key, formData[key as keyof typeof formData]);
+//   }
+
+//   // Append each attachment file
+//   Object.entries(attachments).forEach(([key, file]) => {
+//     if (file) {
+//       formDataToSend.append(key, file);
+//     }
+//   });
+
+//   try {
+//     const res = await axios.post('/api/createagent', formDataToSend, {
+//       headers: {
+//         'Content-Type': 'multipart/form-data', // let browser set boundary
+//       },
+//     });
+
+//     if (res.status === 200 || res.status === 201) {
+//       alert('Agent created successfully!');
+//     } else {
+//       alert('Error creating agent.');
+//     }
+//   } catch (err) {
+//     console.error('Submission error:', err);
+//     alert('Failed to create agent.');
+//   }
+// };
+const handlePincodeChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const value = e.target.value;
+
+  // Update pin code immediately
+  setFormData((prev) => ({ ...prev, pinCode: value }));
+
+  // If valid 6-digit pincode, fetch city & state
+  if (value.length === 6 && /^\d{6}$/.test(value)) {
+    try {
+      const res = await fetch(`https://api.postalpincode.in/pincode/${value}`);
+      const data = await res.json();
+
+      if (data[0]?.Status === "Success") {
+        const postOffice = data[0]?.PostOffice?.[0];
+        setFormData((prev) => ({
+          ...prev,
+          city: postOffice?.District || "",
+          district: postOffice?.Name || "",
+          state: postOffice?.State || ""
+        }));
+      } else {
+        console.warn("Invalid pincode or no data found");
+      }
+    } catch (error) {
+      console.error("Error fetching city/state from pincode:", error);
     }
-  };
+  }
+};
+
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  const res = await fetch('/api/createagent', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      ...formData,
+      attachments // already contains Base64 strings
+    })
+  });
+
+  if (res.ok) {
+    alert('Agent created successfully!');
+  } else {
+    alert('Error creating agent.');
+  }
+};
 
   return (
     <div className={styles.container}>
@@ -866,11 +966,21 @@ const CreateAgent: React.FC = () => {
             <input
               id="pinCode"
               value={formData.pinCode}
-              onChange={handleChange}
+             onChange={handlePincodeChange}
               className={styles.input}
               required
             />
           </div>
+
+          {/* <div className={styles.formGroup}>
+            <label htmlFor="district">District</label>
+            <input
+              type="text"
+              id="district"
+              className={styles.input}
+              required
+            />
+          </div> */}
           <div className={styles.formGroup}>
             <label>City</label>
             <input
