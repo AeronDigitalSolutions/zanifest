@@ -73,7 +73,7 @@
 .submitButton {
   margin-top: 1rem;
   padding: 0.75rem 1.25rem;
-  background-color: #2563eb;
+  background-color: orangered;
   color: #ffffff;
   font-weight: 600;
   font-size: 1rem;
@@ -85,7 +85,7 @@
 }
 
 .submitButton:hover {
-  background-color: #1e40af;
+  background-color: orangered;
 }
 
 @media (max-width: 768px) {
