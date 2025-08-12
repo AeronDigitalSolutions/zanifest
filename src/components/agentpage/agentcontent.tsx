@@ -28,7 +28,7 @@ const AgentContent: React.FC<AgentContentProps> = ({ agentName }) => {
 
   return (
     <main className={styles.content}>
-      <h2 className={styles.dashboardTitle}>Hello {agentName}</h2>
+      <h2 className={styles.dashboardTitle}>Hello, {agentName}</h2>
 
       <div className={styles.cardGrid}>
         <div className={styles.infoCard}>
