@@ -16,21 +16,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const agent = await Agent.findOne({ email });
 
     if (!agent) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "Invalid credentials. Email not found in DB" });
     }
 
     // 🔐 If passwords are hashed: await bcrypt.compare(password, agent.password)
     const isPasswordValid = password === agent.password;
 
     if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "Invalid credentials. Password Mismatched" });
     }
+
+    const fullName = `${agent.firstName} ${agent.lastName || ""}`.trim();
 
     const token = jwt.sign(
       {
         id: agent._id,
         email: agent.email,
-        name: agent.name,
+        fullName,
         role: "agent",
       },
       process.env.JWT_SECRET!,
@@ -48,7 +50,7 @@ res.setHeader('Set-Cookie', serialize('agentToken', token, {
 }));
 
 
-    res.status(200).json({ token, agent: { name: agent.name, email: agent.email, role: "agent" } });
+    res.status(200).json({ token, agent: { name: fullName, email: agent.email, role: "agent" } });
   } 
   
   catch (err) {

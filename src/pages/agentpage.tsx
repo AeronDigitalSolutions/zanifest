@@ -1,16 +1,13 @@
-
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "@/styles/pages/agent.module.css";
 import axios from "axios";
-
 import AgentHeader from "@/components/agentpage/agentheader";
 import AgentSidebar from "@/components/agentpage/agentsidebar";
 import AgentContent from "@/components/agentpage/agentcontent";
 import ResetPassword from "@/components/districtmanagerdashboard/resetpassword";
 import CreateUser from "@/components/agentpage/createuser";
-
 
 
 const AgentDashboard = () => {
@@ -22,6 +19,7 @@ const AgentDashboard = () => {
   useEffect(() => {
     // Safe access to localStorage on client side
     const storedName = localStorage.getItem("agentName");
+    // console.log("Stored agent name:", storedName);
     if (storedName) {
       setAgentName(storedName);
     }

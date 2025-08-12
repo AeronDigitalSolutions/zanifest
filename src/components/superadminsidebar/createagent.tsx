@@ -238,8 +238,6 @@ const CreateAgent: React.FC = () => {
 
   
 
-// const [attachments, setAttachments] = useState<Record<string, string>>({});
-
 const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
   const { name, files } = e.target;
   if (files && files[0]) {
