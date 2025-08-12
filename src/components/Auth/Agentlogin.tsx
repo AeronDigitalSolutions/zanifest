@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-
-import { IoIosArrowBack } from "react-icons/io";
 import styles from "@/styles/components/Auth/Login.module.css";
 import Image from "next/image";
 
@@ -33,6 +31,7 @@ export default function Agentlogin() {
     }
 
     const data = await res.json();
+    console.log("Login successful:", data);
 
     localStorage.setItem("agentToken", data.token);
     localStorage.setItem("agentName", data.agent.name);
