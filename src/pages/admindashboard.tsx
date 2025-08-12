@@ -135,7 +135,9 @@ const router = useRouter();
                 setActiveSection("dashboard");
                 setSidebarOpen(false);
               }}
-              className={styles.menuItem}
+              // className={styles.menuItem}
+                className={`${styles.menuItem} ${activeSection === "dashboard" ? styles.activeMenuItem : ""}`}
+
             >
               <span className={styles.iconLabel}>
                 <FiUsers className={styles.icon} />
@@ -157,6 +159,8 @@ const router = useRouter();
                 <span className={styles.label}>Create Manager</span>
               </span>
             </li>
+ 
+
             <li
               onClick={() => {
                 setActiveSection("createAgent");
@@ -276,3 +280,5 @@ const router = useRouter();
 };
 
 export default AdminDashboard;
+
+
