@@ -103,7 +103,7 @@
 /* For mobile up to 480px */
 @media (max-width: 480px) {
   .container {
-    width: 90%;
+    width: 100%;
     margin-left: 1px;
     margin-right: 1px;
     padding: 1rem;
@@ -141,7 +141,7 @@
 /* For very small screens up to 370px */
 @media (max-width: 370px) {
   .container {
-    width: 90%;
+    width: 100%;
     margin-left: 1px;
     margin-right: 1px;
     padding: 0.8rem;
