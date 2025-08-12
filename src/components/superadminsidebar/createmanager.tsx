@@ -1425,7 +1425,9 @@ const CreateManager = () => {
   };
 
   const handlePincodeChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  const value = e.target.value;
+  // const value = e.target.value;
+    const value = e.target.value.replace(/[^0-9]/g, "").slice(0, 6);
+
 
   // Update pin code immediately
   setFormData((prev) => ({ ...prev, pinCode: value }));

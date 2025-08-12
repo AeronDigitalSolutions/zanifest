@@ -369,6 +369,7 @@
   }
 
   .cardGrid {
+    margin-left: 10px;
     gap: 0.8rem;
   }
 
@@ -520,6 +521,7 @@
 
   .mobileCardWrapper {
     padding: 1rem;
+    /* margin: 0 10px; */
   }
 
 .mobileCardWrapper {
@@ -533,7 +535,7 @@
 }
 @media screen and (max-width: 768px) {
   .cardGrid {
-    
+    margin: 0 10px;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
     grid-template-areas:
