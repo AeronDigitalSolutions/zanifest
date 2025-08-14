@@ -1324,15 +1324,24 @@ const CreateManager = () => {
     const { name, value } = e.target;
     let updatedValue = value;
 
+    
     if (name === "pinCode") {
       updatedValue = value.replace(/\D/g, ""); 
       if (updatedValue.length > 6) updatedValue = updatedValue.slice(0, 6);
     }
 
     if (name === "managerPanNumber" || name === "nomineePanNumber") {
-      updatedValue = value.toUpperCase();
+      updatedValue = value.toUpperCase()
+      .replace(/[^A-Z0-9]/g, "")
+        .slice(0, 10);
     }
 
+     if (name === "ifscCode") {
+      updatedValue = value.toUpperCase().slice(0, 11);
+    }
+     if (name === "accountNumber") {
+      updatedValue = value.replace(/[^0-9]/g, "");
+    }
     if (name === "managerAadharNumber" || name === "nomineeAadharNumber") {
       updatedValue = value.replace(/\D/g, ""); 
       updatedValue = updatedValue.slice(0, 12); 
@@ -1416,7 +1425,9 @@ const CreateManager = () => {
   };
 
   const handlePincodeChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  const value = e.target.value;
+  // const value = e.target.value;
+    const value = e.target.value.replace(/[^0-9]/g, "").slice(0, 6);
+
 
   // Update pin code immediately
   setFormData((prev) => ({ ...prev, pinCode: value }));
@@ -1501,13 +1512,14 @@ const CreateManager = () => {
           </div>
           <div className={styles.formGroup}>
             <label>Phone Number</label>
-            <input
-              type="number"
+             <input
+              type="text"
+              inputMode="numeric"
               id="phone"
               value={formData.phone}
               onChange={(e) => {
-                let value = e.target.value.replace(/\D/g, ""); 
-                if (value.length > 10) value = value.slice(0, 10); 
+                let value = e.target.value.replace(/\D/g, "");
+                if (value.length > 10) value = value.slice(0, 10);
                 setFormData((prev) => ({ ...prev, phone: value }));
               }}
               className={styles.input}

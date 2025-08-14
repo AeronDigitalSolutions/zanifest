@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import styles from "@/styles/pages/agent.module.css";
 import {
   LineChart,
@@ -11,20 +11,42 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const chartData = [
-  { month: "Jan", price: 30 },
-  { month: "Feb", price: 40 },
-  { month: "Mar", price: 40 },
-  { month: "Apr", price: 50 },
-  { month: "May", price: 35 },
-  { month: "Jun", price: 55 },
-  { month: "Jul", price: 65 },
-  { month: "Aug", price: 70 },
+const allData = [
+  { month: "Jan", price: 30, date: "2025-01-15" },
+  { month: "Feb", price: 40, date: "2025-02-10" },
+  { month: "Mar", price: 40, date: "2025-03-20" },
+  { month: "Apr", price: 50, date: "2025-04-18" },
+  { month: "May", price: 35, date: "2025-05-05" },
+  { month: "Jun", price: 55, date: "2025-06-22" },
+  { month: "Jul", price: 65, date: "2025-07-12" },
+  { month: "Aug", price: 70, date: "2025-08-08" },
 ];
+
 interface AgentContentProps {
   agentName: string;
 }
+
 const AgentContent: React.FC<AgentContentProps> = ({ agentName }) => {
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [chartData, setChartData] = useState(allData);
+
+  const handleFilter = () => {
+    if (!startDate || !endDate) {
+      setChartData(allData); 
+      return;
+    }
+
+    const filtered = allData.filter((item) => {
+      const itemDate = new Date(item.date);
+      return (
+        itemDate >= new Date(startDate) &&
+        itemDate <= new Date(endDate)
+      );
+    });
+
+    setChartData(filtered);
+  };
 
   return (
     <main className={styles.content}>
@@ -45,6 +67,23 @@ const AgentContent: React.FC<AgentContentProps> = ({ agentName }) => {
         </div>
       </div>
 
+       <div className={styles.dateFilterSection}>
+        <label className={styles.dateLabel}>
+          Start Date:
+          <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+        </label>
+        <label className={styles.dateLabel}>
+          End Date:
+          <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+        </label>
+        <div className={styles.buttonWrapper}>
+          <button className={styles.filterButton} onClick={handleFilter}>
+            Show
+          </button>
+        </div>
+        </div>
+
+      {/* Chart Section */}
       <div className={styles.chartContainer}>
         <h3 className={styles.chartTitle}>Monthly Sales Overview</h3>
         <ResponsiveContainer width="100%" height={300}>

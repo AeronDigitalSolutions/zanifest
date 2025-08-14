@@ -5,6 +5,7 @@ import { FaArrowRight } from "react-icons/fa6";
 import SingleHtmlCarousal from "../ui/SingleIHtmlCarousal";
 
 import styles from "@/styles/components/home/AllInsuranceSection.module.css";
+import { FaEllipsisH } from "react-icons/fa";
 
 const SERVICESLIST = [
   {
@@ -32,7 +33,11 @@ function AllInsuranceSection() {
   <p className={styles.text}>
     We're Giving all the <span className={styles.orange}>Insurance</span> Services to you
   </p>
+ 
 </div>
+ <div className={styles.mobileEllipsis}>
+          <FaEllipsisH style={{ color: "#fa621a", fontSize:"25px" }} />
+        </div>
 
       </div>
       <div className={styles.bottom}>

@@ -5,6 +5,7 @@ import styles from "@/styles/components/home/BestServicesSection.module.css";
 import { MdHeadsetMic } from "react-icons/md";
 import { LuNotebookPen } from "react-icons/lu";
 import { LiaMoneyBillSolid } from "react-icons/lia";
+import { FaEllipsisH } from "react-icons/fa";
 
 const LIST = [
   {
@@ -31,6 +32,9 @@ function BestServicesSection() {
   <h1 className={styles.heading1}>
     Best <span className={styles.heading2}>Service</span>
   </h1>
+   <div className={styles.mobileEllipsis}>
+          <FaEllipsisH style={{ color: "#fa621a", fontSize:"25px" }} />
+        </div>
 </div>
 
       <div className={styles.list}>
