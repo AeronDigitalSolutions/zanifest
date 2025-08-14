@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "@/styles/components/home/Partners.module.css";
 import Image from "next/image";
+import { FaEllipsisH } from "react-icons/fa";
 
 const CATEGORYLIST = [
   {
@@ -51,6 +52,9 @@ function Partners() {
           <span className={styles.orange}>Insurance</span> Partner
         </p>
       </div>
+        <div className={styles.mobileEllipsis}>
+          <FaEllipsisH style={{ color: "#fa621a", fontSize:"25px" }} />
+        </div>
 
       <div className={styles.bottom}>
         {/* DESKTOP: exactly the same structure as before */}

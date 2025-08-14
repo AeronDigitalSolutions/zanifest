@@ -3,6 +3,7 @@ import React from "react";
 import styles from "@/styles/components/home/HowWorksSections.module.css";
 import { desc, image } from "framer-motion/client";
 import Image from "next/image";
+import { FaEllipsisH } from "react-icons/fa";
 
 const LIST = [
   {
@@ -80,7 +81,11 @@ function HowWorksSections() {
       <div className={styles.head}>
        <div className={styles.heading}>
   How We <span className={styles.orange}>Work?</span>
+   <div className={styles.mobileEllipsis}>
+          <FaEllipsisH style={{ color: "#fa621a", fontSize:"25px" }} />
+        </div>
 </div>
+
 
       </div>
       <div className={styles.bottom}>
@@ -102,6 +107,9 @@ function HowWorksSections() {
       <div className={styles.servciesCont}>
         <div className={styles.heading}>
           Pay <span className={styles.orange}> Less </span>Cover More
+        </div>
+         <div className={styles.mobileEllipsis}>
+          <FaEllipsisH style={{ color: "#fa621a", fontSize:"25px" }} />
         </div>
         <div className={styles.services}>
           {SERVICES.map((item, index) => {

@@ -3,7 +3,9 @@ import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { FaArrowRight } from "react-icons/fa6";
+
 import styles from "@/styles/components/home/CarInsuranceSection.module.css";
+import { FaEllipsisH } from "react-icons/fa";
 
 const INSURANCELIST = [
   {
@@ -83,7 +85,11 @@ function CarInsuraceSection() {
         <div className={styles.heading}>
           Click to buy an <span className={styles.orange}>Insurance</span>
         </div>
+          
       </div>
+      <div className={styles.mobileEllipsis}>
+          <FaEllipsisH style={{ color: "#fa621a", fontSize:"25px" }} />
+        </div>
 
       <div className={styles.list}>
         {INSURANCELIST.map((item, index) => (

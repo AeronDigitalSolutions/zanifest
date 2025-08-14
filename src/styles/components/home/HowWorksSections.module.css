@@ -11,13 +11,16 @@
   justify-content: center;
   position: relative;
 }
-
+.mobileEllipsis {
+  display: none;
+ 
+}
 .head::after {
   /* content: ""; */
   position: absolute;
-  bottom: -7px; /* consistent 7px offset below text */
-  width: 90%; /* underline length */
-  height: 6px; /* double thickness */
+  bottom: -15px; /* consistent 7px offset below text */
+  width: 25%; /* underline length */
+  height: 5px; /* double thickness */
   background-color: #fa621a; /* underline color */
   border-radius: 3px;
 }
@@ -26,16 +29,18 @@
   font-size: 2.5rem;
   font-weight: bold;
   color: #000; 
-  margin-bottom: 2rem;
+  margin-bottom: 20px;
   position: relative;
+  align-self: center;
+
 }
 
 .heading::after {
   content: "";
   position: absolute;
-  bottom: -7px;
-  width: 90%;
-  height: 6px;
+  bottom: -15px;
+  width: 25%;
+  height: 5px;
   background-color: #fa621a;
   border-radius: 3px;
   left: 50%;
@@ -53,11 +58,11 @@
   width: 80%;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 2rem;
-  margin-top: 2rem;
+  margin-top: 25px;
 }
 
 .item {
-  padding: 20px;
+  /* padding: 20px; */
   display: grid;
   place-items: center;
   gap: 1rem;
@@ -78,6 +83,7 @@
   all: unset;
   text-align: center;
   font-size: 14px;
+  margin-bottom: 1px;
 }
 
 .servciesCont {
@@ -86,13 +92,26 @@
   display: grid;
   place-items: center;
   padding: 40px 0px;
+  justify-content: center;
+  text-align: center;
+  align-self: center;
 }
-
+/* 
 .services {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   width: 80%;
   gap: 5rem;
+} */
+
+.services {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  width: 100%; 
+  max-width: 1100px; 
+  margin: 0 auto; 
+  gap: 5rem;
+  margin-top: 25px;
 }
 
 .serviceItem {
@@ -140,9 +159,6 @@
 }
 
 
-.serviceItem:hover .serviceDesc {
-  transform: translateY(-10px);
-}
 
 @media screen and (max-width: 1200px) {
   .bottom {
@@ -183,8 +199,8 @@
     display: grid;
   width: 100%;
   place-items: center;
-  margin-top: 0px;
-  margin-bottom:10px;
+  margin-top: 40px;
+  /* margin-bottom:40px; */
   }
   .item{
     padding: 0px;
@@ -202,4 +218,36 @@
 
  
   
+}
+
+
+@media screen and (max-width: 700px) {
+  .head {
+    
+    text-align: center; /* center text */
+    margin-bottom: 0px;
+    position: relative;
+  }
+
+  .head::after {
+    display: none; 
+  }
+  .heading{
+    margin-bottom: 0%;
+
+  }
+  .heading::after{
+    display: none;
+  }
+
+  .mobileEllipsis {
+    display: block;              
+    text-align: center;           
+    font-size: 20px;             
+  }
+  
+  .head {
+    flex-direction: column;      
+    align-items: center;         
+  }
 }

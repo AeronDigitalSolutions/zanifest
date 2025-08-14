@@ -15,9 +15,9 @@
 .head::after {
   content: "";
   position: absolute;
-  bottom: 10px;
-  width: 90%;
-  height: 6px;
+  bottom: 5px;
+  width: 25%;
+  height: 5px;
   background-color: #fa621a;
   border-radius: 3px;
 }
@@ -34,17 +34,17 @@
 }
 
 .bottom {
-  display: grid;
-  width: 80%;
-  place-self: center;
-  /* grid-template-columns: 1fr 1fr 1fr; */
+  width: 100%;
+    
+    align-self:center;
+
 }
 
 .serviceItem {
-  position: relative; /* ✅ Needed for arrow buttons to align relative to card */
+  position: relative; 
   min-width: 300px;
   max-width: 300px;
-  margin: 20px 10px;
+  /* margin: 40px 10px; */
   flex-shrink: 0;
   background-color: white;
   padding: 20px;
@@ -159,6 +159,11 @@
 .claimButton:hover {
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
+.mobileEllipsis {
+  display: none;
+  row-gap: 2px;
+ 
+}
 
 @media screen and (max-width: 1200px) {
   .bottom {
@@ -213,19 +218,23 @@
   max-width: 1120px;
   overflow: hidden;
   margin: 0 auto;
-  padding: 0 10px;
+  padding: 0 20px;
 }
 
-.track {
+
+ .track {
   display: flex;
   transition: transform 0.5s ease-in-out;
-  gap: 20px;
+  gap: 20px; 
+  justify-content: flex-center;
 }
+
 
 .serviceItem {
   min-width: 300px;
   max-width: 300px;
   margin: 10px 10px;
+  margin-top: 40px;
   flex-shrink: 0;
   background-color: white;
   padding: 20px;
@@ -243,7 +252,6 @@
   place-items: center;
 }
 
-/* CSS for arrows */
 .nav {
   position: absolute;
   top: 50%;
@@ -280,7 +288,7 @@
 .serviceItem{
   min-width: 345px;
     max-width: 323px;
-    margin: 4px 20px;
+    margin: 20px;
     flex-shrink: 0;
     background-color: white;
     padding: 20px;
@@ -303,7 +311,7 @@
   .serviceItem {
     min-width: 293px;
     max-width: 300px;
-    margin: 4px 18px;
+    margin: 25px 18px;
     flex-shrink: 0;
     background-color: white;
     padding: 20px;
@@ -321,14 +329,34 @@
   .serviceItem {
     min-width: 293px;
     max-width: 300px;
-    margin: 4px 18px;
+    margin: 25px 18px;
     flex-shrink: 0;
     background-color: white;
-    padding: 20px;
+    padding: 14px;
     border-radius: 22px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     display: grid;
     place-items: center;
     gap: 1rem;
   }
+}
+
+ @media screen and (max-width: 700px) {
+  .head::after {
+    display: none;
+  }
+  .mobileEllipsis {
+    display: block;
+  }
+  .heading{
+    margin-bottom: 0%;
+    padding-bottom: 0%;
+  }
+  .head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 0px;
+  position: relative;
+}
 }

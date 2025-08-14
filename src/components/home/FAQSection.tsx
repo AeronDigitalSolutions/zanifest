@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaPlus } from "react-icons/fa";
+import { FaEllipsisH, FaPlus } from "react-icons/fa";
 import { TiMinus } from "react-icons/ti";
 
 import styles from "@/styles/components/home/FAQSection.module.css";
@@ -28,7 +28,9 @@ const QUESTIONS = [
 ];
 
 function FAQSection() {
-  const [ansIndex, setAnsIndex] = useState<number | null>(null);
+  // const [ansIndex, setAnsIndex] = useState<number | null>(null);
+    const [ansIndex, setAnsIndex] = useState(0);
+
 
   return (
     <div>
@@ -38,6 +40,10 @@ function FAQSection() {
   Frequently Asked <span className={styles.orange}>Questions</span>
 </div>
 
+
+        </div>
+         <div className={styles.mobileEllipsis}>
+          <FaEllipsisH style={{ color: "#fa621a", fontSize:"25px" }} />
         </div>
         <div className={styles.bottom}>
           <div className={styles.list}>

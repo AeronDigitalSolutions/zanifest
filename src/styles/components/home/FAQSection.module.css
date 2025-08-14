@@ -13,15 +13,16 @@
   gap: 0.7rem;
   justify-content: center;
   position: relative;
+  margin-bottom: 20px;
 }
 
 .head::after {
   content: "";
   position: absolute;
-  bottom: -7px; /* offset */
-  width: 90%; /* underline length */
-  height: 6px; /* double thickness */
-  background-color: #fa621a; /* underline color */
+  bottom: -15px; 
+  width: 25%; 
+  height: 5px; 
+  background-color: #fa621a; 
   border-radius: 3px;
 }
 .heading {
@@ -29,6 +30,7 @@
   padding: 0;
   font-size: 2.5rem;
   font-weight: bold;
+  
 }
 
 
@@ -37,9 +39,9 @@
 }
 
 .bottom {
-  display: grid;
+  /* display: grid; */
   width: 70%;
-  margin-top: 2rem;
+  margin-top:25px;
   place-items: center;
 }
 
@@ -65,7 +67,10 @@
   padding: 0px;
 
 }
-
+.mobileEllipsis {
+  display: none;
+ 
+}
 .ans {
   font-size: 16px;
   animation: open 0.5s forwards ease-in;
@@ -114,8 +119,8 @@
   .ans {
     font-size: 16px;
     text-align: justify;
-    max-height: auto; /* 🔶 Updated height for mobile view */
-    overflow-y: auto;  /* Optional: scroll if content exceeds */
+    max-height: auto;
+    overflow-y: auto;  
   }
 
   .ques {
@@ -139,19 +144,34 @@
 @media screen and (max-width: 480px) {
   .item {
     width: 110%;
-    /* width: calc(100% - 0px); 100% minus 20px on left and right */
+    
     margin: 0px -12px;
     box-sizing: border-box;
     padding: 0 20px;
-      -webkit-tap-highlight-color: transparent; /* 🔧 removes blue flash on tap */
+      -webkit-tap-highlight-color: transparent; 
 
-    /* inner padding if needed */
   }
 }
 
 
-  /* .bottom {
-    font-size: 14px;
-  } */
+ 
   
 
+@media screen and (max-width: 700px) {
+  .head::after {
+    display: none;
+  }
+  .mobileEllipsis {
+    display: block;
+  }
+  .heading{
+    margin-bottom: 0%;
+  }
+  .head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 0px;
+  position: relative;
+}
+}

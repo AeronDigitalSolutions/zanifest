@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
-
 import styles from "@/styles/components/home/DemoSection.module.css";
+import { FaEllipsisH } from "react-icons/fa";
 
 const DEMOLIST = [
   {
@@ -34,13 +34,17 @@ function DemoSection() {
   return (
     <div className={styles.cont}>
       <div className={styles.head}>
+        
         <div className={styles.heading}>
           Why is&nbsp;<span style={{ color: "#fa621a" }}>ZANIFEST</span>&nbsp;India's go-to for insurance?
         </div>
-
+ <div className={styles.mobileEllipsis}>
+          <FaEllipsisH style={{ color: "#fa621a", fontSize:"25px" }} />
+        </div>
         <div className={styles.subHeading}>
           Zanifest is your trusted partner in insurance — providing transparent comparisons, affordable policies, and dedicated support. We simplify your insurance journey with easy access to top insurers and seamless claim support.
         </div>
+        
       </div>
       <div className={styles.list}>
         {DEMOLIST.map((item, index) => {
