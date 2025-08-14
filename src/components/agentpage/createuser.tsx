@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import styles from "@/styles/components/superadminsidebar/changepassword.module.css"; 
 
 const CreateUser = () => {
-  const [fullName, setFullName] = useState("");
+  const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
 
   const capitalizeEachWord = (value: string) => {
@@ -15,19 +15,19 @@ const CreateUser = () => {
 
   const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = capitalizeEachWord(e.target.value);
-    setFullName(formatted);
+    setUserName(formatted);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      const res = await fetch("/api/admin/create-user", {
+      const res = await fetch("/api/users/create-user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ fullName, email }),
+        body: JSON.stringify({ userName, email }),
       });
 
       const data = await res.json();
@@ -35,7 +35,7 @@ const CreateUser = () => {
       if (!res.ok) throw new Error(data.message || "Failed to create user");
 
       alert("User created successfully");
-      setFullName("");
+      setUserName("");
       setEmail("");
     } catch (err: any) {
       alert(err.message || "Something went wrong");
@@ -53,8 +53,8 @@ const CreateUser = () => {
             </label>
             <input
               type="text"
-              id="fullname"
-              value={fullName}
+              id="userName"
+              value={userName}
               onChange={handleFullNameChange}
               className={styles.input}
               required
