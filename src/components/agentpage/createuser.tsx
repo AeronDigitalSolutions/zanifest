@@ -34,7 +34,7 @@ const CreateUser = () => {
 
       if (!res.ok) throw new Error(data.message || "Failed to create user");
 
-      alert("User created successfully");
+      alert("Email send to the user for password creation");
       setUserName("");
       setEmail("");
     } catch (err: any) {
