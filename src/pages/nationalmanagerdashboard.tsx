@@ -11,6 +11,7 @@ import NationalManagerSidebar from "@/components/nationalmanagerdashboard/nation
 import DashboardContent from "@/components/nationalmanagerdashboard/dashboardcontent";
 import ResetPassword from "@/components/districtmanagerdashboard/resetpassword";
 import ListOfStateManager from "@/components/nationalmanagerdashboard/listofstatemanager";
+import CreateManager from "@/components/superadminsidebar/createmanager";
 // Dummy Data
 const agents = [
   {
@@ -70,6 +71,8 @@ const NationalManagerDashboard = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [stateManagers, setStateManagers] = useState([]);
   const [showAgentList, setShowAgentList] = useState(false);
+    const [loading, setLoading] = useState(false);
+  const [manager, setManager] = useState<any>(null);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [filteredData, setFilteredData] = useState(monthlySalesData);
@@ -99,7 +102,19 @@ const NationalManagerDashboard = () => {
     };
     fetchStateManagers();
   }, []);
+  // profile edit 
+  useEffect(() => {
+    if (activeSection === "profileEdit") {
+      setLoading(true);
+      axios
+        .get("/api/managers/me") 
+        .then((res) => setManager(res.data))
+        .catch((err) => console.error("Error fetching manager:", err))
+        .finally(() => setLoading(false));
+    }
+  }, [activeSection]);
 
+  
   const handleLogout = async () => {
     try {
       await axios.post("/api/manager/logout");
@@ -138,8 +153,7 @@ const NationalManagerDashboard = () => {
           setActiveSection={setActiveSection}
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
-          handleLogout={handleLogout}
-        />
+          handleLogout={handleLogout} activeSection={""}        />
 
         <main className={styles.content}>
           {activeSection === "dashboard" && (
@@ -164,6 +178,14 @@ const NationalManagerDashboard = () => {
 
           {activeSection === "resetpassword" && <ResetPassword />}
           {activeSection === "listofstatemanager" && <ListOfStateManager />}
+           {activeSection === "profileEdit" && (
+            <CreateManager
+           
+               mode="edit"
+                initialData={manager} 
+            />
+          )}
+
         </main>
       </div>
     </div>

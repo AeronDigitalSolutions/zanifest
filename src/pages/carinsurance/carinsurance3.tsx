@@ -54,7 +54,7 @@ const CarInsurance3 = () => {
           className={`${styles.sidebarWrapper} ${
             isMobile ? (sidebarOpen ? styles.sidebarOpen : styles.sidebarClosed) : ""
           }`}
-        >
+           >
           {/* Close button inside sidebar */}
           {isMobile && (
             <div className={styles.closeSidebar}>

@@ -21,7 +21,7 @@ const INSURANCELIST = [
   {
     name: "Travel Insurance",
     image: require("@/assets/airplane.png"),
-    link: "#",
+    link: "./marineinsurance/marineinsurance8",
   },
   {
     name: "Car Insurance",
@@ -46,7 +46,7 @@ const INSURANCELIST = [
   {
     name: "Commercial Vehicle",
     image: require("@/assets/3d-truck.png"),
-    link: "#",
+    link: "./CommercialVehicle/CommercialVehicle1",
   },
   {
     name: "Home Insurance",

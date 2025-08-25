@@ -9,6 +9,10 @@ interface ButtonProps {
   accept?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
+interface CreateAgentProps {
+  mode?: "create" | "edit";
+  initialData?: any;
+}
 
 const Button: React.FC<ButtonProps> = ({ label, name, accept, onChange }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -133,7 +137,7 @@ const Button: React.FC<ButtonProps> = ({ label, name, accept, onChange }) => {
   );
 };
 
-const CreateAgent: React.FC = () => {
+const CreateAgent: React.FC<CreateAgentProps> = ({ mode = "create", initialData }) => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -365,12 +369,24 @@ const handleSubmit = async (e: React.FormEvent) => {
     alert('Error creating agent.');
   }
 };
+//edit form 
+  useEffect(() => {
+    if (mode === "edit" && initialData) {
+      setFormData((prev) => ({
+        ...prev,
+        ...initialData, 
+      }));
+    }
+  }, [mode, initialData]);
 
+  
   return (
     <div className={styles.container}>
-      <h2 className={styles.heading}>Create Agent</h2>
+      <h2 className={styles.heading}>
+                {initialData ? "Edit Agent Profile" : "Create Agent"}
+
+      </h2>
       <form className={styles.form} onSubmit={handleSubmit}>
-        {/* Row 1 */}
         <div className={styles.row}>
           <div className={styles.formGroup}>
             <label>Agent Code</label>

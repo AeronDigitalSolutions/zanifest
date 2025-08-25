@@ -8,13 +8,15 @@ import AgentSidebar from "@/components/agentpage/agentsidebar";
 import AgentContent from "@/components/agentpage/agentcontent";
 import ResetPassword from "@/components/districtmanagerdashboard/resetpassword";
 import CreateUser from "@/components/agentpage/createuser";
-
+import CreateAgent from "@/components/superadminsidebar/createagent";
 
 const AgentDashboard = () => {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("dashboard");
   const [agentName, setAgentName] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+  const [agent, setagent] = useState<any>(null);
 
   useEffect(() => {
     // Safe access to localStorage on client side
@@ -24,6 +26,18 @@ const AgentDashboard = () => {
       setAgentName(storedName);
     }
   }, []);
+
+  // profile edit
+  useEffect(() => {
+    if (activeSection === "profileEdit") {
+      setLoading(true);
+      axios
+        .get("/api/agents/me")
+        .then((res) => setagent(res.data))
+        .catch((err) => console.error("Error fetching agent:", err))
+        .finally(() => setLoading(false));
+    }
+  }, [activeSection]);
 
   const handleLogout = async () => {
     try {
@@ -51,12 +65,14 @@ const AgentDashboard = () => {
         />
         <main className={styles.content}>
           {activeSection === "dashboard" && (
-        <AgentContent agentName={agentName} />
+            <AgentContent agentName={agentName} />
           )}
 
           {activeSection === "resetpassword" && <ResetPassword />}
-          {activeSection === "createuser" && <CreateUser/>}
-
+          {activeSection === "createuser" && <CreateUser />}
+          {activeSection === "profileEdit" && (
+            <CreateAgent mode="edit" initialData={agent} />
+          )}
         </main>
       </div>
     </div>
