@@ -224,7 +224,6 @@ const Carousel: React.FC<CarouselProps> = ({ images }) => {
             alt={`Slide ${current}`}
             className={styles.image}
             priority
-            fill
             sizes="100vw"
             style={{ objectFit: "cover" }}
           />

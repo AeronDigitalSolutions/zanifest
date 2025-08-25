@@ -91,6 +91,15 @@ const AgentSidebar: React.FC<AgentSidebarProps> = ({
           </ul>
         </div>
       </div>
+     <div className={styles.editprofile}>
+  <button
+    className={styles.editButton}
+    onClick={() => handleClick("profileEdit")} 
+  >
+    Your profile Edit
+  </button>
+</div>
+
 
       {/* Mobile Only Logout */}
       <div className={styles.mobileOnlyLogout}>

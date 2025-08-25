@@ -1,31 +1,48 @@
+import React, { useState, useEffect } from "react";
+import styles from "@/styles/components/superadminsidebar/createadmin.module.css";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
-import React, { useState } from 'react';
-import styles from '@/styles/components/superadminsidebar/createadmin.module.css';
-import { FiEye, FiEyeOff } from 'react-icons/fi';
+interface CreateAdminProps {
+  initialData?: {
+    userFirstName: string;
+    userLastName: string;
+    email: string;
+    password?: string;
+  };
+}
 
-const CreateAdmin = () => {
+// const CreateAdmin = () => {
+const CreateAdmin: React.FC<CreateAdminProps> = ({ initialData }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
 
-  const [userFirstName, setUserFirstName] = useState('');
-  const [userLastName, setUserLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [userFirstName, setUserFirstName] = useState("");
+  const [userLastName, setUserLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  // edit form
+  useEffect(() => {
+    if (initialData) {
+      setUserFirstName(initialData.userFirstName || "");
+      setUserLastName(initialData.userLastName || "");
+      setEmail(initialData.email || "");
+      setPassword(initialData.password || "");
+    }
+  }, [initialData]);
 
   const capitalizeFirstLetter = (value: string) => {
     return value.charAt(0).toUpperCase() + value.slice(1);
   };
 
   const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const capitalized =e.target.value;
-  setUserFirstName(capitalized);
-};
+    const capitalized = e.target.value;
+    setUserFirstName(capitalized);
+  };
 
-const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const capitalized = e.target.value;
-  setUserLastName(capitalized);
-};
-
+  const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const capitalized = e.target.value;
+    setUserLastName(capitalized);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,14 +52,14 @@ const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       userLastName,
       email,
       password,
-      role: isSuperAdmin ? 'superadmin' : 'admin',
+      role: isSuperAdmin ? "superadmin" : "admin",
     };
 
     try {
-      const res = await fetch('/api/createadmin', {
-        method: 'POST',
+      const res = await fetch("/api/createadmin", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
@@ -50,25 +67,27 @@ const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const result = await res.json();
 
       if (res.ok) {
-        alert('Admin created successfully!');
-        setUserFirstName('');
-        setUserLastName('');
-        setEmail('');
-        setPassword('');
+        alert("Admin created successfully!");
+        setUserFirstName("");
+        setUserLastName("");
+        setEmail("");
+        setPassword("");
         setIsSuperAdmin(false);
         setShowPassword(false);
       } else {
-        alert(result.message || 'Failed to create admin.');
+        alert(result.message || "Failed to create admin.");
       }
     } catch (error) {
-      console.error('Error creating admin:', error);
-      alert('Server error!');
+      console.error("Error creating admin:", error);
+      alert("Server error!");
     }
   };
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.heading}>Create Admin</h2>
+      <h2 className={styles.heading}>
+        {initialData ? "Edit Admin Profile" : "Create Admin"}
+      </h2>
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.row}>
           <div className={styles.formGroup}>
@@ -112,25 +131,29 @@ const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             />
           </div>
 
-       <div className={styles.formGroup} style={{ position: 'relative' }}>
-  <label htmlFor="password">Password</label>
-  <input
-    type={showPassword ? 'text' : 'password'}
-    id="password"
-    className={styles.input}
-    placeholder="Enter password"
-    value={password}
-    onChange={(e) => setPassword(e.target.value)}
-  />
-  <span
-    className={styles.eyeIcon}
-    style={{ position: 'absolute', right: 10, top: 38, cursor: 'pointer' }}
-    onClick={() => setShowPassword(!showPassword)}
-  >
-    {showPassword ? <FiEyeOff /> : <FiEye />}
-  </span>
-</div>
-
+          <div className={styles.formGroup} style={{ position: "relative" }}>
+            <label htmlFor="password">Password</label>
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password"
+              className={styles.input}
+              placeholder="Enter password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <span
+              className={styles.eyeIcon}
+              style={{
+                position: "absolute",
+                right: 10,
+                top: 38,
+                cursor: "pointer",
+              }}
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FiEyeOff /> : <FiEye />}
+            </span>
+          </div>
         </div>
 
         <div className={styles.checkboxGroup}>
@@ -145,7 +168,7 @@ const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         </div>
 
         <button type="submit" className={styles.submitButton}>
-          Create
+          {initialData ? "Update" : "Create"}
         </button>
       </form>
     </div>

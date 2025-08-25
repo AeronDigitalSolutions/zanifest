@@ -23,7 +23,7 @@ import {
   FiMenu,
   FiX,
 } from "react-icons/fi";
-import {  useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
@@ -34,9 +34,9 @@ const AdminDashboard = () => {
   const [districtManagerCount, setDistrictManagerCount] = useState(0);
 
   const router = useRouter();
-  const { admin , loading} = useAdmin();
-  console.log("user first name",admin?.userFirstName);
-  
+  const { admin, loading } = useAdmin();
+  console.log("user first name", admin?.userFirstName);
+
   const handleLogout = async () => {
     try {
       await axios.post("/api/admin/logout");
@@ -72,8 +72,14 @@ const AdminDashboard = () => {
     const fetchManagerCounts = async () => {
       const res = await fetch("/api/getmanager");
       const managers = await res.json();
-      setStateManagerCount(managers.filter((m: { category: string }) => m.category === "state").length);
-      setDistrictManagerCount(managers.filter((m: { category: string }) => m.category === "district").length);
+      setStateManagerCount(
+        managers.filter((m: { category: string }) => m.category === "state")
+          .length
+      );
+      setDistrictManagerCount(
+        managers.filter((m: { category: string }) => m.category === "district")
+          .length
+      );
     };
     fetchManagerCounts();
   }, []);
@@ -84,7 +90,13 @@ const AdminDashboard = () => {
       <header className={styles.header}>
         <h1>Welcome, {admin?.userFirstName ?? "SuperAdmin"}</h1>
         <div className={styles.logoContainer}>
-          <Image src={logo} alt="Logo" width={130} height={40} className={styles.logo} />
+          <Image
+            src={logo}
+            alt="Logo"
+            width={130}
+            height={40}
+            className={styles.logo}
+          />
         </div>
         <button
           className={styles.menuToggle}
@@ -103,7 +115,9 @@ const AdminDashboard = () => {
       <div className={styles.mainArea}>
         {/* Sidebar */}
         <aside
-          className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarMobile : ""}`}
+          className={`${styles.sidebar} ${
+            sidebarOpen ? styles.sidebarMobile : ""
+          }`}
         >
           <p className={styles.sectionTitle}>Menu</p>
           <ul className={styles.menu}>
@@ -112,7 +126,9 @@ const AdminDashboard = () => {
                 setActiveSection("dashboard");
                 setSidebarOpen(false);
               }}
-              className={styles.menuItem}
+              className={`${styles.menuItem} ${
+                activeSection === "dashboard" ? styles.activeMenu : ""
+              }`}
             >
               <span className={styles.iconLabel}>
                 <FiUsers className={styles.icon} />
@@ -127,7 +143,9 @@ const AdminDashboard = () => {
                 setActiveSection("createAdmin");
                 setSidebarOpen(false);
               }}
-              className={styles.menuItem}
+              className={`${styles.menuItem} ${
+                activeSection === "createAdmin" ? styles.activeMenu : ""
+              }`}
             >
               <span className={styles.iconLabel}>
                 <FiUserPlus className={styles.icon} />
@@ -139,7 +157,9 @@ const AdminDashboard = () => {
                 setActiveSection("createManager");
                 setSidebarOpen(false);
               }}
-              className={styles.menuItem}
+              className={`${styles.menuItem} ${
+                activeSection === "createManager" ? styles.activeMenu : ""
+              }`}
             >
               <span className={styles.iconLabel}>
                 <FiUserPlus className={styles.icon} />
@@ -151,7 +171,9 @@ const AdminDashboard = () => {
                 setActiveSection("createAgent");
                 setSidebarOpen(false);
               }}
-              className={styles.menuItem}
+              className={`${styles.menuItem} ${
+                activeSection === "createAgent" ? styles.activeMenu : ""
+              }`}
             >
               <span className={styles.iconLabel}>
                 <FiUserPlus className={styles.icon} />
@@ -162,57 +184,74 @@ const AdminDashboard = () => {
             <p className={styles.sectionTitle}>List</p>
 
             <li
-              className={styles.menuItem}
+              // className={styles.menuItem}
+              className={`${styles.menuItem} ${
+                activeSection === "adminlist" ? styles.activeMenu : ""
+              }`}
               onClick={() => {
                 setActiveSection("adminlist");
                 setSidebarOpen(false);
-              }}>
+              }}
+            >
               <span className={styles.iconLabel}>
                 <FiList className={styles.icon} />
                 <span className={styles.label}>Admin List</span>
               </span>
             </li>
             <li
-              className={styles.menuItem}
+              className={`${styles.menuItem} ${
+                activeSection === "managerlist" ? styles.activeMenu : ""
+              }`}
               onClick={() => {
                 setActiveSection("managerlist");
                 setSidebarOpen(false);
-              }}>
+              }}
+            >
               <span className={styles.iconLabel}>
                 <FiList className={styles.icon} />
                 <span className={styles.label}>Manager List</span>
               </span>
             </li>
             <li
-              className={styles.menuItem}
+              className={`${styles.menuItem} ${
+                activeSection === "agentlist" ? styles.activeMenu : ""
+              }`}
               onClick={() => {
                 setActiveSection("agentlist");
                 setSidebarOpen(false);
-              }}>
+              }}
+            >
               <span className={styles.iconLabel}>
                 <FiList className={styles.icon} />
                 <span className={styles.label}>Agent List</span>
               </span>
             </li>
-             <li
-              className={styles.menuItem}
+            <li
+              // className={styles.menuItem}
+              className={`${styles.menuItem} ${
+                activeSection === "userList" ? styles.activeMenu : ""
+              }`}
               onClick={() => {
                 setActiveSection("userList");
                 setSidebarOpen(false);
-              }}>
+              }}
+            >
               <span className={styles.iconLabel}>
                 <FiList className={styles.icon} />
                 <span className={styles.label}>User List</span>
               </span>
             </li>
 
-             <p className={styles.sectionTitle}>Security</p> 
-             <li
+            <p className={styles.sectionTitle}>Security</p>
+            <li
               onClick={() => {
                 setActiveSection("resetpassword");
                 setSidebarOpen(false);
               }}
-              className={styles.menuItem}
+              // className={styles.menuItem}
+              className={`${styles.menuItem} ${
+                activeSection === "resetpassword" ? styles.activeMenu : ""
+              }`}
             >
               <span className={styles.iconLabel}>
                 <FiLock className={styles.icon} />
@@ -225,14 +264,34 @@ const AdminDashboard = () => {
                 setActiveSection("changepassword");
                 setSidebarOpen(false);
               }}
-              className={styles.menuItem}
+              // className={styles.menuItem}
+              className={`${styles.menuItem} ${
+                activeSection === "changepassword" ? styles.activeMenu : ""
+              }`}
             >
               <span className={styles.iconLabel}>
                 <FiLock className={styles.icon} />
                 <span className={styles.label}>Change Password</span>
               </span>
-            </li> 
+            </li>
+            <p className={styles.sectionTitle}>Profile</p>
+            <li
+              onClick={() => {
+                setActiveSection("profileEdit");
+                // setSidebarOpen(false);
+              }}
+              // className={styles.menuItem}
+              className={`${styles.menuItem} ${
+                activeSection === "profileEdit" ? styles.activeMenu : ""
+              }`}
+            >
+              <span className={styles.iconLabel}>
+                <FiLock className={styles.icon} />
+                <span className={styles.label}>Your Profile Edit</span>
+              </span>
+            </li>
           </ul>
+
           <div className={styles.mobileOnlyLogout}>
             <button className={styles.logoutButton} onClick={handleLogout}>
               Logout
@@ -276,6 +335,16 @@ const AdminDashboard = () => {
           {activeSection === "managerlist" && <ManagerList />}
           {activeSection === "agentlist" && <AgentList />}
           {activeSection === "userList" && <UserList />}
+          {activeSection === "profileEdit" && (
+            <CreateAdmin
+              initialData={{
+                userFirstName: admin?.userFirstName ?? "",
+                userLastName: admin?.userLastName ?? "",
+                email: admin?.email ?? "",
+                password: "", // security reason se blank rakha
+              }}
+            />
+          )}
         </main>
       </div>
     </div>
@@ -283,4 +352,3 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
-
