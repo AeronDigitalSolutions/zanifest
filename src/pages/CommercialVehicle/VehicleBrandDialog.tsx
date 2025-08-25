@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import styles from "@/styles/pages/commercialvehicle/VehicleBrandDialog.module.css";
+import styles from "@/styles/pages/CommercialVehicle/VehicleBrandDialog.module.css";
 import { FiArrowLeft, FiSearch, FiEdit2, FiMapPin } from "react-icons/fi";
 import { FaTruck } from "react-icons/fa";
 
