@@ -1,0 +1,361 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 40px 60px;
+  background: #f9fbff;
+  gap: 40px;
+  font-family: Arial, sans-serif;
+}
+
+/* LEFT SECTION */
+.leftSection {
+  flex: 1;
+  max-width: 45%;
+}
+
+.heading {
+  font-size: 24px;
+  font-weight: bold;
+  color: #1a1a1a;
+}
+
+.heading span {
+  color: #ff6600;
+}
+
+.subtext {
+  color: #666;
+  margin: 10px 0 20px 0;
+}
+
+.whyChoose {
+  margin: 20px 0 10px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.benefits li {
+  margin: 8px 0;
+  font-size: 15px;
+}
+
+.iconGreen { color: green; margin-right: 6px; }
+.iconOrange { color: orange; margin-right: 6px; }
+.iconYellow { color: goldenrod; margin-right: 6px; }
+.iconBlue { color: royalblue; margin-right: 6px; }
+
+/* RIGHT SECTION */
+.rightSection {
+  flex: 1;
+  max-width: 50%;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.formHeading {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.popularChoices {
+  margin-bottom: 20px;
+}
+
+.popularText {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #555;
+}
+
+.choicesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.choice {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 14px;
+  cursor: pointer;
+  background: #f9fbff;
+  transition: 0.2s;
+}
+.choice:hover {
+  background: #eaf3ff;
+}
+
+.dateTravellerRow {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.inputBox {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+.travellerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.travellerBox {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  flex: 1;
+  margin-right: 10px;
+}
+
+.addTraveller {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f3f7ff;
+  border: 1px solid #0077ff;
+  color: #0077ff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.exploreBtn {
+  width: 100%;
+  background: #ff6600;
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.exploreBtn:hover {
+  background: #e65c00;
+}
+
+/* MODAL STYLES */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  justify-content: flex-end;
+  z-index: 1000;
+}
+
+.modalContent {
+  width: 400px;
+  height: 100%;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px 0 0 12px;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.modalBody {
+  flex: 1;
+  overflow-y: auto;
+  margin-top: 15px;
+}
+
+.dateInputs {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.dateInputs input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.calendarBox {
+  background: #f9fbff;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  margin: 20px 0;
+  color: #777;
+}
+
+.tripDuration {
+  font-size: 14px;
+  color: #333;
+}
+
+.continueBtn {
+  background: #ff6600;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+/* Existing styles from previous answer stay same */
+
+/* Modal Common */
+.modalOverlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  justify-content: flex-end;
+  z-index: 1000;
+}
+
+.modalContent {
+  width: 420px;
+  height: 100%;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px 0 0 12px;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.modalBody {
+  flex: 1;
+  overflow-y: auto;
+  margin-top: 15px;
+}
+
+.continueBtn {
+  background: #ff6600;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+/* STEP 2 Styles */
+.signInText {
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.signInBtn {
+  background: none;
+  border: none;
+  color: #0077ff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.travellerCount {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.travellerCount button {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background: #f9fbff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.travellerCount button:hover {
+  background: #eaf3ff;
+}
+
+.ageSelect {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.medicalSection {
+  font-size: 14px;
+  color: #333;
+}
+
+.radioGroup {
+  display: flex;
+  gap: 20px;
+  margin-top: 10px;
+}
+.radioGroup label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
