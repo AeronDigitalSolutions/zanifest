@@ -6,9 +6,8 @@ import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import Image from "next/image";
 import zurich from "@/assets/pageImages/zurich kotak.png";
-import { FaWhatsapp } from "react-icons/fa"
+import { FaWhatsapp } from "react-icons/fa";
 import { FaRupeeSign } from "react-icons/fa";
-
 
 const Thirdparty3 = () => {
   const [owner, setOwner] = useState("individual");
@@ -100,19 +99,18 @@ const Thirdparty3 = () => {
                 <label className={styles.addonLeft}>
                   <input type="checkbox" defaultChecked />
                   <span>
-                    <b>Mandatory</b> Personal Accident cover (₹15 lakhs) by Digit{" "}
-                    <a href="#">know more</a>
+                    <b>Mandatory</b> Personal Accident cover (₹15 lakhs) by
+                    Digit <a href="#">know more</a>
                   </span>
                 </label>
                 <span className={styles.price}>+ ₹378</span>
               </div>
 
               <div className={styles.totalPay}>
-              
-<div className={styles.payText}>
-  <FaRupeeSign className={styles.dot} />
-  <p>You'll Pay</p>
-</div>
+                <div className={styles.payText}>
+                  <FaRupeeSign className={styles.dot} />
+                  <p>You'll Pay</p>
+                </div>
                 <h2>₹4,031</h2>
               </div>
 
@@ -120,25 +118,24 @@ const Thirdparty3 = () => {
 
               <label className={styles.whatsapp}>
                 <input type="checkbox" /> Get updates on Whatsapp{" "}
-      <FaWhatsapp className={styles.whatsappIcon} />
+                <FaWhatsapp className={styles.whatsappIcon} />
               </label>
 
               <p className={styles.terms}>
-                 <input type="checkbox" /> I agree to the <a href="#">terms & conditions</a> and confirm:
-                my car is not a commercial vehicle and my car has a valid PUC
-                certificate.
+                <input type="checkbox" /> I agree to the{" "}
+                <a href="#">terms & conditions</a> and confirm: my car is not a
+                commercial vehicle and my car has a valid PUC certificate.
               </p>
             </div>
 
             {/* Next Step */}
-           <div className={styles.nextStep}>
-  <h4>Next step</h4>
-  <p>
-    After payment, we’ll ask you to fill a few details and complete your KYC to{" "}
-    <b>deliver your policy instantly</b> to your inbox.
-  </p>
-</div>
-
+            <div className={styles.nextStep}>
+              <h4>Next step</h4>
+              <p>
+                After payment, we’ll ask you to fill a few details and complete
+                your KYC to <b>deliver your policy instantly</b> to your inbox.
+              </p>
+            </div>
           </div>
         </div>
       </div>
