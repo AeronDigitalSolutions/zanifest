@@ -133,10 +133,11 @@
 
 /* Section headings */
 .sectionTitle {
+  margin-bottom: 0;
   font-size: 18px;
   font-weight: 800;
   color: #0d1b3e;
-  margin: 4px 0 2px;
+  margin: 4px 0 -12px;
 }
 .priceTag {
   color: #ff5a1f;
@@ -168,7 +169,7 @@
   align-items: center;
 }
 .img { width: 88px; height: auto; object-fit: contain; }
-.planText p { margin: 0; }
+.planText p { margin: 0; margin-left: 14px; }
 .planType {
   font-size: 14px;
   font-weight: 800;
@@ -202,7 +203,6 @@
   font-weight: 900;
   padding: 8px 14px;
   border-radius: 12px;
-  box-shadow: 0 12px 22px rgba(255, 90, 31, 0.26);
   position: relative;
 }
 .planPrice::after {

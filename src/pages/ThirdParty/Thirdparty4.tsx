@@ -4,6 +4,10 @@ import styles from "@/styles/pages/Thirdparty/thirdparty4.module.css";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import Image from "next/image";
+import { BiSolidBank } from "react-icons/bi";
+import { FaCreditCard, FaMoneyBillWave, FaWallet } from "react-icons/fa";
+import { MdCreditCard, MdPayment } from "react-icons/md";
+import { BsCreditCard2BackFill } from "react-icons/bs";
 
 // Bank Logos
 import hdfc from "@/assets/pageImages/hdfc.png";
@@ -16,6 +20,7 @@ import baroda from "@/assets/pageImages/baroda.png";
 // Company Logo
 import zurich from "@/assets/pageImages/zurich kotak.png";
 import { FaCheck } from "react-icons/fa";
+import { GiTakeMyMoney } from "react-icons/gi";
 
 const ThirdParty4 = () => {
   return (
@@ -24,22 +29,23 @@ const ThirdParty4 = () => {
 
       <div className={styles.wrapper}>
         <div className={styles.progressBarWrapper}>
-      <div className={styles.progressBar}>
-        {/* Step 1 - Active */}
-        <div className={`${styles.step} ${styles.active}`}>
-          <div className={styles.circle}>
-            <FaCheck size={10} color="#fff" />
-          </div>
-          <span>Payment Mode</span>
-        </div>
+          <div className={styles.progressBar}>
+            {/* Step 1 - Active */}
+            <div className={`${styles.step} ${styles.active}`}>
+              <div className={styles.circle}>
+                <FaCheck size={10} color="#fff" />
+              </div>
+              <span>Payment Mode</span>
+            </div>
 
-        {/* Step 2 - Inactive */}
-        <div className={styles.step}>
-          <div className={styles.circle}></div>
-          <span>Payment Complete</span>
+            {/* Step 2 - Inactive */}
+            <div className={styles.step}>
+              <div className={styles.circle}></div>
+              <span>Payment Complete</span>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+{/* mobile */}
 
         <div className={styles.container}>
           {/* LEFT SIDE */}
@@ -47,13 +53,31 @@ const ThirdParty4 = () => {
             {/* Sidebar */}
             <div className={styles.sidebar}>
               <div className={`${styles.option} ${styles.active}`}>
-                NetBanking
+                <div className={styles.paymentOption}>
+                  <BiSolidBank className={styles.paymentIcon} />
+                  <span>NetBanking</span>
+                </div>
               </div>
-              <div className={styles.option}>UPI</div>
-              <div className={styles.option}>Credit Card</div>
-              <div className={styles.option}>Debit Card</div>
-              <div className={styles.option}>Wallet</div>
-              <div className={styles.option}>EMI</div>
+              <div className={styles.option}>
+                <FaMoneyBillWave className={styles.icon} />
+                <span>UPI</span>
+              </div>{" "}
+              <div className={styles.option}>
+                <BsCreditCard2BackFill className={styles.icon} />
+                <span>Credit Card</span>
+              </div>
+              <div className={styles.option}>
+                <MdCreditCard className={styles.icon} />
+                <span>Debit Card</span>
+              </div>{" "}
+              <div className={styles.option}>
+                <FaWallet className={styles.icon} />
+                <span>Wallet</span>
+              </div>
+              <div className={styles.option}>
+                <GiTakeMyMoney className={styles.icon} />
+                <span>EMI</span>
+              </div>{" "}
             </div>
 
             {/* Main Content */}
@@ -67,7 +91,7 @@ const ThirdParty4 = () => {
 
               <div className={styles.bankGrid}>
                 <button className={styles.bankBtn}>
-                  <Image  className={styles.img} src={hdfc} alt="HDFC" />
+                  <Image className={styles.img} src={hdfc} alt="HDFC" />
                   <span>HDFC</span>
                 </button>
                 <button className={styles.bankBtn}>
@@ -79,22 +103,22 @@ const ThirdParty4 = () => {
                   <span>SBI</span>
                 </button>
                 <button className={styles.bankBtn}>
-                  <Image className={styles.img} src={kotak} alt="Kotak"  />
+                  <Image className={styles.img} src={kotak} alt="Kotak" />
                   <span>Kotak Mahindra</span>
                 </button>
                 <button className={styles.bankBtn}>
-                  <Image className={styles.img}
+                  <Image
+                    className={styles.img}
                     src={punjab}
                     alt="Punjab National Bank"
-                   
                   />
                   <span>Punjab National Bank</span>
                 </button>
                 <button className={styles.bankBtn}>
-                  <Image className={styles.img}
+                  <Image
+                    className={styles.img}
                     src={baroda}
                     alt="Bank of Baroda"
-                  
                   />
                   <span>Bank of Baroda</span>
                 </button>
@@ -114,12 +138,16 @@ const ThirdParty4 = () => {
           {/* RIGHT SIDE */}
           <div className={styles.right}>
             <div className={styles.orderBox}>
-              <div className={styles.row}>
+              <div className={`${styles.row} ${styles.orderNumberRow}`}>
                 <span className={styles.orderLabel}>Order Number</span>
                 <span className={styles.orderValue}>PB135154111</span>
               </div>
               <div className={styles.row}>
-                <Image className={styles.img} src={zurich} alt="Zurich Kotak"  />
+                <Image
+                  className={styles.orderimg}
+                  src={zurich}
+                  alt="Zurich Kotak"
+                />
                 <span className={styles.price}>₹ 4,031.00</span>
               </div>
               <div className={styles.row}>

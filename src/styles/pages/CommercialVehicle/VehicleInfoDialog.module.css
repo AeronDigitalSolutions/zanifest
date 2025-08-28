@@ -12,7 +12,22 @@
   padding: 20px;        
   overflow-y: auto;      
 }
+.viewBtn {
+  background: #ff5722;
+  color: #fff;
+  border: none;
+  padding: 16px;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: background 0.3s;
+}
 
+.viewBtn:hover {
+  background: #e64a19;
+}
 
 .dialog {
   display: flex;

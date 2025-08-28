@@ -420,4 +420,13 @@ font-weight: 800;
   .sectionTitle{
 font-size: 15px;
   }
+  .payBtn{
+    align-items: center;
+    font-size: 12px;
+    align-self: center;
+  }
+  
+  .totalPay h2{
+    font-size: 18px;
+  }
 }

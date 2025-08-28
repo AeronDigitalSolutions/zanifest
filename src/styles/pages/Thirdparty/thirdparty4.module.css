@@ -1,12 +1,39 @@
+/* Wrapper fix */
 .wrapper {
   font-family: "Segoe UI", Arial, sans-serif;
   background: #f9fbff;
-  padding: 20px 40px;   
   min-height: 100vh;
   box-sizing: border-box;
+  width: 100%;              /* full width */
+  max-width: 100%;          /* no cutoff */
+  margin: 0 auto;           /* center content */
+  padding: 20px;            /* equal padding */
+  overflow-x: hidden;       /* avoid horizontal scroll */
 }
 
-/* Progress wrapper */
+/* Progress bar wrapper fix */
+.progressBarWrapper {
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  margin: 0 auto 20px auto; /* center horizontally */
+  width: 100%;
+  max-width: 650px;         /* safe max size */
+  overflow-x: auto;
+}
+
+/* Container fix */
+.container {
+  width: 100%;
+  max-width: 1200px;        /* center page content */
+  margin: 0 auto;
+  padding: 0 10px;          /* safe space on both sides */
+  box-sizing: border-box;
+}
 .progressBarWrapper {
   background: #fff;
   border-radius: 10px;
@@ -62,9 +89,9 @@
   display: flex;
   flex-direction: column;
   width: 170px;
-  background: #fff;
+  background: #ececec;
   border: 1px solid #eee;
-  border-radius: 8px;
+  border-radius: 8px 0px 0px 8px;
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -167,13 +194,13 @@
 /* LEFT SIDE */
 .left {
   display: flex;
-  gap: 18px;
+  /* gap: 18px; */
 }
 
 .option {
   padding: 14px 16px;
   font-size: 14px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #c3c0c0;
   cursor: pointer;
   color: #333;
   transition: background 0.2s, color 0.2s;
@@ -185,13 +212,14 @@
   background: #f0f5ff;
   color: #0066ff;
   font-weight: 600;
+  border-right: 3px solid #0066ff ;
 }
 
 .mainBox {
   flex: 1;
   background: #fff;
   border: 1px solid #eee;
-  border-radius: 8px;
+  border-radius: 0px 8px 8px 0px;
   padding: 20px;
 }
 .notice {
@@ -259,10 +287,50 @@
   gap: 15px;
 }
 .orderBox {
-  background: #fdf5ff;
+  /* background: #fdf5ff; */
   border-radius: 8px;
   padding: 15px;
   border: 1px solid #eee;
+
+}
+.paymentIcon {
+  font-size: 20px;  /* size adjust karo */
+  color: #519be9;   /* blue color */
+  margin-right: 8px; /* text ke sath spacing */
+  vertical-align: middle;
+}
+.grey {
+  color: #6c757d; /* grey text */
+}
+
+.grey .icon {
+  color: #6c757d;
+}
+.icon {
+  font-size: 18px;    
+  color: #6c757d;      
+  flex-shrink: 0; 
+  margin-right: 10px;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 0%;
+  padding: 0%;
+
+}
+
+.active .icon {
+  color: #fff;
+}
+
+.orderimg{
+  width:100px;
+  height: auto;
+}
+.orderNumberRow {
+  background-color: #ead3fc; 
+  color: black; 
+  padding: 8px 12px;
+  border-radius: 4px;
 }
 .row {
   display: flex;
@@ -320,4 +388,76 @@
 .footer a {
   color: #0066ff;
   text-decoration: none;
+}
+/* =========================
+   <= 720px (tablets / small laptops)
+   ========================= */
+@media (max-width: 720px) {
+  /* page padding a bit tighter */
+  .wrapper {
+    padding: 16px;
+  }
+
+  /* center + loosen progress bar */
+  .progressBarWrapper {
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* stack the two columns */
+  .container {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* turn the left rail into a top tab row */
+  .left {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    border-radius: 8px 8px 0 0;
+    border-right: 0;
+    border-bottom: 1px solid #dfe5f2;
+    background: #fff;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  
+  .option {
+    flex: 0 0 auto;
+    border-bottom: 0;
+    border-right: 1px solid #e7ecf2;
+    padding: 12px 14px;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .option:last-child { border-right: 0; }
+
+  /* active state adapts to horizontal layout */
+  .option.active {
+    border-right: 0;
+    border-bottom: 3px solid #0066ff;
+    background: #f0f5ff;
+  }
+
+  /* content panel now sits under the tabs */
+  .mainBox {
+    border-radius: 0 0 8px 8px;
+  }
+
+  /* summary card goes under the payment card */
+  .right {
+    order: 2;
+  }
+
+  /* reduce bank grid density a touch */
+  .bankGrid {
+    gap: 10px;
+  }
 }

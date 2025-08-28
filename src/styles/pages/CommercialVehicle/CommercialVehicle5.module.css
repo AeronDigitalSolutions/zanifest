@@ -5,7 +5,7 @@
   padding: 1.2rem;
   font-family: "Segoe UI", Arial, sans-serif;
   background: #f9fbff;
-  margin-top: 20px;
+  /* margin-top: 20px; */
 }
 
 /* ===== LEFT COLUMN ===== */
@@ -27,6 +27,7 @@
   font-weight: 700;
   margin-bottom: 10px;
   color: #222;
+  padding-top:20px;
 }
 
 .vehicleDetails {
@@ -165,6 +166,8 @@
   width: 100%;
   z-index: 1000;
   overflow-y: auto;
+      margin-top: 5rem;
+
 }
 
 /* Backdrop */
@@ -172,7 +175,7 @@
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.4);
-  z-index: 999;
+  z-index: 12;
 }
 
 /* ===== MIDDLE COLUMN ===== */
@@ -588,9 +591,17 @@ align-items: center;
 .mobileHeader{
   border-radius: 20px;
   align-items: center;
-  padding-top: 3px;
-  margin-left: 10px;
+
+  margin-left: -13px;
   size: 30px;
+  z-index: 1000;
+
+}
+
+.sidebarToggle{
+  border:none;
+  background:none;
+  font-size:30px;
 }
 .overlay {
   display: none;
@@ -625,7 +636,7 @@ align-items: center;
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.4);
-    z-index: 999;
+    z-index: 5;
   }
 
   /* Filter button */
@@ -687,7 +698,7 @@ align-items: center;
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.4);
-    z-index: 999;
+    z-index: 10;
   }
 
   .middle {
@@ -845,7 +856,7 @@ align-items: center;
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.4);
-    z-index: 999;
+    z-index: 11;
   }
 
   .middle {

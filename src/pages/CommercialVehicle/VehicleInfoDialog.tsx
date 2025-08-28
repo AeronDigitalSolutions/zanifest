@@ -5,6 +5,7 @@ import { FiEdit2, FiMapPin } from "react-icons/fi";
 import { FaTruck, FaCar } from "react-icons/fa";
 import { BsCalendarDate } from "react-icons/bs";
 import { GiGearStickPattern } from "react-icons/gi";
+import { useRouter} from "next/router";
 
 interface VehicleInfoDialogProps {
   onClose: () => void;
@@ -17,8 +18,10 @@ const VehicleInfoDialog: React.FC<VehicleInfoDialogProps> = ({
 }) => {
   const [fullName, setFullName] = useState("");
   const [mobile, setMobile] = useState("");
+  const router = useRouter();  
 
   return (
+
     <div className={styles.overlay}>
       <div className={styles.dialog}>
         {/* Left Section */}
@@ -81,7 +84,12 @@ const VehicleInfoDialog: React.FC<VehicleInfoDialogProps> = ({
             className={styles.input}
           />
 
-          <button className={styles.button}>View prices</button>
+          <button
+            className={styles.viewBtn}
+            onClick={() => router.push("/CommercialVehicle/CommercialVehicle5")}
+          >
+            View prices
+          </button>
           <p className={styles.terms}>
             By clicking on 'View prices', you agree to our{" "}
             <a href="#">Privacy Policy</a> & <a href="#">Terms of Use</a>
