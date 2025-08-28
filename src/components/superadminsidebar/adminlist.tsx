@@ -1,91 +1,7 @@
-
-// import React, { useEffect, useState } from 'react';
-// import styles from '@/styles/components/superadminsidebar/adminlist.module.css';
-// import Image from 'next/image';
-
-
-// type Admin = {
-//   _id: string;
-//   userName: string;
-//   email: string;
-//   role: string;
-// };
-
-// export default function AdminList() {
-//   const [admins, setAdmins] = useState<Admin[]>([]);
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     const fetchAdmins = async () => {
-//       try {
-//         const res = await fetch('/api/getadmin');
-//         const data = await res.json();
-//         setAdmins(data);
-//       } catch (error) {
-//         console.error('Failed to fetch admins:', error);
-//         alert('Something went wrong!');
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchAdmins();
-//   }, []);
-
-//   return (
-//     <div className={styles.container}>
-//       <h1 className={styles.heading}>Admin List</h1>
-
-//       {/* {loading ? (
-//         <p className={styles.loading}>Loading admins...</p>
-//       ) : admins.length === 0 ? (
-//         <p className={styles.noData}>No admins found.</p>
-//       ) : ( */}
-
-
-// {loading ? (
-//   <div className={styles.loaderWrapper}>
-//     <Image
-//             src={require("@/assets/Material wave loading.gif")}
-//       alt="Loading..."
-//       width={100}
-//       height={100}
-//       className={styles.logoAnimation}
-//     />
-//   </div>
-// ) : admins.length === 0 ? (
-//   <p className={styles.noData}>No admins found.</p>
-// ) : (
-
-//         <div className={styles.tableWrapper}>
-//           <table className={styles.table}>
-//             <thead>
-//               <tr>
-//                 <th className={styles.th}>Name</th>
-//                 <th className={styles.th}>Email</th>
-//                 <th className={styles.th}>Role</th>
-//               </tr>
-//             </thead>
-//             <tbody>
-//               {admins.map((admin) => (
-//                 <tr key={admin._id} className={styles.row}>
-//                   <td className={styles.td}>{admin.userName}</td>
-//                   <td className={styles.td}>{admin.email}</td>
-//                   <td className={styles.td}>{admin.role}</td>
-//                 </tr>
-//               ))}
-//             </tbody>
-//           </table>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-
-
 import React, { useEffect, useState } from 'react';
 import styles from '@/styles/components/superadminsidebar/adminlist.module.css';
 import Image from 'next/image';
+import axios from 'axios';
 
 type Admin = {
   _id: string;
@@ -93,6 +9,7 @@ type Admin = {
   userLastName: string;
   email: string;
   role: string;
+  accountStatus?: 'active' | 'inactive';
 };
 
 const ITEMS_PER_PAGE = 5;
@@ -106,22 +23,66 @@ export default function AdminList() {
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentAdmins = admins.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
-  useEffect(() => {
-    const fetchAdmins = async () => {
+
+  const fetchAdmins = async () => {
       try {
         const res = await fetch('/api/getadmin');
         const data = await res.json();
         setAdmins(data);
-      } catch (error) {
+      } 
+      catch (error) {
         console.error('Failed to fetch admins:', error);
         alert('Something went wrong!');
-      } finally {
+      } 
+      finally {
         setLoading(false);
       }
     };
 
+  useEffect(() => {
     fetchAdmins();
   }, []);
+
+  const handleToggleStatus = async (id: string, currentStatus: string) => {
+    try {
+      const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+      console.log("Toggling status for admin ID:", id, "from", currentStatus, "to", newStatus);
+
+
+      // ✅ ask SUPERADMIN to confirm password
+      const password = prompt(`Enter your password to set status to ${newStatus}`);
+      // console.log("Password entered:", password);
+      if (!password) return; // user cancelled
+
+      const token = localStorage.getItem("token"); // or cookie if you're storing it there
+      // console.log("Using token:", token);
+
+        const res = await fetch(`/api/admin/updateAccountStatus?id=${id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json','Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ accountStatus: newStatus, password }),
+        });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert(`admin status updated to ${newStatus}`);
+        // ✅ update state immediately
+        setAdmins((prevAdmins) =>
+          prevAdmins.map((m) =>
+            m._id === id ? { ...m, accountStatus: newStatus } : m
+          )
+        );
+      } 
+      else {
+        alert(data.message || 'Failed to update status');
+      }
+    } 
+    catch (err) {
+      console.error(err);
+      alert('Error updating admin status');
+    }
+  };
 
   const handlePrevPage = () => {
     setCurrentPage((prev) => Math.max(prev - 1, 1));
@@ -130,6 +91,32 @@ export default function AdminList() {
   const handleNextPage = () => {
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   };
+
+  const handleDelete = async (id: string) => {
+    try{
+      const res = await axios.delete(`/api/admin/deleteadmin?id=${id}`);
+
+      if(res.status ===200){
+        alert("admin deleted successfully");
+
+        //refresh table after deleting
+        fetchAdmins();
+
+        //to update the state immediately so that UI refreshes
+        setAdmins((prevAdmins) => prevAdmins.filter((a) => a._id!==id));
+      }
+
+      else{
+        alert("Failed to delete admin");
+      }
+    }
+
+    catch(error){
+      console.error('Error deleting admin:', error);
+      alert('Error deleting admin');
+    }
+
+  }
 
   return (
     <div className={styles.container}>
@@ -157,6 +144,8 @@ export default function AdminList() {
                   <th className={styles.th}>Name</th>
                   <th className={styles.th}>Email</th>
                   <th className={styles.th}>Role</th>
+                  <th className={styles.th}>Status</th>
+                  <th className={styles.th}>Delete</th>
                 </tr>
               </thead>
               <tbody>
@@ -166,6 +155,24 @@ export default function AdminList() {
                     <td className={styles.td}>{`${admin.userFirstName}` +" "+ `${admin.userLastName}`}</td>
                     <td className={styles.td}>{admin.email}</td>
                     <td className={styles.td}>{admin.role}</td>
+                    <td className={styles.td}>
+                      {admin.role==="admin" ? 
+                      <button
+                        className={`${styles.editButton} ${
+                          (admin.accountStatus ?? 'active') === 'active' ? styles.active : styles.inactive
+                        }`}
+                        onClick={() => handleToggleStatus(admin._id, admin.accountStatus ?? 'active')}
+                      >
+                        {(admin.accountStatus ?? 'active') === 'active' ? 'Active' : 'Inactive'}
+                      </button>
+                      : 
+                      <span>N/A</span>}
+                    </td>
+                    <td className={styles.td}>
+                      <button onClick={()=> handleDelete(admin._id)}>
+                        Delete
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

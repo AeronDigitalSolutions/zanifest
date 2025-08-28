@@ -23,14 +23,14 @@ export default function Agentlogin() {
       body: JSON.stringify({ email: userName, password }),
     });
 
+     const data = await res.json();
+
     if (!res.ok) {
-      alert("Login failed. Please check your credentials.");
+      alert(data.message||"Login failed. Please check your credentials.");
       setError(true);
       setLoading(false);
       return;
     }
-
-    const data = await res.json();
     console.log("Login successful:", data);
 
     localStorage.setItem("agentToken", data.token);
@@ -38,10 +38,14 @@ export default function Agentlogin() {
 
     setError(false);
     router.push("/agentpage");
-  } catch (err) {
+  } 
+
+  catch (err) {
     console.error("Login failed:", err);
     setError(true);
-  } finally {
+  } 
+  
+  finally {
     setLoading(false);
   }
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from '@/styles/components/superadminsidebar/agentlist.module.css';
 import Image from 'next/image';
+import axios from 'axios';
 
 interface Agent {
   _id: string;
@@ -12,6 +13,7 @@ interface Agent {
   district: string;
   city: string;
   state: string;
+  accountStatus: 'active' | 'inactive';
 }
 
 const AgentsPage: React.FC = () => {
@@ -19,6 +21,43 @@ const AgentsPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const agentsPerPage = 10;
+
+  const handleToggleStatus = async (id: string, currentStatus: string) => {
+    try {
+      const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+
+       const password = prompt(`Enter your password to set status to ${newStatus}`);
+    // console.log("Password entered:", password);
+    if (!password) return; // user cancelled
+
+    const token = localStorage.getItem("token"); // or cookie if you're storing it there
+    console.log("Using token (agentlist):", token);
+
+     const res = await fetch(`/api/agent/updateAccountStatus?id=${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json','Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ accountStatus: newStatus, password }),
+      });
+
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert(`Agent status updated to ${newStatus}`);
+        // ✅ update state immediately
+        setAgents((prevAgents) =>
+          prevAgents.map((m) =>
+            m._id === id ? { ...m, accountStatus: newStatus } : m
+          )
+        );
+      } else {
+        alert(data.message || 'Failed to update status');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error updating Agent status');
+    }
+  };
 
   const fetchAgents = async () => {
     try {
@@ -49,6 +88,28 @@ const AgentsPage: React.FC = () => {
     if (currentPage < totalPages) setCurrentPage(prev => prev + 1);
   };
 
+  const handleDelete = async ( id: string) => {
+
+    try{
+      const res = await axios.delete(`/api/agent/deleteagent?id=${id}`);
+      console.log("response status: ", res.status);
+
+      if(res.status===200){
+        alert("Agent deleted successfully");
+        setAgents((prevAgents) => prevAgents.filter((a) => a._id!==id));
+      }
+      else{
+        alert("Failed to delete agent");
+      }
+    }
+
+    catch(err){
+      console.error('Error deleting agent:', err);
+      alert('Error deleting agent');
+    }
+
+  }
+
   return (
     <div className={styles.container}>
       <h1 className={styles.heading}>All Agents</h1>
@@ -77,6 +138,8 @@ const AgentsPage: React.FC = () => {
                   <th className={styles.th}>City</th>
                   <th className={styles.th}>State</th>
                   <th className={styles.th}>Assigned To</th>
+                  <th className={styles.th}>Status</th>
+                  <th className={styles.th}>Delete</th>
                 </tr>
               </thead>
               <tbody>
@@ -91,6 +154,19 @@ const AgentsPage: React.FC = () => {
                     <td className={styles.td}>{agent.state}</td>
                     <td className={`${styles.td} ${styles.assignedTo}`}>
                       {agent.assignedTo}
+                    </td>
+                    <td className={styles.td}>
+                      <button
+                        className={`${styles.editButton} ${
+                          (!agent.accountStatus || agent.accountStatus === 'active') ? styles.active : styles.inactive
+                        }`}
+                        onClick={() => handleToggleStatus(agent._id, agent.accountStatus && agent.accountStatus === 'inactive' ? 'inactive' : 'active')}
+                      >
+                        {(!agent.accountStatus || agent.accountStatus === 'active') ? 'Active' : 'Inactive'}
+                      </button>
+                    </td>
+                    <td className={styles.td}>
+                      <button onClick={()=> handleDelete(agent._id)}>Delete</button>
                     </td>
                   </tr>
                 ))}

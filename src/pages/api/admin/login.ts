@@ -23,8 +23,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     await dbConnect();
-const admin = await Admin.findOne({ email })
-  .select("userFirstName userLastName email role password");
+    const admin = await Admin.findOne({ email })
+    .select("userFirstName userLastName email role password accountStatus");
     console.log("Admin found:", admin);
 
     if (!admin) {
@@ -40,6 +40,11 @@ const admin = await Admin.findOne({ email })
       console.warn("Login failed: Password mismatch");
       return res.status(401).json({ message: "Invalid email or password" });
     }
+    const status = admin.accountStatus ?? "active";
+    if(admin.role==='admin' && status === 'inactive') {
+      console.log(`Login attempt blocked for inactive account: ${email}`);
+      return res.status(403).json({ message: "Account is not active. Please contact support." });
+    }
 
     // Create JWT
     const token = jwt.sign(
@@ -49,6 +54,7 @@ const admin = await Admin.findOne({ email })
         userLastName: admin.userLastName || "",
         email: admin.email,
         role: admin.role,
+        accountStatus: status,
       },
       process.env.JWT_SECRET as string,
       { expiresIn: "1d" }
@@ -72,9 +78,11 @@ const admin = await Admin.findOne({ email })
     console.log("Token set in cookie for admin:", admin.userFirstName);
 
     // Respond with minimal info
- return res.status(200).json({ token, role: admin.role });
+    return res.status(200).json({ token, role: admin.role });
 
-  } catch (err) {
+  } 
+  
+  catch (err) {
     console.error("Login server error:", err);
     return res.status(500).json({ message: "Internal Server Error" });
   }

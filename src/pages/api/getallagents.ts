@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === 'GET') {
     try {
       const agents = await Agent.find();
-      console.log("Fetched all agents:", agents);
+      // console.log("Fetched all agents:", agents);
       if (!agents || agents.length === 0) {
         console.log("No agents found");
         // Return a 404 status if no agents are found

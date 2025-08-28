@@ -14,6 +14,7 @@ import ResetPassword from "@/components/superadminsidebar/resetpassword";
 import styles from "@/styles/pages/admindashboard.module.css";
 import { useAdmin } from "@/lib/hooks/useAdmin";
 import axios from "axios";
+
 import {
   FiUsers,
   FiUserPlus,
@@ -29,6 +30,8 @@ const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [adminCount, setAdminCount] = useState(0);
+  const[adminData, setAdminData]=useState<any>(null);
+  const [load, setLoad] = useState(false);
   const [agentCount, setAgentCount] = useState(0);
   const [stateManagerCount, setStateManagerCount] = useState(0);
   const [districtManagerCount, setDistrictManagerCount] = useState(0);
@@ -83,6 +86,23 @@ const AdminDashboard = () => {
     };
     fetchManagerCounts();
   }, []);
+
+    // profile edit 
+  useEffect(() => {
+    if (activeSection === "profileEdit") {
+      setLoad(true);
+      axios
+        .get("/api/admin/getadmindetails", {
+          // Not needed if cookie is httpOnly; else use Authorization
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          },
+        })
+        .then((res) => setAdminData(res.data))
+        .catch((err) => console.error("Error fetching admin:", err))
+        .finally(() => setLoad(false));
+    }
+  }, [activeSection]);
 
   return (
     <div className={styles.wrapper}>
@@ -326,7 +346,7 @@ const AdminDashboard = () => {
             </div>
           )}
 
-          {activeSection === "createAdmin" && <CreateAdmin />}
+          {activeSection === "createAdmin" && <CreateAdmin mode="create" />}
           {activeSection === "createManager" && <CreateManager />}
           {activeSection === "createAgent" && <CreateAgent />}
           {activeSection === "changepassword" && <ChangePassword />}
@@ -337,12 +357,8 @@ const AdminDashboard = () => {
           {activeSection === "userList" && <UserList />}
           {activeSection === "profileEdit" && (
             <CreateAdmin
-              initialData={{
-                userFirstName: admin?.userFirstName ?? "",
-                userLastName: admin?.userLastName ?? "",
-                email: admin?.email ?? "",
-                password: "", // security reason se blank rakha
-              }}
+              initialData={adminData}
+              mode="edit"
             />
           )}
         </main>

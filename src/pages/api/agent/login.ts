@@ -16,6 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const agent = await Agent.findOne({ email });
 
     if (!agent) {
+      console.log(`Login attempt failed. Email not found: ${email}`);
       return res.status(401).json({ message: "Invalid credentials. Email not found in DB" });
     }
 
@@ -26,12 +27,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(401).json({ message: "Invalid credentials. Password Mismatched" });
     }
 
+    if(agent.accountStatus !== 'active') {
+      console.log(`Login attempt blocked for inactive account: ${email}`);
+      return res.status(403).json({ message: "Account is not active. Please contact support." });
+    }
+
     const fullName = `${agent.firstName} ${agent.lastName || ""}`.trim();
 
     const token = jwt.sign(
       {
         id: agent._id,
         email: agent.email,
+        accountStatus: agent.accountStatus,
         fullName,
         role: "agent",
       },
@@ -50,7 +57,7 @@ res.setHeader('Set-Cookie', serialize('agentToken', token, {
 }));
 
 
-    res.status(200).json({ token, agent: { name: fullName, email: agent.email, role: "agent" } });
+    res.status(200).json({ token, agent: { name: fullName, email: agent.email, accountStatus:agent.accountStatus, role: "agent" } });
   } 
   
   catch (err) {

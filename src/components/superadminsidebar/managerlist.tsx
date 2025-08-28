@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -6,20 +5,21 @@ import styles from '@/styles/components/superadminsidebar/managerlist.module.css
 import Image from 'next/image';
 
 interface Manager {
-  _id: string;
-  managerId: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  category: string;
-    city: string;
-    district: string;
-    state: string;
-  assignedTo?: {
+    _id: string;
     managerId: string;
     firstName: string;
     lastName: string;
-  }
+    email: string;
+    category: string;
+    city: string;
+    district: string;
+    state: string;
+    accountStatus: 'active' | 'inactive';
+    assignedTo?: {
+      managerId: string;
+      firstName: string;
+      lastName: string;
+    }
 }
 
 export default function ManagersTable() {
@@ -28,8 +28,7 @@ export default function ManagersTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  useEffect(() => {
-    const fetchManagers = async () => {
+  const fetchManagers = async () => {
       try {
         const res = await fetch('/api/getallmanagers');
         const data = await res.json();
@@ -42,8 +41,69 @@ export default function ManagersTable() {
       }
     };
 
+  const handleToggleStatus = async (id: string, currentStatus: string) => {
+    try {
+      const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+
+      const res = await fetch(`/api/manager/updateAccountStatus?id=${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ accountStatus: newStatus }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert(`Manager status updated to ${newStatus}`);
+        // ✅ update state immediately
+        setManagers((prevManagers) =>
+          prevManagers.map((m) =>
+            m._id === id ? { ...m, accountStatus: newStatus } : m
+          )
+        );
+      } else {
+        alert(data.message || 'Failed to update status');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error updating manager status');
+    }
+  };
+
+
+  useEffect(() => {
     fetchManagers();
   }, []);
+
+ const handleDelete = async (id: string) => {
+  try {
+    //get response from calling api
+    const res = await fetch(`/api/manager/deletemanager?id=${id}`, {
+      method: 'DELETE',
+    });
+
+    //store json type response in data variable
+    const data = await res.json();
+
+    if (data.success) {
+      alert('Manager deleted successfully');
+      // fetchManagers(); // refresh table after delete
+
+          // ✅ Update state immediately so UI refreshes
+    setManagers((prevManagers) => prevManagers.filter((m) => m._id !== id));
+    } 
+    
+    else {
+      alert(data.message);
+    }
+  } 
+  
+  catch (err) {
+    console.error(err);
+    alert('Error deleting manager');
+  }
+};
+
 
   const totalPages = Math.ceil(managers.length / itemsPerPage);
   const paginatedManagers = managers.slice(
@@ -88,6 +148,8 @@ export default function ManagersTable() {
                   <th className={styles.th}>State</th>
                   <th className={styles.th}>District</th>
                   <th className={styles.th}>Assigned To</th>
+                  <th className={styles.th}>Status</th>
+                  <th className={styles.th}>Delete</th>
                 </tr>
               </thead>
               <tbody>
@@ -111,6 +173,19 @@ You need to concatenate the strings using the + operator or template literals, n
                       {manager.assignedTo
                         ? `${manager.assignedTo.managerId}`
                         : '—'}
+                    </td>
+                    <td className={styles.td}>
+                      <button
+                        className={`${styles.editButton} ${
+                          manager.accountStatus === 'active' ? styles.active : styles.inactive
+                        }`}
+                        onClick={() => handleToggleStatus(manager._id, manager.accountStatus)}
+                      >
+                        {manager.accountStatus === 'active' ? 'Active' : 'Inactive'}
+                      </button>
+                    </td>
+                    <td className={styles.td}>
+                      <button className={styles.deleteButton} onClick={()=> handleDelete(manager._id)}>Delete</button>   
                     </td>
                   </tr>
                 ))}

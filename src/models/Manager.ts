@@ -65,6 +65,9 @@ const managerSchema = new mongoose.Schema({
     ref: 'Manager',
     default: null,
   },
+
+  accountStatus: { type: String, enum: ['active', 'inactive'], default: 'active' }, // NEW
+
 }, {
   timestamps: true,
 });
