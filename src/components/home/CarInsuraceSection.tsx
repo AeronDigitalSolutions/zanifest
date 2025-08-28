@@ -36,7 +36,7 @@ const INSURANCELIST = [
   {
     name: "Shop Insurance",
     image: require("@/assets/shops.png"),
-    link: "#",
+    link: "./Shop/Shop1",
   },
   {
     name: "Third Party Insurance",
