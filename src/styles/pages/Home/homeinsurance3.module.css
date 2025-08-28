@@ -186,6 +186,7 @@ z-index: 10;
   font-weight: 800;
   padding: 8px 14px;
   border-radius: 12px;
+
 }
 .oneTime { font-size: 10px; color: #6b7391; margin-top: 6px; }
 
@@ -288,5 +289,6 @@ z-index: 10;
   text-align: center;
   align-self: center;
   font-size: 12px;
+  cursor: pointer;
 }
 }

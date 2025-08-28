@@ -1,7 +1,7 @@
 /* ===== Page ===== */
 .container {
   font-family: "Segoe UI", Arial, sans-serif;
-  background: #eef3ff;                 /* soft page blue */
+  background: #ffffff;                 /* soft page blue */
   min-height: 70vh;
   padding: 24px 20px;
   max-width: 1160px;                    /* center like mock */
@@ -81,7 +81,7 @@
 
 .docsHeading {
   font-size: 22px;
-  font-weight: 800;
+  font-weight: 600;
   margin: 0 0 4px;
   color: #0d1b3e;
 }

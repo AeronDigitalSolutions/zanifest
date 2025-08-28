@@ -7,15 +7,18 @@ import logo from "@/assets/CommercialVehicle/shriram.png";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 // import personImg from "@/assets/person.png"; 
-
+import { useRouter } from "next/navigation";
 export default function Shop6() {
+  const router = useRouter();
   return (
+       // ✅ router instance
+    
     <>
     <Navbar/>
     <div className={styles.container}>
       {/* Header */}
       <div className={styles.header}>
-        <FiArrowLeft className={styles.backIcon} />
+        <FiArrowLeft className={styles.backIcon} onClick={() => router.push("Shop5")}/>
         <h2 className={styles.title}>Checkout</h2>
       </div>
 
@@ -65,7 +68,7 @@ export default function Shop6() {
               Premium <br />
               <span>₹ 590/- (Inclusive of all taxes)</span>
             </p>
-            <button className={styles.uploadBtn}>Upload documents</button>
+            <button className={styles.uploadBtn}             onClick={() => router.push("Shop7")}>Upload documents</button>
           </div>
         </div>
       </div>

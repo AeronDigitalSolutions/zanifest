@@ -65,6 +65,7 @@
 
 .planHeader {
   text-align: center;
+      background-color: #FFE894;
 }
 
 
@@ -249,8 +250,17 @@
   text-align: left;
   margin: 0;
   padding: 18px 22px 16px;
-  background: #f4f6fb;
+  background: #ffffff;
   border-top: 1px solid #e7eaf6;
+}
+.heading1{
+  font-size: 18px;
+    margin:0px 0px 20px 0px;
+    color: #1f2437;
+    display: flex
+;font-weight:500;
+    align-items: center;
+    gap: 8px;
 }
 
 .features p {

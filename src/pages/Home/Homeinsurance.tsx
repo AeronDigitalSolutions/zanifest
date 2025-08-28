@@ -19,6 +19,7 @@ const Homeinsurance: React.FC = () => {
         : [...prev, option]
     );
   };
+  const router = useRouter();
 
   // ✅ Just navigate to /homeinsurance2
   const handleSubmit = (e: React.FormEvent) => {
@@ -52,15 +53,33 @@ const Homeinsurance: React.FC = () => {
           </span>
         </div>
 
+<<<<<<< HEAD
         {/* ✅ form with navigation */}
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.inputGroup}>
             <input type="text" placeholder="Full Name" className={styles.input} />
+=======
+        <form className={styles.form}>
+          <div className={styles.inputGroup}>
+            <input
+              type="text"
+              placeholder="Full Name"
+              className={styles.input}
+            />
+>>>>>>> origin/khushiinsurance20
             <FiUser className={styles.inputIcon} />
           </div>
 
           <div className={styles.inputGroup}>
+<<<<<<< HEAD
             <input type="text" placeholder="Mobile Number" className={styles.input} />
+=======
+            <input
+              type="text"
+              placeholder="Mobile Number"
+              className={styles.input}
+            />
+>>>>>>> origin/khushiinsurance20
             <FiPhone className={styles.inputIcon} />
             <span className={styles.noSpam}>We don’t spam</span>
           </div>
@@ -89,6 +108,7 @@ const Homeinsurance: React.FC = () => {
             </div>
           </div>
 
+<<<<<<< HEAD
           {/* ✅ Navigate to /homeinsurance2 */}
           <button type="submit" className={styles.submitBtn}>
             View Free Quotes
@@ -97,6 +117,19 @@ const Homeinsurance: React.FC = () => {
           <div className={styles.whatsapp}>
             <FaWhatsapp className={styles.icon} />
             <span className={styles.label}>Get Updates on WhatsApp</span>
+=======
+          <button
+            type="button" // prevent form submit
+            className={styles.submitBtn}
+            onClick={() => router.push("Homeinsurance2")}
+          >
+            View Free Quotes
+          </button>
+          <div className={styles.whatsapp}>
+            <FaWhatsapp className={styles.icon} />
+            <span className={styles.label}>Get Updates on WhatsApp</span>
+
+>>>>>>> origin/khushiinsurance20
             <label className={styles.switch}>
               <input
                 type="checkbox"
@@ -107,6 +140,10 @@ const Homeinsurance: React.FC = () => {
             </label>
           </div>
 
+<<<<<<< HEAD
+=======
+          {/* Terms & Privacy */}
+>>>>>>> origin/khushiinsurance20
           <p className={styles.terms}>
             By clicking on “Continue”, you agree to our{" "}
             <a href="#">Privacy Policy</a> and <a href="#">Terms of Use</a>

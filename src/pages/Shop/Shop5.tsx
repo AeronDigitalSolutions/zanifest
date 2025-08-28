@@ -6,9 +6,12 @@ import Image from "next/image";
 import shriram from "@/assets/CommercialVehicle/shriram.png"
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
-
+import { useRouter } from "next/navigation";
 export default function Shop5() {
+  const router = useRouter(); 
   return (
+      // ✅ router instance
+    
     <>
     <Navbar/>
     <div className={styles.wrapper}>
@@ -154,7 +157,7 @@ export default function Shop5() {
             <h3>₹ 590/-</h3>
           </div>
 
-          <button className={styles.proceedBtn}>Proceed</button>
+          <button className={styles.proceedBtn}            onClick={() => router.push("Shop6")}>Proceed</button>
         </div>
       </div>
     </div>

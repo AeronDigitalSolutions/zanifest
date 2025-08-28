@@ -11,14 +11,17 @@ import Image from "next/image";
 import shriram from "@/assets/CommercialVehicle/shriram.png"
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
+import { useRouter } from "next/navigation";
 
 const Shop7: React.FC = () => {
+        const router = useRouter();
+  
   return (
     <>
     <Navbar/>
     <div className={styles.container}>
       {/* Back Button */}
-      <button className={styles.backButton}>
+      <button className={styles.backButton}  onClick={() => router.push("Shop6")}>
         <FaArrowLeft />
       </button>
 

@@ -6,11 +6,13 @@ import Image from "next/image";
 import shriram from "@/assets/CommercialVehicle/shriram.png";
 import Footer from "@/components/ui/Footer";
 import Navbar from "@/components/ui/Navbar";
-
+import { useRouter } from "next/navigation";
 export default function Shop3() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+      const router = useRouter();
   return (
+ // ✅ router instance
+    
     <>
     <Navbar/>
     <div className={styles.container}>
@@ -56,6 +58,7 @@ export default function Shop3() {
 
         {/* Features */}
         <div className={styles.features}>
+          <span className={styles.heading1}>Included Features</span>
           <p>
             <FaCheckCircle className={styles.icon} /> Fire
           </p>
@@ -76,11 +79,11 @@ export default function Shop3() {
 
       {/* Buttons */}
       <div className={styles.buttons}>
-        <button className={styles.customize}>Customize my plan</button>
+        <button className={styles.customize} onClick={() => setIsModalOpen(true)}
+>Customize my plan</button>
         <button
           className={styles.buyNow}
-          onClick={() => setIsModalOpen(true)}
-        >
+               onClick={() => router.push("Shop5")}   >
           Buy now
         </button>
       </div>
@@ -159,7 +162,7 @@ export default function Shop3() {
             </div>
 
             {/* Continue */}
-            <button className={styles.continueBtn}>
+            <button className={styles.continueBtn}            onClick={() => router.push("Shop5")}>
               Save &amp; Continue →
             </button>
           </div>

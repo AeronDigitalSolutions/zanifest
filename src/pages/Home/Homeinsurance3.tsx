@@ -2,6 +2,8 @@
 import React from "react";
 import styles from "@/styles/pages/Home/homeinsurance3.module.css";
 import Image, { StaticImageData } from "next/image";
+import { useRouter } from "next/navigation";
+
 
 type Policy = {
   id: string;
@@ -70,6 +72,8 @@ const policies: Policy[] = [
 ];
 
 const Homeinsurance3: React.FC = () => {
+    const router = useRouter();
+  
   return (
     <>
     <Navbar/>
@@ -136,7 +140,8 @@ const Homeinsurance3: React.FC = () => {
                 </div>
 
                 <div className={styles.priceWrap}>
-                  <span className={styles.pricePill}>{p.pricePerMonth}</span>
+                  <span className={styles.pricePill}            onClick={() => router.push("Homeinsurance4")}
+>{p.pricePerMonth}</span>
                   <div className={styles.oneTime}>{p.oneTimeText}</div>
                 </div>
               </div>

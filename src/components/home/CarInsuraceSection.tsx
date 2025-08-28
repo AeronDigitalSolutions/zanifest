@@ -51,7 +51,7 @@ const INSURANCELIST = [
   {
     name: "Home Insurance",
     image: require("@/assets/home/car/9.png"),
-    link: "#",
+    link: "./Home/Homeinsurance",
   },
   {
     name: "Office Package Policy",

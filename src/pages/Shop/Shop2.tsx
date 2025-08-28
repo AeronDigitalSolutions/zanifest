@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-
+import { useRouter } from "next/navigation";
 // Illustrations & Logos
 import shopIllustration from "@/assets/pageImages/fire_insurance.png";
 import digit from "@/assets/pageImages/digit.png";
@@ -14,6 +14,8 @@ import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 
 const Shop2 = () => {
+    const router = useRouter(); // ✅ router instance
+  
   return (
     <>
     <Navbar/>
@@ -92,7 +94,7 @@ const Shop2 = () => {
           </div>
 
           {/* Continue Button */}
-          <button className={styles.continueBtn}>Continue →</button>
+          <button className={styles.continueBtn} onClick={() => router.push("Shop3")}>Continue →</button>
         </div>
       </div>
     </div>
