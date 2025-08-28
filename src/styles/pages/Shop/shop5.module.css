@@ -48,7 +48,8 @@
 .input,
 .inputFull,
 .inputIcon input,
-select.input {
+select.input,
+textarea.inputFull {
   background: #fff;
   border: 1.6px solid #dbe4ff;
   border-radius: 10px;
@@ -58,25 +59,36 @@ select.input {
   color: #111827;
   outline: none;
   transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+
+  /* 🔑 Fix overflow issue */
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .input:focus,
 .inputFull:focus,
 .inputIcon input:focus,
-select.input:focus {
+select.input:focus,
+textarea.inputFull:focus {
   border-color: #0d63f3;
   box-shadow: 0 0 0 4px rgba(13, 99, 243, 0.10);
   background: #fff;
 }
 
 .input::placeholder,
-.inputFull::placeholder {
+.inputFull::placeholder,
+textarea.inputFull::placeholder {
   color: #9aa4b2;
 }
 
 .inputFull {
-  width: 100%;
   margin-bottom: 12px;
+}
+
+textarea.inputFull {
+  min-height: 100px;   /* good for address/loan detail */
+  resize: vertical;    /* only vertical resize */
 }
 
 /* Select dropdown arrow */
@@ -147,6 +159,7 @@ select.input {
 .orderSection {
   flex: 1;
   min-width: 300px;
+  margin-top: 3.8rem;
 }
 
 .orderCard {
@@ -260,4 +273,57 @@ select.input {
   .orderCard { border-radius: 12px; }
   .orderLogo { width: 80px; }
   .proceedBtn { width: calc(100% - 24px); margin: 10px 12px 12px; }
+}
+
+@media (max-width: 640px) {
+  .wrapper { 
+    flex-direction: column; 
+    padding: 14px; 
+  }
+
+  .heading { font-size: 20px; }
+
+  .card { 
+    padding: 14px; 
+    border-radius: 12px; 
+    box-sizing: border-box;
+  }
+
+  .row { 
+    grid-template-columns: 1fr; 
+    gap: 10px; 
+  }
+
+  .input, 
+  .inputFull, 
+  .inputIcon input, 
+  select.input, 
+  textarea.inputFull {
+    width: 100%;           
+    max-width: 100%;       
+    box-sizing: border-box;
+    padding: 12px;
+    font-size: 15px;
+  }
+
+  textarea.inputFull {
+    min-height: 100px;   
+    resize: vertical;    
+  }
+
+  .addonRow { 
+    padding: 12px; 
+    border-radius: 10px; 
+  }
+
+  .sumInsured { font-size: 12px; }
+
+  .orderCard { border-radius: 12px; }
+
+  .orderLogo { width: 80px; }
+
+  .proceedBtn { 
+    width: calc(100% - 24px); 
+    margin: 10px 12px 12px; 
+  }
 }

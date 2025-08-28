@@ -3,9 +3,9 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: 40px;
-  padding: 40px 60px;
+  padding: 80px 60px;
   background: #f9fbff;
-  min-height: 100vh;
+  /* min-height: 100vh; */
   box-sizing: border-box;
 
 }
@@ -192,4 +192,128 @@
   .illustration {
     max-width: 200px;
   }
+}
+/* 📱 TABLETS & SMALL LAPTOPS (≤1024px) */
+@media (max-width: 1024px) {
+  .wrapper {
+    flex-direction: column;
+    padding: 30px 20px;
+    gap: 30px;
+  }
+
+  .left,
+  .right {
+    max-width: 100%;
+  }
+
+  .middle {
+    flex-direction: column;
+    gap: 25px;
+    width: 100%;
+  }
+
+  .illustration {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .illustration img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .partnersBox {
+    width: 100%;
+    max-width: 100%;
+    padding: 20px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  .partnersGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    width: 100%;
+  }
+
+  .partner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .partner img {
+    max-width: 140px;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+}
+/* 📱 PHONES & SMALL TABLETS (≤768px) */
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 20px 15px;
+    gap: 25px;
+  }
+
+  .heading { font-size: 22px; }
+  .subHeading { font-size: 13px; }
+  .features { font-size: 13px; }
+
+  .partnersBox { padding: 20px; }
+
+  .partnersGrid {
+    grid-template-columns: repeat(2, 1fr); /* ✅ 2 per row */
+    gap: 15px;
+  }
+
+  .partner img {
+    max-width: 140px;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .businessOptions { gap: 8px; }
+  .businessOptions button { font-size: 12px; padding: 6px 12px; }
+
+  .ownerTenant { flex-direction: column; gap: 12px; }
+  .option { padding: 10px; }
+
+  .card { padding: 22px; }
+}
+
+/* 📱 SMALL PHONES (≤480px) */
+@media (max-width: 480px) {
+  .wrapper { padding: 15px 10px; gap: 20px; }
+
+  .heading { font-size: 20px; }
+  .subHeading { font-size: 12px; }
+  .features { font-size: 12px; gap: 4px; }
+
+  .illustration img {
+    width: 100%;
+    height:auto;
+    max-width: 100%;
+  }
+
+  .partnersBox { padding: 18px; }
+
+  .partnersGrid {
+    grid-template-columns: repeat(2, 1fr); /* ✅ still 2 per row */
+    gap: 10px;
+  }
+
+  .partner img {
+    max-width: 120px;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .card { padding: 20px; }
+  .cardHeading { font-size: 16px; }
+  .continueBtn { font-size: 14px; padding: 10px; }
 }

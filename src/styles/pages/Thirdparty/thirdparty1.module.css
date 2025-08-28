@@ -1,10 +1,12 @@
+
+
 .wrapper {
   text-align: center;
-  padding: 50px 20px;
+  padding: 150px 20px;
   font-family: "Segoe UI", Arial, sans-serif;
   background: linear-gradient(to bottom, #f9fbff, #ffffff);
-  max-width: 1000px;
-  margin: 100px auto;
+  max-width: 100%;
+  margin: 0px auto;
 }
 
 /* Top small text */
@@ -112,30 +114,36 @@
 }
 
 /* Responsive */
+
+
 @media (max-width: 768px) {
   .heading {
     font-size: 22px;
   }
-.wrapper{
-    margin: 0 auto;
-    
 
-}
+  .wrapper {
+    margin: 0 auto;
+    padding: 50px 20px;
+  }
+
   .form {
     flex-direction: column;
     border-radius: 10px;
-    box-shadow: none; /* remove shadow for stacked mobile view */
+    box-shadow: none;
+    width: 100%;   /* full width for form */
   }
 
   .input {
-    /* width: 100%; */
+    width: 100%;         /* full width on mobile */
+    max-width: 100%;     /* prevent overflow */
     border-radius: 8px;
     border: 1px solid #d1d5db;
     margin-bottom: 10px;
+    box-sizing: border-box; /* ensure padding doesn't overflow */
   }
 
   .button {
-    width: 50%;
+    width: 100%;   /* button full width instead of 50% */
     border-radius: 8px;
   }
 
@@ -144,4 +152,3 @@
     gap: 10px;
   }
 }
-

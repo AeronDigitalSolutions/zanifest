@@ -464,3 +464,200 @@
 }
 .continueBtn:hover { filter: brightness(0.97); }
 .continueBtn:active { transform: translateY(1px); }
+
+
+/* 📱 TABLETS & SMALL LAPTOPS (≤1024px) */
+@media (max-width: 1024px) {
+  .container {
+    padding: 28px 16px;
+    max-width: 100%;
+  }
+
+  .planCard {
+    width: 100%;
+    max-width: 95%;
+  }
+
+  .buttons {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .customize,
+  .buyNow {
+    flex: 1;
+    text-align: center;
+  }
+
+  .modal {
+    width: 360px;
+    max-width: 92vw;
+  }
+}
+
+/* 📱 PHONES & SMALL TABLETS (≤768px) */
+@media (max-width: 768px) {
+  .container {
+    padding: 24px 14px;
+  }
+
+  .header h2 {
+    font-size: 22px;
+  }
+
+  .header p {
+    font-size: 13px;
+    margin-bottom: 18px;
+  }
+
+  .coverOptions {
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .coverButton {
+    font-size: 13px;
+    padding: 8px 14px;
+  }
+
+  .planCard {
+    width: 100%;
+    margin-bottom: 22px;
+    border-radius: 12px;
+  }
+
+  .planHeader h3 {
+    font-size: 20px;
+  }
+
+  .features p {
+    font-size: 13px;
+    margin: 6px 0;
+  }
+
+  .buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .customize,
+  .buyNow {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .modal {
+    width: 92vw;
+    padding: 18px;
+  }
+
+  .modalHeader h3 {
+    font-size: 16px;
+  }
+
+  .options {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .options label {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+}
+
+/* 📱 SMALL PHONES (≤480px) */
+@media (max-width: 480px) {
+  .container {
+    padding: 18px 12px;
+  }
+
+  .header h2 {
+    font-size: 20px;
+  }
+
+  .header p {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .coverButton {
+    font-size: 12px;
+    padding: 7px 12px;
+  }
+
+  .planCard {
+    border-radius: 10px;
+    margin-bottom: 18px;
+  }
+
+  .planHeader {
+    padding: 18px 14px 10px;
+  }
+
+  .logo {
+    max-width: 90px;
+  }
+
+  .planHeader h3 {
+    font-size: 18px;
+  }
+
+  .gst {
+    font-size: 12px;
+  }
+
+  .features {
+    padding: 14px;
+  }
+
+  .features p {
+    font-size: 12px;
+    gap: 6px;
+  }
+
+  .viewMore {
+    font-size: 12px;
+    margin: 8px 14px 14px;
+  }
+
+  .buttons {
+    margin-top: 12px;
+    gap: 8px;
+  }
+
+  .customize,
+  .buyNow {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .modal {
+    width: 100%;
+    padding: 14px;
+  }
+
+  .modalHeader h3 {
+    font-size: 15px;
+  }
+
+  .question p {
+    font-size: 13px;
+  }
+
+  .options label {
+    font-size: 12px;
+    padding: 9px 10px;
+  }
+
+  .options label input[type="radio"] {
+    width: 16px;
+    height: 16px;
+  }
+
+  .continueBtn {
+    font-size: 14px;
+    padding: 12px;
+  }
+}

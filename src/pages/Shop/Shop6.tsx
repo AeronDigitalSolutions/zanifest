@@ -90,7 +90,7 @@ export default function Shop6() {
         {/* <Image src={personImg} alt="Illustration" className={styles.personImg} /> */}
       </div>
     </div>
-    <footer/>
+    <Footer/>
     </>
   );
 }

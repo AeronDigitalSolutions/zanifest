@@ -11,6 +11,7 @@ import chola from "@/assets/home/chola ms.png";
 import future from "@/assets/pageImages/insurance.png";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
+import { IoLogoWhatsapp } from "react-icons/io";
 
 const Shop1: React.FC = () => {
   return (
@@ -95,8 +96,10 @@ const Shop1: React.FC = () => {
         <button className={styles.cta}>View Free Quotes</button>
 
         {/* WhatsApp line */}
-        <div className={styles.whatsapp}>
+        <div className={styles.whatsapp} >
           Get updates on WhatsApp
+          <IoLogoWhatsapp  className={styles.whatsappIcon}/>
+
         </div>
       </div>
     </div>
