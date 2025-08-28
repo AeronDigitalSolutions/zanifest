@@ -41,7 +41,7 @@ const INSURANCELIST = [
   {
     name: "Third Party Insurance",
     image: require("@/assets/home/car/7.png"),
-    link: "#",
+    link: "./ThirdParty/Thirdparty1",
   },
   {
     name: "Commercial Vehicle",
@@ -114,9 +114,7 @@ function CarInsuraceSection() {
         ))}
       </div>
 
-      {/* <div className={styles.bottomCont}>
-        <div className={styles.button}>View All</div>
-      </div> */}
+ 
     </div>
   );
 }

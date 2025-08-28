@@ -8,9 +8,11 @@ import Image from "next/image";
 import zurich from "@/assets/pageImages/zurich kotak.png";
 import { FaWhatsapp } from "react-icons/fa";
 import { FaRupeeSign } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 const Thirdparty3 = () => {
   const [owner, setOwner] = useState("individual");
+  const router = useRouter();
 
   return (
     <div>
@@ -114,7 +116,12 @@ const Thirdparty3 = () => {
                 <h2>₹4,031</h2>
               </div>
 
-              <button className={styles.payBtn}>PAY SECURELY →</button>
+              <button
+                className={styles.payBtn}
+                onClick={() => router.push("Thirdparty4")}
+              >
+                PAY SECURELY →
+              </button>
 
               <label className={styles.whatsapp}>
                 <input type="checkbox" /> Get updates on Whatsapp{" "}
