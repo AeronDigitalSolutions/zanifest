@@ -243,7 +243,7 @@ const ProposalForm: React.FC = () => {
                   >
                     Back
                   </button>
-                  <button className={styles.continueBtn}>Submit</button>
+                  <button className={styles.continueBtn} onClick={() => router.push("DoctorInsurance7")}>Submit</button>
                 </div>
               </>
             )}

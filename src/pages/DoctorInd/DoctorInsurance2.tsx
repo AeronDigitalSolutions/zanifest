@@ -473,7 +473,7 @@ const InsuranceComparison: React.FC = () => {
               <h3>Why Doctors buy from Policybazaar for Business ?</h3>
 
               <div className={styles.reason}>
-                <Image className={styles.logo} src={balance} alt="Future Generali" />
+                <Image className={styles.logo1} src={balance} alt="Future Generali" />
                 <div>
                   <strong>Medico-Legal Lawyer Panel</strong>
                   <p>Expert panel of medico-legal lawyers to represent doctors</p>
@@ -481,7 +481,7 @@ const InsuranceComparison: React.FC = () => {
               </div>
 
               <div className={styles.reason}>
-                <Image className={styles.logo} src={call} alt="Future Generali" />
+                <Image className={styles.logo1} src={call} alt="Future Generali" />
                 <div>
                   <strong>Within 4 hrs Lawyer Allocation Promise</strong>
                   <p>You will have legal representation allocated within 4 hours</p>
@@ -489,7 +489,7 @@ const InsuranceComparison: React.FC = () => {
               </div>
 
               <div className={styles.reason}>
-                <Image className={styles.logo} src={ruppee} alt="Future Generali" />
+                <Image className={styles.logo1} src={ruppee} alt="Future Generali" />
                 <div>
                   <strong>Affordable Pricing</strong>
                   <p>We provide you the best prices in the market with excellent services</p>
@@ -497,7 +497,7 @@ const InsuranceComparison: React.FC = () => {
               </div>
 
               <div className={styles.reason}>
-                <Image className={styles.logo} src={manager} alt="Future Generali" />
+                <Image className={styles.logo1} src={manager} alt="Future Generali" />
                 <div>
                   <strong>Dedicated Relationship Manager</strong>
                   <p>A full-time relationship manager is assigned for all your insurance needs</p>
@@ -505,7 +505,7 @@ const InsuranceComparison: React.FC = () => {
               </div>
 
               <div className={styles.reason}>
-                <Image className={styles.logo} src={flag} alt="Future Generali" />
+                <Image className={styles.logo1} src={flag} alt="Future Generali" />
                 <div>
                   <strong>365 Days Claim Assistance</strong>
                   <p>Our claim experts are available 365 days to help you with claim initiation and status</p>
@@ -513,7 +513,7 @@ const InsuranceComparison: React.FC = () => {
               </div>
 
               <div className={styles.reason}>
-                <Image className={styles.logo} src={quick} alt="Future Generali" />
+                <Image className={styles.logo1} src={quick} alt="Future Generali" />
                 <div>
                   <strong>Instant Policy Copy</strong>
                   <p>Get policy copy instantly in 5 clicks</p>

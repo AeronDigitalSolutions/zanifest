@@ -3,9 +3,11 @@
   font-family: "Segoe UI", Arial, sans-serif;
   background: #eef3ff;                  /* soft app background */
   color: #1a1f36;
-  padding: 20px;
+  padding: 5rem 2rem;
+
   max-width: 1160px;                    /* center like mock */
   margin: 0 auto;
+  
   box-sizing: border-box;
 }
 

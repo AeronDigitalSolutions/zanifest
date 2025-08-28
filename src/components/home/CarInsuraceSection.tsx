@@ -61,7 +61,7 @@ const INSURANCELIST = [
    {
     name: "Doctor Indemnity Insurance",
     image: require("@/assets/medical-team.png"),
-    link: "#",
+    link: "./DoctorInd/DoctorInsurance",
   },
    {
     name: "Director & Officer Liability Insurance",
