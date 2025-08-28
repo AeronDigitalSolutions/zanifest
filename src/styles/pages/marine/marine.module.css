@@ -1,0 +1,168 @@
+/* === Container === */
+.container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 3rem;
+  padding: 3rem 6%;
+  background: #fff;
+  font-family: "Inter", sans-serif;
+}
+
+/* === Left Section === */
+.left {
+  flex: 1;
+}
+
+/* Typography */
+.subheading {
+  font-size: 1rem;
+  color: #2563eb;
+  font-weight: 500;
+  margin-bottom: 0.6rem;
+}
+
+.heading {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 1.5rem;
+  line-height: 1.35;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.iconWrapper {
+  color: #f97316;
+  font-size: 1.5rem;
+  margin-right: 0.3rem;
+}
+
+.highlight {
+  color: #f97316;
+  font-weight: 700;
+}
+
+/* Features */
+.features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 2.5rem;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+  color: #374151;
+}
+
+.features span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.features svg {
+  color: #2563eb;
+  font-size: 0.95rem;
+}
+
+/* Illustration */
+.illustration {
+  margin: 2rem 0;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.illustration img {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+}
+
+/* Partners */
+.partners {
+  margin-top: 1rem;
+  background: #f9fafb;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  width: fit-content;
+}
+
+.partners h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  color: #111827;
+}
+
+.partnerGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 160px);
+  gap: 1rem 1.5rem;
+}
+
+.partnerGrid img {
+  width: 100%;
+  height: auto;
+  max-height: 65px;
+  object-fit: contain;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 0.8rem;
+  background: #fff;
+  transition: transform 0.2s ease;
+}
+
+.partnerGrid img:hover {
+  transform: scale(1.05);
+}
+
+/* === Responsive Design === */
+@media (max-width: 1024px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 2rem;
+  }
+
+  .heading {
+    justify-content: center;
+  }
+
+  .features {
+    justify-content: center;
+  }
+
+  .illustration {
+    justify-content: center;
+  }
+
+  .partners {
+    margin: 2rem auto 0 auto;
+  }
+
+  .partnerGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .heading {
+    font-size: 1.8rem;
+  }
+
+  .illustration img {
+    max-width: 300px;
+  }
+
+  .partners {
+    padding: 1rem;
+  }
+
+  .partnerGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+  }
+}
