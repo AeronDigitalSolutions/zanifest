@@ -1,361 +1,1093 @@
-.container {
+/* ====== Layout ====== */
+.wrapper {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 40px 60px;
-  background: #f9fbff;
   gap: 40px;
-  font-family: Arial, sans-serif;
+  padding: 40px 60px;
+  background: #f8faff;
+  font-family: "Inter", sans-serif;
 }
 
-/* LEFT SECTION */
 .leftSection {
   flex: 1;
-  max-width: 45%;
+  padding-right: 20px;
 }
 
+.rightSection {
+  flex: 1.2;
+  background: #ffffff;
+  padding: 28px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ====== Left Section ====== */
 .heading {
-  font-size: 24px;
-  font-weight: bold;
-  color: #1a1a1a;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #1d2a3b;
 }
 
-.heading span {
-  color: #ff6600;
+.price {
+  color: orangered;
+  font-weight: 700;
 }
 
-.subtext {
-  color: #666;
-  margin: 10px 0 20px 0;
+.subText {
+  font-size: 16px;
+  margin-top: 6px;
+  color: #4b5563;
 }
 
-.whyChoose {
-  margin: 20px 0 10px 0;
-  font-size: 18px;
+.whyHeading {
+  margin-top: 30px;
+  font-size: 20px;
   font-weight: 600;
+  color: #1f2937;
 }
 
-.benefits {
+.featureList {
+  margin-top: 14px;
   list-style: none;
   padding: 0;
-  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.benefits li {
-  margin: 8px 0;
+.featureList li {
+  display: flex;
+  align-items: center;
   font-size: 15px;
+  color: #374151;
 }
 
-.iconGreen { color: green; margin-right: 6px; }
-.iconOrange { color: orange; margin-right: 6px; }
-.iconYellow { color: goldenrod; margin-right: 6px; }
-.iconBlue { color: royalblue; margin-right: 6px; }
-
-/* RIGHT SECTION */
-.rightSection {
-  flex: 1;
-  max-width: 50%;
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  margin-right: 12px;
+  font-size: 18px;
 }
 
+.green {
+  background: #e6f9f0;
+  color: #059669;
+}
+
+.red {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.yellow {
+  background: #fef9c3;
+  color: #ca8a04;
+}
+
+.blue {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+/* ====== Right Section (Form) ====== */
 .formHeading {
   font-size: 18px;
   font-weight: 600;
-  margin-bottom: 10px;
+  color: #1f2937;
 }
 
-.searchInput {
+.searchWrap {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  margin-bottom: 15px;
+}
+
+.inputBox {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.inputBox:focus {
+  border-color: #2563eb;
 }
 
 .popularChoices {
-  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .popularText {
   font-size: 14px;
-  margin-bottom: 8px;
-  color: #555;
+  font-weight: 500;
+  color: #374151;
 }
 
-.choicesGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+.muted {
+  color: #6b7280;
 }
 
-.choice {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  text-align: center;
-  font-size: 14px;
-  cursor: pointer;
-  background: #f9fbff;
-  transition: 0.2s;
-}
-.choice:hover {
-  background: #eaf3ff;
-}
-
-.dateTravellerRow {
+.countryList {
   display: flex;
-  gap: 12px;
-  margin-bottom: 15px;
+  gap: 14px;
+  flex-wrap: wrap;
 }
 
-.inputBox {
+.countryCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.2s;
+}
+
+.countryCard:hover {
+  transform: scale(1.05);
+}
+
+.countryImg {
+  border-radius: 50%;
+  object-fit: cover;
+  width: 60px;
+  height: 60px;
+  border: 2px solid transparent;
+}
+
+.countryActive .countryImg {
+  border-color: #ff3b00;
+}
+
+.countryName {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #111827;
+  text-align: center;
+}
+
+.selectedPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pill {
+  background: #ff3b00;
+  color: white;
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+/* ====== Dates ====== */
+.dateRow {
+  display: flex;
+  gap: 16px;
+}
+
+.dateField {
   flex: 1;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.travellerRow {
+.dateLabel {
+  font-size: 14px;
+  color: #374151;
+  font-weight: 500;
+}
+
+.dateBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.dateBtn:hover {
+  border-color: #2563eb;
+}
+
+/* ====== Travellers ====== */
+.travellerBox {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  padding: 12px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #f9fafb;
+  font-size: 14px;
+  color: #374151;
 }
 
-.travellerBox {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  flex: 1;
-  margin-right: 10px;
-}
-
-.addTraveller {
+.travellerLeft {
   display: flex;
   align-items: center;
-  gap: 6px;
-  background: #f3f7ff;
-  border: 1px solid #0077ff;
-  color: #0077ff;
-  padding: 8px 12px;
-  border-radius: 6px;
-  cursor: pointer;
+  gap: 8px;
 }
 
-.exploreBtn {
-  width: 100%;
-  background: #ff6600;
+.travellerIcon {
+  font-size: 18px;
+  color: #2563eb;
+}
+
+.addBtn {
+  background: none;
   border: none;
-  color: #fff;
-  font-weight: bold;
-  padding: 12px;
-  border-radius: 8px;
+  color: #2563eb;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.3s;
-}
-.exploreBtn:hover {
-  background: #e65c00;
 }
 
-/* MODAL STYLES */
+/* ====== CTA Explore Plans button ====== */
+.exploreBtn {
+  margin-top: 8px;
+  background: #ff3b00;
+  color: #ffffff;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.exploreBtn:hover {
+  background: #e63600;
+}
+
+/* ====== Modal Styles ====== */
 .modalOverlay {
   position: fixed;
   top: 0;
-  right: 0;
-  bottom: 0;
   left: 0;
-  background: rgba(0,0,0,0.3);
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+  align-items: center;
   z-index: 1000;
 }
 
 .modalContent {
-  width: 400px;
-  height: 100%;
   background: #fff;
-  padding: 20px;
-  border-radius: 12px 0 0 12px;
-  display: flex;
-  flex-direction: column;
-  animation: slideIn 0.3s ease;
+  padding: 28px;
+  border-radius: 12px;
+  max-width: 700px;
+  width: 95%;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
 }
 
-@keyframes slideIn {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+.modalHeading {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #1f2937;
 }
 
-.modalHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.closeBtn {
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.modalBody {
-  flex: 1;
-  overflow-y: auto;
-  margin-top: 15px;
-}
-
-.dateInputs {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.dateInputs input {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+.modalSubtext {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 20px;
 }
 
 .calendarBox {
-  background: #f9fbff;
-  border: 1px dashed #ccc;
-  border-radius: 8px;
-  padding: 30px;
-  text-align: center;
-  margin: 20px 0;
-  color: #777;
-}
-
-.tripDuration {
-  font-size: 14px;
-  color: #333;
-}
-
-.continueBtn {
-  background: #ff6600;
-  color: white;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-}
-/* Existing styles from previous answer stay same */
-
-/* Modal Common */
-.modalOverlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.3);
   display: flex;
-  justify-content: flex-end;
-  z-index: 1000;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 1rem;
+  margin-bottom: 16px;
 }
 
-.modalContent {
-  width: 420px;
-  height: 100%;
-  background: #fff;
-  padding: 20px;
-  border-radius: 12px 0 0 12px;
+/* ====== Calendar Styling ====== */
+.calendarMonth {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  animation: slideIn 0.3s ease;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 7px;
+  
 }
 
-@keyframes slideIn {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
-}
-
-.modalHeader {
+.calendarHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.closeBtn {
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.modalBody {
-  flex: 1;
-  overflow-y: auto;
-  margin-top: 15px;
-}
-
-.continueBtn {
-  background: #ff6600;
-  color: white;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 20px;
-}
-
-/* STEP 2 Styles */
-.signInText {
-  font-size: 14px;
   margin-bottom: 12px;
 }
 
+.monthName {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.navBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #374151;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.navBtn:hover {
+  background: #e5e7eb;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.dayName {
+  font-weight: 600;
+  font-size: 13px;
+  color: #6b7280;
+  padding: 4px 0;
+}
+
+.dateCell {
+  padding: 8px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.dateCell:hover {
+  background: #e0f2fe;
+  color: #2563eb;
+}
+
+.dateDisabled {
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.dateSelected {
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
+}
+
+.dateRange {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+/* ====== Modal Footer Buttons ====== */
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.cancelBtn {
+  background: none;
+  border: 1px solid #d1d5db;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #374151;
+  transition: background 0.2s;
+}
+
+.cancelBtn:hover {
+  background: #f3f4f6;
+}
+
+.applyBtn {
+  background: #ff3b00;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.applyBtn:hover {
+  background: #e63600;
+}
+/* Drawer Overlay */
+.drawerOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  z-index: 2000;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Right-side Drawer */
+.drawer {
+  background: #fff;
+     width: 494px;
+  height: 100%;
+  padding: 28px;
+  box-shadow: -4px 0 12px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.modalHeading {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 6px;
+}
+
+.modalSubtext {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 16px;
+}
+
+.calendarBox {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+/* Calendar Styling */
+.calendarMonth {
+  flex: 1;
+}
+
+.calendarTitle {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #1f2937;
+  text-align: center;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.calendarDayName {
+  font-weight: 600;
+  font-size: 13px;
+  color: #6b7280;
+  padding: 4px 0;
+}
+
+.calendarDate {
+  padding: 8px 0;
+  border-radius: 10%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.calendarDate:hover {
+  background: #e0f2fe;
+  color: #2563eb;
+}
+
+.inRange {
+  background: #dbeafe;
+  border-radius: 6px;
+  color: #1e40af;
+}
+
+.selectedDate {
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Empty cell */
+.emptyCell {
+  height: 34px;
+}
+
+/* Trip Duration */
+.tripDuration {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: #374151;
+}
+
+/* Continue Button */
+.modalContinueBtn {
+  background: #ff3b00;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 6rem;
+  transition: background 0.2s;
+}
+
+.modalContinueBtn:hover {
+  background: #e63600;
+}
+
+/* ====== Mobile Responsive ====== */
+@media (max-width: 768px) {
+  .drawer {
+    width: 100%;
+    height: auto;
+    max-height: 85%;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    padding: 20px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+  }
+
+  .calendarBox {
+    flex-direction: column;
+  }
+}
+
+.calendarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.navBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #374151;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.navBtn:hover {
+  background: #e5e7eb;
+}
+
+.calendarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.monthName {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.navBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #374151;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.navBtn:hover {
+  background: #e5e7eb;
+}
+/* ====== Traveller Modal ====== */
+.signInStrip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9fafb;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #374151;
+      font-weight: 600;
+  margin-bottom: 16px;
+}
+.spantext{
+  font-weight:500;
+}
 .signInBtn {
   background: none;
   border: none;
-  color: #0077ff;
+  color: #2563eb;
+  font-weight: 600;
   cursor: pointer;
-  font-weight: bold;
 }
 
-.travellerCount {
+.travellerCountBtns {
   display: flex;
-  gap: 10px;
-  margin: 15px 0;
+  gap: 20px;
+  margin-bottom: 16px;
 }
 
-.travellerCount button {
+.travellerCountBtn {
   flex: 1;
-  padding: 10px;
-  border: 1px solid #ddd;
-  background: #f9fbff;
-  border-radius: 6px;
+  padding: 10px 0;
+  border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  border-radius: 8px;
+  background: #fff;
+  font-size: 14px;
   cursor: pointer;
-  transition: 0.2s;
+  transition: all 0.2s;
 }
-.travellerCount button:hover {
-  background: #eaf3ff;
+
+.travellerCountBtn:hover {
+  border-color: #2563eb;
+}
+
+.travellerActive {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
 }
 
 .ageSelect {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
   margin-bottom: 20px;
 }
 
-.medicalSection {
+.medicalQ {
   font-size: 14px;
-  color: #333;
+  color: #374151;
+  margin-bottom: 12px;
+  font-weight: 600;
 }
 
 .radioGroup {
-  display: flex;
-  gap: 20px;
-  margin-top: 10px;
+     display: flex
+;
+    gap: 60px;
+    /* margin-bottom: 201px; */
+    margin-top: 2rem;
+    font-size: 14px;
+    color: #374151;
 }
-.radioGroup label {
-  display: flex;
-  align-items: center;
-  gap: 5px;
+.modalContinueBtn1 {
+  background: #ff3b00;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 18rem;
+  transition: background 0.2s;
+}
+/* ====== Mobile Responsive (All mobile screens) ====== */
+@media (max-width: 1024px) {
+  .wrapper {
+    flex-direction: column;
+    padding: 24px 20px;
+    gap: 24px;
+  }
+
+  .leftSection {
+    padding-right: 0;
+  }
+
+  .rightSection {
+    padding: 20px;
+    width: 100%;
+  }
+
+  .heading {
+    font-size: 22px;
+  }
+
+  .subText {
+    font-size: 14px;
+  }
+
+  .whyHeading {
+    font-size: 18px;
+    margin-top: 20px;
+  }
+
+  .formHeading {
+    font-size: 16px;
+  }
+
+  .inputBox {
+    font-size: 14px;
+    padding: 14px;   /* ✅ taller input fields for mobile */
+  }
+
+  .countryImg {
+    width: 50px;
+    height: 50px;
+  }
+
+  .countryName {
+    font-size: 12px;
+  }
+
+  .pill {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+
+  .dateRow {
+    flex-direction: column; /* ✅ stack fields on small screens */
+    gap: 12px;
+  }
+
+  .travellerBox {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+  }
+
+  .exploreBtn {
+    font-size: 15px;
+    padding: 12px;
+    border-radius: 8px;
+  }
+
+  .calendarBox {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .calendarGrid {
+    font-size: 12px;
+    gap: 4px;
+  }
+
+  .modalContent {
+    padding: 20px;
+    width: 95%;
+    max-height: 90%;
+    overflow-y: auto;
+  }
+
+  .modalHeading {
+    font-size: 18px;
+  }
+
+  .modalSubtext {
+    font-size: 13px;
+  }
+
+  .modalFooter {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cancelBtn,
+  .applyBtn {
+    width: 100%;
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  /* Drawer for mobile */
+  .drawer {
+    width: 100%;
+    max-height: 90%;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    padding: 20px;
+  }
+
+  /* Traveller modal mobile */
+  .signInStrip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+
+  .travellerCountBtns {
+    flex-wrap: wrap;
+  }
+
+  .travellerCountBtn {
+    flex: 1 1 45%;
+    font-size: 18px;
+    padding: 15px 0;
+  }
+
+  .ageSelect {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .medicalQ {
+    font-size: 13px;
+  }
+
+  .radioGroup {
+    gap: 20px; /* ✅ smaller gap */
+    flex-wrap: wrap;
+    font-size: 13px;
+  }
+
+  .modalContinueBtn,
+  .modalContinueBtn1 {
+    width: 100%;
+    margin-top: 2rem; /* ✅ avoid huge blank spaces */
+    font-size: 15px;
+    padding: 12px;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .heading {
+    font-size: 20px;
+  }
+
+  .subText {
+    font-size: 13px;
+  }
+
+  .whyHeading {
+    font-size: 16px;
+  }
+
+  .inputBox {
+    font-size: 13px;
+    padding: 12px; /* ✅ compact yet clickable */
+  }
+
+  .countryImg {
+    width: 44px;
+    height: 44px;
+  }
+
+  .countryName {
+    font-size: 11px;
+  }
+
+  .pill {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  .travellerBox {
+    font-size: 12px;
+    gap: 8px;
+  }
+
+  .exploreBtn {
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .calendarGrid {
+    font-size: 11px;
+    gap: 3px;
+  }
+
+  .modalHeading {
+    font-size: 16px;
+  }
+
+  .modalSubtext {
+    font-size: 12px;
+  }
+
+  .cancelBtn,
+  .applyBtn {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .radioGroup {
+    gap: 16px;
+    font-size: 12px;
+  }
+}
+/* ====== Mobile Fix for Right Section Spacing ====== */
+@media (max-width: 1024px) {
+  .rightSection {
+    width: 100%;
+    padding: 20px 16px;   /* ✅ equal spacing left & right */
+    box-sizing: border-box;
+  }
+
+  .dateRow,
+  .travellerBox,
+  .searchWrap,
+  .popularChoices,
+  .selectedPills {
+    width: 100%;
+    margin-left: 0;       /* ✅ no uneven indent */
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .rightSection {
+    padding: 16px 14px;   /* ✅ tighter but still equal on small phones */
+  }
+}
+/* ====== Mobile Fix for Calendar & Traveller Drawer Spacing ====== */
+@media (max-width: 1024px) {
+  /* Calendar Modal */
+  .modalContent {
+    padding: 20px 16px;      /* ✅ equal left & right */
+    box-sizing: border-box;
+    width: 95%;
+    margin: 0 auto;          /* ✅ centers modal */
+  }
+
+  .calendarBox {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  /* Traveller Drawer */
+  .drawer {
+    width:auto;
+    max-height: 90%;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    padding: 20px 16px;       /* ✅ equal spacing */
+    box-sizing: border-box;
+  }
+
+  .drawer .calendarBox,
+  .drawer .travellerCountBtns,
+  .drawer .signInStrip {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .modalContent,
+  .drawer {
+    padding: 16px 14px;       /* ✅ tighter equal spacing on very small screens */
+  }
+}
+/* ====== Mobile Fix for Search Country Field Overflow ====== */
+@media (max-width: 1024px) {
+  .searchWrap {
+    width: 100%;
+    box-sizing: border-box;  /* ✅ keeps it inside parent */
+  }
+
+  .inputBox {
+    width: 100%;             /* ✅ force full width */
+    max-width: 100%;         /* ✅ prevent overflow */
+    padding: 14px;           /* ✅ taller touch-friendly input */
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 480px) {
+  .inputBox {
+    padding: 12px;           /* ✅ compact but equal */
+    font-size: 13px;
+  }
+}
+/* ✅ Equal left & right spacing INSIDE drawer for mobile */
+@media (max-width: 1024px) {
+  .drawer {
+    padding-left: 16px;
+    padding-right: 16px; /* ensures equal margins */
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 480px) {
+  .drawer {
+    padding-left: 14px;
+    padding-right: 14px; /* tighter but still equal */
+  }
+}
+/* 🔧 Final fix: equal left & right inside drawer (mobile only) */
+@media (max-width: 1024px) {
+  .drawer {
+    width: 100% !important;      /* override the earlier width:auto */
+    padding-left: 16px;
+    padding-right: 16px;
+    box-sizing: border-box;
+    scrollbar-gutter: stable;     /* keeps right padding visible if scrollbar shows */
+  }
+}
+
+@media (max-width: 480px) {
+  .drawer {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+}
+/* 📱 Equal 10px margin on both sides of drawer (mobile) */
+@media (max-width: 768px) {
+  .drawer {
+    width: calc(100% - 20px); /* full width minus 10px left + 10px right */
+    margin: 0 10px;
+    box-sizing: border-box;
+  }
+}
+/* 📱 Drawer: exact 10px left & right on mobile */
+@media (max-width: 768px) {
+  .drawer {
+    left: 10px !important;   /* create left gutter */
+    right: 10px !important;  /* create right gutter */
+    width: auto !important;  /* width determined by left/right */
+    margin: 0 !important;    /* ignore margins so gutters are exact */
+    box-sizing: border-box;
+  }
 }
