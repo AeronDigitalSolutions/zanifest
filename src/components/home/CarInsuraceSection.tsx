@@ -21,7 +21,7 @@ const INSURANCELIST = [
   {
     name: "Travel Insurance",
     image: require("@/assets/airplane.png"),
-    link: "./marineinsurance/marineinsurance8",
+    link: "./Travel/Travel1",
   },
   {
     name: "Car Insurance",
