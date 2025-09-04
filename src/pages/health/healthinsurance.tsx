@@ -34,14 +34,14 @@ function healthinsurance() {
   const [selectedMan, setSelectedMan] = useState<boolean>(true);
   const [selectedMember, setSelectedMember] = useState<number>(0);
   const router = useRouter();
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      window.history.scrollRestoration = "manual";
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 0);
-    }
-  }, []);
+
+const handleRouteChange = () => {
+  requestAnimationFrame(() => {
+    // reset scroll on the container
+    const container = document.querySelector(".cont");
+    if (container) container.scrollTop = 0;
+  });
+};
   return (
     <div>
       <UserDetails />
