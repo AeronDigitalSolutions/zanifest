@@ -11,9 +11,6 @@ import VehicleBrandDialog from "@/pages/CommercialVehicle/VehicleBrandDialog";
 import VehicleModelDialog from "@/pages/CommercialVehicle/VehicleModelDialog";
 import VehicleVariantDialog from "@/pages/CommercialVehicle/VehicleVariantDialog";
 import YearDialog from "@/pages/CommercialVehicle/YearDialog";
-import SelectionFormDialog from "@/pages/CommercialVehicle/SelectionFormDialog";
-import CommercialVehicle5 from "@/pages/CommercialVehicle/CommercialVehicle5";
-
 
 const CommercialVehicle1: React.FC = () => {
   const [activeSection, setActiveSection] = useState<
@@ -23,18 +20,21 @@ const CommercialVehicle1: React.FC = () => {
     | "vehicleModel"
     | "vehicleVariant"
     | "yearDialog"
-    | "selectionForm"
-     |"plan"
+    |"CommercialVehicle1"
     | null
   >(null);
 
   // ✅ Selection states
   const [vehicleNumber, setVehicleNumber] = useState("DL01LAG8279");
   const [selectedVehicle, setSelectedVehicle] = useState("Truck");
-  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
-  const [selectedModel, setSelectedModel] = useState<string | null>(null);
-  const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
-  const [selectedYear, setSelectedYear] = useState<number | null>(null);
+  const [selectedBrand, setSelectedBrand] = useState<string | null>(
+    "TATA MOTORS LTD"
+  );
+  const [selectedModel, setSelectedModel] = useState<string | null>("LPT 709");
+  const [selectedVariant, setSelectedVariant] = useState<string | null>(
+    "g DCR39HSD 85B6M5 TT - CNG"
+  );
+  const [selectedYear, setSelectedYear] = useState<number | null>(2022);
 
   return (
     <>
@@ -64,8 +64,15 @@ const CommercialVehicle1: React.FC = () => {
 
           {/* Right Section */}
           <div className={styles.right}>
-            <Image src={vehicle} alt="Commercial Vehicle" className={styles.truckImg} />
-            <button className={styles.button} onClick={() => setActiveSection("vehicleInfo")}>
+            <Image
+              src={vehicle}
+              alt="Commercial Vehicle"
+              className={styles.truckImg}
+            />
+            <button
+              className={styles.button}
+              onClick={() => setActiveSection("vehicleInfo")}
+            >
               View Prices
             </button>
           </div>
@@ -76,23 +83,44 @@ const CommercialVehicle1: React.FC = () => {
       {activeSection === "vehicleInfo" && (
         <VehicleInfoDialog
           onClose={() => setActiveSection(null)}
+          oncommercialvehicle1={() => setActiveSection("CommercialVehicle1")}
           onChooseVehicle={() => setActiveSection("chooseVehicle")}
+          onChooseBrand={() => setActiveSection("vehicleBrand")}
+          onChooseModel={() => setActiveSection("vehicleModel")}
+          onChooseFuelVariant={() => setActiveSection("vehicleVariant")}
+          onChooseYear={() => setActiveSection("yearDialog")}
+          vehicleNumber={vehicleNumber}
+          selectedVehicle={selectedVehicle}
+          selectedBrand={selectedBrand}
+          selectedModel={selectedModel}
+          selectedVariant={selectedVariant}
+          selectedYear={selectedYear}
+          onUpdateData={(data) => {
+            if (data.vehicle) setSelectedVehicle(data.vehicle);
+            if (data.brand) setSelectedBrand(data.brand);
+            if (data.model) setSelectedModel(data.model);
+            if (data.variant) setSelectedVariant(data.variant);
+            if (data.year) setSelectedYear(data.year);
+          }}
         />
       )}
-
       {activeSection === "chooseVehicle" && (
         <ChooseVehicleDialog
           onClose={() => setActiveSection(null)}
-          onSelectVehicle={(vehicle) => {
-            setSelectedVehicle(vehicle);
+          onSelectVehicle={(v) => {
+            setSelectedVehicle(v);
             setActiveSection("vehicleBrand");
           }}
+          onBackToInfo={() => setActiveSection("vehicleInfo")}
+          onNextToBrand={() => setActiveSection("vehicleBrand")}
         />
       )}
 
       {activeSection === "vehicleBrand" && (
         <VehicleBrandDialog
           onClose={() => setActiveSection(null)}
+          onBackToChooseVehicle={() => setActiveSection("chooseVehicle")} 
+          onNextToVehicleModel={() => setActiveSection("vehicleModel")}
           vehicleNumber={vehicleNumber}
           selectedVehicle={selectedVehicle}
           onSelectBrand={(brand) => {
@@ -104,6 +132,8 @@ const CommercialVehicle1: React.FC = () => {
 
       {activeSection === "vehicleModel" && selectedBrand && (
         <VehicleModelDialog
+          onBack={() => setActiveSection("vehicleBrand")}
+          onNext={() => setActiveSection("vehicleVariant")}
           onClose={() => setActiveSection(null)}
           vehicleNumber={vehicleNumber}
           selectedVehicle={selectedVehicle}
@@ -117,6 +147,8 @@ const CommercialVehicle1: React.FC = () => {
 
       {activeSection === "vehicleVariant" && selectedBrand && selectedModel && (
         <VehicleVariantDialog
+          onBackToModel={() => setActiveSection("vehicleModel")} // 👈 back
+          onNextToYear={() => setActiveSection("yearDialog")}
           onClose={() => setActiveSection(null)}
           vehicleNumber={vehicleNumber}
           selectedVehicle={selectedVehicle}
@@ -134,6 +166,7 @@ const CommercialVehicle1: React.FC = () => {
         selectedModel &&
         selectedVariant && (
           <YearDialog
+            onBack={() => setActiveSection("vehicleVariant")} // 👈 go back
             onClose={() => setActiveSection(null)}
             vehicleNumber={vehicleNumber}
             selectedVehicle={selectedVehicle}
@@ -142,27 +175,12 @@ const CommercialVehicle1: React.FC = () => {
             selectedVariant={selectedVariant}
             onSelectYear={(year) => {
               setSelectedYear(year);
-              setActiveSection("selectionForm"); 
+              setActiveSection("vehicleInfo");
             }}
           />
         )}
 
-      {activeSection === "selectionForm" &&
-        selectedBrand &&
-        selectedModel &&
-        selectedVariant &&
-        selectedYear && (
-          <SelectionFormDialog
-            onClose={() => setActiveSection(null)}
-            vehicleNumber={vehicleNumber}
-            selectedVehicle={selectedVehicle}
-            selectedBrand={selectedBrand}
-            selectedModel={selectedModel}
-            selectedVariant={selectedVariant}
-            selectedYear={selectedYear}
-          />
-        )}
-  <Footer/>
+      <Footer />
     </>
   );
 };

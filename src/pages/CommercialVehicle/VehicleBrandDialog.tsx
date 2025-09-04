@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useState } from "react";
 import styles from "@/styles/pages/CommercialVehicle/VehicleBrandDialog.module.css";
@@ -21,6 +22,8 @@ interface VehicleBrandDialogProps {
   onClose: () => void;
   vehicleNumber: string;
   selectedVehicle: string;
+   onBackToChooseVehicle: () => void;   
+  onNextToVehicleModel: () => void;   
   onSelectBrand: (brand: string) => void; 
 }
 
@@ -29,6 +32,8 @@ const VehicleBrandDialog: React.FC<VehicleBrandDialogProps> = ({
   vehicleNumber,
   selectedVehicle,
   onSelectBrand,
+    onBackToChooseVehicle,
+  onNextToVehicleModel,
 }) => {
   const [search, setSearch] = useState("");
 
@@ -49,7 +54,6 @@ const VehicleBrandDialog: React.FC<VehicleBrandDialogProps> = ({
               <FiMapPin className={styles.icon} />
               <span>{vehicleNumber}</span>
             </div>
-            <FiEdit2 className={styles.editIcon} />
           </div>
 
           {/* Selected Vehicle */}
@@ -58,15 +62,19 @@ const VehicleBrandDialog: React.FC<VehicleBrandDialogProps> = ({
               <FaTruck className={styles.icon} />
               <span>{selectedVehicle}</span>
             </div>
-            <FiEdit2 className={styles.editIcon} />
           </div>
         </div>
 
         {/* Right Panel */}
         <div className={styles.rightPanel}>
           <div className={styles.header}>
-            <FiArrowLeft size={18} onClick={onClose} />
+            <button className={styles.arrowBtn} onClick={onBackToChooseVehicle}>
+              ‹
+            </button>
             <span>Search Vehicle Brand</span>
+            <button className={styles.arrowBtn} onClick={onNextToVehicleModel}>
+              ›
+            </button>            
           </div>
 
           {/* Search */}

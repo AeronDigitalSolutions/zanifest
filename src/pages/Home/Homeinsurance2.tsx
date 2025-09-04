@@ -24,11 +24,13 @@ const Homeinsurance2: React.FC = () => {
         {/* House Value Input */}
         <div className={styles.inputGroup}>
           <input
-            type="text"
+            type="number"
             placeholder="Enter current market value of your house (₹)"
             value={houseValue}
-            onChange={(e) => setHouseValue(e.target.value)}
+            onChange={(e) => setHouseValue(e.target.value.replace(/\D/g, ""))}
             className={styles.input}
+            min="0"
+            step="1"
           />
           <FiInfo className={styles.icon} />
         </div>
@@ -45,11 +47,15 @@ const Homeinsurance2: React.FC = () => {
         {/* Household Items */}
         <div className={styles.inputGroup}>
           <input
-            type="text"
+            type="number"
             placeholder="Value of household items (Rs.)"
             value={householdValue}
-            onChange={(e) => setHouseholdValue(e.target.value)}
+            onChange={(e) =>
+              setHouseholdValue(e.target.value.replace(/\D/g, ""))
+            }
             className={styles.input}
+            min="0"
+            step="1"
           />
           <FiInfo className={styles.icon} />
         </div>

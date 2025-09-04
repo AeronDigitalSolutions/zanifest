@@ -6,10 +6,11 @@ import bajaj from "@/assets/pageImages/bajaj.png";
 import chola from "@/assets/home/chola ms.png";
 import digit from "@/assets/pageImages/digit.png";
 import { FaCheck } from "react-icons/fa";
+import { FaTruck, FaPlane, FaShip, FaBox, FaTrain } from "react-icons/fa";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import { useRouter } from "next/navigation";
-// ✅ Extracted Modal as a separate component
+
 const Modal = ({
   showModal,
   modalStep,
@@ -22,9 +23,9 @@ const Modal = ({
   numberToWords,
   isContinueDisabled,
   handleModalContinue,
+  handleCompanyChange,
 }: any) => {
   if (!showModal) return null;
-   
 
   return (
     <div className={styles.modalOverlay}>
@@ -35,18 +36,20 @@ const Modal = ({
             <h3 className={styles.modalTitle}>
               Just one last thing before you get your quotes
             </h3>
-            <p className={styles.modalSubtitle}>Tell us the name of your company</p>
+            <p className={styles.modalSubtitle}>
+              Tell us the name of your company
+            </p>
             <div className={styles.inputGroup}>
               <label htmlFor="companyName" className={styles.inputLabel}>
-                Company name *
+                Company name
               </label>
               <input
                 id="companyName"
                 type="text"
                 value={companyName}
-                onChange={(e) => setCompanyName(e.target.value)}
+                onChange={handleCompanyChange}
                 className={styles.textInput}
-                placeholder="company name"
+                placeholder="Company Name"
               />
             </div>
             <button
@@ -71,17 +74,51 @@ const Modal = ({
               How will your goods be making their journey?
             </p>
             <div className={styles.transportOptions}>
-              {["Road", "Air", "Sea", "Courier", "Rail"].map((option) => (
-                <div
-                  key={option}
-                  className={`${styles.transportOption} ${
-                    transportMode === option ? styles.selected : ""
-                  }`}
-                  onClick={() => setTransportMode(option)}
-                >
-                  {option}
-                </div>
-              ))}
+              <div
+                className={`${styles.transportOption} ${
+                  transportMode === "Road" ? styles.selected : ""
+                }`}
+                onClick={() => setTransportMode("Road")}
+              >
+                <FaTruck className={styles.transportIcon} />
+                Road
+              </div>
+              <div
+                className={`${styles.transportOption} ${
+                  transportMode === "Air" ? styles.selected : ""
+                }`}
+                onClick={() => setTransportMode("Air")}
+              >
+                <FaPlane className={styles.transportIcon} />
+                Air
+              </div>
+              <div
+                className={`${styles.transportOption} ${
+                  transportMode === "Sea" ? styles.selected : ""
+                }`}
+                onClick={() => setTransportMode("Sea")}
+              >
+                <FaShip className={styles.transportIcon} />
+                Sea
+              </div>
+              <div
+                className={`${styles.transportOption} ${
+                  transportMode === "Courier" ? styles.selected : ""
+                }`}
+                onClick={() => setTransportMode("Courier")}
+              >
+                <FaBox className={styles.transportIcon} />
+                Courier
+              </div>
+              <div
+                className={`${styles.transportOption} ${
+                  transportMode === "Rail" ? styles.selected : ""
+                }`}
+                onClick={() => setTransportMode("Rail")}
+              >
+                <FaTrain className={styles.transportIcon} />
+                Rail
+              </div>
             </div>
             <button
               onClick={handleModalContinue}
@@ -144,7 +181,7 @@ const Marine5 = () => {
   const [companyName, setCompanyName] = useState("");
   const [transportMode, setTransportMode] = useState("");
   const [coverAmount, setCoverAmount] = useState("");
-  const router = useRouter(); 
+  const router = useRouter();
 
   useEffect(() => {
     setShowModal(true);
@@ -179,6 +216,14 @@ const Marine5 = () => {
     const value = e.target.value;
     const formattedValue = formatNumber(value);
     setCoverAmount(formattedValue);
+  };
+
+  const handleCompanyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    const formattedValue = inputValue.replace(/\b\w/g, (char) =>
+      char.toUpperCase()
+    );
+    setCompanyName(formattedValue);
   };
 
   const numberToWords = (num: string) => {
@@ -249,15 +294,23 @@ const Marine5 = () => {
         numberToWords={numberToWords}
         isContinueDisabled={isContinueDisabled}
         handleModalContinue={handleModalContinue}
+        handleCompanyChange={handleCompanyChange}
       />
 
       {/* ✅ Background always rendered, blurred if modal is open */}
-      <div className={`${styles.pageContent} ${showModal ? styles.blurred : ""}`}>
+      <div
+        className={`${styles.pageContent} ${showModal ? styles.blurred : ""}`}
+      >
         <Navbar />
 
         {/* ---------- TOP BAR ---------- */}
         <div className={styles.topBar}>
-          <button className={styles.backBtn}>←</button>
+          <button
+            className={styles.backBtn}
+            onClick={() => router.push("Marine1")}
+          >
+            ←
+          </button>
           <div className={styles.info}>
             <div>
               <span className={styles.label}>Commodity details</span>
@@ -299,7 +352,12 @@ const Marine5 = () => {
                     <span className={styles.coveredLabel}>Covered amount</span>
                     <strong className={styles.coveredValue}>₹ 54,45,556</strong>
                   </div>
-                  <button className={styles.quoteBtn}  onClick={() => router.push("Marine6")}>Get quote</button>
+                  <button
+                    className={styles.quoteBtn}
+                    onClick={() => router.push("Marine6")}
+                  >
+                    Get quote
+                  </button>
                 </div>
                 <div className={styles.coverages}>
                   <div className={styles.linetext}>
@@ -308,11 +366,12 @@ const Marine5 = () => {
                   <div className={styles.tagsRow}>
                     <div className={styles.tags}>
                       <span>
-                        <FaCheck size={12} className={styles.tick} /> Theft/pilferage
+                        <FaCheck size={12} className={styles.tick} />{" "}
+                        Theft/pilferage
                       </span>
                       <span>
-                        <FaCheck size={12} className={styles.tick} /> Loading and
-                        unloading
+                        <FaCheck size={12} className={styles.tick} /> Loading
+                        and unloading
                       </span>
                       <span>
                         <FaCheck size={12} className={styles.tick} /> Malicious
@@ -341,19 +400,23 @@ const Marine5 = () => {
                 <span className={styles.webinar}>Webinar (Online)</span>
               </p>
               <h5 className={styles.heading}>
+                {" "}
                 FIEO - Federation of Indian Export Organisation (Ministry of
-                commerce)
+                commerce){" "}
               </h5>
               <p className={styles.desc}>
+                {" "}
                 Moments from our recent webinar on Role of Insurance in managing
-                Export Supply Chain risk
+                Export Supply Chain risk{" "}
               </p>
               <a href="#" className={styles.link}>
-                Read more →
+                {" "}
+                Read more →{" "}
               </a>
             </div>
           </div>
         </div>
+
         <Footer />
       </div>
     </>
