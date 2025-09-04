@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation";
 const Homeinsurance: React.FC = () => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [whatsappUpdates, setWhatsappUpdates] = useState(false);
+  const [fullName, setFullName] = useState("");
+  const [mobile, setMobile] = useState("+91 ");
   const router = useRouter();
 
   const handleOptionChange = (option: string) => {
@@ -26,6 +28,31 @@ const Homeinsurance: React.FC = () => {
     router.push("Homeinsurance2");
   };
 
+  // ✅ Full Name handler (capitalize each word)
+  const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let input = e.target.value.replace(/[^a-zA-Z\s]/g, ""); // sirf letters & space
+    input = input
+      .split(" ")
+      .filter(Boolean) // extra spaces hatao
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+    setFullName(input);
+  };
+
+  // ✅ Mobile handler
+  const handleMobileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const prefix = "+91 ";
+    let input = e.target.value;
+
+    if (!input.startsWith(prefix)) {
+      input = prefix;
+    }
+
+    const digitsOnly = input.substring(prefix.length).replace(/\D/g, "");
+    const limitedDigits = digitsOnly.slice(0, 10);
+
+    setMobile(prefix + limitedDigits);
+  };
   return (
     <div>
       <Navbar />
@@ -55,12 +82,25 @@ const Homeinsurance: React.FC = () => {
         {/* ✅ form with navigation */}
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.inputGroup}>
-            <input type="text" placeholder="Full Name" className={styles.input} />
+            <input
+              type="text"
+              placeholder="Full Name"
+              className={styles.input}
+              value={fullName}
+              onChange={handleFullNameChange}
+            />{" "}
             <FiUser className={styles.inputIcon} />
           </div>
 
           <div className={styles.inputGroup}>
-            <input type="text" placeholder="Mobile Number" className={styles.input} />
+            <input
+              type="tel"
+              placeholder="Mobile Number"
+              className={styles.input}
+              value={mobile}
+              onChange={handleMobileChange}
+              maxLength={14} // +91 + 10 digits = 14 chars
+            />{" "}
             <FiPhone className={styles.inputIcon} />
             <span className={styles.noSpam}>We don’t spam</span>
           </div>

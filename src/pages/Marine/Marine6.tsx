@@ -4,11 +4,12 @@ import React from "react";
 import styles from "@/styles/pages/marine/marine6.module.css";
 import Image, { StaticImageData } from "next/image";
 
-// Assets
 import chola from "@/assets/home/chola ms.png";
 import tata from "@/assets/images.jpeg";
 import icici from "@/assets/CommercialVehicle/ICICIlombard.png";
 import agent from "@/assets/health/manicon.webp";
+import { useRouter } from "next/navigation";
+
 
 // Icons
 import {
@@ -34,7 +35,6 @@ type PolicyCardProps = {
   extraCoverages: number;
 };
 
-// ✅ Structured data moved to top
 const policies: PolicyCardProps[] = [
   {
     logo: tata,
@@ -123,13 +123,15 @@ const PolicyCard: React.FC<PolicyCardProps> = ({
 };
 
 const Marine6: React.FC = () => {
+    const router = useRouter(); 
+  
   return (
      <>
     <Navbar/>
     <div className={styles.wrapper}>
       {/* Back */}
       <button className={styles.back}>
-        <FaArrowLeft size={16} />
+        <FaArrowLeft size={16}   onClick={() => router.push("Marine5")}/>
         Back
       </button>
 

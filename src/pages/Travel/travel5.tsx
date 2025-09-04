@@ -12,6 +12,9 @@ import Footer from "@/components/ui/Footer";
 
 const PersonalDetails: React.FC = () => {
   const [step, setStep] = useState(1);
+  const [pincode, setPincode] = useState("");
+  const [email, setEmail] = useState("");
+
   const router = useRouter();
 
   const handleBack = () => {
@@ -24,6 +27,56 @@ const PersonalDetails: React.FC = () => {
     }
   };
 
+  // Input Handlers
+  const handleNameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/[^a-zA-Z\s]/g, ""); // only letters + spaces
+    value = value.replace(/\b\w/g, (char) => char.toUpperCase()); // capitalize first letter of each word
+    e.target.value = value;
+  };
+
+  const handleDOBInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, ""); // keep only digits
+
+    if (value.length > 8) value = value.slice(0, 8); // max 8 digits (DDMMYYYY)
+
+    // Auto format: DD-MM-YYYY
+    if (value.length > 4) {
+      value = value.replace(/(\d{2})(\d{2})(\d{1,4})/, "$1-$2-$3");
+    } else if (value.length > 2) {
+      value = value.replace(/(\d{2})(\d{1,2})/, "$1-$2");
+    }
+
+    e.target.value = value;
+  };
+
+  // ✅ Pincode handler
+  const handlePincodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const digitsOnly = e.target.value.replace(/\D/g, "");
+    setPincode(digitsOnly.slice(0, 6));
+  };
+
+  const handlePassportInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, ""); // allow only digits
+    e.target.value = value;
+  };
+
+  const handlePanInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.toUpperCase(); // uppercase
+    if (value.length > 11) value = value.slice(0, 11); // max 11 chars
+    e.target.value = value;
+  };
+
+  const handleMobileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, ""); // only digits
+    if (value.length > 10) value = value.slice(0, 10); // max 10 digits
+    e.target.value = value;
+  };
+  // ✅ Email handler
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let input = e.target.value.trim().toLowerCase();
+    input = input.replace(/[^a-z0-9@._-]/g, ""); // sirf valid chars allow karega
+    setEmail(input);
+  };
   return (
     <>
       <Navbar />
@@ -50,7 +103,9 @@ const PersonalDetails: React.FC = () => {
 
             <div className={styles.stepper}>
               <div
-                className={`${styles.step} ${step >= 1 ? styles.completed : ""}`}
+                className={`${styles.step} ${
+                  step >= 1 ? styles.completed : ""
+                }`}
               >
                 {step > 1 ? "✓" : "1"}
               </div>
@@ -84,7 +139,11 @@ const PersonalDetails: React.FC = () => {
                 <div className={styles.row}>
                   <div className={styles.formGroup}>
                     <label>Full Name</label>
-                    <input type="text" placeholder="Enter full name" />
+                    <input
+                      type="text"
+                      placeholder="Enter full name"
+                      onInput={handleNameInput}
+                    />{" "}
                   </div>
                   <div className={styles.formGroup}>
                     <label>Gender</label>
@@ -110,6 +169,7 @@ const PersonalDetails: React.FC = () => {
                     <input
                       type="text"
                       placeholder="Enter date of birth (DD-MM-YYYY)"
+                      onInput={handleDOBInput}
                     />
                   </div>
                   <div className={styles.formGroup}>
@@ -121,7 +181,11 @@ const PersonalDetails: React.FC = () => {
                 <div className={styles.row}>
                   <div className={styles.formGroup}>
                     <label>Passport Number</label>
-                    <input type="text" placeholder="Enter passport number" />
+                    <input
+                      type="text"
+                      placeholder="Enter passport number"
+                      onInput={handlePassportInput}
+                    />{" "}
                   </div>
                   <div className={styles.formGroup}>
                     <label className={styles.labelgroup}>
@@ -145,22 +209,26 @@ const PersonalDetails: React.FC = () => {
                 <div className={styles.row}>
                   <div className={styles.formGroup}>
                     <label>PAN Number</label>
-                    <input type="text" placeholder="Enter pan number" />
+                    <input
+                      type="text"
+                      placeholder="Enter pan number"
+                      onInput={handlePanInput}
+                    />{" "}
                   </div>
                   <div className={styles.formGroup}>
                     <label>Mobile Number</label>
                     <div className={styles.phoneWrapper}>
-                      <select>
-                        <option>+91</option>
-                      </select>
-                      <input type="text" placeholder="Mobile number" />
+                      <input
+                        type="text"
+                        placeholder="Mobile number"
+                        onInput={handleMobileInput}
+                      />{" "}
                     </div>
                   </div>
                 </div>
 
                 <label className={styles.checkbox}>
-                  <input type="checkbox" />
-                  I don’t have a pancard
+                  <input type="checkbox" />I don’t have a pancard
                 </label>
 
                 <p className={styles.helperNote}>
@@ -169,7 +237,11 @@ const PersonalDetails: React.FC = () => {
 
                 <div className={styles.row}>
                   <div className={styles.formGroup}>
-                    <input type="text" placeholder="Enter nominee full name" />
+                    <input
+                      type="text"
+                      placeholder="Enter nominee full name"
+                      onInput={handleNameInput}
+                    />{" "}
                   </div>
                   <div className={styles.formGroup}>
                     <div className={styles.selectWrapper}>
@@ -241,11 +313,27 @@ const PersonalDetails: React.FC = () => {
                 <div className={styles.row}>
                   <div className={styles.formGroup}>
                     <label>Email</label>
-                    <input type="email" placeholder="Enter email" />
+                    <input
+                      type="email"
+                      placeholder="Email id *"
+                      value={email}
+                      onChange={handleEmailChange}
+                      className={styles.input}
+                      required
+                      pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                      title="Please enter a valid email address"
+                    />{" "}
                   </div>
                   <div className={styles.formGroup}>
                     <label>Pincode</label>
-                    <input type="text" placeholder="Enter pincode" />
+                    <input
+                      type="tel"
+                      placeholder="Enter your pincode"
+                      value={pincode}
+                      onChange={handlePincodeChange}
+                      maxLength={6}
+                      className={styles.input}
+                    />
                   </div>
                 </div>
                 <div className={styles.row}>
@@ -262,12 +350,10 @@ const PersonalDetails: React.FC = () => {
                   <div className={styles.formGroup}>
                     <label>Alternate Number</label>
                     <div className={styles.phoneWrapper}>
-                      <select>
-                        <option>+91</option>
-                      </select>
                       <input
                         type="text"
-                        placeholder="Enter alternate number (Optional)"
+                        placeholder="Mobile number"
+                        onInput={handleMobileInput}
                       />
                     </div>
                   </div>

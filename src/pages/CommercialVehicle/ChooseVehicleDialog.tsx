@@ -13,11 +13,12 @@ import { TbBus } from "react-icons/tb";
 import { RiMotorbikeFill } from "react-icons/ri";
 import { BiLoader } from "react-icons/bi";
 
-import { useRouter } from "next/navigation";  // ✅ Import router
-
 interface ChooseVehicleDialogProps {
   onClose: () => void;
-  onSelectVehicle: (vehicle: string) => void; // ✅ callback
+  onSelectVehicle: (vehicle: string) => void;
+  onBackToInfo: () => void;   
+  onNextToBrand: () => void;  
+
 }
 
 const vehicles = [
@@ -38,9 +39,11 @@ const vehicles = [
 const ChooseVehicleDialog: React.FC<ChooseVehicleDialogProps> = ({
   onClose,
   onSelectVehicle,
+  onBackToInfo,
+  onNextToBrand,
+  
 }) => {
   const [active, setActive] = useState("Truck");
-  const router = useRouter();  // ✅ Init router
 
   return (
     <div className={styles.overlay}>
@@ -53,14 +56,13 @@ const ChooseVehicleDialog: React.FC<ChooseVehicleDialogProps> = ({
         {/* Right Content */}
         <div className={styles.right}>
           <div className={styles.header}>
-            {/* ✅ Navigate to VehicalInfoDialog */}
-            <button
-              className={styles.navBtn}
-              onClick={() => router.push("VehicleInfoDialog")}
-            >
-              ←
+            <button className={styles.arrowBtn} onClick={onBackToInfo}>
+              ‹
             </button>
-            <h2>Choose the type of your vehicle</h2>
+            <span>Choose the type of your vehicle</span>
+            <button className={styles.arrowBtn} onClick={onNextToBrand}>
+              ›
+            </button>  
           </div>
 
           <div className={styles.vehicleGrid}>

@@ -182,7 +182,9 @@
   outline: none;
   border-left: 1px solid #e3e9f1;
 }
-
+.formGroup input {
+  text-transform: capitalize;
+}
 /* Continue button */
 .continueBtn {
   align-self: center;

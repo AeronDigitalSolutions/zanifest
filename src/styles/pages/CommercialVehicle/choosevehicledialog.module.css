@@ -30,7 +30,6 @@
 
 .vehicleImg {
   width: 280px;              
-  height: 280px;
 }
 
 .right {
@@ -39,18 +38,27 @@
 }
 
 .header {
-  display: flex;
   align-items: center;
-  justify-content: space-between;
   background: #ff5722;
-  color: #fff;
   border-radius: 8px;
-  padding: 4px 18px;         /* add padding */
-  font-weight: 600;
-  font-size: 16px;
   margin: 0 20px 20px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fb6530;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
 }
-
+.arrowBtn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+}
 .navBtn {
   background: none;
   border: none;
@@ -60,13 +68,6 @@
   cursor: pointer;
 }
 
-.header h2 {
-  font-size: 18px;
-  font-weight: bold;
-  flex: 1;
-  text-align: center;
-  margin: 0;
-}
 
 .vehicleGrid {
   display: grid;

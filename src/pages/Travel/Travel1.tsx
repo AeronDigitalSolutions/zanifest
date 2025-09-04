@@ -243,7 +243,11 @@ export default function TravelInsurance() {
               placeholder="Search country"
               className={styles.inputBox}
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) =>
+                setQuery(
+                  e.target.value.replace(/\b\w/g, (char) => char.toUpperCase())
+                )
+              }
             />
           </div>
 

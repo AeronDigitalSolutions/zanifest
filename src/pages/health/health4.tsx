@@ -11,6 +11,8 @@ import { useEffect, useState } from "react";
 const Health4 = () => {
   const router = useRouter();
   const [mobile, setMobile] = useState("");
+    const [fullName, setFullName] = useState(""); // 🔹 state for name
+
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -21,6 +23,15 @@ const Health4 = () => {
     if (numericValue.length <= 10) {
       setMobile(numericValue);
     }
+  };
+
+    // 🔹 Capitalize each word in name
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const capitalized = value
+      .toLowerCase()
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+    setFullName(capitalized);
   };
 
   return (
@@ -46,6 +57,8 @@ const Health4 = () => {
               type="text"
               placeholder="Your full name"
               className={styles.input}
+              value={fullName}
+              onChange={handleNameChange}
             />
 
             <div className={styles.phoneGroup}>

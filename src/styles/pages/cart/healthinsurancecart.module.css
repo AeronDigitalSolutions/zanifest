@@ -130,7 +130,15 @@
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
+  position: sticky;
+  top: 10px;  
+  right: calc((100% - 1166px) / 2); 
+  width: 340px;  
+  max-width: 100%; 
+  /* z-index: 1; */
+} 
+
+
 
 .summaryCard h4 {
   margin-bottom: 1rem;
