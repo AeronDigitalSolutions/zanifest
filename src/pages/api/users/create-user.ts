@@ -46,11 +46,12 @@ const newUser = new User({
 
 
     await transporter.sendMail({
-      from: `"YourApp" <${process.env.EMAIL_USER}>`,
+      from: `"Zanifest Insurance" <${process.env.EMAIL_USER}>`,
       to: email,
-      subject: "Set your password",
+      subject: "Setup your password",
       html: `<p>Hello ${userName},</p>
-             <p>Click <a href="${link}">here</a> to set your password. This link expires in 24 hours.</p>`
+            <p>Your account has been created. Please set your password by clicking the link below:</p>
+            <p>Click <a href="${link}">here</a> to set your password. This link expires in 1 hour.</p>`
     });
 
     return res.status(201).json({ message: 'User created successfully. Email sent!' });

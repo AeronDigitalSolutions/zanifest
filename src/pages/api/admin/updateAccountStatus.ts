@@ -1,6 +1,6 @@
 import dbConnect from "@/lib/dbConnect";
 import Admin from "@/models/Admin";
-import { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";  // if you’re using JWT auth
 import {parse} from 'cookie';
 import cookie from 'cookie';

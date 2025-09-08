@@ -2,16 +2,11 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import "@/styles/globals.css";
 import { AuthProvider } from "@/context/AuthContext";
-// import type { AppProps } from "next/app";
-// import CriticalIllnessInsurance from "./criticalillnessinsurance";
-
-// export default function App({ Component, pageProps }: AppProps) {
-//   return <Component {...pageProps} />;
-// }
+import { Toaster } from "react-hot-toast";
+import { ConfigProvider, App as AntdApp } from "antd";
+import "antd/dist/reset.css"; // reset styles for v5
 
 import type { AppProps } from "next/app";
-// import { useRouter } from "next/router";
-// import { useEffect } from "react";
 
 // ✅ Scroll to top on route change
 function ScrollToTop() {
@@ -54,8 +49,15 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [router]);
 
   return (
-    <AuthProvider>
-      <Component {...pageProps} />
+     <AuthProvider>
+      {/* ✅ Wrap with ConfigProvider */}
+      <ConfigProvider>
+        <AntdApp>
+          <ScrollToTop />
+          <Component {...pageProps} />
+          <Toaster position="top-center" reverseOrder={false} />
+        </AntdApp>
+      </ConfigProvider>
     </AuthProvider>
   );
 }

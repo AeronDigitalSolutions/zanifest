@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import styles from '@/styles/components/superadminsidebar/agentlist.module.css';
 import Image from 'next/image';
 import axios from 'axios';
+import { toast } from 'react-hot-toast';
+import { Modal, Input, message } from "antd";
 
 interface Agent {
   _id: string;
@@ -9,7 +11,7 @@ interface Agent {
   firstName: string;
   lastName: string;
   email: string;
-  assignedTo: string;
+  assignedTo: string ;
   district: string;
   city: string;
   state: string;
@@ -21,43 +23,126 @@ const AgentsPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const agentsPerPage = 10;
+  const [passwordModalVisible, setPasswordModalVisible] = useState(false);
+  const [passwordInput, setPasswordInput] = useState("");
+  const [pendingAction, setPendingAction] = useState<{ id: string; currentStatus: string } | null>(null);
+  const [districtManagers, setDistrictManagers] = useState<any[]>([]);
+  const [editingAgentId, setEditingAgentId] = useState<string | null>(null);
+  const [newAssignedTo, setNewAssignedTo] = useState<string>("");
 
-  const handleToggleStatus = async (id: string, currentStatus: string) => {
-    try {
-      const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
 
-       const password = prompt(`Enter your password to set status to ${newStatus}`);
-    // console.log("Password entered:", password);
-    if (!password) return; // user cancelled
+  // const handleToggleStatus = async (id: string, currentStatus: string) => {
+  //   try {
+  //     const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
 
-    const token = localStorage.getItem("token"); // or cookie if you're storing it there
-    console.log("Using token (agentlist):", token);
+  //      const password = prompt(`Enter your password to set status to ${newStatus}`);
+  //   // console.log("Password entered:", password);
+  //   if (!password) return; // user cancelled
 
-     const res = await fetch(`/api/agent/updateAccountStatus?id=${id}`, {
+  //   const token = localStorage.getItem("token"); // or cookie if you're storing it there
+  //   console.log("Using token (agentlist):", token);
+
+  //    const res = await fetch(`/api/agent/updateAccountStatus?id=${id}`, {
+  //       method: 'PATCH',
+  //       headers: { 'Content-Type': 'application/json','Authorization': `Bearer ${token}` },
+  //       body: JSON.stringify({ accountStatus: newStatus, password }),
+  //     });
+
+
+  //     const data = await res.json();
+
+  //     if (data.success) {
+  //       toast.success(`Agent status updated to ${newStatus}`);
+  //       // ✅ update state immediately
+  //       setAgents((prevAgents) =>
+  //         prevAgents.map((m) =>
+  //           m._id === id ? { ...m, accountStatus: newStatus } : m
+  //         )
+  //       );
+  //     } else {
+  //       toast.error(data.message || 'Failed to update status');
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //     toast.error('Error updating Agent status (serverside error)');
+  //   }
+  // };
+
+ const handleToggleStatus = (id: string, currentStatus: string) => {
+  // open modal instead of prompt
+  setPendingAction({ id, currentStatus });
+  setPasswordModalVisible(true);
+};
+
+const confirmToggleStatus = async () => {
+  if (!passwordInput) {
+    message.warning("Please enter your password");
+    return;
+  }
+
+  try {
+    const { id, currentStatus } = pendingAction!;
+    const newStatus = currentStatus === "active" ? "inactive" : "active";
+
+    const token = localStorage.getItem("token");
+
+   const res = await fetch(`/api/agent/updateAccountStatus?id=${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json','Authorization': `Bearer ${token}` },
-        body: JSON.stringify({ accountStatus: newStatus, password }),
+        body: JSON.stringify({ accountStatus: newStatus, password: passwordInput }),
       });
+    const data = await res.json();
 
-
-      const data = await res.json();
-
-      if (data.success) {
-        alert(`Agent status updated to ${newStatus}`);
-        // ✅ update state immediately
-        setAgents((prevAgents) =>
-          prevAgents.map((m) =>
-            m._id === id ? { ...m, accountStatus: newStatus } : m
-          )
-        );
-      } else {
-        alert(data.message || 'Failed to update status');
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Error updating Agent status');
+    if (data.success) {
+      toast.success(`Admin status updated to ${newStatus}`);
+      setAgents((prevAgents) =>
+        prevAgents.map((m) => (m._id === id ? { ...m, accountStatus: newStatus } : m))
+      );
+    } else {
+      toast.error(data.message || "Failed to update status");
     }
-  };
+  } catch (err) {
+    console.error(err);
+    toast.error("Error updating status");
+  } finally {
+    setPasswordModalVisible(false);
+    setPasswordInput("");
+    setPendingAction(null);
+  }
+};
+
+const handleSaveAssignedTo = async (agentId: string) => {
+  try {
+    const res = await fetch(`/api/agent/${agentId}/assign`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ assignedTo: newAssignedTo }),
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      toast.success("Agent assigned successfully!");
+
+      setAgents((prev) =>
+        prev.map((a) => (a._id === agentId ? data.agent : a))
+      );
+
+      setEditingAgentId(null);
+      setNewAssignedTo("");
+    } 
+    
+    else {
+      toast.error(data.message || "Failed to assign agent");
+    }
+  } 
+  
+  catch (err) {
+    console.error(err);
+    toast.error("Something went wrong");
+  }
+};
+
 
   const fetchAgents = async () => {
     try {
@@ -74,6 +159,23 @@ const AgentsPage: React.FC = () => {
   useEffect(() => {
     fetchAgents();
   }, []);
+
+  useEffect(() => {
+  const fetchDistrictManagers = async () => {
+    try {
+      const res = await fetch("/api/managers/district");
+      const data = await res.json();
+      if (data.success) {
+        setDistrictManagers(data.managers);
+      }
+    } catch (err) {
+      console.error("Failed to load district managers", err);
+    }
+  };
+
+  fetchDistrictManagers();
+}, []);
+
 
   const indexOfLastAgent = currentPage * agentsPerPage;
   const indexOfFirstAgent = indexOfLastAgent - agentsPerPage;
@@ -95,23 +197,45 @@ const AgentsPage: React.FC = () => {
       console.log("response status: ", res.status);
 
       if(res.status===200){
-        alert("Agent deleted successfully");
+        toast.success("Agent deleted successfully");
         setAgents((prevAgents) => prevAgents.filter((a) => a._id!==id));
       }
       else{
-        alert("Failed to delete agent");
+        toast.error("Failed to delete agent");
       }
     }
 
     catch(err){
       console.error('Error deleting agent:', err);
-      alert('Error deleting agent');
+      toast.error('Error deleting agent (serverside error)');
     }
 
   }
 
   return (
     <div className={styles.container}>
+
+      <Modal
+              title="Confirm Password"
+              visible={passwordModalVisible}
+              onOk={confirmToggleStatus}
+              onCancel={() => {
+                setPasswordModalVisible(false);
+                setPasswordInput("");
+                setPendingAction(null);
+              }}
+              okText="Confirm"
+              cancelText="Cancel"
+              centered
+            >
+              <Input.Password
+                placeholder="Enter your password"
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+              />
+            </Modal>
+
+
       <h1 className={styles.heading}>All Agents</h1>
 
       {loading ? (
@@ -152,9 +276,45 @@ const AgentsPage: React.FC = () => {
                     <td className={styles.td}>{agent.district}</td>
                     <td className={styles.td}>{agent.city}</td>
                     <td className={styles.td}>{agent.state}</td>
-                    <td className={`${styles.td} ${styles.assignedTo}`}>
-                      {agent.assignedTo}
+                    <td className={styles.td}>
+                    
+                      {editingAgentId === agent._id ? (
+                        <>
+                          <select
+                            value={newAssignedTo}
+                            onChange={(e) => setNewAssignedTo(e.target.value)}
+                          >
+                            <option value=""> Select Manager </option>
+                            {districtManagers.map((manager) => (
+                              <option key={manager._id} value={manager.managerId}>
+                                {manager.firstName}-{manager.managerId}
+                              </option>
+                            ))}
+                          </select>
+                          <button onClick={() => handleSaveAssignedTo(agent._id)}>Save</button>
+                          <button onClick={() => setEditingAgentId(null)}>Cancel</button>
+                        </>
+                      ) : (
+                        <>
+                          <span>
+                            {agent.assignedTo || "Not Assigned"}
+                          </span>
+                          <button
+                            onClick={() => {
+                              setEditingAgentId(agent._id);
+                              setNewAssignedTo
+                              (
+                                typeof agent.assignedTo === "string" ? agent.assignedTo : ""
+                              );
+                            }}
+                          >
+                            Edit
+                          </button>
+                        </>
+                      )}
                     </td>
+
+
                     <td className={styles.td}>
                       <button
                         className={`${styles.editButton} ${

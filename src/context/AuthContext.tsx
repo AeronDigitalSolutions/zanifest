@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        console.log("Fetching user info... from AUthContext");
         const res = await fetch("/api/users/me"); // This should return user info from cookie
         if (!res.ok) throw new Error("Not authenticated");
         const data = await res.json();

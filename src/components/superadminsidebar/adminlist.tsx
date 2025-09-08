@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import styles from '@/styles/components/superadminsidebar/adminlist.module.css';
 import Image from 'next/image';
 import axios from 'axios';
+import { toast } from 'react-hot-toast';
+import { Modal, Input, message } from "antd";
 
 type Admin = {
   _id: string;
@@ -23,6 +25,9 @@ export default function AdminList() {
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentAdmins = admins.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
+const [passwordModalVisible, setPasswordModalVisible] = useState(false);
+const [passwordInput, setPasswordInput] = useState("");
+const [pendingAction, setPendingAction] = useState<{ id: string; currentStatus: string } | null>(null);
 
   const fetchAdmins = async () => {
       try {
@@ -32,7 +37,7 @@ export default function AdminList() {
       } 
       catch (error) {
         console.error('Failed to fetch admins:', error);
-        alert('Something went wrong!');
+        message.error("Failed to fetch admins");
       } 
       finally {
         setLoading(false);
@@ -43,46 +48,90 @@ export default function AdminList() {
     fetchAdmins();
   }, []);
 
-  const handleToggleStatus = async (id: string, currentStatus: string) => {
-    try {
-      const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
-      console.log("Toggling status for admin ID:", id, "from", currentStatus, "to", newStatus);
+  // const handleToggleStatus = async (id: string, currentStatus: string) => {
+  //   try {
+  //     const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+  //     console.log("Toggling status for admin ID:", id, "from", currentStatus, "to", newStatus);
 
 
-      // ✅ ask SUPERADMIN to confirm password
-      const password = prompt(`Enter your password to set status to ${newStatus}`);
-      // console.log("Password entered:", password);
-      if (!password) return; // user cancelled
+  //     // ✅ ask SUPERADMIN to confirm password
+  //     const password = prompt("Enter your password to confirm status change:");
+  //     // console.log("Password entered:", password);
+  //     if (!password) return; // user cancelled
 
-      const token = localStorage.getItem("token"); // or cookie if you're storing it there
-      // console.log("Using token:", token);
+  //     const token = localStorage.getItem("token"); // or cookie if you're storing it there
+  //     // console.log("Using token:", token);
 
-        const res = await fetch(`/api/admin/updateAccountStatus?id=${id}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json','Authorization': `Bearer ${token}` },
-          body: JSON.stringify({ accountStatus: newStatus, password }),
-        });
+  //       const res = await fetch(`/api/admin/updateAccountStatus?id=${id}`, {
+  //         method: 'PATCH',
+  //         headers: { 'Content-Type': 'application/json','Authorization': `Bearer ${token}` },
+  //         body: JSON.stringify({ accountStatus: newStatus, password }),
+  //       });
 
-      const data = await res.json();
+  //     const data = await res.json();
 
-      if (data.success) {
-        alert(`admin status updated to ${newStatus}`);
-        // ✅ update state immediately
-        setAdmins((prevAdmins) =>
-          prevAdmins.map((m) =>
-            m._id === id ? { ...m, accountStatus: newStatus } : m
-          )
-        );
-      } 
-      else {
-        alert(data.message || 'Failed to update status');
-      }
-    } 
-    catch (err) {
-      console.error(err);
-      alert('Error updating admin status');
+  //     if (data.success) {
+  //       toast.success(`Admin status updated to ${newStatus}`);
+  //       // ✅ update state immediately
+  //       setAdmins((prevAdmins) =>
+  //         prevAdmins.map((m) =>
+  //           m._id === id ? { ...m, accountStatus: newStatus } : m
+  //         )
+  //       );
+  //     } 
+  //     else {
+  //       toast.error(data.message || 'Failed to update status');
+  //     }
+  //   } 
+  //   catch (err) {
+  //     console.error(err);
+  //     toast.error('Error updating status');
+  //   }
+  // };
+
+  const handleToggleStatus = (id: string, currentStatus: string) => {
+  // open modal instead of prompt
+  setPendingAction({ id, currentStatus });
+  setPasswordModalVisible(true);
+};
+
+const confirmToggleStatus = async () => {
+  if (!passwordInput) {
+    message.warning("Please enter your password");
+    return;
+  }
+
+  try {
+    const { id, currentStatus } = pendingAction!;
+    const newStatus = currentStatus === "active" ? "inactive" : "active";
+
+    const token = localStorage.getItem("token");
+
+    const res = await fetch(`/api/admin/updateAccountStatus?id=${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+      body: JSON.stringify({ accountStatus: newStatus, password: passwordInput }),
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      toast.success(`Admin status updated to ${newStatus}`);
+      setAdmins((prevAdmins) =>
+        prevAdmins.map((m) => (m._id === id ? { ...m, accountStatus: newStatus } : m))
+      );
+    } else {
+      toast.error(data.message || "Failed to update status");
     }
-  };
+  } catch (err) {
+    console.error(err);
+    toast.error("Error updating status");
+  } finally {
+    setPasswordModalVisible(false);
+    setPasswordInput("");
+    setPendingAction(null);
+  }
+};
 
   const handlePrevPage = () => {
     setCurrentPage((prev) => Math.max(prev - 1, 1));
@@ -97,7 +146,7 @@ export default function AdminList() {
       const res = await axios.delete(`/api/admin/deleteadmin?id=${id}`);
 
       if(res.status ===200){
-        alert("admin deleted successfully");
+        message.success("admin deleted successfully");
 
         //refresh table after deleting
         fetchAdmins();
@@ -107,7 +156,7 @@ export default function AdminList() {
       }
 
       else{
-        alert("Failed to delete admin");
+        message.error("Failed to delete admin");
       }
     }
 
@@ -120,6 +169,26 @@ export default function AdminList() {
 
   return (
     <div className={styles.container}>
+      <Modal
+        title="Confirm Password"
+        visible={passwordModalVisible}
+        onOk={confirmToggleStatus}
+        onCancel={() => {
+          setPasswordModalVisible(false);
+          setPasswordInput("");
+          setPendingAction(null);
+        }}
+        okText="Confirm"
+        cancelText="Cancel"
+        centered
+      >
+        <Input.Password
+          placeholder="Enter your password"
+          value={passwordInput}
+          onChange={(e) => setPasswordInput(e.target.value)}
+        />
+      </Modal>
+
       <h1 className={styles.heading}>Admin List</h1>
 
       {loading ? (
@@ -200,6 +269,7 @@ export default function AdminList() {
           </div>
         </>
       )}
+      
     </div>
   );
 }

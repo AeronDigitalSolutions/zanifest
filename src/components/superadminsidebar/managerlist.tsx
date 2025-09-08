@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import styles from '@/styles/components/superadminsidebar/managerlist.module.css';
 import Image from 'next/image';
+import { toast } from 'react-hot-toast';
+import { span } from 'framer-motion/client';
 
 interface Manager {
     _id: string;
@@ -27,7 +29,12 @@ export default function ManagersTable() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const [ editingManagerAssinedTo, setEditingManagerAssignedTo]
+ = useState<string | null>(null);
+  const [newAssignedTo, setNewAssignedTo] = useState<string>('');
 
+
+  //to get all mnanagers
   const fetchManagers = async () => {
       try {
         const res = await fetch('/api/getallmanagers');
@@ -35,12 +42,13 @@ export default function ManagersTable() {
         setManagers(data);
       } catch (err) {
         console.error('Error fetching managers:', err);
-        alert('Something went wrong!');
+        toast.error('Something went wrong!');
       } finally {
         setLoading(false);
       }
     };
 
+    //activate/inactivate` manager
   const handleToggleStatus = async (id: string, currentStatus: string) => {
     try {
       const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
@@ -54,7 +62,7 @@ export default function ManagersTable() {
       const data = await res.json();
 
       if (data.success) {
-        alert(`Manager status updated to ${newStatus}`);
+        toast.success(`Manager status updated to ${newStatus}`);
         // ✅ update state immediately
         setManagers((prevManagers) =>
           prevManagers.map((m) =>
@@ -62,18 +70,51 @@ export default function ManagersTable() {
           )
         );
       } else {
-        alert(data.message || 'Failed to update status');
+        toast.error(data.message || 'Failed to update status');
       }
     } catch (err) {
       console.error(err);
-      alert('Error updating manager status');
+      toast.error('Error updating manager status');
     }
   };
 
 
+  //fetch managers whenever the page loads
+
   useEffect(() => {
     fetchManagers();
   }, []);
+
+  const handleSaveAssignedTo = async(managerId: string) => {
+    try
+    {
+      const res = await fetch(`/api/manager/${managerId}/assign`, {
+        method: "PUT",
+        headers : { "Content-Type": "application/json" },
+        body: JSON.stringify({ assignedTo: newAssignedTo}),
+      })
+
+      const data = await res.json();
+
+      if(data.success)
+      {
+        toast.success("Manager assigned successfully");
+
+        setManagers( (prev)=> prev.map((m)=> (m._id === managerId ? data.manager : m)));
+
+        setEditingManagerAssignedTo(null);
+         setNewAssignedTo(''); 
+      }
+
+      else{
+        toast.error(data.message || "Failed to assign manager");
+      }
+    
+  }catch(e){
+      console.error(e);
+      toast.error("Error assigning manager");
+    }
+  };
 
  const handleDelete = async (id: string) => {
   try {
@@ -86,7 +127,7 @@ export default function ManagersTable() {
     const data = await res.json();
 
     if (data.success) {
-      alert('Manager deleted successfully');
+      toast.success('Manager deleted successfully');
       // fetchManagers(); // refresh table after delete
 
           // ✅ Update state immediately so UI refreshes
@@ -94,13 +135,13 @@ export default function ManagersTable() {
     } 
     
     else {
-      alert(data.message);
+      toast.error(data.message);
     }
   } 
   
   catch (err) {
     console.error(err);
-    alert('Error deleting manager');
+    toast.error('Error deleting manager (serverside error)');
   }
 };
 
@@ -166,13 +207,46 @@ export default function ManagersTable() {
                     <td className={styles.td}>{manager.state}</td>
                     <td className={styles.td}>{manager.district}</td>
                     <td className={styles.td}>
-                      {/* fix This expression is not callable.
-Type 'String' has no call signatures.
-
-You need to concatenate the strings using the + operator or template literals, not by placing them next to each other. */}
-                      {manager.assignedTo
+                      {/* {manager.assignedTo
                         ? `${manager.assignedTo.managerId}`
-                        : '—'}
+                        : '—'} */}
+
+                        {
+                          editingManagerAssinedTo === manager._id ? (
+                            <>
+                            <select
+                            value={newAssignedTo}
+                            onChange={(e) => setNewAssignedTo(e.target.value)}
+                            >
+                            <option value = "">Select New Manager</option>
+                            {managers.map((m)=> (
+                              <option key={manager._id} value={manager.managerId}>
+                                {`${manager.firstName} ${manager.lastName} (${manager.managerId})`}
+                              </option>
+                            ) )}
+                             </select>
+                             <button onClick={()=> handleSaveAssignedTo(manager._id)}>Save</button>
+                             <button onClick={()=>setEditingManagerAssignedTo(null)}>Cancel</button>
+                              
+                            </>
+                          ):(
+                            <>
+                            {manager.assignedTo ? 
+                          <span> {manager.assignedTo.managerId}</span>  :
+                          <span>—</span>
+                          }
+                          <button
+                          onClick={()=> {
+                            setEditingManagerAssignedTo(manager._id);
+                            setNewAssignedTo(manager.assignedTo?.managerId || 'this is not assignable'
+                            );
+                          }}
+                          >
+                            Edit
+                          </button>
+                            </>
+                          )
+                        }
                     </td>
                     <td className={styles.td}>
                       <button

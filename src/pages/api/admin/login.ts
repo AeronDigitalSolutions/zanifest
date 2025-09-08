@@ -23,8 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     await dbConnect();
-    const admin = await Admin.findOne({ email })
-    .select("userFirstName userLastName email role password accountStatus");
+    const admin = await Admin.findOne({ email }).select("userFirstName userLastName email role password accountStatus");
     console.log("Admin found:", admin);
 
     if (!admin) {
@@ -41,6 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(401).json({ message: "Invalid email or password" });
     }
     const status = admin.accountStatus ?? "active";
+    
     if(admin.role==='admin' && status === 'inactive') {
       console.log(`Login attempt blocked for inactive account: ${email}`);
       return res.status(403).json({ message: "Account is not active. Please contact support." });

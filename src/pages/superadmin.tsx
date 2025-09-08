@@ -72,20 +72,25 @@ const AdminDashboard = () => {
   }, []);
 
   useEffect(() => {
-    const fetchManagerCounts = async () => {
-      const res = await fetch("/api/getmanager");
+  const fetchManagerCounts = async () => {
+    try {
+      const res = await fetch("/api/getallmanagers");
       const managers = await res.json();
+      console.log("Fetched managers:", managers);
+
       setStateManagerCount(
-        managers.filter((m: { category: string }) => m.category === "state")
-          .length
+        managers.filter((m: { category: string }) => m.category === "state").length
       );
       setDistrictManagerCount(
-        managers.filter((m: { category: string }) => m.category === "district")
-          .length
+        managers.filter((m: { category: string }) => m.category === "district").length
       );
-    };
-    fetchManagerCounts();
-  }, []);
+    } catch (err) {
+      console.error("Error fetching managers:", err);
+    }
+  };
+  fetchManagerCounts();
+}, []);
+
 
     // profile edit 
   useEffect(() => {

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import styles from "@/styles/components/Auth/Login.module.css";
 import Image from "next/image";
+import { toast } from 'react-hot-toast';
+
 
 export default function AdminLogin() {
   const [password, setPassword] = useState<string>("");
@@ -33,7 +35,7 @@ export default function AdminLogin() {
     // }
 
     if (!res.ok) {
-      alert(data.message || "Login failed");
+      toast.error(data.message || "Login failed");
       return;
     }
 
@@ -45,12 +47,12 @@ export default function AdminLogin() {
       // window.location.href = "/admin";
       router.push("/admindashboard");
     } else {
-      alert("Unauthorized Role");
+      toast.error("Unauthorized Role");
     }
   } catch (error) 
   {
     console.error("Login error:", error);
-    alert("Something went wrong");
+    toast.error("Something went wrong");
   }
 };
 
