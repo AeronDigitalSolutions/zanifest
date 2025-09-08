@@ -91,6 +91,8 @@ const agentSchema = new mongoose.Schema({
     ref: "Manager",
     required: true,
   },
+
+  accountStatus :{type: String, enum: ['active', 'inactive'], default: 'active'}
 });
 
 export default mongoose.models.Agent || mongoose.model("Agent", agentSchema);

@@ -4,4 +4,6 @@ const nextConfig = {
   // other settings
 };
 
-module.exports = nextConfig;
+module.exports = {
+  outputFileTracingRoot: __dirname, // set root explicitly
+}

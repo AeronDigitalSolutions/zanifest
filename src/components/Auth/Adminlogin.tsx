@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import styles from "@/styles/components/Auth/Login.module.css";
 import Image from "next/image";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { toast } from 'react-hot-toast';
+
 
 export default function AdminLogin() {
   const [password, setPassword] = useState<string>("");
@@ -32,7 +34,7 @@ export default function AdminLogin() {
 
       if (!res.ok) {
         setError(true);
-        alert(data.message || "Login failed");
+        toast.error(data.message || "Login failed");
         setLoading(false);
         return;
       }
@@ -42,11 +44,11 @@ export default function AdminLogin() {
       } else if (data.role === "admin") {
         router.push("/admindashboard");
       } else {
-        alert("Unauthorized Role");
+        toast.error("Unauthorized Role");
       }
     } catch (error) {
       console.error("Login error:", error);
-      alert("Something went wrong");
+      toast.error("Something went wrong");
     } finally {
       setLoading(false); // ✅ hide loader
     }

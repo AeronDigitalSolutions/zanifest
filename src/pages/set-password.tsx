@@ -5,6 +5,7 @@ import Image from "next/image";
 import PasswordStrengthBar from "react-password-strength-bar";
 import styles from "@/styles/pages/set-password.module.css";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { toast } from 'react-hot-toast';
 
 export default function SetPassword() {
   const [customScore, setCustomScore] = useState(0);
@@ -44,7 +45,7 @@ export default function SetPassword() {
       return setMessage("Password must not exceed 8 characters.");
     }
     if (password !== confirm) {
-      return setMessage("Passwords do not match.");
+      toast.error("Passwords do not match.");
     }
 
     try {
@@ -58,10 +59,11 @@ export default function SetPassword() {
       setMessage(data.message);
 
       if (res.ok) {
+        toast.success("Password set successfully. Redirecting to login...");
         setTimeout(() => router.push("/login"), 2000);
       }
     } catch {
-      setMessage("Something went wrong.");
+      toast.error("Something went wrong.");
     }
   };
 

@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from "react";
 import styles from "@/styles/components/superadminsidebar/createadmin.module.css";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import axios from "axios";
 
 interface CreateAdminProps {
-  initialData?: {
-    userFirstName: string;
-    userLastName: string;
-    email: string;
-    password?: string;
-  };
+  initialData?: any;
+  mode?: "create" | "edit"; // Optional mode prop
 }
 
-// const CreateAdmin = () => {
-const CreateAdmin: React.FC<CreateAdminProps> = ({ initialData }) => {
+const CreateAdmin: React.FC<CreateAdminProps> = ({ initialData, mode }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
 
@@ -22,13 +18,15 @@ const CreateAdmin: React.FC<CreateAdminProps> = ({ initialData }) => {
   const [password, setPassword] = useState("");
   // edit form
   useEffect(() => {
-    if (initialData) {
+    if (mode==="edit" && initialData) {
       setUserFirstName(initialData.userFirstName || "");
       setUserLastName(initialData.userLastName || "");
       setEmail(initialData.email || "");
-      setPassword(initialData.password || "");
+      setPassword(""); //do not preload password.. it is dangerous...
     }
   }, [initialData]);
+
+ 
 
   const capitalizeFirstLetter = (value: string) => {
     return value.charAt(0).toUpperCase() + value.slice(1);
@@ -45,22 +43,24 @@ const CreateAdmin: React.FC<CreateAdminProps> = ({ initialData }) => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const data = {
-      userFirstName,
-      userLastName,
-      email,
-      password,
-      role: isSuperAdmin ? "superadmin" : "admin",
-    };
+  const data: any = {
+    userFirstName,
+    userLastName,
+    email,
+    role: isSuperAdmin ? "superadmin" : "admin",
+  };
 
-    try {
+  if (password) {
+    data.password = password; // only send if user typed something
+  }
+
+  try {
+    if (mode === "create") {
       const res = await fetch("/api/createadmin", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
@@ -77,16 +77,26 @@ const CreateAdmin: React.FC<CreateAdminProps> = ({ initialData }) => {
       } else {
         alert(result.message || "Failed to create admin.");
       }
-    } catch (error) {
-      console.error("Error creating admin:", error);
-      alert("Server error!");
+    } else if (mode === "edit") {
+      const res = await axios.patch("/api/admin/updateadmin", data, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("managerToken")}`,
+        },
+      });
+      alert("Profile updated successfully!");
     }
-  };
+  } catch (error) {
+    console.error("Error creating/updating admin:", error);
+    alert("Server error!");
+  }
+};
+
 
   return (
     <div className={styles.container}>
       <h2 className={styles.heading}>
-        {initialData ? "Edit Admin Profile" : "Create Admin"}
+        {mode==="edit" ? "Edit Admin Profile" : "Create Admin"}
       </h2>
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.row}>
@@ -168,7 +178,7 @@ const CreateAdmin: React.FC<CreateAdminProps> = ({ initialData }) => {
         </div>
 
         <button type="submit" className={styles.submitButton}>
-          {initialData ? "Update" : "Create"}
+          {mode==="edit" ? "Update" : "Create"}
         </button>
       </form>
     </div>

@@ -40,7 +40,7 @@ const Button: React.FC<ButtonProps> = ({ label, name, accept, onChange }) => {
         <button
           className={styles.documentsBtn}
           type="button"
-          onClick={handleClick}
+          onClick={()=>handleClick}
         >
           <span className={styles.folderContainer}>
             <svg
@@ -177,14 +177,64 @@ const CreateManager: React.FC<CreateManagerProps> = ({ mode = "create", initialD
     cancelledChequeAttachment: "",
   });
 
+  console.log(formData.nomineeAadharNumber);
+
+
+   // Prefill when in edit mode
+  useEffect(() => {
+    if (mode === 'edit' && initialData) {
+      setFormData((prev) => ({
+        ...prev,
+        firstName: initialData.firstName || '',
+        lastName: initialData.lastName || '',
+
+        email: initialData.email || '',
+        phone: initialData.phone || '',
+        managerId: initialData.managerId || '',
+        dateOfJoining: initialData.dateOfJoining
+          ? new Date(initialData.dateOfJoining).toISOString().slice(0,10)
+          : '',
+
+        pinCode: initialData.pinCode || '',
+        city: initialData.city || '',
+        district: initialData.district || '',
+        state: initialData.state || '',
+
+        managerPanNumber: initialData.managerPanNumber || '',
+        managerAadharNumber: initialData.managerAadharNumber || '',
+        nomineeName: initialData.nomineeName || '',
+        nomineeRelation: initialData.nomineeRelation || '',
+        nomineePanNumber: initialData.nomineePanNumber || '',
+        nomineeAadharNumber: initialData.nomineeAadharNumber || '',
+
+        accountHoldername: initialData.accountHoldername || '',
+        bankName: initialData.bankName || '',
+        accountNumber: initialData.accountNumber || '',
+        ifscCode: initialData.ifscCode || '',
+        branchLoaction: initialData.branchLoaction || '',
+
+        category: initialData.category || 'national',
+        assignedTo: initialData.assignedTo || '',
+      }));
+
+      setAttachments({
+        managerPanAttachment: initialData.managerPanAttachment || '',
+        managerAadharAttachment: initialData.managerAadharAttachment || '',
+        nomineePanAttachment: initialData.nomineePanAttachment || '',
+        nomineeAadharAttachment: initialData.nomineeAadharAttachment || '',
+        cancelledChequeAttachment: initialData.cancelledChequeAttachment || '',
+      });
+    }
+  }, [mode, initialData]);
+
   const [assignedToOptions, setAssignedToOptions] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
 
-    useEffect(() => {
-    if (mode === "edit" && initialData) {
-      setFormData({ ...formData, ...initialData });
-    }
-  }, [mode, initialData]);
+  //   useEffect(() => {
+  //   if (mode === "edit" && initialData) {
+  //     setFormData({ ...formData, ...initialData });
+  //   }
+  // }, [mode, initialData]);
 
   useEffect(() => {
     const fetchManagers = async () => {
@@ -288,17 +338,30 @@ const CreateManager: React.FC<CreateManagerProps> = ({ mode = "create", initialD
     const payload = { ...formData, ...attachments };
 
     try {
-      const res = await axios.post("/api/createmanager", payload, {
-        headers: { "Content-Type": "application/json" },
-      });
+      if(mode === "create"){
+        const res = await axios.post("/api/createmanager", payload, {
+            headers: { "Content-Type": "application/json" },
+          });
 
-    if (res.status === 200 || res.status === 201) {
-      alert('Manager created successfully!');
-      
-    } else {
-      alert('Error creating manager.');
-    }
-  } catch (err) {
+        if (res.status === 200 || res.status === 201) {
+          alert('Manager created successfully!');
+          
+        } else {
+          alert('Error creating manager.');
+        }
+      }
+      else {
+        const res = await axios.patch('/api/manager/updatemanager', payload, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('managerToken')}`, // if not using httpOnly cookie
+          },
+        });
+        alert('Profile updated successfully!');
+      }
+  } 
+  catch (err)
+   {
     console.error('Submission error:', err);
     alert('Failed to create manager.');
   }
@@ -360,6 +423,7 @@ const CreateManager: React.FC<CreateManagerProps> = ({ mode = "create", initialD
               onChange={handleChange}
               className={styles.input}
               placeholder="Enter Employee Code"
+              disabled={mode === "edit"} //lock emp code
             />
           </div>
           <div className={styles.formGroup}>
@@ -397,6 +461,7 @@ const CreateManager: React.FC<CreateManagerProps> = ({ mode = "create", initialD
               onChange={handleChange}
               className={styles.input}
               placeholder="Enter Email"
+              disabled={mode === "edit"} //lock email
             />
           </div>
           <div className={styles.formGroup}>
@@ -588,10 +653,11 @@ onChange={handlePincodeChange}
           </div>
           <div className={styles.formGroup}>
             <label>Nominee Aadhar Number</label>
+            
             <input
               type="text"
               name="nomineeAadharNumber"
-              value={formData.nomineeAadharNumber}
+              value={formData.nomineeAadharNumber || ''}
               onChange={handleChange}
               className={styles.input}
               placeholder="Enter Aadhar Number"
