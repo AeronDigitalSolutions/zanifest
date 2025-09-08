@@ -6,10 +6,12 @@ import { FaTruck, FaCar } from "react-icons/fa";
 
 interface VehicleModelDialogProps {
   onClose: () => void;
+    onBack: () => void;   
+  onNext: () => void;
   vehicleNumber: string;
   selectedVehicle: string;
   selectedBrand: string;
-  onSelectModel: (model: string) => void;   // ✅ New prop
+  onSelectModel: (model: string) => void;
 }
 
 const VehicleModelDialog: React.FC<VehicleModelDialogProps> = ({
@@ -18,6 +20,8 @@ const VehicleModelDialog: React.FC<VehicleModelDialogProps> = ({
   selectedVehicle,
   selectedBrand,
   onSelectModel,
+   onBack,
+  onNext,
 }) => {
   const [search, setSearch] = useState("");
 
@@ -28,6 +32,7 @@ const VehicleModelDialog: React.FC<VehicleModelDialogProps> = ({
     "TEMPO TRAVELLER",
     "TEMPO TRAX",
     "TRAVELLER",
+    "LPT 709"
   ];
 
   return (
@@ -39,15 +44,12 @@ const VehicleModelDialog: React.FC<VehicleModelDialogProps> = ({
           <div className={styles.selectionBox}>
             <div className={styles.selectionItem}>
               <FiMapPin className={styles.icon} /> {vehicleNumber}
-              <FiEdit2 className={styles.editIcon} />
             </div>
             <div className={styles.selectionItem}>
               <FaTruck className={styles.icon} /> {selectedVehicle}
-              <FiEdit2 className={styles.editIcon} />
             </div>
             <div className={styles.selectionItem}>
               <FaCar className={styles.icon} /> {selectedBrand}
-              <FiEdit2 className={styles.editIcon} />
             </div>
           </div>
         </div>
@@ -55,8 +57,13 @@ const VehicleModelDialog: React.FC<VehicleModelDialogProps> = ({
         {/* Right Section */}
         <div className={styles.right}>
           <div className={styles.header}>
-            <button onClick={onClose} className={styles.backBtn}>←</button>
-            <h3>Search Vehicle Model</h3>
+            <button className={styles.arrowBtn} onClick={onBack}>
+              ‹
+            </button>
+            <span>Search Vehicle Model</span>
+            <button className={styles.arrowBtn} onClick={onNext}>
+              ›
+            </button>            
           </div>
 
           {/* Search Bar */}
@@ -80,7 +87,7 @@ const VehicleModelDialog: React.FC<VehicleModelDialogProps> = ({
                 <button
                   key={i}
                   className={styles.modelBtn}
-                  onClick={() => onSelectModel(model)} // ✅ Trigger next step
+                  onClick={() => onSelectModel(model)}
                 >
                   {model}
                   <span className={styles.arrow}>›</span>

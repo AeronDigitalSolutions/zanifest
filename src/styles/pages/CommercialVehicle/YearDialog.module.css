@@ -26,7 +26,6 @@
 .selectionBox {
   flex: 1;
   border-right: 1px solid #eee;
-  padding-right: 20px;
 }
 
 .selectionTitle {
@@ -61,10 +60,7 @@
   color: #6b7280;
 }
 
-.editIcon {
-  color: #9ca3af;
-  cursor: pointer;
-}
+
 
 /* Right Section */
 .yearBox {

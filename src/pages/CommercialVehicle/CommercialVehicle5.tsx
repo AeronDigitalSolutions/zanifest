@@ -1,10 +1,9 @@
-
 "use client";
 import React, { useEffect, useState } from "react";
 import styles from "@/styles/pages/CommercialVehicle/CommercialVehicle5.module.css";
 
 import { FiPhoneCall } from "react-icons/fi";
-import { FaCircle, FaFilter, FaPlus, FaTimes } from "react-icons/fa";
+import { FaCircle, FaFilter, FaPlus } from "react-icons/fa";
 import { RiArrowRightWideLine } from "react-icons/ri";
 import Image from "next/image";
 import agent from "@/assets/health/manicon.webp";
@@ -12,16 +11,19 @@ import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import shriram from "@/assets/CommercialVehicle/shriram.png";
 import icic from "@/assets/CommercialVehicle/ICICIlombard.png";
+import { IoIosCloseCircle } from "react-icons/io";
+import { useRouter } from "next/navigation"; // ✅ Router import
+
 
 const CommercialVehicle5: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const router = useRouter(); // ✅ Router init
 
   useEffect(() => {
     const checkViewport = () => {
       setIsMobile(window.innerWidth <= 1024);
     };
-
     checkViewport();
     window.addEventListener("resize", checkViewport);
     return () => window.removeEventListener("resize", checkViewport);
@@ -34,18 +36,14 @@ const CommercialVehicle5: React.FC = () => {
   const toggleSidebar = () => setSidebarOpen((prev) => !prev);
   const closeSidebar = () => setSidebarOpen(false);
 
+  // ✅ Function to navigate
+  const goToNextPage = () => {
+    router.push("CommercialVehicle6");
+  };
+
   return (
     <>
       <Navbar />
-
-      {/* 🔹 Mobile Header with Toggle */}
-      {isMobile && (
-        <div className={styles.mobileHeader}>
-          <button className={styles.sidebarToggle} onClick={toggleSidebar}>
-            {sidebarOpen ? <FaTimes /> : <FaFilter />}
-          </button>
-        </div>
-      )}
 
       <div className={styles.container}>
         {/* 🔹 Sidebar Backdrop (only in mobile) */}
@@ -64,16 +62,6 @@ const CommercialVehicle5: React.FC = () => {
                 : ""
             }`}
           >
-            {/* Close button inside sidebar for mobile */}
-            {isMobile && (
-              <div className={styles.closeSidebar}>
-                <button onClick={closeSidebar} className={styles.closeButton}>
-                  <FaTimes />
-                </button>
-              </div>
-            )}
-
-            {/* Vehicle Info */}
             <div className={styles.sidebar}>
               <h3 className={styles.sidebarTitle}>Vehicle Info</h3>
               <div className={styles.vehicleDetails}>
@@ -155,6 +143,15 @@ const CommercialVehicle5: React.FC = () => {
 
           {/* ===== MIDDLE COLUMN ===== */}
           <div className={styles.middle}>
+            {/* 🔹 Mobile Header with Toggle */}
+            {isMobile && (
+              <div className={styles.mobileHeader}>
+                <button className={styles.sidebarToggle} onClick={toggleSidebar}>
+                  {sidebarOpen ? <IoIosCloseCircle /> : <FaFilter />}
+                </button>
+              </div>
+            )}
+
             <h2 className={styles.heading}>2 Third Party plans</h2>
             <p className={styles.subtext}>
               cover damages caused to third party only and not your vehicle
@@ -177,7 +174,10 @@ const CommercialVehicle5: React.FC = () => {
                       <p className={styles.link}>Buy Without Inspection</p>
                     </div>
                   </div>
-                  <button className={styles.button}>₹4,487 →</button>
+                  {/* ✅ Navigate on click */}
+                  <button className={styles.button} onClick={goToNextPage}>
+                    ₹4,487 →
+                  </button>
                 </div>
               </div>
 
@@ -196,7 +196,9 @@ const CommercialVehicle5: React.FC = () => {
                       <p className={styles.link}>Buy Without Inspection</p>
                     </div>
                   </div>
-                  <button className={styles.button}>₹4,487 →</button>
+                  <button className={styles.button} onClick={goToNextPage}>
+                    ₹4,487 →
+                  </button>
                 </div>
               </div>
             </div>
@@ -226,7 +228,9 @@ const CommercialVehicle5: React.FC = () => {
                       <span>99.7%</span>
                     </p>
                   </div>
-                  <button className={styles.priceBtn}>₹4,497 →</button>
+                  <button className={styles.priceBtn} onClick={goToNextPage}>
+                    ₹4,497 →
+                  </button>
                 </div>
                 <div className={styles.extraInfo}>
                   <span>60% Advance Payment</span>
@@ -257,7 +261,9 @@ const CommercialVehicle5: React.FC = () => {
                       <span>96%</span>
                     </p>
                   </div>
-                  <button className={styles.priceBtn}>₹4,891 →</button>
+                  <button className={styles.priceBtn} onClick={goToNextPage}>
+                    ₹4,891 →
+                  </button>
                 </div>
                 <div className={styles.packageFooter}>
                   <span></span>

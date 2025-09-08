@@ -33,12 +33,16 @@ function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
   useEffect(() => {
+    // disable browser scroll restore
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
     }
 
+    // force scroll to top on route change
     const handleRouteChange = () => {
-      window.scrollTo(0, 0);
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      });
     };
 
     router.events.on("routeChangeComplete", handleRouteChange);

@@ -12,18 +12,33 @@
   padding: 20px;        
   overflow-y: auto;      
 }
+.viewBtn {
+  background: #ff5722;
+  color: #fff;
+  border: none;
+  padding: 16px;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: background 0.3s;
+}
 
+.viewBtn:hover {
+  background: #e64a19;
+}
 
 .dialog {
   display: flex;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-  width: 100%;            /* ✅ full available width */
-  max-width: 900px;       /* ✅ readability ke liye limit */
-  margin: 0 10px;         /* ✅ left-right margin har device par */
+  width: 100%;           
+  max-width: 900px;      
+  margin: 0 10px;        
   padding: 40px 30px;
-  gap: 100px;
+  gap: 90px;
 }
 
 .left {
@@ -35,6 +50,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 .heading {

@@ -13,12 +13,53 @@ body {
   margin: 0;
   padding: 0;
   width: 100%;
-  overflow: hidden; 
-   overflow-y:auto;
-}
-html, body {
-  margin: 0;
-  padding: 0;
   height: 100%;
   box-sizing: border-box;
+
+  /* ✅ Allow scrolling normally */
+  /* overflow-y: auto; */
 }
+
+/* ✅ Apply border-box everywhere to avoid width miscalculations */
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+/* ✅ Prevent elements from exceeding screen width */
+img, video, iframe {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ✅ Common fix: avoid 100vw issue */
+.container, section, div {
+  max-width: 100%;
+}
+
+:root{
+  --bg:#F5F7FB;
+  --white:#fff;
+  --border:#E7EEF7;
+  --shadow:0 6px 18px rgba(30, 62, 98, .06);
+  --text:#1f2937;
+  --muted:#6b7280;
+  --green:#16a34a;
+  --chip-bg:#F3F6FA;
+  --chip-bd:#E6ECF2;
+  --primary:#2563eb;
+  --cta:#ff6b00;
+  --cta-dark:#ea6405;
+  --cta-arrow:#ffffff;
+  --violet:#8b5cf6;
+}
+
+:root{
+  --bg: #f7f9fb;
+  --muted: #6b7280;
+  --accent: #ff5a1f;
+  --card-blue-1: #dff4f9;
+  --card-blue-2: #cceffa;
+}
+
+

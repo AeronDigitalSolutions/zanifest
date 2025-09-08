@@ -16,12 +16,12 @@ const INSURANCELIST = [
   {
     name: "Marine Insurance",
     image: require("@/assets/ship.png"),
-    link: "#",
+    link: "./Marine/Marine1",
   },
   {
     name: "Travel Insurance",
     image: require("@/assets/airplane.png"),
-    link: "./marineinsurance/marineinsurance8",
+    link: "./Travel/Travel1",
   },
   {
     name: "Car Insurance",
@@ -36,12 +36,12 @@ const INSURANCELIST = [
   {
     name: "Shop Insurance",
     image: require("@/assets/shops.png"),
-    link: "#",
+    link: "./Shop/Shop1",
   },
   {
     name: "Third Party Insurance",
     image: require("@/assets/home/car/7.png"),
-    link: "#",
+    link: "./ThirdParty/Thirdparty1",
   },
   {
     name: "Commercial Vehicle",
@@ -51,7 +51,7 @@ const INSURANCELIST = [
   {
     name: "Home Insurance",
     image: require("@/assets/home/car/9.png"),
-    link: "#",
+    link: "./Home/Homeinsurance",
   },
   {
     name: "Office Package Policy",
@@ -61,7 +61,7 @@ const INSURANCELIST = [
    {
     name: "Doctor Indemnity Insurance",
     image: require("@/assets/medical-team.png"),
-    link: "#",
+    link: "./DoctorInd/DoctorInsurance",
   },
    {
     name: "Director & Officer Liability Insurance",
@@ -114,9 +114,7 @@ function CarInsuraceSection() {
         ))}
       </div>
 
-      {/* <div className={styles.bottomCont}>
-        <div className={styles.button}>View All</div>
-      </div> */}
+ 
     </div>
   );
 }
