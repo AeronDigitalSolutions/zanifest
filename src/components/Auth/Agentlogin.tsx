@@ -24,7 +24,7 @@ export default function Agentlogin() {
         body: JSON.stringify({ email: userName, password }),
       });
 
-     const data = await res.json();
+    //  const data = await res.json();
 
       if (!res.ok) {
         alert("Login failed. Please check your credentials.");
