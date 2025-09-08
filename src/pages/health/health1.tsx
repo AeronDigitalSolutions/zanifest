@@ -71,7 +71,7 @@ const Health1 = () => {
 
           <button
             className={styles.continueBtn}
-            onClick={() => router.push("./health3")}
+            onClick={() => router.push("./health")}
           >
             Continue ›
           </button>

@@ -1,4 +1,4 @@
-
+/* ===================== GLOBAL RESET ===================== */
 .wrapper :global(*) {
   box-sizing: border-box;
 }
@@ -49,13 +49,12 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
   width: 50vw;
-  height: 30vw;
-  /* border: 1px solid #e0e0e0; */
+  height: 31vw;
   overflow: hidden;
 }
 
 .headingBox {
-  width: 94%;
+  width: 100%;
   min-height: 100px;
   background-color: #f5fafa;
   margin-bottom: 20px;
@@ -103,9 +102,7 @@
   text-decoration: underline;
   cursor: pointer;
   transition: opacity 0.2s;
-  
 }
-
 .helpLink:hover {
   opacity: 0.8;
 }
@@ -133,246 +130,7 @@
   transform: scaleX(-1);
 }
 
-/* ===================== DATEPICKER STYLES ===================== */
-.customCalendar {
-  display: flex !important;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 2rem;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-.react-datepicker__month-container {
-  width: 100%;
-  max-width: 280px;
-}
-
-.react-datepicker__header {
-  background-color: white;
-  border: none;
-  padding-top: 0.5rem;
-}
-
-.customCalendar :global(.react-datepicker__current-month) {
-  color: #0000ff;
-  font-size: 1rem;
-  font-weight: bold;
-  text-align: center;
-}
-
-.react-datepicker__day-names {
-  display: flex;
-  justify-content: space-around;
-  padding: 0 0.5rem;
-}
-
-.react-datepicker__day-name,
-.react-datepicker__day {
-  font-size: 0.8rem;
-  width: 2.2rem;
-  height: 2.2rem;
-  line-height: 2.2rem;
-  margin: 0.2rem;
-  text-align: center;
-}
-
-.react-datepicker__day--selected,
-.react-datepicker__day--keyboard-selected {
-  background-color: #fa4e1b !important;
-  color: white !important;
-  border-radius: 50%;
-}
-
-/* ===================== RESPONSIVE STYLES ===================== */
-
-/* TABLET */
-@media screen and (max-width: 1024px) {
-  .pageContainer {
-    flex-direction: column;
-    width: 100%;
-    padding: 2rem 1.5rem;
-    gap: 2rem;
-  }
-
-  .outerBox {
-    max-width: 100%;
-    width: 100%;
-    padding: 2rem;
-  }
-
-  .innerBox {
-    width: 100%;
-    height: auto;
-    /* border: 1px solid #e0e0e0; */
-    border-radius: 16px;
-  }
-
-  .rightSection {
-    display: none;
-  }
-
-  .customCalendar {
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-  }
-
-  /* ✅ Ensure only one calendar is visible */
-  .customCalendar .react-datepicker__month-container:nth-child(n+2) {
-    display: none !important;
-  }
-}
-
-/* SMALL TABLET */
-@media screen and (max-width: 768px) {
-  .pageContainer {
-    padding: 1.5rem;
-    gap: 1.5rem;
-  }
-
-  .outerBox {
-    padding: 1.5rem;
-  }
-
-  .innerBox {
-    width: 100%;
-    height: auto;
-    justify-items:center;
-  }
-
-  .heading {
-    font-size: 1.1rem;
-  }
-
-  .subtext {
-    font-size: 0.85rem;
-  }
-
-  .customCalendar {
-    gap: 1rem;
-  }
-
-  .customCalendar .react-datepicker__month-container:nth-child(n+2) {
-    display: none !important;
-  }
-
-  .react-datepicker__day,
-  .react-datepicker__day-name {
-    font-size: 0.75rem;
-    width: 2rem;
-    height: 2rem;
-    line-height: 2rem;
-  }
-
-  .customCalendar :global(.react-datepicker__current-month) {
-    font-size: 0.9rem;
-  }
-}
-
-/* MOBILE */
-@media screen and (max-width: 600px) {
-  .pageContainer {
-    padding: 1rem;
-    gap: 1rem;
-    width: min-content;
-  }
-
-  .outerBox {
-    padding: 1rem;
-    
-  }
-
-  .innerBox {
-    padding-bottom: 1.5rem;
-    border-radius: 12px;
-    /* border: 1px solid #ccc; */
-  }
-
-  .headingBox {
-    min-height: 70px;
-    padding: 1rem ;
-    border-radius: 12px 12px 0 0;
-    justify-content: center;
-  }
-
-  .heading {
-    font-size: 1rem;
-  }
-
-  .subtext {
-    font-size: 0.8rem;
-  }
-
-  .datepickerWrapper {
-    padding: 0;
-  }
-
-  .customCalendar {
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  /* ✅ One calendar only */
-  .customCalendar .react-datepicker__month-container:nth-child(n+2) {
-    display: none !important;
-  }
-
-  .react-datepicker__day,
-  .react-datepicker__day-name {
-    font-size: 0.7rem;
-    width: 1.8rem;
-    height: 1.8rem;
-    line-height: 1.8rem;
-  }
-
-  .helpLink {
-    font-size: 0.8rem;
-  }
-}
-
-/* SMALL MOBILE */
-@media screen and (max-width: 400px) {
-  .pageContainer {
-    padding: 1rem;
-  }
-
-  .outerBox {
-    padding: 1rem;
-    border-radius: 16px;
-  }
-
-  .innerBox {
-    border-radius: 12px;
-    /* border: 1px solid #ccc; */
-    padding:1vw;
-  }
-
-  .headingBox {
-    border-radius: 12px 12px 0 0;
-  }
-
-  .customCalendar .react-datepicker__month-container:nth-child(n+2) {
-    display: none !important;
-  }
-
-  .react-datepicker__day,
-  .react-datepicker__day-name {
-    font-size: 0.65rem;
-    width: 1.6rem;
-    height: 1.6rem;
-    line-height: 1.6rem;
-  }
-}
-
-
-
-
-
+/* ===================== NEW CALENDAR STYLES ===================== */
 .calendarWrapper {
   display: flex;
   justify-content: center;
@@ -390,7 +148,6 @@
 
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   font-weight: bold;
   margin-bottom: 8px;
@@ -399,7 +156,7 @@
 .monthYear {
   color: #3366cc;
   font-size: 16px;
-   text-align: center;
+  text-align: center;
   flex-grow: 1;
 }
 
@@ -428,9 +185,8 @@
   font-size: 13px;
   color: #000;
   cursor: pointer;
-  
 }
-.date:hover{
+.date:hover {
   background-color: #f0f0f0;
   border-radius: 4px;
 }
@@ -440,19 +196,182 @@
     justify-content: space-between;
     align-items: center;
   }
-
   .monthYear {
     flex: 1;
     text-align: center;
     font-size: 16px;
   }
-
   .arrow {
     font-size: 20px;
     padding: 0 10px;
     cursor: pointer;
   }
 }
+
+/* ===================== CLAIM BOX (Carinsurance5) ===================== */
+.outerBoxClaim {
+  background-color: #fa4e1b;
+  border-radius: 20px;
+  padding: 1.5rem;
+  max-width: 480px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.innerBoxClaim {
+  background-color: #f9f9f9;
+  border-radius: 16px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 400px;
+  text-align: left;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.sectionTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  color: #333;
+}
+.question {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  color: #222;
+}
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.optionButton {
+  background: white;
+  padding: 0.9rem 1.2rem;
+  border-radius: 12px;
+  border: 1px solid #e1e1e1;
+  text-align: left;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  position: relative;
+  color: #333;
+}
+.optionButton::after {
+  content: "›";
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  color: #999;
+}
+.optionButton:hover {
+  border-color: #fa4e1b;
+  background-color: #fff6f2;
+}
+
+/* ===================== FORM WRAPPER (Carinsurance2) ===================== */
+.formWrapper {
+  background-color: #fff3e0;
+  padding: 2rem;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.iconBox {
+  background-color: white;
+  padding: 6px;
+  border-radius: 8px;
+  margin-right: 0.75rem;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.flagImg {
+  border-radius: 2px;
+}
+.titleText {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #4e3d2f;
+}
+.input {
+  height: 40px;
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+.mobileInputGroup {
+  display: flex;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  background-color: white;
+}
+.flagWrapper {
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  background-color: #fff;
+  border-right: 1px solid #ccc;
+  gap: 0.5rem;
+  font-size: 14px;
+}
+.mobileInput {
+  flex: 1;
+  height: 40px;
+  border: none;
+  padding: 0.75rem;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+.mobileInput:focus,
+.input:focus {
+  outline: none;
+  border-color: #fa621a;
+}
+.submitButton {
+  background-color: #fa621a;
+  color: white;
+  border: none;
+  width: 100%;
+  padding: 0.85rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+.terms {
+  font-size: 12px;
+  text-align: center;
+  color: #777;
+}
+.link {
+  color: #fa621a;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* ===================== BACK BUTTON (COMMON) ===================== */
 .backBtn {
   position: fixed;
   left: 2rem;
@@ -467,7 +386,6 @@
   background-color: rgb(230, 230, 229);
   z-index: 10;
 }
-
 .arrowBack {
   color: #000;
   font-size: 20px;
@@ -475,24 +393,51 @@
   justify-items: center;
 }
 
-/* Tablet */
+/* ===================== RESPONSIVE BREAKPOINTS ===================== */
 @media screen and (max-width: 1024px) {
-  .backBtn {
-    left: 5rem;
-    top: 18%;
+  .pageContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1.5rem;
+    gap: 1.5rem;
+    width: 100%;
   }
+  .outerBox, .outerBoxClaim {
+    width: 100%;
+    max-width: 100%;
+  }
+  .innerBox, .innerBoxClaim {
+    width: 100%;
+    height: auto;
+  }
+  .rightSection { display: none; }
+  .backBtn { left: 5rem; top: 18%; }
 }
 
-/* Mobile */
 @media screen and (max-width: 768px) {
-  .backBtn {
-    left: 1rem;
-    top: 16%;
-    width: 36px;
-    height: 36px;
-  }
+  .pageContainer { padding: 1.5rem; }
+  .outerBox, .outerBoxClaim { padding: 1.5rem; }
+  .heading { font-size: 1.1rem; }
+  .subtext { font-size: 0.85rem; }
+  .backBtn { left: 1rem; top: 16%; width: 36px; height: 36px; }
+  .arrowBack { font-size: 18px; }
+}
 
-  .arrowBack {
-    font-size: 18px;
-  }
+@media screen and (max-width: 600px) {
+  .pageContainer { padding: 1rem; }
+  .outerBox, .outerBoxClaim { padding: 1rem; }
+  .heading { font-size: 1rem; }
+  .subtext { font-size: 0.8rem; }
+}
+
+@media screen and (max-width: 480px) {
+  .outerBox, .outerBoxClaim { padding: 0.8rem; }
+  .sectionTitle { font-size: 1rem; }
+  .question { font-size: 0.95rem; }
+  .optionButton { font-size: 0.95rem; padding: 0.8rem 1rem; }
+}
+
+@media screen and (max-width: 400px) {
+  .outerBox, .outerBoxClaim { border-radius: 16px; }
+  .innerBox, .innerBoxClaim { border-radius: 12px; }
 }

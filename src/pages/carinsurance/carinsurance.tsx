@@ -45,7 +45,7 @@ function carinsurance() {
             <button
               className={styles.button}
               onClick={() => {
-                router.push("./carinsurance2");
+                router.push("./carinsurance4");
               }}
             >
               View Prices <FaArrowRight />
