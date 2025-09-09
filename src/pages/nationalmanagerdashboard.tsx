@@ -182,7 +182,7 @@ const NationalManagerDashboard = () => {
           )}
 
           {activeSection === "resetpassword" && <ResetPassword />}
-          {activeSection === "listofstatemanager" && <ListOfStateManager />}
+          {activeSection === "listofstatemanager" && <ListOfStateManager stateManagers={stateManagers}/>}
            {activeSection === "profileEdit" && (
             <CreateManager
            

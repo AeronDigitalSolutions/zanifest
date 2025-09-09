@@ -62,8 +62,7 @@ const DistrictManagerTable: React.FC = () => {
                 <th>City</th>
                 <th>State</th>
                 <th>District</th>
-                <th>PAN number</th>
-                <th>Adhaar Number</th>
+                
               </tr>
             </thead>
             <tbody>
@@ -79,8 +78,7 @@ const DistrictManagerTable: React.FC = () => {
                     <td>{manager.city}</td>
                     <td>{manager.state}</td>
                     <td>{manager.district}</td>
-                    <td>{manager.panNumber}</td>
-                    <td>{manager.adhaarNumber}</td>
+                    
 
                     
                     {/* <td>

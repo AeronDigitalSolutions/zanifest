@@ -4,7 +4,8 @@ import styles from "@/styles/pages/nationalmanager.module.css";
 
 type Manager = {
   _id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   location: {
     state: string;
@@ -33,7 +34,7 @@ const StateManagerList: React.FC<Props> = ({ stateManagers = [] }) => {
             {stateManagers.length > 0 ? (
               stateManagers.map((manager) => (
                 <tr key={manager._id}>
-                  <td>{manager.name}</td>
+                  <td>{manager.firstName}</td>
                   <td>{manager.email}</td>
                   <td>{manager.location?.state || "—"}</td>
                 </tr>

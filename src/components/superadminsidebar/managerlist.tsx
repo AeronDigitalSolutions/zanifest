@@ -95,7 +95,6 @@ export default function ManagersTable() {
       })
 
       const data = await res.json();
-
       if(data.success)
       {
         toast.success("Manager assigned successfully");
@@ -211,7 +210,7 @@ export default function ManagersTable() {
                         ? `${manager.assignedTo.managerId}`
                         : '—'} */}
 
-                        {
+                        {/* {
                           editingManagerAssinedTo === manager._id ? (
                             <>
                             <select
@@ -246,7 +245,53 @@ export default function ManagersTable() {
                           </button>
                             </>
                           )
-                        }
+                        } */}
+
+
+                        {editingManagerAssinedTo === manager._id ? (
+  <>
+    <select
+      value={newAssignedTo}
+      onChange={(e) => setNewAssignedTo(e.target.value)}
+    >
+      <option value="">Select New Manager</option>
+
+      {managers
+        .filter((m) =>
+          manager.category === "district"
+            ? m.category === "state" // District → State
+            : manager.category === "state"
+            ? m.category === "national" // State → National
+            : false // National managers can't be reassigned
+        )
+        .map((m) => (
+          <option key={m._id} value={m.managerId}>
+            {`${m.firstName} ${m.lastName} (${m.managerId})`}
+          </option>
+        ))}
+    </select>
+
+    <button onClick={() => handleSaveAssignedTo(manager._id)}>Save</button>
+    <button onClick={() => setEditingManagerAssignedTo(null)}>Cancel</button>
+  </>
+) : (
+  <>
+    {manager.assignedTo ? (
+      <span>{manager.assignedTo.managerId}</span>
+    ) : (
+      <span>—</span>
+    )}
+    <button
+      onClick={() => {
+        setEditingManagerAssignedTo(manager._id);
+        setNewAssignedTo(manager.assignedTo?.managerId || "");
+      }}
+    >
+      Edit
+    </button>
+  </>
+)}
+
                     </td>
                     <td className={styles.td}>
                       <button
