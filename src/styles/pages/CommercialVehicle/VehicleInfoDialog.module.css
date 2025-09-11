@@ -172,3 +172,24 @@
   }
   
 }
+.closeBtn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 22px;
+  color: #333;
+  z-index: 1000; /* ✅ ensure it's above everything */
+}
+
+.closeBtn:hover {
+  color: red;
+}
+.dialog {
+  position: relative; /* ✅ required for close button */
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+}

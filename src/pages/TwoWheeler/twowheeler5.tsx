@@ -13,6 +13,8 @@ import { VscSettings } from "react-icons/vsc";
 import { LuTicketsPlane, LuArrowDownUp } from "react-icons/lu";
 import { IoMdMenu, IoMdClose } from "react-icons/io"; // icons for toggle
 import {useRouter} from 'next/router'
+import { FaFilter } from "react-icons/fa";
+
 const plans = [
   {
     id: 1,
@@ -66,7 +68,7 @@ const twowheeler5 = () => {
         {/* Icon Toggle */}
         {isMobile && (
           <div className={styles.toggleIcon} onClick={() => setSidebarOpen(!sidebarOpen)}>
-            {sidebarOpen ? <IoMdClose size={24} /> : <IoMdMenu size={24} />}
+            {sidebarOpen ? <IoMdClose size={24} /> : <FaFilter  />}
           </div>
         )}
 
@@ -131,7 +133,7 @@ const twowheeler5 = () => {
                     <p className={styles.idvValue}>{plan.idv}</p>
                   </div>
                   <button className={styles.buyBtn} onClick={()=>{router.push('/cart/bikeinsurancecart')}}>
-                    Buy now <br /> <span>{plan.price}</span>
+                    Buy now <span>{plan.price}</span>
                     <MdOutlineKeyboardArrowRight />
                   </button>
                 </div>

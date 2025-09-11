@@ -1,19 +1,40 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import Footer from "@/components/ui/Footer";
 import Navbar from "@/components/ui/Navbar";
 import UserDetails from "@/components/ui/UserDetails";
 import styles from "@/styles/pages/carinsurance.module.css";
 import Image from "next/image";
-import { FaArrowRight, FaTimes } from "react-icons/fa";
+import { FaArrowRight } from "react-icons/fa";
 import { useRouter } from "next/router";
 
-function CarInsurance() {
+// ✅ Import dialogs
+import ChoosecarDialog from "@/pages/carinsurance/ChooseVehicleDialog";
+import VehicleBrandDialog from "@/pages/carinsurance/VehicleBrandDialog";
+import VehicleModelDialog from "@/pages/carinsurance/VehicleModelDialog";
+import VehicleVariantDialog from "@/pages/carinsurance/VehicleVariantDialog";
+import YearDialog from "@/pages/carinsurance/YearDialog";
+import VehicleInfoDialog from "@/pages/carinsurance/VehicleInfoDialog";
+
+function Carinsurance() {
   const router = useRouter();
   const [carNumber, setCarNumber] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [step, setStep] = useState<
+    | "none"
+    | "chooseVehicle"
+    | "chooseBrand"
+    | "chooseModel"
+    | "chooseVariant"
+    | "chooseYear"
+    | "vehicleInfo"
+  >("none");
+
+  const [selectedVehicle, setSelectedVehicle] = useState<string | null>(null);
+  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
+  const [selectedModel, setSelectedModel] = useState<string | null>(null);
+  const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
+  const [selectedYear, setSelectedYear] = useState<number | null>(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -59,7 +80,7 @@ function CarInsurance() {
             <div className={styles.newCar}>
               Brand new car?{" "}
               <button
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => setStep("chooseVehicle")}
                 className={styles.linkBtn}
               >
                 click here
@@ -71,67 +92,111 @@ function CarInsurance() {
 
       <Footer />
 
-      {/* 🚗 Custom Modal */}
-      {isModalOpen && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContent}>
-            <div className={styles.modalHeader}>
-              <h3>We have found your vehicle</h3>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className={styles.closeBtn}
-              >
-                <FaTimes />
-              </button>
-            </div>
+      {/* ✅ Choose Vehicle Dialog */}
+      {step === "chooseVehicle" && (
+        <ChoosecarDialog
+          onClose={() => setStep("none")}
+          onSelectVehicle={(vehicle) => {
+            setSelectedVehicle(vehicle);
+            setStep("chooseBrand");
+          }}
+          onBackToInfo={() => setStep("none")}
+          onNextToBrand={() => setStep("chooseBrand")}
+        />
+      )}
 
-            <div className={styles.modalBody}>
-              {/* Left side vehicle info */}
-              <div className={styles.vehicleInfo}>
-                <input value="DL01LAG8279" readOnly className={styles.modalInput} />
-                <input value="Truck" readOnly className={styles.modalInput} />
-                <input
-                  value="TATA MOTORS LTD"
-                  readOnly
-                  className={styles.modalInput}
-                />
-                <input value="LPT 709" readOnly className={styles.modalInput} />
-                <input
-                  value="g DCR39HSD 85B6M5 TT - CNG"
-                  readOnly
-                  className={styles.modalInput}
-                />
-                <input value="2022" readOnly className={styles.modalInput} />
-              </div>
+      {/* ✅ Vehicle Brand Dialog */}
+      {step === "chooseBrand" && (
+        <VehicleBrandDialog
+          onClose={() => setStep("none")}
+          vehicleNumber={carNumber || "NEW VEHICLE"}
+          selectedVehicle={selectedVehicle || ""}
+          onBackToChooseVehicle={() => setStep("chooseVehicle")}
+          onNextToVehicleModel={() => setStep("chooseModel")}
+          onSelectBrand={(brand) => {
+            setSelectedBrand(brand);
+            setStep("chooseModel"); // 👉 open model dialog
+          }}
+        />
+      )}
 
-              {/* Right side form */}
-              <div className={styles.userStep}>
-                <p className={styles.subHeading}>
-                  Almost done! Just one last step
-                </p>
-                <input
-                  type="text"
-                  placeholder="Enter your full name"
-                  className={styles.modalInput}
-                />
-                <input
-                  type="text"
-                  placeholder="+91"
-                  className={styles.modalInput}
-                />
-                <button className={styles.viewBtn}>View prices</button>
-                <p className={styles.policyText}>
-                  By clicking on 'View prices', you agree to our{" "}
-                  <Link href="#">Privacy Policy</Link> &{" "}
-                  <Link href="#">Terms of Use</Link>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* ✅ Vehicle Model Dialog */}
+      {step === "chooseModel" && (
+        <VehicleModelDialog
+          onClose={() => setStep("none")}
+          vehicleNumber={carNumber || "NEW VEHICLE"}
+          selectedVehicle={selectedVehicle || ""}
+          selectedBrand={selectedBrand || ""}
+          onBack={() => setStep("chooseBrand")}
+          onNext={() => setStep("chooseVariant")}
+          onSelectModel={(model) => {
+            setSelectedModel(model);
+            setStep("chooseVariant"); // 👉 open variant dialog
+          }}
+        />
+      )}
+
+      {/* ✅ Vehicle Variant Dialog */}
+      {step === "chooseVariant" && (
+        <VehicleVariantDialog
+          onClose={() => setStep("none")}
+          vehicleNumber={carNumber || "NEW VEHICLE"}
+          selectedVehicle={selectedVehicle || ""}
+          selectedBrand={selectedBrand || ""}
+          selectedModel={selectedModel || ""}
+          onBackToModel={() => setStep("chooseModel")}
+          onNextToYear={() => setStep("chooseYear")}
+          onSelectVariant={(variant) => {
+            setSelectedVariant(variant);
+            setStep("chooseYear"); // 👉 open year dialog
+          }}
+        />
+      )}
+
+      {/* ✅ Year Dialog */}
+      {step === "chooseYear" && (
+        <YearDialog
+          onClose={() => setStep("none")}
+          vehicleNumber={carNumber || "NEW VEHICLE"}
+          selectedVehicle={selectedVehicle || ""}
+          selectedBrand={selectedBrand || ""}
+          selectedModel={selectedModel || ""}
+          selectedVariant={selectedVariant || ""}
+          onBack={() => setStep("chooseVariant")}
+          onSelectYear={(year) => {
+            setSelectedYear(year);
+            setStep("vehicleInfo"); // 👉 After year selection open vehicle info dialog
+          }}
+        />
+      )}
+
+      {/* ✅ Vehicle Info Dialog */}
+      {step === "vehicleInfo" && (
+        <VehicleInfoDialog
+          onClose={() => setStep("none")}
+          oncommercialvehicle1={() => setStep("none")}
+          onChooseVehicle={() => setStep("chooseVehicle")}
+          onChooseBrand={() => setStep("chooseBrand")}
+          onChooseModel={() => setStep("chooseModel")}
+          onChooseFuelVariant={() => setStep("chooseVariant")}
+          onChooseYear={() => setStep("chooseYear")}
+          vehicleNumber={carNumber || "NEW VEHICLE"}
+          selectedVehicle={selectedVehicle}
+          selectedBrand={selectedBrand}
+          selectedModel={selectedModel}
+          selectedVariant={selectedVariant}
+          selectedYear={selectedYear}
+          onUpdateData={(data) => {
+            if (data.vehicle) setSelectedVehicle(data.vehicle);
+            if (data.brand) setSelectedBrand(data.brand);
+            if (data.model) setSelectedModel(data.model);
+            if (data.variant) setSelectedVariant(data.variant);
+            if (data.year) setSelectedYear(data.year);
+          }}
+        />
       )}
     </div>
   );
 }
 
-export default CarInsurance;
+export default Carinsurance;

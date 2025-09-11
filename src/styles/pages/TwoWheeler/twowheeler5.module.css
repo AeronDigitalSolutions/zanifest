@@ -8,16 +8,18 @@
 
 /* Toggle Icon (Mobile/Tab Only) */
 .toggleIcon {
-  display: none;
-  position: fixed;
-  top: 80px;
-  left: 16px;
-  z-index: 1000;
-  background: white;
-  padding: 8px;
-  border-radius: 50%;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  cursor: pointer;
+     display: none;
+    position: absolute;
+    top: 112px;
+    left: 16px;
+    z-index: 1000;
+    background: white;
+    padding: 5px;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    align-items: center;
+    height: 30px;
 }
 
 /* Sidebar styles */
@@ -37,6 +39,7 @@
 
 .card h4 {
   font-size: 1rem;
+  font-weight: 600;
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
@@ -145,7 +148,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 20px;
   flex-wrap: wrap;
 }
 
@@ -164,19 +168,22 @@
 }
 
 .idvValue {
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
 
 .buyBtn {
-  background-color: #007bff;
+  background-color:orangered;
   color: white;
-  padding: 0.4rem 1rem;
+  padding: 0.4rem 0.8rem;
   border: none;
   border-radius: 6px;
-  font-size: 0.8rem;
+  font-size: 1rem;
+  font-weight: 600;
   height: 50px;
+  width: 17%;
+  cursor: pointer;
 }
 
 .buyBtn span {
