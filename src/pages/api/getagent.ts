@@ -44,8 +44,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.log("Fetched agents:", agents.map(a=> a.firstName));
 
     return res.status(200).json({ agents });
-
   } 
+  
   catch (error) {
     console.log("eror fetching agents:", error);
     console.error('Error fetching agents:', error);

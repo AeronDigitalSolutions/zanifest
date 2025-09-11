@@ -4,12 +4,12 @@ import styles from "@/styles/pages/districtmanager.module.css";
 import { useRouter } from "next/router";
 import { useManager } from "@/lib/hooks/useManager";
 import axios from "axios";
-
 import DistrictManagerHeader from "@/components/districtmanagerdashboard/DistrictManagerHeader";
 import DistrictManagerSidebar from "@/components/districtmanagerdashboard/districtmanagersidebar";
 import DashboardContent from "@/components/districtmanagerdashboard/dashboardcontent";
 import ResetPassword from "@/components/districtmanagerdashboard/resetpassword";
 import ListOfAgent from "@/components/districtmanagerdashboard/listofagents";
+
 
 type Agent = {
   id: string;
@@ -104,7 +104,6 @@ const monthlySalesData = [
 const DistricManagerDashboard = () => {
   const router = useRouter();
   const { user } = useManager();
-
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("dashboard");
   const [showAgentList, setShowAgentList] = useState(false);

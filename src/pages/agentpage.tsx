@@ -10,6 +10,9 @@ import ResetPassword from "@/components/districtmanagerdashboard/resetpassword";
 import CreateUser from "@/components/agentpage/createuser";
 import CreateAgent from "@/components/superadminsidebar/createagent";
 
+//money - adder
+//seperate table to show agent sales - 
+
 const AgentDashboard = () => {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);

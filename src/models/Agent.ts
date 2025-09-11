@@ -92,8 +92,13 @@ const agentSchema = new mongoose.Schema({
     required: true,
   },
 
-  accountStatus :{type: String, enum: ['active', 'inactive'], default: 'active'}
-});
+  accountStatus :{type: String, enum: ['active', 'inactive'], default: 'active'},
+
+  lifetimeSales: { type: Number, default: 0 }, // across all managers
+  currentSales: { type: Number, default: 0 },  // only for active DM
+}, {timestamps: true});
+
+//timestamps added on - 9/9/25
 
 export default mongoose.models.Agent || mongoose.model("Agent", agentSchema);
 

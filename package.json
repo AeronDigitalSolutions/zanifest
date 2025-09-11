@@ -24,6 +24,7 @@
     "express": "^5.1.0",
     "formidable": "^3.5.4",
     "framer-motion": "^12.15.0",
+    "graceful-fs": "^4.2.11",
     "insurance": "file:",
     "jose": "^6.0.12",
     "jsonwebtoken": "^9.0.2",
