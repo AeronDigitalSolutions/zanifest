@@ -172,6 +172,7 @@
   transition-duration: 0.3s;
   position: relative;
   overflow: hidden;
+  color: white;
     box-shadow: 0 4px 8px rgba(145, 68, 68, 0.2);
 
 }
@@ -181,7 +182,7 @@
   z-index: 2;
 }
 .binTop {
-  width: 11px;
+  width: 13px;
   transform-origin: right;
   transition-duration: 0.3s;
   z-index: 2;
@@ -294,7 +295,8 @@
 .assignedToWrapper {
   display: flex;
   align-items: center;
-  gap: 6px; /* space between text and icon */
+  gap: 6px;
+  justify-content: space-between;
 }
 
 .editIconBtn {
@@ -361,3 +363,5 @@
 .switch input:checked + .slider:before {
   transform: translateX(24px);
 }
+
+

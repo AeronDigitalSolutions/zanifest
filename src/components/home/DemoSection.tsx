@@ -6,7 +6,7 @@ import { FaEllipsisH } from "react-icons/fa";
 const DEMOLIST = [
   {
     name: "Over 9 Million",
-    desc: "customers trust us and have bought t heir insurance on Policybazaar",
+    desc: "customers trust us and have bought t heir insurance on Zanifest",
     image: require("@/assets/home/demo/1.png"),
     color: "#e7f9f7",
   },

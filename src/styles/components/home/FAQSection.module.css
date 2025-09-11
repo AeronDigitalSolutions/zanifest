@@ -125,6 +125,7 @@
 
   .ques {
     font-size: 16px;
+    text-align: left;
   }
 
   .rightIndicator {
@@ -140,22 +141,6 @@
   }
 
 }
-
-@media screen and (max-width: 480px) {
-  .item {
-    width: 110%;
-    
-    margin: 0px -12px;
-    box-sizing: border-box;
-    padding: 0 20px;
-      -webkit-tap-highlight-color: transparent; 
-
-  }
-}
-
-
- 
-  
 
 @media screen and (max-width: 700px) {
   .head::after {
@@ -174,4 +159,15 @@
   margin-bottom: 0px;
   position: relative;
 }
+}
+
+@media screen and (max-width: 480px) {
+  .item {
+    width: 100%;
+    margin: 0;          /* edges se chipka */
+    box-sizing: border-box;
+    padding: 5px 16px;  
+    justify-content: center;
+    
+  }
 }

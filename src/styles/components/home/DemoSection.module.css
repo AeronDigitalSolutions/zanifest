@@ -93,14 +93,15 @@
   font-size: 20px;
   align-self: baseline;
   margin: 0%;
-    margin-bottom: -15px;
+    margin-bottom: -9px;
 
 }
 
 .desc {
   font-size: 14px;
   justify-content: justify;
-  margin-bottom: -5px;
+  line-height: 1.2;
+  margin-top: 5px;
 
 }
 .mobileEllipsis {
@@ -146,6 +147,7 @@
   }
   .desc {
     text-align: justify;
+    text-align: left;
   }
 }
 
@@ -159,7 +161,7 @@
 
   .heading{
     font-size: 25px;
-    width: 83%;
+    width: 86%;
   }
 
 

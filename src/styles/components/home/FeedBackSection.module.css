@@ -215,7 +215,7 @@
 
 .carouselWindow {
   width: 100%;
-  max-width: 1120px;
+  max-width: 1020px;
   overflow: hidden;
   margin: 0 auto;
   padding: 0 20px;
@@ -330,7 +330,7 @@
   .serviceItem {
     min-width: 293px;
     max-width: 300px;
-    margin: 25px 18px;
+    margin: 0px 18px;
     flex-shrink: 0;
     background-color: white;
     padding: 14px;

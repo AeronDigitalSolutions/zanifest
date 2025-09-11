@@ -350,6 +350,14 @@ export default function TravelInsurance() {
       {showCalendar && (
         <div className={styles.drawerOverlay}>
           <div className={styles.drawer}>
+            {/* 🔽 Close button added here */}
+            <button
+              className={styles.closeBtn}
+              onClick={() => setShowCalendar(false)}
+            >
+              <FiXCircle />
+            </button>
+
             <h2 className={styles.modalHeading}>
               When are you planning to travel to{" "}
               {selected.length > 0 ? selected[0] : "your destination"}?
