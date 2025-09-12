@@ -20,7 +20,7 @@ const teamMembers = [
   },
   {
     name: "Sarbvir Singh",
-    title: "President & CEO - Policybazaar",
+    title: "President & CEO - Zanifest",
     image: img3,
   },
 ];

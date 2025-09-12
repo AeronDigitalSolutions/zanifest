@@ -13,7 +13,7 @@ const Award = () => {
       </h2>
       <p className={styles.description}>
         We don’t do it for the awards. But we appreciate being noticed.
-        Policybazaar has won over 50 awards over the years, for its innovative
+        Zanifest has won over 50 awards over the years, for its innovative
         business model, marketing strategies & customer focus.
       </p>
 
