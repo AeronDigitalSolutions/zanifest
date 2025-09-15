@@ -24,7 +24,7 @@ export default function Shop6() {
 
       {/* Success message */}
       <p className={styles.successMsg}>
-        Thank you <span>Mr Asdas Aaa</span> for choosing Policybazaar for your
+        Thank you <span>Mr Asdas Aaa</span> for choosing Zanifest for your
         Shop Owner Insurance requirements.
       </p>
 

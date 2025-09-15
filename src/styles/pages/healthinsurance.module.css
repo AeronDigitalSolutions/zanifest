@@ -100,8 +100,7 @@
   transform: scale(0.9);
 }
 
-.disclamir {
-}
+
 
 .terms {
   color: #7bafff;
@@ -126,4 +125,52 @@
   cursor: pointer;
   margin-top: 20px;
   font-weight: 700;
+}
+/* Compact Counter box */
+.counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; 
+  margin-top: 8px;
+  background: #fff;
+  border: 2px solid #2bb673; 
+  border-radius: 20px;
+  padding: 2px 10px;   
+  font-size: 14px;     
+  font-weight: 500;
+  color: #333;
+  width: 100px;
+  align-self: center;
+  translate: 95px -25px;
+
+}
+
+/* Counter buttons */
+.counter button {
+  background: none;
+  border: none;
+  color: #2bb673;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 20px;   /* ✅ smaller button size */
+  height: 20px;
+  line-height: 18px;
+  text-align: center;
+  border-radius: 50%;
+  transition: background 0.2s ease;
+  /* translate: 95px -25px; */
+}
+
+.counter button:hover {
+  background: rgba(43, 182, 115, 0.1);
+}
+
+/* Counter number */
+.counter span {
+  min-width: 16px;
+  text-align: center;
+  font-weight: 600;
+  color: #111;
 }

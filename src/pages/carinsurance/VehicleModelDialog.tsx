@@ -26,13 +26,13 @@ const VehicleModelDialog: React.FC<VehicleModelDialogProps> = ({
   const [search, setSearch] = useState("");
 
   const models = [
-    "van",
-    "car",
-    "Jeep",
-    "SUV",
-    "Hashback",
-    "Coupe",
-    "Sedan",
+    "swift",
+    "WagonR",
+    "Baleno",
+    "Dezire",
+    "Ertiga",
+    "Ciaz",
+    "Alto",
   ];
 
   return (
@@ -60,7 +60,7 @@ const VehicleModelDialog: React.FC<VehicleModelDialogProps> = ({
             <button className={styles.arrowBtn} onClick={onBack}>
               ‹
             </button>
-            <span>Search Vehicle Model</span>
+            <span>Search car Model</span>
             <button className={styles.arrowBtn} onClick={onNext}>
               ›
             </button>            
@@ -71,7 +71,7 @@ const VehicleModelDialog: React.FC<VehicleModelDialogProps> = ({
             <FiSearch className={styles.searchIcon} />
             <input
               type="text"
-              placeholder="Search Vehicle Model"
+              placeholder="Search car Model"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />

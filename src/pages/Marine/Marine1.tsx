@@ -172,7 +172,7 @@ const Marine: React.FC = () => {
                 <div className={styles.badge}>
                   <FaUserShield className={styles.badgeIcon} />
                   <p className={styles.badgetext}>
-                    Only certified Policybazaar expert will assist you
+                    Only certified Zanifest expert will assist you
                   </p>
                 </div>
 

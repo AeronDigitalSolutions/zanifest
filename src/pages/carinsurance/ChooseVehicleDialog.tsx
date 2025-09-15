@@ -1,16 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import styles from "@/styles/pages/CommercialVehicle/choosevehicledialog.module.css";
+import styles from "@/styles/pages/cardetailsdialog.module.css";
 
-// React Icons
-import { FaTruck, FaTractor, FaBus } from "react-icons/fa";
-import { MdElectricRickshaw, MdDirectionsBus } from "react-icons/md";
-import { PiVanFill } from "react-icons/pi";
-import { GiMineTruck } from "react-icons/gi";
-import { TbBus } from "react-icons/tb";
-import { RiMotorbikeFill } from "react-icons/ri";
-import { BiLoader } from "react-icons/bi";
+
 
 interface ChooseVehicleDialogProps {
   onClose: () => void;
@@ -20,18 +13,18 @@ interface ChooseVehicleDialogProps {
 }
 
 const car = [
-  { label: "SUV", icon: <PiVanFill size={45} /> },
-  { label: "Compact car", icon: <RiMotorbikeFill size={45} /> },
-  { label: "Hatchback", icon: <MdElectricRickshaw size={45} /> },
-  { label: "A-segment", icon: <BiLoader size={45} /> },
-  { label: "Microcar", icon: <FaTruck size={45} /> },
-  { label: "Utility vehicle", icon: <GiMineTruck size={45} /> },
-  { label: "D-segment", icon: <MdDirectionsBus size={45} /> },
-  { label: "Minivan", icon: <FaTractor size={45} /> },
-  { label: "Sedan", icon: <TbBus size={45} /> },
-  { label: "Luxury car", icon: <FaBus size={45} /> },
-  { label: "Coupe", icon: <RiMotorbikeFill size={45} /> },
-  { label: "E-segment", icon: <FaTruck size={45} /> },
+  { label: "Delhi"},
+  { label: "Gurgaon"},
+  { label: "Noida"},
+  { label: "Faridabad"},
+  { label: "Ghaziabad"},
+  { label: "Meerut"},
+  { label: "Agra"},
+  { label: "Lucknow"},
+  { label: "Kanpur"},
+  { label: "Prayagraj"},
+  { label: "Varanasi"},
+  { label: "Aligarh"},
 ];
 
 const ChoosecarDialog: React.FC<ChooseVehicleDialogProps> = ({
@@ -60,7 +53,7 @@ const ChoosecarDialog: React.FC<ChooseVehicleDialogProps> = ({
             <button className={styles.arrowBtn} onClick={onBackToInfo}>
               ‹
             </button>
-            <span>Choose the type of your vehicle</span>
+            <span>Select City</span>
             <button className={styles.arrowBtn} onClick={onNextToBrand}>
               ›
             </button>
@@ -78,7 +71,6 @@ const ChoosecarDialog: React.FC<ChooseVehicleDialogProps> = ({
                   active === v.label ? styles.active : ""
                 }`}
               >
-                {v.icon}
                 <span>{v.label}</span>
               </button>
             ))}
