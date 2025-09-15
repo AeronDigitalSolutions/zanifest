@@ -6,25 +6,25 @@ import { FaEllipsisH } from "react-icons/fa";
 const DEMOLIST = [
   {
     name: "Over 9 Million",
-    desc: "customers trust us and have bought t heir insurance on Zanifest",
+    desc: "Customers trust us and have bought their insurance on Zanifest",
     image: require("@/assets/home/demo/1.png"),
     color: "#e7f9f7",
   },
   {
     name: "50+ Insurers",
-    desc: "partnered with us so that you can compare easily & transparently",
+    desc: "Partnered with us so that you can compare easily & transparently",
     image: require("@/assets/home/demo/2.png"),
     color: "#ebf2f8",
   },
   {
     name: "Great Price",
-    desc: "for all kinds of insurance plans available online for all kinds of insurance plans available online",
+    desc: "For all kinds of insurance plans available online for all kinds of insurance plans available online",
     image: require("@/assets/home/demo/3.png"),
     color: "#f9e5e2",
   },
   {
     name: "Claims",
-    desc: "support built in with every policy for help, when you need it the most",
+    desc: "Support built in with every policy for help, when you need it the most",
     image: require("@/assets/home/demo/4.png"),
     color: "#faf6e2",
   },

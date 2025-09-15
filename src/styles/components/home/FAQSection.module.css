@@ -67,6 +67,7 @@
   text-align: left;   /* ✅ text center */
   /* padding: 0px; */
   margin-top: 20px;
+  font-weight: 600;
 }
 .mobileEllipsis {
   display: none;
@@ -83,7 +84,7 @@
 .rightIndicator {
   position: absolute;
   right: 20px;
-  top: 15px;
+  top: 20px;
 }
 
 .active {

@@ -66,6 +66,7 @@
   all: unset;
   font-size: 20px;
   transition: all 0.3s;
+  font-weight: 500;
 }
 
 .desc {

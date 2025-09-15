@@ -8,7 +8,6 @@ import { useRouter } from "next/router";
 import styles from "@/styles/pages/healthinsurance.module.css";
 
 const MEMBERS = [
-  // Basic Members
   { id: 1, name: "Self", maleImg: require("@/assets/pageImages/health/1.webp"), femaleImg: require("@/assets/pageImages/health/2.webp") },
   { id: 2, name: "Spouse", maleImg: require("@/assets/pageImages/health/2.webp"), femaleImg: require("@/assets/pageImages/health/1.webp") },
   { id: 3, name: "Son", maleImg: require("@/assets/pageImages/health/3.webp"), femaleImg: require("@/assets/pageImages/health/3.webp") },
@@ -22,30 +21,59 @@ const MEMBERS = [
 ];
 
 function HealthInsurance() {
-  const [selectedMan, setSelectedMan] = useState<boolean>(true); // true = Male, false = Female
-  const [selectedMember, setSelectedMember] = useState<number>(0);
+  const [selectedMan, setSelectedMan] = useState<boolean>(true);
+  const [selectedMembers, setSelectedMembers] = useState<number[]>([]);
+  const [memberCounts, setMemberCounts] = useState<{ [key: number]: number }>({}); // id → count
   const [showMore, setShowMore] = useState<boolean>(false);
   const router = useRouter();
 
-  // Adjust names based on gender
   const getAdjustedMembers = () => {
     return MEMBERS.map((m) => {
       if (m.id === 1) {
-        // Self
-        return {
-          ...m,
-          name: "Self",
-          image: selectedMan ? m.maleImg : m.femaleImg,
-        };
+        return { ...m, name: "Self", image: selectedMan ? m.maleImg : m.femaleImg };
       } else if (m.id === 2) {
-        // Spouse
-        return {
-          ...m,
-          name: selectedMan ? "Wife" : "Husband",
-          image: selectedMan ? m.maleImg : m.femaleImg,
-        };
+        return { ...m, name: selectedMan ? "Wife" : "Husband", image: selectedMan ? m.maleImg : m.femaleImg };
       } else {
         return { ...m, image: selectedMan ? m.maleImg : m.femaleImg };
+      }
+    });
+  };
+
+  // Toggle selection for members except Son/Daughter
+  const handleSelect = (id: number) => {
+    if (id === 3 || id === 4) {
+      // For Son/Daughter → start counter from 1 if not already
+      setMemberCounts((prev) => ({
+        ...prev,
+        [id]: prev[id] ? prev[id] : 1,
+      }));
+      if (!selectedMembers.includes(id)) {
+        setSelectedMembers([...selectedMembers, id]);
+      }
+    } else {
+      setSelectedMembers((prev) =>
+        prev.includes(id) ? prev.filter((memberId) => memberId !== id) : [...prev, id]
+      );
+    }
+  };
+
+  // Increase count
+  const increaseCount = (id: number) => {
+    setMemberCounts((prev) => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
+  };
+
+  // Decrease count
+  const decreaseCount = (id: number) => {
+    setMemberCounts((prev) => {
+      const current = prev[id] || 0;
+      if (current > 1) {
+        return { ...prev, [id]: current - 1 };
+      } else {
+        // if 1 → remove member completely
+        const updated = { ...prev };
+        delete updated[id];
+        setSelectedMembers((sm) => sm.filter((m) => m !== id));
+        return updated;
       }
     });
   };
@@ -74,39 +102,58 @@ function HealthInsurance() {
             </button>
           </div>
 
-          <p style={{ fontWeight: "bold" }}>Select member you want to insure</p>
+          <p style={{ fontWeight: "bold" }}>Select member(s) you want to insure</p>
         </div>
 
-        {/* Show First 6 Members */}
+        {/* First 6 */}
         <div className={styles.middle}>
           {getAdjustedMembers()
             .slice(0, 6)
             .map((item) => (
-              <button
-                key={item.id}
-                className={`${styles.item} ${selectedMember == item.id ? styles.selectedItem : ""}`}
-                onClick={() => setSelectedMember(item.id)}
-              >
-                <Image src={item.image} alt={item.name} className={styles.itemImage} />
-                <h3 className={styles.itemName}>{item.name}</h3>
-              </button>
-            ))}
-        </div>
-
-        {/* Show More Members */}
-        {showMore && (
-          <div className={styles.middle}>
-            {getAdjustedMembers()
-              .slice(6) 
-              .map((item) => (
+              <div key={item.id} className={styles.itemWrapper}>
                 <button
-                  key={item.id}
-                  className={`${styles.item} ${selectedMember == item.id ? styles.selectedItem : ""}`}
-                  onClick={() => setSelectedMember(item.id)}
+                  className={`${styles.item} ${
+                    selectedMembers.includes(item.id) ? styles.selectedItem : ""
+                  }`}
+                  onClick={() => handleSelect(item.id)}
                 >
                   <Image src={item.image} alt={item.name} className={styles.itemImage} />
                   <h3 className={styles.itemName}>{item.name}</h3>
                 </button>
+
+                {/* Counter for Son/Daughter */}
+                {(item.id === 3 || item.id === 4) && selectedMembers.includes(item.id) && (
+                  <div className="{styles.counter-wrapper}">
+
+                  <div className={styles.counter}>
+                    <button onClick={() => decreaseCount(item.id)}>-</button>
+                    <span>{memberCounts[item.id] || 1}</span>
+                    <button onClick={() => increaseCount(item.id)}>+</button>
+                  </div>
+                    </div>
+
+                )}
+              </div>
+            ))}
+        </div>
+
+        {/* More */}
+        {showMore && (
+          <div className={styles.middle}>
+            {getAdjustedMembers()
+              .slice(6)
+              .map((item) => (
+                <div key={item.id} className={styles.itemWrapper}>
+                  <button
+                    className={`${styles.item} ${
+                      selectedMembers.includes(item.id) ? styles.selectedItem : ""
+                    }`}
+                    onClick={() => handleSelect(item.id)}
+                  >
+                    <Image src={item.image} alt={item.name} className={styles.itemImage} />
+                    <h3 className={styles.itemName}>{item.name}</h3>
+                  </button>
+                </div>
               ))}
           </div>
         )}
@@ -120,7 +167,13 @@ function HealthInsurance() {
           {showMore ? "Show less" : "More members ▼"}
         </p>
 
-        <button className={styles.continueButton} onClick={() => router.push("./health1")}>
+        <button
+          className={styles.continueButton}
+          onClick={() => {
+            console.log("Selected Members:", selectedMembers, "Counts:", memberCounts);
+            router.push("./health1");
+          }}
+        >
           Continue <FaChevronRight size={10} />
         </button>
 

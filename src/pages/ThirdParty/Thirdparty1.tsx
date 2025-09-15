@@ -56,9 +56,9 @@ const Thirdparty1: React.FC = () => {
         </div>
 
         {/* Bottom text */}
-        <p className={styles.bottomText}>
+        {/* <p className={styles.bottomText}>
           Brand new car? <a href="#">Click here</a>
-        </p>
+        </p> */}
       </div>
       <Footer />
     </div>

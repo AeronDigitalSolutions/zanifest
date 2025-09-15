@@ -1,10 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import styles from "@/styles/pages/CommercialVehicle/VehicleInfoDialog.module.css";
-import { FiEdit2, FiMapPin, FiX } from "react-icons/fi"; // ✅ Cross icon add
+import { FiEdit2, FiMapPin, FiX } from "react-icons/fi";
 import { FaTruck, FaCar } from "react-icons/fa";
-import { BsCalendarDate } from "react-icons/bs";
+import { BsCalendarDate, BsFuelPumpDiesel } from "react-icons/bs";
 import { GiGearStickPattern } from "react-icons/gi";
+import { MdLocalGasStation } from "react-icons/md"; // ✅ Fuel icon
 import { useRouter } from "next/navigation";
 
 interface VehicleInfoDialogProps {
@@ -20,12 +21,14 @@ interface VehicleInfoDialogProps {
   selectedBrand: string | null;
   selectedModel: string | null;
   selectedVariant: string | null;
+  selectedFuel?: string | null; // ✅ New prop
   selectedYear: number | null;
   onUpdateData: (data: {
     vehicle?: string;
     brand?: string;
     model?: string;
     variant?: string;
+    fuel?: string;
     year?: number;
   }) => void;
 }
@@ -43,6 +46,7 @@ const VehicleInfoDialog: React.FC<VehicleInfoDialogProps> = ({
   selectedBrand,
   selectedModel,
   selectedVariant,
+  selectedFuel, // ✅ Added fuel here
   selectedYear,
   onUpdateData,
 }) => {
@@ -87,10 +91,13 @@ const VehicleInfoDialog: React.FC<VehicleInfoDialogProps> = ({
             <div className={styles.item}>
               <FiMapPin className={styles.icon} />
               <span>{vehicleNumber}</span>
-              <FiEdit2 className={styles.editIcon} onClick={oncommercialvehicle1} />
+              <FiEdit2
+                className={styles.editIcon}
+                onClick={oncommercialvehicle1}
+              />
             </div>
             <div className={styles.item}>
-              <FaTruck className={styles.icon} />
+              <FiMapPin className={styles.icon} />
               <span>{selectedVehicle}</span>
               <FiEdit2 className={styles.editIcon} onClick={onChooseVehicle} />
             </div>
@@ -105,15 +112,27 @@ const VehicleInfoDialog: React.FC<VehicleInfoDialogProps> = ({
               <FiEdit2 className={styles.editIcon} onClick={onChooseModel} />
             </div>
             <div className={styles.item}>
-              <GiGearStickPattern className={styles.icon} />
+              <BsFuelPumpDiesel
+ className={styles.icon} />
               <span>{selectedVariant}</span>
-              <FiEdit2 className={styles.editIcon} onClick={onChooseFuelVariant} />
+              <FiEdit2
+                className={styles.editIcon}
+                onClick={onChooseFuelVariant}
+              />
             </div>
+
+            {/* ✅ Fuel Type row */}
             <div className={styles.item}>
-              <BsCalendarDate className={styles.icon} />
-              <span>{selectedYear}</span>
-              <FiEdit2 className={styles.editIcon} onClick={onChooseYear} />
+              <GiGearStickPattern
+ className={styles.icon} />
+              <span>{selectedFuel}</span>
+              <FiEdit2
+                className={styles.editIcon}
+                onClick={onChooseFuelVariant}
+              />
             </div>
+
+           
           </div>
         </div>
 
@@ -140,7 +159,7 @@ const VehicleInfoDialog: React.FC<VehicleInfoDialogProps> = ({
 
           <button
             className={styles.viewBtn}
-            onClick={() => router.push("/CommercialVehicle/CommercialVehicle5")}
+            onClick={() => router.push("/carinsurance/carinsurance3")}
           >
             View prices
           </button>

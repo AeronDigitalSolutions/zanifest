@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import styles from "@/styles/pages/CommercialVehicle/VehicleVariantDialog.module.css";
-import { FiMapPin, FiEdit2, FiSearch } from "react-icons/fi";
+import { FiMapPin, FiSearch } from "react-icons/fi";
 import { FaTruck, FaCar } from "react-icons/fa";
 
 interface VehicleVariantDialogProps {
@@ -11,8 +11,8 @@ interface VehicleVariantDialogProps {
   selectedBrand: string;
   selectedModel: string;
   onBackToModel: () => void;
-onNextToYear: () => void;
-  onSelectVariant: (variant: string) => void;   
+  onNextToYear: () => void;
+  onSelectVariant: (variant: string) => void;
 }
 
 const VehicleVariantDialog: React.FC<VehicleVariantDialogProps> = ({
@@ -22,17 +22,17 @@ const VehicleVariantDialog: React.FC<VehicleVariantDialogProps> = ({
   selectedBrand,
   selectedModel,
   onSelectVariant,
-   onBackToModel,
+  onBackToModel,
   onNextToYear,
 }) => {
   const [search, setSearch] = useState("");
 
   const variants = [
-    { name: "35000 GVW - DIESEL", weight: "35000", seating: "3" },
-    { name: "BSIV - DIESEL", weight: "35200", seating: "3" },
-    { name: "CAR CARRIER GVW 35200 - DIESEL", weight: "35200", seating: "3" },
-    { name: "TT CBC - DIESEL", weight: "35200", seating: "3" },
-    { name: "g DCR39HSD 85B6M5 TT - CNG", weight: "35200", seating: "3" },
+    { name: "LXI" },
+    { name: "VXI" },
+    { name: "ZXI" },
+    { name: "ZXI Plus" },
+    { name: "VXI AT" },
   ];
 
   return (
@@ -67,7 +67,7 @@ const VehicleVariantDialog: React.FC<VehicleVariantDialogProps> = ({
             <button className={styles.arrowBtn} onClick={onNextToYear}>
               ›
             </button>
-          </div>           
+          </div>
 
           {/* Search Bar */}
           <div className={styles.searchBox}>
@@ -91,9 +91,6 @@ const VehicleVariantDialog: React.FC<VehicleVariantDialogProps> = ({
                   onClick={() => onSelectVariant(v.name)}
                 >
                   <div className={styles.variantName}>{v.name}</div>
-                  <div className={styles.variantInfo}>
-                    Weight: {v.weight} | Seating Capacity: {v.seating}
-                  </div>
                   <span className={styles.arrow}></span>
                 </button>
               ))}

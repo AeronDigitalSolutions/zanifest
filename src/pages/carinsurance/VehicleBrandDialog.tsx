@@ -59,7 +59,7 @@ const VehicleBrandDialog: React.FC<VehicleBrandDialogProps> = ({
           {/* Selected Vehicle */}
           <div className={styles.selectionBox}>
             <div className={styles.selectionItem}>
-              <FaTruck className={styles.icon} />
+              <FiMapPin className={styles.icon} />
               <span>{selectedVehicle}</span>
             </div>
           </div>
@@ -71,7 +71,7 @@ const VehicleBrandDialog: React.FC<VehicleBrandDialogProps> = ({
             <button className={styles.arrowBtn} onClick={onBackToChooseVehicle}>
               ‹
             </button>
-            <span>Search Vehicle Brand</span>
+            <span>Search Car Brand</span>
             <button className={styles.arrowBtn} onClick={onNextToVehicleModel}>
               ›
             </button>            
@@ -82,7 +82,7 @@ const VehicleBrandDialog: React.FC<VehicleBrandDialogProps> = ({
             <FiSearch size={18} className={styles.searchIcon} />
             <input
               type="text"
-              placeholder="Search Vehicle Brand"
+              placeholder="Search car Brand"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
