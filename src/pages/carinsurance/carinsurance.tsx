@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import Footer from "@/components/ui/Footer";
 import Navbar from "@/components/ui/Navbar";
@@ -10,11 +9,11 @@ import { FaArrowRight } from "react-icons/fa";
 import { useRouter } from "next/router";
 
 // ✅ Import dialogs
-import ChoosecarDialog from "@/pages/carinsurance/ChooseVehicleDialog";
-import VehicleBrandDialog from "@/pages/carinsurance/VehicleBrandDialog";
-import VehicleModelDialog from "@/pages/carinsurance/VehicleModelDialog";
-import VehicleVariantDialog from "@/pages/carinsurance/VehicleVariant";
-import VehicleInfoDialog from "@/pages/carinsurance/VehicleInfoDialog";
+import ChoosecarDialog from "./Location";
+import VehicleBrandDialog from "./Carbrand";
+import VehicleModelDialog from "./Carmodel";
+import VehicleVariantDialog from "./CarVariant";
+import VehicleInfoDialog from "./CarInfoDialog";
 import SelectFuelType from "./Selectfueltype";
 
 function Carinsurance() {
@@ -25,8 +24,8 @@ function Carinsurance() {
     | "chooseVehicle"
     | "chooseBrand"
     | "chooseModel"
-    | "chooseVariant"
     | "selectfueltype"
+    | "chooseVariant"
     | "vehicleInfo"
   >("none");
 
@@ -92,12 +91,16 @@ function Carinsurance() {
 
       <Footer />
 
-      {/* ✅ Choose Vehicle Dialog */}
+      {/* Dialogs */}
       {step === "chooseVehicle" && (
         <ChoosecarDialog
           onClose={() => setStep("none")}
           onSelectVehicle={(vehicle) => {
             setSelectedVehicle(vehicle);
+            setSelectedBrand(null);
+            setSelectedModel(null);
+            setSelectedFuel(null);
+            setSelectedVariant(null);
             setStep("chooseBrand");
           }}
           onBackToInfo={() => setStep("none")}
@@ -105,55 +108,40 @@ function Carinsurance() {
         />
       )}
 
-      {/* ✅ Vehicle Brand Dialog */}
       {step === "chooseBrand" && (
         <VehicleBrandDialog
           onClose={() => setStep("none")}
           vehicleNumber={carNumber || "NEW VEHICLE"}
           selectedVehicle={selectedVehicle || ""}
-          onBackToChooseVehicle={() => setStep("chooseVehicle")}
-          onNextToVehicleModel={() => setStep("chooseModel")}
           onSelectBrand={(brand) => {
             setSelectedBrand(brand);
+            setSelectedModel(null);
+            setSelectedFuel(null);
+            setSelectedVariant(null);
             setStep("chooseModel");
           }}
+          onBackToChooseVehicle={() => setStep("chooseVehicle")}
+          onNextToVehicleModel={() => setStep("chooseModel")}
         />
       )}
 
-      {/* ✅ Vehicle Model Dialog */}
       {step === "chooseModel" && (
         <VehicleModelDialog
           onClose={() => setStep("none")}
           vehicleNumber={carNumber || "NEW VEHICLE"}
           selectedVehicle={selectedVehicle || ""}
           selectedBrand={selectedBrand || ""}
-          onBack={() => setStep("chooseBrand")}
-          onNext={() => setStep("chooseVariant")}
           onSelectModel={(model) => {
             setSelectedModel(model);
-            setStep("chooseVariant");
-          }}
-        />
-      )}
-
-      {/* ✅ Vehicle Variant Dialog */}
-      {step === "chooseVariant" && (
-        <VehicleVariantDialog
-          onClose={() => setStep("none")}
-          vehicleNumber={carNumber || "NEW VEHICLE"}
-          selectedVehicle={selectedVehicle || ""}
-          selectedBrand={selectedBrand || ""}
-          selectedModel={selectedModel || ""}
-          onBackToModel={() => setStep("chooseModel")}
-          onNextToYear={() => setStep("selectfueltype")}
-          onSelectVariant={(variant: React.SetStateAction<string | null>) => {
-            setSelectedVariant(variant);
+            setSelectedFuel(null);
+            setSelectedVariant(null);
             setStep("selectfueltype");
           }}
+          onBack={() => setStep("chooseBrand")}
+          onNext={() => setStep("selectfueltype")}
         />
       )}
 
-      {/* ✅ Select Fuel Type */}
       {step === "selectfueltype" && (
         <SelectFuelType
           onClose={() => setStep("none")}
@@ -163,25 +151,34 @@ function Carinsurance() {
           selectedModel={selectedModel || ""}
           selectedVariant={selectedVariant || ""}
           selectedFuel={selectedFuel || ""}
-          onBackToModel={() => setStep("chooseVariant")}
-          onNextToYear={() => setStep("vehicleInfo")}
+          onBackToModel={() => setStep("chooseModel")}
           onSelectFuel={(fuel) => {
             setSelectedFuel(fuel);
+            setStep("chooseVariant");
+          }}
+          onNextToVariant={() => setStep("chooseVariant")}
+        />
+      )}
+
+      {step === "chooseVariant" && (
+        <VehicleVariantDialog
+          onClose={() => setStep("none")}
+          vehicleNumber={carNumber || "NEW VEHICLE"}
+          selectedVehicle={selectedVehicle || ""}
+          selectedBrand={selectedBrand || ""}
+          selectedModel={selectedModel || ""}
+          selectedFuel={selectedFuel || ""}
+          onBackToModel={() => setStep("selectfueltype")}
+          onSelectVariant={(variant) => {
+            setSelectedVariant(variant);
             setStep("vehicleInfo");
           }}
         />
       )}
 
-      {/* ✅ Vehicle Info Dialog */}
       {step === "vehicleInfo" && (
         <VehicleInfoDialog
           onClose={() => setStep("none")}
-          oncommercialvehicle1={() => setStep("none")}
-          onChooseVehicle={() => setStep("chooseVehicle")}
-          onChooseBrand={() => setStep("chooseBrand")}
-          onChooseModel={() => setStep("chooseModel")}
-          onChooseFuelVariant={() => setStep("chooseVariant")}
-          onChooseYear={() => setStep("vehicleInfo")}
           vehicleNumber={carNumber || "NEW VEHICLE"}
           selectedVehicle={selectedVehicle}
           selectedBrand={selectedBrand}
@@ -195,6 +192,12 @@ function Carinsurance() {
             if (data.variant) setSelectedVariant(data.variant);
             if (data.fuel) setSelectedFuel(data.fuel);
           }}
+          oncommercialvehicle1={() => setStep("chooseVehicle")}
+          onChooseVehicle={() => setStep("chooseBrand")}
+          onChooseBrand={() => setStep("chooseModel")}
+          onChooseModel={() => setStep("selectfueltype")}
+          onChooseFuelVariant={() => setStep("chooseVariant")}
+          onChooseYear={() => {}}
           selectedYear={null}
         />
       )}

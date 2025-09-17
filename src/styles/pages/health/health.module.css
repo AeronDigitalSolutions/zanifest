@@ -120,8 +120,8 @@
 }
 
 .heading {
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 25px;
+  /* font-weight: 700; */
   color: #1d2c4c;
   margin-bottom: 8px;
 }
@@ -349,5 +349,206 @@
 
   .arrowBack {
     font-size: 18px;
+  }
+}
+
+
+/* dropdown */
+
+.customdropdown {
+  position: relative;
+  width: 250px;
+}
+
+.dropdowntoggle {
+  width: 100%;
+  padding: 12px 16px;
+  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.1);
+
+  border-radius: 6px;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+  font-size: 16px;
+  position: relative;
+  border: none;
+}
+
+.arrow {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: transform 0.3s ease;
+}
+
+.arrow.up {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+/* ✅ Dropdown Menu */
+.dropdownmenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%; 
+  border-radius: 6px;
+  background: #fff;
+  list-style: none;
+  margin: 4px 0 0 0;
+  padding: 0;
+  z-index: 100;
+   box-shadow: 0 8px 10px rgba(0, 0, 0, 0.1);
+}
+
+.dropdownmenu li {
+  padding: 10px 16px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.dropdownmenu li:hover {
+  background: #f5f5f5;
+  color: #000;
+}
+
+/* ✅ Selected Item */
+.selectedOption {
+  background: #007bff;
+  color: #fff;
+  font-weight: bold;
+}
+
+.continueBtn {
+  padding: 12px 24px;
+  background-color: #ff5722;
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: background 0.3s ease;
+}
+
+.continueBtn:hover {
+  background-color: #e64a19;
+}
+
+
+
+
+/* Tablet View */
+@media screen and (max-width: 1024px) {
+  .backBtn {
+    left: 5rem;
+    top: 18%;
+  }
+
+  .dropdown {
+    width: 220px;
+
+
+
+  }
+.avatar{
+  display:none;
+}
+  .title {
+    font-size: 24px;
+  }
+}
+
+/* Mobile View */
+@media screen and (max-width: 768px) {
+  .container {
+    margin: 0.5rem auto 1rem auto;
+    padding: 0 16px;
+    min-height: auto;
+    width: 100%;          /* ✅ full width लेगा */
+    max-width: 100%;      /* ✅ कोई extra space नहीं बचेगा */
+    display: flex;
+    flex-direction: column;
+    align-items: center;  /* ✅ सब center align */
+    box-sizing: border-box;
+  }
+
+  .title {
+    font-size: 20px;
+    margin-bottom: 16px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .dropdown {
+    width: 100%;        
+    max-width: 320px;   /* ✅ ज्यादा wide नहीं होगा */
+    margin: 0 auto;
+  }
+
+  .continueBtn {
+    width: 100%;
+    max-width: 320px;   /* ✅ dropdown के बराबर width */
+    font-size: 15px;
+    margin: 1rem auto 0 auto;
+    display: block;
+  }
+}
+
+/* ---------- STEP 1 ONLY BUTTON ---------- */
+.continueBtnStep1 {
+  padding: 12px 24px;
+  background-color: #ff5722;
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: background 0.3s ease;
+
+  width: auto;
+  min-width: 250px;
+}
+
+.continueBtnStep1:hover {
+  background-color: #e64a19;
+}
+@media screen and (max-width: 768px) {
+  .formSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;      /* ✅ horizontal center */
+    justify-content: flex-start; /* ✅ ऊपर से start */
+    text-align: center;
+    min-height: 50vh;        
+    padding: 10px 16px 16px;  /* ✅ ऊपर से 80px space, नीचे normal */
+    box-sizing: border-box;
+  }
+
+  .customdropdown {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .continueBtnStep1 {
+    width: 100%;
+    max-width: 320px;
+    margin: 20px auto 0 auto;
+  }
+
+  .heading {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .backBtn {
+    left: 1rem;
+    top: 22%;   /* ⬅️ पहले 16% था, अब थोड़ा नीचे */
+    width: 36px;
+    height: 36px;
+    margin-top: 20px;
   }
 }

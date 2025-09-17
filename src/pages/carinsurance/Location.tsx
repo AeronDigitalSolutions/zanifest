@@ -3,8 +3,6 @@ import React, { useState } from "react";
 import Image from "next/image";
 import styles from "@/styles/pages/cardetailsdialog.module.css";
 
-
-
 interface ChooseVehicleDialogProps {
   onClose: () => void;
   onSelectVehicle: (vehicle: string) => void;
@@ -12,19 +10,19 @@ interface ChooseVehicleDialogProps {
   onNextToBrand: () => void;
 }
 
-const car = [
-  { label: "Delhi"},
-  { label: "Gurgaon"},
-  { label: "Noida"},
-  { label: "Faridabad"},
-  { label: "Ghaziabad"},
-  { label: "Meerut"},
-  { label: "Agra"},
-  { label: "Lucknow"},
-  { label: "Kanpur"},
-  { label: "Prayagraj"},
-  { label: "Varanasi"},
-  { label: "Aligarh"},
+const cities = [
+  "Delhi",
+  "Gurgaon",
+  "Noida",
+  "Faridabad",
+  "Ghaziabad",
+  "Meerut",
+  "Agra",
+  "Lucknow",
+  "Kanpur",
+  "Prayagraj",
+  "Varanasi",
+  "Aligarh",
 ];
 
 const ChoosecarDialog: React.FC<ChooseVehicleDialogProps> = ({
@@ -33,7 +31,13 @@ const ChoosecarDialog: React.FC<ChooseVehicleDialogProps> = ({
   onBackToInfo,
   onNextToBrand,
 }) => {
-  const [active, setActive] = useState("Truck");
+  const [active, setActive] = useState("");
+
+  // Function to handle city selection
+  const handleSelectCity = (city: string) => {
+    setActive(city);
+    onSelectVehicle(city);
+  };
 
   return (
     <div className={styles.overlay}>
@@ -54,24 +58,31 @@ const ChoosecarDialog: React.FC<ChooseVehicleDialogProps> = ({
               ‹
             </button>
             <span>Select City</span>
-            <button className={styles.arrowBtn} onClick={onNextToBrand}>
+            <button
+              className={styles.arrowBtn}
+              onClick={() => {
+                // Right arrow works only if a city is selected
+                if (active) {
+                  onNextToBrand();
+                } else {
+                  alert("Please select a city first!");
+                }
+              }}
+            >
               ›
             </button>
           </div>
 
           <div className={styles.vehicleGrid}>
-            {car.map((v) => (
+            {cities.map((v) => (
               <button
-                key={v.label}
-                onClick={() => {
-                  setActive(v.label);
-                  onSelectVehicle(v.label);
-                }}
+                key={v}
+                onClick={() => handleSelectCity(v)}
                 className={`${styles.vehicleBtn} ${
-                  active === v.label ? styles.active : ""
+                  active === v ? styles.active : ""
                 }`}
               >
-                <span>{v.label}</span>
+                <span>{v}</span>
               </button>
             ))}
           </div>

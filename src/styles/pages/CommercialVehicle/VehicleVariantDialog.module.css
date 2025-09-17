@@ -221,3 +221,20 @@
     font-size: 11px;
   }
 }
+@media (max-width: 768px) {
+  .dialog {
+    flex-direction: column;  /* stack panels */
+    width: 95%;
+    max-height: 95vh;
+    margin: 10px;
+  }
+
+  .left {
+    display: none;          
+  }
+
+  .right {
+    flex: 1;
+    overflow-y: auto;      
+  }
+}

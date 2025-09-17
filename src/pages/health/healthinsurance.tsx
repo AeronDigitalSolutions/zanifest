@@ -102,7 +102,7 @@ function HealthInsurance() {
             </button>
           </div>
 
-          <p style={{ fontWeight: "bold" }}>Select member(s) you want to insure</p>
+          <p style={{ fontWeight: "bold", marginTop:"20px"}}>Select member(s) you want to insure</p>
         </div>
 
         {/* First 6 */}
@@ -171,7 +171,7 @@ function HealthInsurance() {
           className={styles.continueButton}
           onClick={() => {
             console.log("Selected Members:", selectedMembers, "Counts:", memberCounts);
-            router.push("./health1");
+            router.push("./health");
           }}
         >
           Continue <FaChevronRight size={10} />
