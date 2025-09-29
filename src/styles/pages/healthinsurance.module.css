@@ -175,7 +175,7 @@
 }
 @media screen and (max-width: 370px) {
   .counter{
-    display: flex;
+        display: flex;
     align-items: center;
     justify-content: center;
     gap: 3px;
@@ -183,6 +183,7 @@
     background: #fff;
     border: 2px solid #2bb673;
     border-radius: 20px;
+    /* padding: 2px 10px; */
     font-size: 12px;
     font-weight: 500;
     color: #333;

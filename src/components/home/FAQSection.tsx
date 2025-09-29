@@ -1,83 +1,70 @@
-import React, { useState } from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
+import useSWR from "swr";
 import { FaEllipsisH, FaPlus } from "react-icons/fa";
 import { TiMinus } from "react-icons/ti";
-
 import styles from "@/styles/components/home/FAQSection.module.css";
 
-const QUESTIONS = [
-  {
-    ques: "Which type of cancer is covered?",
-    ans: "Yes, there is an age limit . The age span is between 18-50 for this product. This age groups are important for some critical illnesses. Insurers can renew their policies every other year till 51 years old.",
-  },
-  {
-    ques: "Are there any age limit?",
-    ans: "Yes, there is an age limit . The age span is between 18-50 for this product. This age groups are important for some critical illnesses. Insurers can renew their policies every other year till 51 years old.",
-  },
-  {
-    ques: "How 25% cash back works?",
-    ans: "Yes, there is an age limit . The age span is between 18-50 for this product. This age groups are important for some critical illnesses. Insurers can renew their policies every other year till 51 years old.",
-  },
-  {
-    ques: "How  I use 3 year premium option?",
-    ans: "Yes, there is an age limit . The age span is between 18-50 for this product. This age groups are important for some critical illnesses. Insurers can renew their policies every other year till 51 years old.",
-  },
-  {
-    ques: "What is the process to get lump sum payment when risk is realized?",
-    ans: "Yes, there is an age limit . The age span is between 18-50 for this product. This age groups are important for some critical illnesses. Insurers can renew their policies every other year till 51 years old.",
-  },
-];
+type QA = { ques: string; ans: string };
 
-function FAQSection() {
-  // const [ansIndex, setAnsIndex] = useState<number | null>(null);
-    const [ansIndex, setAnsIndex] = useState(0);
+type Props = {
+  headingOverride?: string;
+  questionsOverride?: QA[];
+};
 
+export default function FAQSection({ headingOverride, questionsOverride }: Props) {
+  const { data } = useSWR("/api/faq", (url) => fetch(url).then(res => res.json()));
+  const heading = headingOverride || data?.heading || "Frequently Asked Questions";
+  const questions: QA[] = questionsOverride || data?.questions || [];
+
+  // By default, first question open
+  const [ansIndex, setAnsIndex] = useState<number>(0);
+
+  // Reset open question if questions array changes (useful for admin live preview)
+  useEffect(() => {
+    if (questions.length > 0) setAnsIndex(0);
+  }, [questions]);
+
+  const renderHeading = (text: string) => {
+    const words = text.split(" ");
+    return (
+      <>
+        {words.slice(0, -1).join(" ")}{" "}
+        <span className={styles.orange}>{words.slice(-1)}</span>
+      </>
+    );
+  };
 
   return (
-    <div>
-      <div className={styles.cont}>
-        <div className={styles.head}>
-          <div className={styles.heading}>
-  Frequently Asked <span className={styles.orange}>Questions</span>
-</div>
+    <div className={styles.cont}>
+      <div className={styles.head}>
+        <div className={styles.heading}>{renderHeading(heading)}</div>
+      </div>
 
+      <div className={styles.mobileEllipsis}>
+        <FaEllipsisH style={{ color: "#fa621a", fontSize: "20px" }} />
+      </div>
 
-        </div>
-         <div className={styles.mobileEllipsis}>
-          <FaEllipsisH style={{ color: "#fa621a", fontSize:"25px" }} />
-        </div>
-        <div className={styles.bottom}>
-          <div className={styles.list}>
-            {QUESTIONS.map((item, index) => {
-              return (
-                <div
-                  key={index}
-                  className={`${styles.item}`}
-                  onClick={() => {
-                    setAnsIndex(index);
-                  }}
-                >
-                  <p
-                    className={`${styles.ques}  ${
-                      index == ansIndex ? styles.active : ""
-                    }`}
-                  >
-                    {item.ques}
-                  </p>
-                  {index == ansIndex && (
-                    <p className={styles.ans}>{item.ans}</p>
-                  )}
-
-                  <div className={styles.rightIndicator}>
-                    {index == ansIndex ? <TiMinus /> : <FaPlus />}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+      <div className={styles.bottom}>
+        <div className={styles.list}>
+          {questions.map((item, index) => (
+            <div
+              key={index}
+              className={styles.item}
+              onClick={() => setAnsIndex(index)} // always open clicked question
+            >
+              <p className={`${styles.ques} ${index === ansIndex ? styles.active : ""}`}>
+                {item.ques}
+              </p>
+              {index === ansIndex && <p className={styles.ans}>{item.ans}</p>}
+              <div className={styles.rightIndicator}>
+                {index === ansIndex ? <TiMinus /> : <FaPlus />}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
   );
 }
-
-export default FAQSection;

@@ -1,59 +1,85 @@
+"use client";
+
 import React from "react";
-
+import useSWR from "swr";
 import styles from "@/styles/components/home/BestServicesSection.module.css";
-
 import { MdHeadsetMic } from "react-icons/md";
 import { LuNotebookPen } from "react-icons/lu";
 import { LiaMoneyBillSolid } from "react-icons/lia";
 import { FaEllipsisH } from "react-icons/fa";
 
-const LIST = [
+// Mapping icons
+const iconMap = {
+  support: <MdHeadsetMic size={40} />,
+  claim: <LuNotebookPen size={40} />,
+  installment: <LiaMoneyBillSolid size={40} />,
+};
+
+type ServiceType = keyof typeof iconMap;
+
+interface ServiceItem {
+  name: string;
+  desc: string;
+  type: ServiceType;
+}
+
+interface ServiceData {
+  heading: string;
+  services: ServiceItem[];
+}
+
+// Default fallback list
+const LIST_FALLBACK: ServiceItem[] = [
   {
     name: "24X7 Support",
-    desc: "Our dedicated customer support team is available 24/7 to guide you at every step of your insurance journey.",
-    image: <MdHeadsetMic size={40} />,
+    desc: "Our dedicated customer support team is available 24/7 to guide you at every step of your insurance journey.",
+    type: "support",
   },
   {
     name: "Easy Claim System",
-    desc: "Hassle-free claim process designed to get you quick resolutions when you need them the most.",
-    image: <LuNotebookPen size={40} />,
+    desc: "Hassle-free claim process designed to get you quick resolutions when you need them the most.",
+    type: "claim",
   },
   {
     name: "Easy Installments",
-    desc: "Flexible and easy premium installment options to suit every budget and keep you worry-free.",
-    image: <LiaMoneyBillSolid size={40} />,
+    desc: "Flexible and easy premium installment options to suit every budget and keep you worry-free.",
+    type: "installment",
   },
 ];
 
-function BestServicesSection() {
+export default function BestServicesSection() {
+  const { data } = useSWR<ServiceData>("/api/bestservice", (url: string) =>
+    fetch(url).then((res) => res.json())
+  );
+
+  const heading = data?.heading || "Best Service";
+  const serviceList =
+    data?.services && data.services.length > 0 ? data.services : LIST_FALLBACK;
+
   return (
     <div className={styles.cont}>
-     <div className={styles.head}>
-  <h1 className={styles.heading1}>
-    Best <span className={styles.heading2}>Service</span>
-  </h1>
-   <div className={styles.mobileEllipsis}>
-          <FaEllipsisH style={{ color: "#fa621a", fontSize:"25px" }} />
+      <div className={styles.head}>
+        <h1 className={styles.heading1}>
+          {heading}
+        </h1>
+        <div className={styles.mobileEllipsis}>
+          <FaEllipsisH style={{ color: "#fa621a", fontSize: "25px" }} />
         </div>
-</div>
+      </div>
 
       <div className={styles.list}>
-        {LIST.map((item, index) => {
-          return (
-            <div className={`${styles.item}`} key={index}>
-              <div className={`${styles.imageCont} ${styles.selected}`}>
-                {item.image}
-              </div>
-              <div className={styles.content}>
-                <p className={styles.name}>{item.name}</p>
-                <p className={styles.desc}>{item.desc}</p>
-              </div>
+        {serviceList.map((item, index) => (
+          <div className={styles.item} key={item.type + "-" + index}>
+            <div className={`${styles.imageCont} ${styles.selected}`}>
+              {iconMap[item.type as ServiceType]}
             </div>
-          );
-        })}
+            <div className={styles.content}>
+              <p className={styles.name}>{item.name}</p>
+              <p className={styles.desc}>{item.desc}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
 }
-
-export default BestServicesSection;
