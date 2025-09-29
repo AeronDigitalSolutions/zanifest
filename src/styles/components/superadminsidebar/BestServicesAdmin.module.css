@@ -1,0 +1,198 @@
+
+.container {
+  padding: 24px;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Page Title */
+.pageTitle {
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+
+.headingBox {
+  margin: 0 auto; 
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 20px;
+  background: #fafafa;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+/* Heading Inputs Row */
+.headingInputs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  padding: 0 15px; 
+  flex-wrap: nowrap; 
+}
+
+.headingInputs input {
+  flex: 1;
+  max-width: 220px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: clamp(12px, 2vw, 14px);
+}
+
+.headingBox button {
+  padding: 4px 8px;
+  margin-left: 20px;
+  border: none;
+  border-radius: 8px;
+  background: #fa621a;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  white-space: nowrap; /* keep text in one line */
+  font-size: clamp(12px, 2vw, 14px); /* shrink text size */
+}
+
+.headingBox button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =======================
+   Services Grid
+   ======================= */
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.serviceCard {
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 15px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.serviceCard input,
+.serviceCard textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: clamp(12px, 2vw, 14px);
+}
+
+.serviceCard button {
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  background: orangered;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 500;
+  width: 50%;
+  align-self: center;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-size: clamp(12px, 2vw, 14px);
+}
+
+.serviceCard button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =======================
+   Preview Section
+   ======================= */
+.previewBox {
+  border: 1px dashed #ccc;
+  padding: 20px;
+  border-radius: 12px;
+  background: #fefefe;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+/* =======================
+   Responsive Styles
+   ======================= */
+
+/* Tablets & smaller */
+@media (max-width: 768px) {
+  .headingBox {
+    width: 80%;
+  }
+
+  .previewBox {
+    display: none; /* hide live preview */
+  }
+
+  .headingInputs {
+    padding: 0 15px;
+  }
+}
+
+/* Mobile screens */
+@media (max-width: 480px) {
+  .container {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .headingBox {
+    width: 100%;
+    padding: 16px;
+  }
+
+  .servicesGrid {
+    gap: 16px;
+  }
+
+  .serviceCard {
+    padding: 12px;
+  }
+
+  .headingInputs {
+    gap: 8px;
+  }
+
+  /* ✅ Save button spacing on mobile */
+  .headingBox button {
+    margin-top: 10px;
+  }
+}
+
+/* Extra small phones */
+@media (max-width: 360px) {
+  .headingBox {
+    padding: 12px;
+  }
+
+  .serviceCard {
+    padding: 10px;
+  }
+
+  .headingInputs input {
+    max-width: 100%;
+  }
+
+  .headingBox button,
+  .serviceCard button {
+    flex-shrink: 0;
+  }
+}

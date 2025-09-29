@@ -12,33 +12,32 @@ import AgentList from "@/components/superadminsidebar/agentlist";
 import ChangePassword from "@/components/superadminsidebar/changepasswords";
 import ResetPassword from "@/components/superadminsidebar/resetpassword";
 import styles from "@/styles/pages/admindashboard.module.css";
+import HomeSection from "@/components/superadminsidebar/mainpage";
 import { useAdmin } from "@/lib/hooks/useAdmin";
 import axios from "axios";
 
 import {
   FiUsers,
   FiUserPlus,
-  FiKey,
   FiLock,
   FiList,
   FiMenu,
   FiX,
 } from "react-icons/fi";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation"; // ✅ FIXED import
 
-const AdminDashboard = () => {
+const SuperAdminDashboard = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [adminCount, setAdminCount] = useState(0);
-  const[adminData, setAdminData]=useState<any>(null);
+  const [adminData, setAdminData] = useState<any>(null);
   const [load, setLoad] = useState(false);
   const [agentCount, setAgentCount] = useState(0);
   const [stateManagerCount, setStateManagerCount] = useState(0);
   const [districtManagerCount, setDistrictManagerCount] = useState(0);
 
   const router = useRouter();
-  const { admin, loading } = useAdmin();
-  console.log("user first name", admin?.userFirstName);
+  const { admin } = useAdmin();
 
   const handleLogout = async () => {
     try {
@@ -50,55 +49,65 @@ const AdminDashboard = () => {
     }
   };
 
+  // ✅ Admin Count
   useEffect(() => {
     const fetchAdminCount = async () => {
-      const res = await fetch("/api/getadmin");
-      const data = await res.json();
-      setAdminCount(data.length);
+      try {
+        const res = await fetch("/api/getadmin");
+        if (!res.ok) throw new Error("Failed to fetch admins");
+        const data = await res.json();
+        setAdminCount(data.length || 0);
+      } catch (err) {
+        console.error("Error fetching admin count:", err);
+      }
     };
     fetchAdminCount();
   }, []);
 
+  // ✅ Agent Count
   useEffect(() => {
     const fetchAgentCount = async () => {
-      const res = await fetch("/api/getallagents");
-      console.log("res for count of agents: ", res);
-      const data = await res.json();
-      console.log("data for agent count:", data);
-      console.log("Data length for agent count:", data.length);
-      setAgentCount(data.length);
+      try {
+        const res = await fetch("/api/getallagents");
+        if (!res.ok) throw new Error("Failed to fetch agents");
+        const data = await res.json();
+        setAgentCount(data.length || 0);
+      } catch (err) {
+        console.error("Error fetching agent count:", err);
+      }
     };
     fetchAgentCount();
   }, []);
 
+  // ✅ Manager Counts
   useEffect(() => {
-  const fetchManagerCounts = async () => {
-    try {
-      const res = await fetch("/api/getallmanagers");
-      const managers = await res.json();
-      console.log("Fetched managers:", managers);
+    const fetchManagerCounts = async () => {
+      try {
+        const res = await fetch("/api/getallmanagers");
+        if (!res.ok) throw new Error("Failed to fetch managers");
+        const managers = await res.json();
 
-      setStateManagerCount(
-        managers.filter((m: { category: string }) => m.category === "state").length
-      );
-      setDistrictManagerCount(
-        managers.filter((m: { category: string }) => m.category === "district").length
-      );
-    } catch (err) {
-      console.error("Error fetching managers:", err);
-    }
-  };
-  fetchManagerCounts();
-}, []);
+        setStateManagerCount(
+          managers.filter((m: { category: string }) => m.category === "state")
+            .length
+        );
+        setDistrictManagerCount(
+          managers.filter((m: { category: string }) => m.category === "district")
+            .length
+        );
+      } catch (err) {
+        console.error("Error fetching managers:", err);
+      }
+    };
+    fetchManagerCounts();
+  }, []);
 
-
-    // profile edit 
+  // ✅ Profile edit fetch
   useEffect(() => {
     if (activeSection === "profileEdit") {
       setLoad(true);
       axios
         .get("/api/admin/getadmindetails", {
-          // Not needed if cookie is httpOnly; else use Authorization
           headers: {
             Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
           },
@@ -146,6 +155,7 @@ const AdminDashboard = () => {
         >
           <p className={styles.sectionTitle}>Menu</p>
           <ul className={styles.menu}>
+            {/* Dashboard */}
             <li
               onClick={() => {
                 setActiveSection("dashboard");
@@ -161,8 +171,8 @@ const AdminDashboard = () => {
               </span>
             </li>
 
+            {/* Create */}
             <p className={styles.sectionTitle}>Create</p>
-
             <li
               onClick={() => {
                 setActiveSection("createAdmin");
@@ -206,10 +216,9 @@ const AdminDashboard = () => {
               </span>
             </li>
 
+            {/* Lists */}
             <p className={styles.sectionTitle}>List</p>
-
             <li
-              // className={styles.menuItem}
               className={`${styles.menuItem} ${
                 activeSection === "adminlist" ? styles.activeMenu : ""
               }`}
@@ -252,7 +261,6 @@ const AdminDashboard = () => {
               </span>
             </li>
             <li
-              // className={styles.menuItem}
               className={`${styles.menuItem} ${
                 activeSection === "userList" ? styles.activeMenu : ""
               }`}
@@ -267,13 +275,13 @@ const AdminDashboard = () => {
               </span>
             </li>
 
+            {/* Security */}
             <p className={styles.sectionTitle}>Security</p>
             <li
               onClick={() => {
                 setActiveSection("resetpassword");
                 setSidebarOpen(false);
               }}
-              // className={styles.menuItem}
               className={`${styles.menuItem} ${
                 activeSection === "resetpassword" ? styles.activeMenu : ""
               }`}
@@ -283,13 +291,11 @@ const AdminDashboard = () => {
                 <span className={styles.label}>Reset Password</span>
               </span>
             </li>
-
             <li
               onClick={() => {
                 setActiveSection("changepassword");
                 setSidebarOpen(false);
               }}
-              // className={styles.menuItem}
               className={`${styles.menuItem} ${
                 activeSection === "changepassword" ? styles.activeMenu : ""
               }`}
@@ -299,13 +305,11 @@ const AdminDashboard = () => {
                 <span className={styles.label}>Change Password</span>
               </span>
             </li>
+
+            {/* Profile */}
             <p className={styles.sectionTitle}>Profile</p>
             <li
-              onClick={() => {
-                setActiveSection("profileEdit");
-                // setSidebarOpen(false);
-              }}
-              // className={styles.menuItem}
+              onClick={() => setActiveSection("profileEdit")}
               className={`${styles.menuItem} ${
                 activeSection === "profileEdit" ? styles.activeMenu : ""
               }`}
@@ -313,6 +317,25 @@ const AdminDashboard = () => {
               <span className={styles.iconLabel}>
                 <FiLock className={styles.icon} />
                 <span className={styles.label}>Your Profile Edit</span>
+              </span>
+            </li>
+
+            {/* Home */}
+            <p className={styles.sectionTitle}>Home</p>
+            <li
+              onClick={() => {
+                setActiveSection("homeSection");
+                if (window.innerWidth <= 768) {
+                  setSidebarOpen(false); // ✅ close only on mobile
+                }
+              }}
+              className={`${styles.menuItem} ${
+                activeSection === "homeSection" ? styles.activeMenu : ""
+              }`}
+            >
+              <span className={styles.iconLabel}>
+                <FiLock className={styles.icon} />
+                <span className={styles.label}>Home Section</span>
               </span>
             </li>
           </ul>
@@ -361,15 +384,13 @@ const AdminDashboard = () => {
           {activeSection === "agentlist" && <AgentList />}
           {activeSection === "userList" && <UserList />}
           {activeSection === "profileEdit" && (
-            <CreateAdmin
-              initialData={adminData}
-              mode="edit"
-            />
+            <CreateAdmin initialData={adminData} mode="edit" />
           )}
+          {activeSection === "homeSection" && <HomeSection />}
         </main>
       </div>
     </div>
   );
 };
 
-export default AdminDashboard;
+export default SuperAdminDashboard;

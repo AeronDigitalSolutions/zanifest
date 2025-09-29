@@ -1,43 +1,45 @@
-import React from "react";
-import Image from "next/image";
+import React from 'react';
+import Image from 'next/image';
+import useSWR from 'swr';
+import { IFeedbackItem } from '@/models/feedback';
+import Carousel from '../ui/CarousalHtml';
+import FeedbackMobile from '../ui/FeedbackMobile';
+import styles from '@/styles/components/home/FeedBackSection.module.css';
+import { FaEllipsisH } from 'react-icons/fa';
 
-import Carousel from "../ui/CarousalHtml";
-import FeedbackMobile from "../ui/FeedbackMobile";
+interface IFeedbackApiResponse {
+  success: boolean;
+  data: IFeedbackItem[];
+  heading?: string;
+  message?: string;
+}
 
-import styles from "@/styles/components/home/FeedBackSection.module.css";
-import { FaEllipsisH } from "react-icons/fa";
+const fetcher = (url: string) => fetch(url).then(res => res.json());
 
-const LIST = [
-  {
-    name: "Mach Nelson",
-    post: "CEO",
-    desc: "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old",
-    image: require("@/assets/home/feedback/1.png"),
-  },
-  {
-    post: "CEO",
-    name: "David Doe",
-    desc: "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old",
-    image: require("@/assets/home/feedback/2.png"),
-  },
-  {
-    name: "John Nick",
-    post: "CEO",
-    desc: "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old",
-    image: require("@/assets/home/feedback/3.png"),
-  },
-];
+const FeedBackSection: React.FC = () => {
+  const { data, error, isLoading } = useSWR<IFeedbackApiResponse>('/api/feedback', fetcher, {
+    refreshInterval: 5000,
+  });
 
-function FeedBackSection() {
-  const slides = LIST.map((item, index) => (
-    <div className={styles.serviceItem} key={index}>
+  if (isLoading) return <div className={styles.cont}>Loading Feedback...</div>;
+  if (error) return <div className={styles.cont}>Failed to load feedback.</div>;
+  if (!data?.success || !data.data) return <div className={styles.cont}>No feedback available.</div>;
+
+  const feedbackList: IFeedbackItem[] = data.data;
+  const displayHeading = data.heading ?? "What Our Customers Are Saying?";
+  const words: string[] = displayHeading.split(" ");
+
+  const slides = feedbackList.map((item, index) => (
+    <div className={styles.serviceItem} key={String(item._id ?? index)}>
       <h6 className={styles.desc}>{item.desc}</h6>
       <div className={styles.itemBottom}>
         <Image
           src={item.image}
           alt={item.name}
-          className={styles.image}
+          width={50}
+          height={50}
           unoptimized
+          className={styles.image}
         />
         <div className={styles.namePost}>
           <h2 className={styles.name}>{item.name}</h2>
@@ -51,24 +53,28 @@ function FeedBackSection() {
     <div className={styles.cont}>
       <div className={styles.head}>
         <div className={styles.heading}>
-          What Our Customers <span className={styles.orange}>Are Saying?</span>
+          {words.map((word: string, idx: number) =>
+            idx === words.length - 1 ? (
+              <span key={idx} className={styles.orange}>{word}</span>
+            ) : (
+              <span key={idx}>{word} </span>
+            )
+          )}
         </div>
       </div>
       <div className={styles.mobileEllipsis}>
-        <FaEllipsisH style={{ color: "#fa621a", fontSize: "25px" }} />
+        <FaEllipsisH style={{ color: '#fa621a', fontSize: '25px' }} />
       </div>
       <div className={styles.bottom}>
-        {/* Mobile carousel */}
         <div className={styles.singlecar}>
           <FeedbackMobile items={slides} />
         </div>
-        {/* Desktop carousel */}
         <div className={styles.multicar}>
-          <Carousel items={LIST} />
+          <Carousel items={feedbackList} />
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default FeedBackSection;

@@ -1,0 +1,227 @@
+/* styles/components/admin/howworksadmin.module.css */
+.adminCont {
+    max-width: 1400px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #fcfcfc;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+}
+
+.loading, .message {
+    text-align: center;
+    padding: 15px;
+    font-weight: 600;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.message {
+    color: #0f5132;
+    background-color: #d1e7dd;
+    border: 1px solid #badbcc;
+}
+
+.divider {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #fa621a, rgba(0, 0, 0, 0));
+    margin: 40px 0;
+}
+
+.orange {
+    color: #fa621a;
+}
+
+/* --- Heading Edit Styles --- */
+.editSection {
+    margin-bottom: 30px;
+}
+
+.headingEdit {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background-color: #f7f7f7;
+}
+
+.headingEdit h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.inputField, .textareaField {
+    width: 80%;
+    max-width: 600px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.textareaField {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.saveBtn {
+    background-color: #fa621a;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 16px;
+    transition: background-color 0.2s;
+    margin-top: 10px;
+}
+
+.saveBtn:hover:not(:disabled) {
+    background-color: #e05414;
+}
+
+.saveBtn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* --- Work Steps (How We Work) Forms --- */
+.formRow {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.workStepForm {
+    flex: 1;
+    max-width: 400px;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.workStepForm h3 {
+    margin-top: 0;
+    color: #007bff;
+    font-size: 18px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+/* --- Services (Pay Less Cover More) Forms --- */
+.servicesGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.serviceItemForm {
+    border: 1px solid #eee;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.serviceItemForm h3 {
+    margin-top: 0;
+    color: #28a745;
+    font-size: 16px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+}
+
+.workStepForm label, .serviceItemForm label {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 13px;
+    color: #555;
+}
+
+.imagePreview {
+    max-width: 80px;
+    height: auto;
+    display: block;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.imagePreviewSmall {
+    max-width: 40px;
+    height: auto;
+    display: block;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.fileInput {
+    padding: 5px 0;
+    font-size: 12px;
+}
+
+
+/* --- Live Preview --- */
+.livePreview {
+    margin-top: 40px;
+    border: 2px dashed #007bff;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f0f8ff;
+}
+
+.livePreview h2 {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 1024px) {
+    .servicesGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .adminCont {
+        padding: 15px;
+    }
+    
+    .formRow {
+        flex-direction: column; 
+    }
+
+    .workStepForm {
+        max-width: 100%;
+    }
+
+    .servicesGrid {
+        grid-template-columns: 1fr; 
+    }
+
+    /* Requirement: Mobile me live preview na dikhe */
+    .livePreview {
+        display: none; 
+    }
+    
+    .inputField, .textareaField {
+        width: 100%;
+    }
+}
