@@ -25,14 +25,14 @@ export default function HowWorksAdmin() {
   const [steps, setSteps] = useState<any[]>([]); 
   const [services, setServices] = useState<any[]>([]); 
 
-  useEffect(() => { 
-    if (data) { 
-      setMainHeading(data.mainHeading || ""); 
-      setServicesHeading(data.servicesHeading || ""); 
-      setSteps(data.steps || []);
-      setServices(data.services || []);
-    } 
-  }, [data]); 
+useEffect(() => {
+  if (data?.data) {
+    setMainHeading(data.data.mainHeading || "");
+    setServicesHeading(data.data.servicesHeading || "");
+    setSteps(data.data.steps || []);
+    setServices(data.data.services || []);
+  }
+}, [data]);
   
   const handleSave = async (payload: any, successMessage: string) => {
     try { 
@@ -64,9 +64,10 @@ export default function HowWorksAdmin() {
   };
   
   const handleStepUpdate = async (index: number) => {
-    // Send the complete steps array for update
-    await handleSave({ steps: steps }, `Step ${index + 1} updated successfully!`);
-  };
+  const stepToUpdate = steps[index]; // only this step
+  await handleSave({ step: stepToUpdate }, `Step ${index + 1} updated successfully!`);
+};
+
 
   // --- Service (Pay Less Cover More) Handlers ---
   const handleServiceChange = (index: number, field: string, value: string) => {
@@ -85,12 +86,24 @@ export default function HowWorksAdmin() {
   };
   
   const handleServiceUpdate = async (index: number) => {
-    // Send the complete services array for update
-    await handleSave({ services: services }, `Service ${index + 1} updated successfully!`);
-  };
+  const serviceToUpdate = services[index];
+  await handleSave({ service: serviceToUpdate }, `Service ${index + 1} updated successfully!`);
+};
+
 
   if (error) return <p>Failed to load data</p>; 
-  if (!data || steps.length === 0 || services.length === 0) return <p>Loading...</p>; 
+
+
+  if(!data){
+    return <p>No data present</p>;
+  }
+  else if(steps.length === 0 ){
+    return <p>No data presenttttt</p>;
+  }
+  else if(services.length === 0 ){
+    return <p>Services length is 0</p>;
+  }
+  // if (!data || steps.length === 0 || services.length === 0) return <p>Loading...</p>; 
 
   return ( 
     <div style={{ padding: "20px" }}> 

@@ -15,7 +15,7 @@ export default function HowWorksSections() {
   const { data, error } = useSWR("/api/howworksapi", fetcher, { refreshInterval: 5000 }); 
 
   if (error) return <p>Failed to load data</p>; 
-  if (!data) return <p>Loading...</p>; 
+  if (!data) return <p>Loadinkkkkkkg...</p>; 
 
   // Destructure dynamic data
   const { mainHeading, servicesHeading, steps = [], services = [] } = data; 
@@ -31,7 +31,7 @@ export default function HowWorksSections() {
     <div className={styles.cont}> 
       <div className={styles.head}> 
         <div className={styles.heading}> 
-          {mainHeading.split(" ").map((word: string, idx: number) => 
+          {(mainHeading || "").split(" ").map((word: string, idx: number) => 
             word.toLowerCase().includes("work") ? ( 
               <span key={idx} className={styles.orange}>{word}</span> 
             ) : ( 
@@ -66,7 +66,7 @@ export default function HowWorksSections() {
       {/* Services Heading: Pay Less Cover More */} 
       <div className={styles.servciesCont}> 
         <div className={styles.heading}> 
-          {servicesHeading.split(" ").map((word: string, idx: number) => 
+          {(servicesHeading || "").split(" ").map((word: string, idx: number) => 
             word.toLowerCase().includes("less") ? ( 
               <span key={idx} className={styles.orange}>{word} </span> 
             ) : ( 
