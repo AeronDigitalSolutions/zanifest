@@ -326,7 +326,7 @@ const SuperAdminDashboard = () => {
               onClick={() => {
                 setActiveSection("homeSection");
                 if (window.innerWidth <= 768) {
-                  setSidebarOpen(false); // ✅ close only on mobile
+                  setSidebarOpen(false); 
                 }
               }}
               className={`${styles.menuItem} ${

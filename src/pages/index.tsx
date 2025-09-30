@@ -6,13 +6,14 @@ import Main from "@/components/home/Main";
 import CarInsuraceSection from "@/components/home/CarInsuraceSection";
 import DemoSection from "@/components/home/DemoSection";
 import BestServicesSection from "@/components/home/BestServicesSection";
-import Partners from "@/components/home/Partners";
+// import Partners from "@/components/home/Partners";
 import AllInsuranceSection from "@/components/home/AllInsuranceSection";
 import HowWorksSections from "@/components/home/HowWorksSections";
 import FeedBackSection from "@/components/home/FeedBackSection";
 import FAQSection from "@/components/home/FAQSection";
 import Footer from "@/components/ui/Footer";
 import CriticalIllnessInsurance from "./criticalillnessinsurance";
+import Partners from "@/components/home/Partners";
 
 export default function Home() {
   return (
@@ -28,7 +29,7 @@ export default function Home() {
         <CarInsuraceSection />
         <DemoSection />
         <BestServicesSection />
-        <Partners />
+        <Partners/>
         <AllInsuranceSection />
         <HowWorksSections />
         <FeedBackSection />

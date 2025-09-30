@@ -1,13 +1,19 @@
+// components/home/CarInsuraceSection.tsx
 "use client";
 import React from "react";
 import Image from "next/image";
-import { useRouter } from "next/router";
-import { FaArrowRight } from "react-icons/fa6";
-
-import styles from "@/styles/components/home/CarInsuranceSection.module.css";
+import { useRouter } from "next/navigation";
 import { FaEllipsisH } from "react-icons/fa";
+import useSWR from "swr";
+import styles from "@/styles/components/home/CarInsuranceSection.module.css";
 
-const INSURANCELIST = [
+type Item = {
+  name: string;
+  image: any;
+  link: string;
+};
+
+const INSURANCELIST: Item[] = [
   {
     name: "Family Health Insurance",
     image: require("@/assets/home/car/1.png"),
@@ -58,45 +64,64 @@ const INSURANCELIST = [
     image: require("@/assets/office-building.png"),
     link: "#",
   },
-   {
+  {
     name: "Doctor Indemnity Insurance",
     image: require("@/assets/medical-team.png"),
     link: "./DoctorInd/DoctorInsurance",
   },
-   {
+  {
     name: "Director & Officer Liability Insurance",
     image: require("@/assets/workspace.png"),
     link: "#",
   },
 ];
 
-function CarInsuraceSection() {
-  const router = useRouter();
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-  const handleClick = (link: string) => {
-    router.push(link).then(() => {
-      window.scrollTo(0, 0);
-    });
-  };
+export default function CarInsuraceSection({
+  initialHeading,
+  initialOrder,
+}: {
+  initialHeading?: string;
+  initialOrder?: string[];
+}) {
+  const router = useRouter();
+  const { data } = useSWR("/api/carinsuranceapi", fetcher);
+
+  const heading =
+    initialHeading ?? data?.heading ?? "Click to buy an Insurance";
+
+  const order: string[] =
+    initialOrder ?? data?.order ?? INSURANCELIST.map((it) => it.name);
+
+  const orderedList: Item[] = order
+    .map((name) => INSURANCELIST.find((it) => it.name === name))
+    .filter(Boolean) as Item[];
 
   return (
     <div className={styles.cont}>
       <div className={styles.head}>
         <div className={styles.heading}>
-          Click to buy an <span className={styles.orange}>Insurance</span>
+          {heading.split(" ").slice(0, -1).join(" ")}{" "}
+          <span className={styles.orange}>
+            {heading.split(" ").slice(-1).join(" ")}
+          </span>
         </div>
-          
       </div>
+
       <div className={styles.mobileEllipsis}>
-          <FaEllipsisH style={{ color: "#fa621a", fontSize:"25px" }} />
-        </div>
+        <FaEllipsisH style={{ color: "#fa621a", fontSize: "25px" }} />
+      </div>
 
       <div className={styles.list}>
-        {INSURANCELIST.map((item, index) => (
+        {orderedList.map((item, index) => (
           <div
             className={styles.item}
             key={index}
-            onClick={() => handleClick(item.link)}
+            onClick={() => {
+              router.push(item.link);
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
           >
             <div className={styles.top}>
               <div className={styles.imageCont}>
@@ -113,10 +138,6 @@ function CarInsuraceSection() {
           </div>
         ))}
       </div>
-
- 
     </div>
   );
 }
-
-export default CarInsuraceSection;

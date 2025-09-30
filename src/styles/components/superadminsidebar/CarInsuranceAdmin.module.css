@@ -1,0 +1,194 @@
+/* File: styles/CarInsuranceAdmin.module.css */
+
+.container {
+  padding: 16px;
+  font-family: Arial, sans-serif;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.content {
+  display: flex;
+  gap: 24px;
+}
+
+/* Left controls column */
+.controls {
+  width: 360px;
+  max-width: 100%;
+}
+
+/* Heading section */
+.headingBlock {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.headingLabel {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.headingInput {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+.saveHeadingBtn {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+    width: 50%;
+
+
+}
+
+.saveHeadingBtn:hover {
+  background: #135ba1;
+}
+
+
+
+
+
+
+.saveOrderBtn {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #28a745;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.saveOrderBtn:hover {
+  background: #1f7a33;
+}
+
+/* Live preview section */
+.preview {
+  flex: 1;
+}
+
+.previewTitle {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+/* Responsive rules */
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+  }
+
+  .controls {
+    width: 100%;
+  }
+
+  /* Hide live preview on small screens */
+  .preview {
+    display: none;
+  }
+}
+/* Order section */
+.orderWrapper {
+  margin-top: 12px;
+}
+
+.orderLabel {
+  font-size: 14px;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+/* Grid layout: 6 items per row */
+.orderBox {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* 6 columns */
+  gap: 12px;                              /* spacing between cards */
+  padding: 12px;
+  border-radius: 6px;
+column-gap: 80px;
+  width: 100%;      /* full width */
+  box-sizing: border-box; /* include padding/border in width */
+}
+
+
+.orderItem {
+  padding: 12px 16px;
+  background: #fff;
+  border-radius: 8px;
+  cursor: grab;
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: center; /* center text inside cards */
+}
+
+.orderItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Center Save Order button */
+.saveOrderBtn {
+  margin: 12px auto 0 auto; /* auto left/right to center */
+  padding: 10px 16px;
+  border-radius: 6px;
+  background: #28a745;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: block;           /* required for auto margin centering */
+}
+
+.saveOrderBtn:hover {
+  background: #1f7a33;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .orderBox {
+    grid-template-columns: repeat(4, 1fr); /* 4 per row */
+  }
+}
+
+@media (max-width: 992px) {
+  .orderBox {
+    grid-template-columns: repeat(3, 1fr); /* 3 per row */
+  }
+}
+
+@media (max-width: 768px) {
+  .orderBox {
+    grid-template-columns: repeat(2, 1fr); /* 2 per row */
+  }
+
+  .saveOrderBtn {
+    width: 80%; /* slightly smaller on mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .orderBox {
+    grid-template-columns: 1fr; /* 1 per row */
+  }
+
+  .saveOrderBtn {
+    width: 100%;
+  }
+}
