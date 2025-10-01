@@ -32,39 +32,52 @@ const FALLBACK_SERVICES = [
   },
 ];
 
+// Function to parse heading and detect <tags>
+const parseHeading = (heading: string) => {
+  const regex = /<([^>]+)>/g;
+  const parts: { text: string; isTag: boolean }[] = [];
+  let lastIndex = 0;
+  let match;
+
+  while ((match = regex.exec(heading)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push({ text: heading.slice(lastIndex, match.index), isTag: false });
+    }
+    parts.push({ text: match[1], isTag: true }); // text inside <>
+    lastIndex = regex.lastIndex;
+  }
+
+  if (lastIndex < heading.length) {
+    parts.push({ text: heading.slice(lastIndex), isTag: false });
+  }
+
+  return parts;
+};
+
 function AllInsuranceSection() {
   const { data } = useSWR("/api/allinsuranceapi", fetcher, {
     refreshInterval: 10000,
   });
 
-  const heading = data?.heading || "We're Giving all the Insurance Services to you";
+  const heading = data?.heading || "We're Giving all the <Insurance> Services to you";
   const services = data?.services || FALLBACK_SERVICES;
 
-  const headingParts = heading.split(" ");
-  const orangeWordIndex = headingParts.findIndex(
-    (word: string) =>
-      word.toLowerCase() === "insurance" || word.toLowerCase() === "services"
-  );
-
-  const beforeOrange =
-    orangeWordIndex !== -1
-      ? headingParts.slice(0, orangeWordIndex).join(" ")
-      : heading;
-  const orangeWord =
-    orangeWordIndex !== -1 ? headingParts[orangeWordIndex] : "";
-  const afterOrange =
-    orangeWordIndex !== -1
-      ? headingParts.slice(orangeWordIndex + 1).join(" ")
-      : "";
+  const headingParts = parseHeading(heading);
 
   return (
     <div className={styles.cont}>
       <div className={styles.head}>
         <div className={styles.heading}>
           <span className={styles.text}>
-            {beforeOrange}{" "}
-            {orangeWord && <span className={styles.orange}>{orangeWord}</span>}{" "}
-            {afterOrange}
+            {headingParts.map((part, i) =>
+              part.isTag ? (
+                <span key={i} className={styles.orange}>
+                  {part.text}
+                </span>
+              ) : (
+                <span key={i}>{part.text}</span>
+              )
+            )}
           </span>
         </div>
         <div className={styles.mobileEllipsis}>

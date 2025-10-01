@@ -6,7 +6,7 @@ import HowWorks from "@/models/howworks";
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: "20mb", // increase as needed
+      sizeLimit: "20mb", // allow large base64 images
     },
   },
 };
@@ -65,7 +65,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (services !== undefined) updateFields.services = services;
 
       if (!data) {
-        // Create a new document if none exists
         data = await HowWorks.create({
           mainHeading: mainHeading || "",
           servicesHeading: servicesHeading || "",
@@ -74,7 +73,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
         console.log("Created new data:", data);
       } else {
-        // Update the existing document
         await HowWorks.updateOne({}, { $set: updateFields });
         data = await HowWorks.findOne({});
         console.log("Updated data:", data);

@@ -87,6 +87,12 @@ export default function BestServicesAdmin() {
   };
 
   return (
+    <>
+     {/* Preview */}
+      <div className={styles.previewBox}>
+        <h3>Live Preview</h3>
+        <BestServicesSection />
+      </div>
     <div className={styles.container}>
       <h2 className={styles.pageTitle}>Edit Best Services </h2>
 
@@ -137,11 +143,8 @@ export default function BestServicesAdmin() {
         ))}
       </div>
 
-      {/* Preview */}
-      <div className={styles.previewBox}>
-        <h3>Live Preview</h3>
-        <BestServicesSection />
-      </div>
+     
     </div>
+    </>
   );
 }

@@ -1,12 +1,13 @@
-// src/pages/admin/PartnerAdmin.tsx
 "use client";
+
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import useSWR from "swr";
 import Partners from "../home/Partners";
-import img1 from "@/assets/home/car/1.png"
-import img2 from "@/assets/home/car/2.png"
-import img3 from "@/assets/home/car/6.png"
+import img1 from "@/assets/home/car/1.png";
+import img2 from "@/assets/home/car/2.png";
+import img3 from "@/assets/home/car/6.png";
+import styles from "@/styles/components/superadminsidebar/partneradmin.module.css";
 
 const CATEGORYLIST = [
   { name: "Health Insurance", icon: img1 },
@@ -19,19 +20,15 @@ const fetcher = (url: string) => fetch(url).then(res => res.json());
 const PartnerAdmin = () => {
   const { data, mutate } = useSWR("/api/partnersApi", fetcher);
   const [selectedCategory, setSelectedCategory] = useState(CATEGORYLIST[0]);
-  const [headings, setHeadings] = useState<Record<string, string>>({});
+  const [heading, setHeading] = useState("Insurance Partner");
   const [images, setImages] = useState<string[]>([]);
 
-  // Initialize headings and images when data or category changes
   useEffect(() => {
-    const catData = data?.find((d: any) => d.category === selectedCategory.name);
-    
-    setHeadings(prev => ({
-      ...prev,
-      [selectedCategory.name]: catData?.heading || "Insurance Partner",
-    }));
-
-    setImages(catData?.images || []);
+    if (data) {
+      setHeading(data.heading || "Insurance Partner");
+      const catData = data.categories.find((c: any) => c.category === selectedCategory.name);
+      setImages(catData?.images || []);
+    }
   }, [selectedCategory, data]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,100 +46,76 @@ const PartnerAdmin = () => {
   };
 
   const handleSaveAll = async () => {
+    const body = {
+      heading,
+      categories: CATEGORYLIST.map(cat =>
+        cat.name === selectedCategory.name
+          ? { category: cat.name, images }
+          : { category: cat.name, images: data?.categories.find((c: any) => c.category === cat.name)?.images || [] }
+      ),
+    };
+
     await fetch("/api/partnersApi", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        category: selectedCategory.name,
-        heading: headings[selectedCategory.name] || "Insurance Partner",
-        images,
-      }),
+      body: JSON.stringify(body),
     });
     mutate();
     alert("Saved successfully!");
   };
 
   return (
-    <div style={{ display: "flex", gap: "20px" }}>
+    <div className={styles.container}>
       {/* Left Category Selector */}
-      <div>
+      <div className={styles.categoryList}>
         {CATEGORYLIST.map((item, idx) => (
           <div
             key={idx}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginBottom: "10px",
-              cursor: "pointer",
-              fontWeight: selectedCategory.name === item.name ? "bold" : "normal",
-            }}
+            className={`${styles.categoryItem} ${selectedCategory.name === item.name ? styles.active : ""}`}
             onClick={() => setSelectedCategory(item)}
           >
             <Image src={item.icon} width={50} height={50} alt={item.name} />
-            <span style={{ marginLeft: "10px" }}>{item.name}</span>
+            <span>{item.name}</span>
           </div>
         ))}
       </div>
 
       {/* Right Editor */}
-      <div style={{ flex: 1 }}>
-        {/* Heading Input */}
-        <div style={{ marginBottom: 20 }}>
+      <div className={styles.editor}>
+        {/* Global Heading Input */}
+        <div className={styles.card}>
+          <h4>Heading</h4>
           <input
             type="text"
-            value={headings[selectedCategory.name] || "Insurance Partner"}
-            onChange={(e) =>
-              setHeadings(prev => ({
-                ...prev,
-                [selectedCategory.name]: e.target.value,
-              }))
-            }
-            placeholder="Category Heading"
-            style={{ padding: "10px", fontSize: "16px", width: "80%" }}
+            value={heading}
+            onChange={(e) => setHeading(e.target.value)}
+            placeholder="Enter heading"
           />
         </div>
 
         {/* Partner Logos */}
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: 10 }}>
-          {images.map((img, idx) => (
-            <div key={idx} style={{ position: "relative" }}>
-              <Image src={img} width={100} height={100} alt={`img-${idx}`} />
-              <button
-                onClick={() => handleDeleteImage(idx)}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  right: 0,
-                  background: "red",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "50%",
-                  width: "20px",
-                  height: "20px",
-                  cursor: "pointer",
-                }}
-              >
-                X
-              </button>
-            </div>
-          ))}
-          {images.length < 9 && (
-            <input type="file" onChange={handleImageUpload} accept="image/png,image/jpeg" />
-          )}
+        <div className={styles.card}>
+          <h4>Partner Logos</h4>
+          <div className={styles.imagesGrid}>
+            {images.map((img, idx) => (
+              <div key={idx} className={styles.imageWrapper}>
+                <Image src={img} width={100} height={100} alt={`img-${idx}`} />
+                <button className={styles.deleteBtn} onClick={() => handleDeleteImage(idx)}>X</button>
+              </div>
+            ))}
+            {images.length < 9 && (
+              <input type="file" onChange={handleImageUpload} accept="image/png,image/jpeg" />
+            )}
+          </div>
         </div>
 
-        <button
-          onClick={handleSaveAll}
-          style={{ padding: "10px 20px", background: "orange", color: "#fff", border: "none", cursor: "pointer" }}
-        >
-          Save All
-        </button>
+        <button className={styles.saveBtn} onClick={handleSaveAll}>Save All</button>
 
         {/* Live Preview */}
-        <section style={{ marginTop: 24 }}>
-          <h3>Live Preview</h3>
-          <Partners liveHeading={headings[selectedCategory.name]} liveImages={images} />
-        </section>
+        <div className={styles.card}>
+          <h4>Live Preview</h4>
+          <Partners liveHeading={heading} liveImages={images} />
+        </div>
       </div>
     </div>
   );

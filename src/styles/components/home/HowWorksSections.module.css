@@ -4,6 +4,9 @@
   place-items: center;
   margin-top: 40px;
 }
+.orange {
+  color: orangered;
+}
 
 .head {
   display: flex;

@@ -26,14 +26,30 @@ export default function FAQSection({ headingOverride, questionsOverride }: Props
     if (questions.length > 0) setAnsIndex(0);
   }, [questions]);
 
+  // Custom heading renderer (handle <...> for orange color)
   const renderHeading = (text: string) => {
-    const words = text.split(" ");
-    return (
-      <>
-        {words.slice(0, -1).join(" ")}{" "}
-        <span className={styles.orange}>{words.slice(-1)}</span>
-      </>
-    );
+    const regex = /<([^>]+)>/g;
+const parts: (string | React.ReactNode)[] = [];
+    let lastIndex = 0;
+    let match;
+
+    while ((match = regex.exec(text)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push(text.slice(lastIndex, match.index)); // normal text
+      }
+      parts.push(
+        <span key={match.index} className={styles.orange}>
+          {match[1]}
+        </span>
+      );
+      lastIndex = regex.lastIndex;
+    }
+
+    if (lastIndex < text.length) {
+      parts.push(text.slice(lastIndex));
+    }
+
+    return <>{parts}</>;
   };
 
   return (
@@ -52,7 +68,7 @@ export default function FAQSection({ headingOverride, questionsOverride }: Props
             <div
               key={index}
               className={styles.item}
-              onClick={() => setAnsIndex(index)} // always open clicked question
+              onClick={() => setAnsIndex(index)}
             >
               <p className={`${styles.ques} ${index === ansIndex ? styles.active : ""}`}>
                 {item.ques}

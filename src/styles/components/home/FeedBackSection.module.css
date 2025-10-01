@@ -4,7 +4,15 @@
   place-items: center;
   margin-top: 40px;
 }
+.heading {
+  font-size: 24px;
+  font-weight: bold;
+  color: black; /* default */
+}
 
+.orange {
+  color: orangered;
+}
 .head {
   display: flex;
   gap: 0.7rem;

@@ -1,14 +1,12 @@
-// src/components/home/Partners.tsx
+"use client";
 import React, { useEffect, useState } from "react";
 import styles from "@/styles/components/home/Partners.module.css";
 import Image from "next/image";
 import useSWR from "swr";
-import img1 from "@/assets/home/car/1.png"
-import img2 from "@/assets/home/car/2.png"
-import img3 from "@/assets/home/car/6.png"
 
-
-
+import img1 from "@/assets/home/car/1.png";
+import img2 from "@/assets/home/car/2.png";
+import img3 from "@/assets/home/car/6.png";
 
 const CATEGORYLIST = [
   { name: "Health Insurance", icon: img1 },
@@ -18,10 +16,10 @@ const CATEGORYLIST = [
 
 interface PartnersProps {
   liveHeading?: string;
-  liveImages?: string[];
+  liveImages?: string[]; // 👈 added to fix error
 }
 
-const fetcher = (url: string) => fetch(url).then(res => res.json());
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 function Partners({ liveHeading, liveImages }: PartnersProps) {
   const { data } = useSWR("/api/partnersApi", fetcher);
@@ -29,21 +27,17 @@ function Partners({ liveHeading, liveImages }: PartnersProps) {
   const [heading, setHeading] = useState("Insurance Partner");
   const [partners, setPartners] = useState<string[]>([]);
 
-  // Only update heading and partners if live props are provided
+  // Heading
   useEffect(() => {
-    if (liveHeading !== undefined) {
-      setHeading(liveHeading);
-    } else if (data) {
-      const catData = data.find((d: any) => d.category === selectedCategory.name);
-      setHeading(catData?.heading ?? "Insurance Partner");
-    }
-  }, [liveHeading, selectedCategory, data]);
+    if (liveHeading !== undefined) setHeading(liveHeading);
+    else if (data) setHeading(data.heading ?? "Insurance Partner");
+  }, [liveHeading, data]);
 
+  // Partners (images)
   useEffect(() => {
-    if (liveImages !== undefined) {
-      setPartners(liveImages);
-    } else if (data) {
-      const catData = data.find((d: any) => d.category === selectedCategory.name);
+    if (liveImages !== undefined) setPartners(liveImages);
+    else if (data) {
+      const catData = data.categories.find((c: any) => c.category === selectedCategory.name);
       setPartners(catData?.images ?? []);
     }
   }, [liveImages, selectedCategory, data]);
@@ -53,7 +47,8 @@ function Partners({ liveHeading, liveImages }: PartnersProps) {
       {/* Heading */}
       <div className={styles.head}>
         <p className={styles.heading}>
-          <span className={styles.orange}>{heading}</span>
+          {heading.split(" ").slice(0, -1).join(" ")}{" "}
+          <span className={styles.orange}>{heading.split(" ").slice(-1)}</span>
         </p>
       </div>
 

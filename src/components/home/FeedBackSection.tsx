@@ -16,6 +16,21 @@ interface IFeedbackApiResponse {
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
+// 🔹 Helper to render heading with <...> styled
+const renderHeading = (heading: string) => {
+  const parts = heading.split(/(<[^>]+>)/g);
+  return parts.map((part, idx) => {
+    if (part.startsWith("<") && part.endsWith(">")) {
+      return (
+        <span key={idx} className={styles.orange}>
+          {part.replace(/[<>]/g, "")}
+        </span>
+      );
+    }
+    return <span key={idx}>{part}</span>;
+  });
+};
+
 const FeedBackSection: React.FC = () => {
   const { data, error, isLoading } = useSWR<IFeedbackApiResponse>('/api/feedback', fetcher, {
     refreshInterval: 5000,
@@ -26,8 +41,7 @@ const FeedBackSection: React.FC = () => {
   if (!data?.success || !data.data) return <div className={styles.cont}>No feedback available.</div>;
 
   const feedbackList: IFeedbackItem[] = data.data;
-  const displayHeading = data.heading ?? "What Our Customers Are Saying?";
-  const words: string[] = displayHeading.split(" ");
+  const displayHeading = data.heading ?? "What Our <Customers> Are Saying?";
 
   const slides = feedbackList.map((item, index) => (
     <div className={styles.serviceItem} key={String(item._id ?? index)}>
@@ -53,13 +67,7 @@ const FeedBackSection: React.FC = () => {
     <div className={styles.cont}>
       <div className={styles.head}>
         <div className={styles.heading}>
-          {words.map((word: string, idx: number) =>
-            idx === words.length - 1 ? (
-              <span key={idx} className={styles.orange}>{word}</span>
-            ) : (
-              <span key={idx}>{word} </span>
-            )
-          )}
+          {renderHeading(displayHeading)}
         </div>
       </div>
       <div className={styles.mobileEllipsis}>

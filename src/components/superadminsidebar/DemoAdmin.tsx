@@ -113,6 +113,12 @@ export default function DemoAdmin() {
   if (!data) return <div>Loading admin panel...</div>;
 
   return (
+    <>
+    {/* Live Preview */}
+      <div className={styles.previewSection}>
+        <h2>Live Preview</h2>
+        <DemoSection />
+      </div>
     <div className={styles.container}>
     
       
@@ -152,47 +158,59 @@ export default function DemoAdmin() {
 </div>
 
 {/* Items grid with 2 columns per row */}
+{/* Items grid with card layout */}
 <div className={styles.itemGrid}>
   {itemForms.map((itemForm, index) => (
     <div key={index} className={styles.itemCard}>
-      <h3>Item {index + 1}</h3>
-      <label className={styles.label}>Name:</label>
-      <input
-        type="text"
-        value={itemForm.name}
-        onChange={(e) => itemForm.setName(e.target.value)}
-        className={styles.input}
-      />
-      <label className={styles.label}>Description:</label>
-      <textarea
-        value={itemForm.desc}
-        onChange={(e) => itemForm.setDesc(e.target.value)}
-        className={styles.textarea}
-      />
-      <label className={styles.label}>Image:</label>
-      <input type="file" onChange={itemForm.handleImageChange} className={styles.fileInput} />
+      {/* Image Preview at Top */}
       {itemForm.image && <img src={itemForm.image} alt="preview" />}
-      <label className={styles.label}>Background Color:</label>
-      <input
-        type="text"
-        value={itemForm.color}
-        onChange={(e) => itemForm.setColor(e.target.value)}
-        className={styles.colorInput}
-      />
-      <button onClick={itemForm.saveItem} className={`${styles.button} ${styles.saveItemBtn}`}>
-        Update Item {index + 1}
-      </button>
-      
+
+      {/* Card Content */}
+      <div className={styles.itemCardContent}>
+        <h3>Item {index + 1}</h3>
+
+        <label className={styles.label}>Name:</label>
+        <input
+          type="text"
+          value={itemForm.name}
+          onChange={(e) => itemForm.setName(e.target.value)}
+          className={styles.input}
+        />
+
+        <label className={styles.label}>Description:</label>
+        <textarea
+          value={itemForm.desc}
+          onChange={(e) => itemForm.setDesc(e.target.value)}
+          className={styles.textarea}
+        />
+
+        <label className={styles.label}>Image:</label>
+        <input
+          type="file"
+          onChange={itemForm.handleImageChange}
+          className={styles.fileInput}
+        />
+
+        <label className={styles.label}>Background Color:</label>
+        <input
+          type="text"
+          value={itemForm.color}
+          onChange={(e) => itemForm.setColor(e.target.value)}
+          className={styles.colorInput}
+        />
+
+        <button
+          onClick={itemForm.saveItem}
+          className={`${styles.button} ${styles.saveItemBtn}`}
+        >
+          Update Item {index + 1}
+        </button>
+      </div>
     </div>
-    
   ))}
 </div>
- {/* Live Preview */}
-      <div className={styles.previewSection}>
-        <h2>Live Preview</h2>
-        <DemoSection />
-      </div>
-  
+
     </div>
+    </>
   );
 }

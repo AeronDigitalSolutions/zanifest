@@ -101,6 +101,9 @@
   display: none;
  
 }
+.orange {
+  color: orangered;
+}
 
 @media screen and (max-width: 1200px) {
   .bottom {

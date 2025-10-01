@@ -1,269 +1,193 @@
-/* styles/components/admin/howworksadmin.module.css */
+/* Container */
+.container {
+  padding: 24px;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
 
-/* --- Main Container --- */
-.adminCont {
-  max-width: 1400px;
-  margin: 40px auto;
-  padding: 25px;
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+/* Page Title */
+.pageTitle {
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 16px;
   color: #333;
 }
 
-/* --- Loader & Messages --- */
-.loading,
-.localMessage {
+/* Heading Box */
+.headingBox {
+  margin: 0 auto;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  padding: 20px;
+  max-width: 500px;
   text-align: center;
-  padding: 15px;
-  border-radius: 8px;
-  margin: 20px 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.headingBox h3 {
+  margin-bottom: 12px;
+  font-size: 1rem;
   font-weight: 600;
+  color: #111827;
 }
 
-.localMessage {
-  background: #d1e7dd;
-  border: 1px solid #badbcc;
-  color: #0f5132;
-}
-
-/* --- Divider --- */
-.divider {
-  border: 0;
-  height: 1px;
-  background: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0),
-    #fa621a,
-    rgba(0, 0, 0, 0)
-  );
-  margin: 40px 0;
-}
-
-.orange {
-  color: #fa621a;
-  font-weight: bold;
-}
-
-/* --- Section Headings --- */
-.editSection {
-  margin-bottom: 40px;
-}
-
-.editSection h2 {
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: #222;
-  border-left: 5px solid #fa621a;
-  padding-left: 10px;
-}
-
-/* --- Inputs --- */
-.inputField,
-.textareaField {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 15px;
+.headingInput {
+  width: 70%;
+  padding: 8px 10px;
   border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 15px;
-  transition: border 0.2s;
+  border-radius: 6px;
+  font-size: 0.9rem;
 }
 
-.inputField:focus,
-.textareaField:focus {
-  outline: none;
-  border-color: #fa621a;
-}
-
-.textareaField {
-  min-height: 100px;
-  resize: vertical;
-}
-
-/* --- Save Button --- */
-.saveBtn {
-  background: #fa621a;
-  color: #fff;
-  font-weight: 700;
+.headingBox button {
+  margin-left: 10px;
+  padding: 8px 14px;
   border: none;
-  padding: 14px 28px;
-  border-radius: 8px;
+  border-radius: 6px;
+  background: orangered;
+  color: #fff;
   cursor: pointer;
-  transition: 0.2s;
-  font-size: 16px;
-  display: inline-block;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+  margin-top: 10px;
 }
 
-.saveBtn:hover:not(:disabled) {
-  background: #e05414;
+.headingBox button:hover {
+  background: #d84b0e;
 }
 
-.saveBtn:disabled {
-  background: #ccc;
+.headingBox button:disabled {
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* --- Work Steps --- */
-.formRow {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 30px;
-  flex-wrap: wrap;
-}
-
-.workStepForm {
-  flex: 1 1 calc(33.33% - 20px);
-  min-width: 280px;
-  border: 1px solid #eee;
-  border-radius: 12px;
-  background: #fff;
-  padding: 20px;
-  transition: box-shadow 0.2s;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.workStepForm:hover {
-  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.1);
-}
-
-.workStepForm h3 {
-  font-size: 18px;
-  margin-bottom: 15px;
-  color: #007bff;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 8px;
-}
-
-.workStepForm label {
-  font-weight: 600;
-  font-size: 14px;
-  margin-bottom: 6px;
-  display: block;
-  color: #444;
-}
-
-/* --- Services --- */
-.servicesGrid {
+/* =======================
+   Steps & Services Grid
+   ======================= */
+.cardsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px;
-  margin-bottom: 30px;
 }
 
-.serviceItemForm {
-  border: 1px solid #eee;
-  border-radius: 12px;
+/* Card (Step or Service) */
+.card {
   background: #fff;
-  padding: 18px;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.2s;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-.serviceItemForm:hover {
-  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.1);
+.card:hover {
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
 }
 
-.serviceItemForm h3 {
-  font-size: 16px;
-  color: #28a745;
-  margin-bottom: 12px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 6px;
-}
-
-.serviceItemForm label {
+/* Card Title */
+.card h4 {
+  font-size: 1rem;
   font-weight: 600;
-  font-size: 13px;
-  margin-bottom: 6px;
-  display: block;
-  color: #555;
+  margin: 0;
+  color: #111827;
+  text-transform: uppercase;
 }
 
-/* --- Image Previews --- */
-.imagePreview,
-.imagePreviewSmall {
+/* Inputs inside card */
+.card input,
+.card textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.card textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+
+/* Save button */
+.card button {
+  align-self: flex-start;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background: orangered;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.85rem;
+  transition: background-color 0.2s ease;
+}
+
+.card button:hover {
+  background: orangered;
+}
+
+.card button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Image Preview */
+.imagePreview {
   display: block;
-  margin: 12px 0;
   border-radius: 6px;
   border: 1px solid #ddd;
   object-fit: cover;
-}
-
-.imagePreview {
   max-width: 120px;
   height: auto;
 }
 
-.imagePreviewSmall {
-  max-width: 60px;
-  height: auto;
-}
-
-/* --- File Input --- */
-.fileInput {
-  font-size: 13px;
-  margin-top: 6px;
-  margin-bottom: 10px;
-}
-
-/* --- Live Preview --- */
+/* =======================
+   Live Preview
+   ======================= */
 .livePreview {
-  margin-top: 50px;
-  padding: 25px;
+  border: 2px dashed #ddd;
   border-radius: 12px;
-  background: #fff;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  background: #fafafa;
 }
 
-.livePreview h2 {
-  text-align: center;
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 25px;
-  color: #007bff;
-}
 
-/* Very important: inner preview uses frontend module styles */
-.livePreview > div {
-  all: unset;
-  display: block;
-  width: 100%;
-}
 
-/* --- Responsive --- */
-@media (max-width: 1200px) {
-  .formRow {
-    flex-direction: column;
-  }
-  .workStepForm {
-    flex: 1 1 100%;
-  }
-}
-
-@media (max-width: 992px) {
-  .servicesGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
+/* =======================
+   Responsive
+   ======================= */
 @media (max-width: 768px) {
-  .adminCont {
-    padding: 15px;
+  .headingBox {
+    width: 90%;
   }
 
-  .workStepForm {
-    min-width: 100%;
-  }
-
-  .servicesGrid {
-    grid-template-columns: 1fr;
-  }
-
-  /* Mobile: hide preview */
+  /* Hide live preview on mobile */
   .livePreview {
     display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .headingBox {
+    width: 100%;
+    padding: 16px;
+  }
+
+  .card {
+    padding: 14px;
   }
 }

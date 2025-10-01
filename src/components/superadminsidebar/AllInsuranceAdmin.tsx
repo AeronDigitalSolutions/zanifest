@@ -58,22 +58,30 @@ const AllInsuranceCAdmin = () => {
   };
 
   return (
+    <>
+     {/* Preview Section */}
+      <div className={styles.previewBox}>
+        <h3 className={styles.previewTitle}>Live Preview</h3>
+        <AllInsuranceSection />
+      </div>
     <div className={styles.container}>
-      <h2 className={styles.title}>Edit All Insurance Section</h2>
+      <h2 className={styles.pageTitle}>Edit All Insurance Section</h2>
 
+      {/* Heading Box */}
       <div className={styles.headingBox}>
-        <label>Heading:</label>
+        <h3>Heading:</h3>
         <input
           type="text"
           value={heading}
           onChange={(e) => setHeading(e.target.value)}
           className={styles.headingInput}
         />
-        <button onClick={handleHeadingSave} className={styles.updateHeadingBtn}>
+        <button onClick={handleHeadingSave} className={styles.headingBtn}>
           Update Heading
         </button>
       </div>
 
+      {/* Services Grid */}
       <div className={styles.servicesGrid}>
         {serviceForms.map((service, index) => (
           <div key={index} className={styles.serviceCard}>
@@ -125,11 +133,9 @@ const AllInsuranceCAdmin = () => {
         ))}
       </div>
 
-      <div className={styles.previewBox}>
-        <h3 className={styles.previewTitle}>Live Preview</h3>
-        <AllInsuranceSection />
-      </div>
+     
     </div>
+    </>
   );
 };
 

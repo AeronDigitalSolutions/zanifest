@@ -7,54 +7,56 @@ import { FaEllipsisH } from "react-icons/fa";
 import useSWR from "swr"; 
 import axios from "axios"; 
 
-// Fetcher function for SWR 
-const fetcher = (url: string) => axios.get(url).then(res => res.data); 
+const fetcher = (url: string) => axios.get(url).then(res => res.data.data); 
 
 export default function HowWorksSections() { 
- 
   const { data, error } = useSWR("/api/howworksapi", fetcher, { refreshInterval: 5000 }); 
 
   if (error) return <p>Failed to load data</p>; 
-  if (!data) return <p>Loadinkkkkkkg...</p>; 
+  if (!data) return <p>Loading...</p>; 
 
-  // Destructure dynamic data
-  const { mainHeading, servicesHeading, steps = [], services = [] } = data; 
+  const { mainHeading = "", servicesHeading = "", steps = [], services = [] } = data; 
 
-  // Default props for Next/Image (adjust as per your CSS and original image sizes)
   const defaultImageProps = {
     width: 100, 
     height: 100,
     style: { objectFit: 'contain' as 'contain' }
   };
+
+  const renderHeading = (text: string) => {
+    const parts = text.split(/(<[^>]+>)/g); // split by <...>
+    return parts.map((part, idx) =>
+      part.startsWith("<") && part.endsWith(">") ? (
+        <span key={idx} className={styles.orange}>{part.slice(1, -1)}</span> // remove <>
+      ) : (
+        <span key={idx}>{part}</span>
+      )
+    );
+  };
   
   return ( 
     <div className={styles.cont}> 
+      {/* Main Heading */}
       <div className={styles.head}> 
         <div className={styles.heading}> 
-          {(mainHeading || "").split(" ").map((word: string, idx: number) => 
-            word.toLowerCase().includes("work") ? ( 
-              <span key={idx} className={styles.orange}>{word}</span> 
-            ) : ( 
-              <span key={idx}> {word} </span> 
-            ) 
-          )} 
+          {renderHeading(mainHeading)}
           <div className={styles.mobileEllipsis}> 
             <FaEllipsisH style={{ color: "#fa621a", fontSize: "25px" }} /> 
           </div> 
         </div> 
       </div> 
 
-      {/* Steps (How We Work) - 3 Divs */} 
+      {/* Steps */}
       <div className={styles.bottom}> 
         {steps.map((item: any, index: number) => ( 
           <div key={index} className={styles.item}> 
-            {/* Image from Base64 string/URL */}
             {item.image && (
               <Image 
                 src={item.image} 
-                alt={item.name} 
+                alt={item.name || `step-${index}`} 
                 className={styles.image} 
                 {...defaultImageProps}
+                unoptimized
               />
             )}
             <h2 className={styles.name}>{item.name}</h2> 
@@ -63,40 +65,33 @@ export default function HowWorksSections() {
         ))} 
       </div> 
 
-      {/* Services Heading: Pay Less Cover More */} 
+      {/* Services Heading */}
       <div className={styles.servciesCont}> 
         <div className={styles.heading}> 
-          {(servicesHeading || "").split(" ").map((word: string, idx: number) => 
-            word.toLowerCase().includes("less") ? ( 
-              <span key={idx} className={styles.orange}>{word} </span> 
-            ) : ( 
-              <span key={idx}>{word} </span> 
-            ) 
-          )} 
+          {renderHeading(servicesHeading)}
         </div> 
         <div className={styles.mobileEllipsis}> 
           <FaEllipsisH style={{ color: "#fa621a", fontSize: "25px" }} /> 
         </div> 
         
-        {/* Services (Pay Less Cover More) - 8 Divs */}
+        {/* Services */}
         <div className={styles.services}> 
           {services.map((item: any, index: number) => ( 
             <div className={styles.serviceItem} key={index}> 
               <div className={styles.servicetop}> 
-                {/* Image from Base64 string/URL */}
                 {item.image && (
                   <Image 
                     src={item.image} 
-                    alt={item.name} 
+                    alt={item.name || `service-${index}`} 
                     className={styles.serviceImage} 
-                    width={50} // Smaller size for these images
+                    width={50} 
                     height={50}
+                    unoptimized
                     style={defaultImageProps.style}
                   />
                 )}
                 <h2 className={styles.serviceName}>{item.name}</h2> 
               </div> 
-              {/* Desc is used as the button text/price */}
               <button className={styles.serviceDesc}>{item.desc}</button> 
             </div> 
           ))} 

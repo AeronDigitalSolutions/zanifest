@@ -7,6 +7,9 @@
   background-color: #f6f7fb;
   padding-bottom: 40px;
 }
+.orange {
+  color: orangered;
+}
 
 .head {
   display: flex;

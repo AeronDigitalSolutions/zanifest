@@ -75,54 +75,63 @@ export default function CarInsuranceAdminPage() {
   };
 
   if (loading) return <div>Loading...</div>;
-
-  return (
-    <div className={styles.container}>
-      <h2 className={styles.title}>Car Insurance Admin</h2>
-      <div className={styles.content}>
-        {/* Controls */}
-        <div className={styles.controls}>
-          <div className={styles.headingBlock}>
-            <label className={styles.headingLabel}>Heading</label>
-            <input
-              value={heading}
-              onChange={(e) => setHeading(e.target.value)}
-              className={styles.headingInput}
-            />
-            <button onClick={saveHeading} className={styles.saveHeadingBtn}>
-              Save Heading
-            </button>
-          </div>
-
-          <div className={styles.orderWrapper}>
-            <div className={styles.orderLabel}>Reorder items</div>
-            <div className={styles.orderBox}>
-              {order.map((name, idx) => (
-                <div
-                  key={name}
-                  draggable
-                  onDragStart={onDragStart(idx)}
-                  onDragOver={onDragOver()}
-                  onDrop={onDrop(idx)}
-                  className={styles.orderItem}
-                >
-                  {name}
-                </div>
-              ))}
-            </div>
-            <button onClick={saveOrder} className={styles.saveOrderBtn}>
-              Save Order
-            </button>
-          </div>
-        </div>
-
-      
+return (
+  <>
+    <div>
+ <div className={styles.previewContent}> 
+      <h2>Live Preview</h2>
+        <CarInsuraceSection initialHeading={heading} initialOrder={order} />
       </div>
-        {/* Live Preview */}
-        <div className={styles.preview}>
-          <h4 className={styles.previewTitle}>Live Preview</h4>
-          <CarInsuraceSection initialHeading={heading} initialOrder={order} />
+          </div>
+  
+  <div className={styles.container}>
+
+    
+
+    {/* Edit Form Card */}
+    <div className={styles.card}>
+      <h2 className={styles.title}>Edit Car Insurance Section</h2>
+
+      {/* Heading Edit */}
+      <input
+        value={heading}
+        onChange={(e) => setHeading(e.target.value)}
+        className={styles.headingInput}
+        placeholder="normal text <orange>
+"
+      />
+      <button onClick={saveHeading} className={styles.saveHeadingBtn}>
+        Save Heading
+      </button>
+
+      {/* Reorder Section */}
+      <div className={styles.orderWrapper}>
+        <div className={styles.orderLabel}>Reorder Items (Drag & Drop)</div>
+        <div className={styles.orderBox}>
+          {order.map((name, idx) => (
+            <div
+              key={name}
+              draggable
+              onDragStart={onDragStart(idx)}
+              onDragOver={onDragOver()}
+              onDrop={onDrop(idx)}
+              className={styles.orderItem}
+            >
+              {name}
+            </div>
+          ))}
         </div>
+        <button onClick={saveOrder} className={styles.saveOrderBtn}>
+          Save Order
+        </button>
+      </div>
     </div>
-  );
+
+  </div>
+  </>
+);
+
+
+
+
 }
