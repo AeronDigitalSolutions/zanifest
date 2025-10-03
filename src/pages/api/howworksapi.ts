@@ -6,10 +6,11 @@ import HowWorks from "@/models/howworks";
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: "20mb", // allow large base64 images
+      sizeLimit: "20mb", 
     },
   },
 };
+
 
 // Default initial data
 const DEFAULT_STEPS = [

@@ -1,28 +1,46 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import dbConnect from "@/lib/dbConnect";
+import Partner from "@/models/partners";
 
-// 🔹 Temporary in-memory storage (replace with DB later)
-let partnersData = {
-  heading: "Insurance Partner",
-  categories: [
-    { category: "Health Insurance", images: [] },
-    { category: "Motor Insurance", images: [] },
-    { category: "Fire Insurance", images: [] },
-  ],
-};
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  await dbConnect();
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
-    return res.status(200).json(partnersData);
+    try {
+      const partners = await Partner.find({});
+      return res.status(200).json({
+        heading: partners[0]?.heading || "Insurance Partner",
+        categories: [
+          { category: "Health Insurance", images: partners.find(p => p.category === "Health Insurance")?.images || [] },
+          { category: "Motor Insurance", images: partners.find(p => p.category === "Motor Insurance")?.images || [] },
+          { category: "Fire Insurance", images: partners.find(p => p.category === "Fire Insurance")?.images || [] },
+        ],
+      });
+    } catch (err) {
+      console.error("GET Error", err);
+      return res.status(500).json({ error: "Failed to fetch partners" });
+    }
   }
 
   if (req.method === "POST") {
-    const { heading, categories } = req.body;
-    partnersData = {
-      heading: heading || "Insurance Partner",
-      categories: categories || partnersData.categories,
-    };
-    return res.status(200).json({ success: true, data: partnersData });
+    try {
+      const { heading, categories } = req.body;
+
+      // Save/update each category in DB
+      for (const cat of categories) {
+        await Partner.findOneAndUpdate(
+          { category: cat.category },
+          { heading, images: cat.images },
+          { upsert: true, new: true }
+        );
+      }
+
+      return res.status(200).json({ success: true });
+    } catch (err) {
+      console.error("POST Error", err);
+      return res.status(500).json({ error: "Failed to save partner data" });
+    }
   }
 
-  res.status(405).json({ error: "Method not allowed" });
+  return res.status(405).json({ error: "Method not allowed" });
 }

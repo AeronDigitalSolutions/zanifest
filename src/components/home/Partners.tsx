@@ -16,7 +16,7 @@ const CATEGORYLIST = [
 
 interface PartnersProps {
   liveHeading?: string;
-  liveImages?: string[]; // 👈 added to fix error
+  liveImages?: string[];
 }
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
