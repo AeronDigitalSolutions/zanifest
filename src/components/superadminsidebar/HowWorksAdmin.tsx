@@ -145,7 +145,7 @@ export default function HowWorksAdmin() {
               value={step.desc}
               onChange={(e) => handleStepChange(index, "desc", e.target.value)}
             />
-            <label>Image (Base64 Upload):</label>
+            <label>Image</label>
             <input
               type="file"
               accept="image/*"
@@ -186,7 +186,7 @@ export default function HowWorksAdmin() {
               value={service.desc}
               onChange={(e) => handleServiceChange(index, "desc", e.target.value)}
             />
-            <label>Image (Base64 Upload):</label>
+            <label>Image</label>
             <input
               type="file"
               accept="image/*"

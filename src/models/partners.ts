@@ -3,7 +3,8 @@ import mongoose, { Schema, model, models } from 'mongoose';
 interface IPartner {
   category: 'Health Insurance' | 'Motor Insurance' | 'Fire Insurance';
   heading: string;
-  images: string[]; // Base64 images
+  images: string[]; 
+  
 }
 
 const partnerSchema = new Schema<IPartner>({

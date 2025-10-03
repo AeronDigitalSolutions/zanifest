@@ -43,7 +43,7 @@ const parseHeading = (heading: string) => {
     if (match.index > lastIndex) {
       parts.push({ text: heading.slice(lastIndex, match.index), isTag: false });
     }
-    parts.push({ text: match[1], isTag: true }); // text inside <>
+    parts.push({ text: match[1], isTag: true });
     lastIndex = regex.lastIndex;
   }
 
@@ -54,13 +54,23 @@ const parseHeading = (heading: string) => {
   return parts;
 };
 
-function AllInsuranceSection() {
-  const { data } = useSWR("/api/allinsuranceapi", fetcher, {
+interface AllInsuranceSectionProps {
+  previewHeading?: string;
+  previewServices?: any[];
+}
+
+function AllInsuranceSection({ previewHeading, previewServices }: AllInsuranceSectionProps) {
+  const { data } = useSWR(!previewHeading ? "/api/allinsuranceapi" : null, fetcher, {
     refreshInterval: 10000,
   });
 
-  const heading = data?.heading || "We're Giving all the <Insurance> Services to you";
-  const services = data?.services || FALLBACK_SERVICES;
+  const heading =
+    previewHeading || data?.heading || "We're Giving all the <Insurance> Services to you";
+
+  const services =
+    previewServices && previewServices.length > 0
+      ? previewServices
+      : data?.services || FALLBACK_SERVICES;
 
   const headingParts = parseHeading(heading);
 

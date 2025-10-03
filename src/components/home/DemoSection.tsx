@@ -35,22 +35,33 @@ const DEMOLIST = [
   },
 ];
 
-// Parser to highlight text inside <>
+// Parser to highlight text inside <> while preserving spaces
 const parseHeading = (text: string) => {
   const regex = /<([^>]+)>/g;
   const parts: { text: string; isTag: boolean }[] = [];
   let lastIndex = 0;
   let match;
+
   while ((match = regex.exec(text)) !== null) {
+    // Text before <>
     if (match.index > lastIndex) {
-      parts.push({ text: text.slice(lastIndex, match.index), isTag: false });
+      const before = text.slice(lastIndex, match.index);
+      if (before) parts.push({ text: before, isTag: false });
     }
-    parts.push({ text: match[1], isTag: true });
+
+    // Text inside <>, trimmed
+    const tagText = match[1].trim();
+    if (tagText) parts.push({ text: tagText, isTag: true });
+
     lastIndex = match.index + match[0].length;
   }
+
+  // Text after last <>
   if (lastIndex < text.length) {
-    parts.push({ text: text.slice(lastIndex), isTag: false });
+    const after = text.slice(lastIndex);
+    if (after) parts.push({ text: after, isTag: false });
   }
+
   return parts;
 };
 
@@ -71,7 +82,13 @@ function DemoSection() {
         {/* Heading with orangered for <> */}
         <div className={styles.heading}>
           {parseHeading(heading).map((part, idx) => (
-            <span key={idx} style={{ color: part.isTag ? "orangered" : "black" }}>
+            <span
+              key={idx}
+              style={{
+                color: part.isTag ? "orangered" : "black",
+                whiteSpace: "pre-wrap", // preserves spaces
+              }}
+            >
               {part.text}
             </span>
           ))}

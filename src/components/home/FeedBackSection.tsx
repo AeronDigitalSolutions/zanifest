@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import useSWR from 'swr';
 import { IFeedbackItem } from '@/models/feedback';
@@ -12,6 +12,11 @@ interface IFeedbackApiResponse {
   data: IFeedbackItem[];
   heading?: string;
   message?: string;
+}
+
+interface FeedBackSectionProps {
+  liveHeading?: string;
+  liveFeedbackList?: IFeedbackItem[];
 }
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
@@ -31,17 +36,29 @@ const renderHeading = (heading: string) => {
   });
 };
 
-const FeedBackSection: React.FC = () => {
-  const { data, error, isLoading } = useSWR<IFeedbackApiResponse>('/api/feedback', fetcher, {
-    refreshInterval: 5000,
-  });
+const FeedBackSection: React.FC<FeedBackSectionProps> = ({ liveHeading, liveFeedbackList }) => {
+  const { data, error, isLoading } = useSWR<IFeedbackApiResponse>(
+    liveHeading || liveFeedbackList ? null : '/api/feedback', // अगर live data है तो API call skip
+    fetcher,
+    { refreshInterval: 5000 }
+  );
 
-  if (isLoading) return <div className={styles.cont}>Loading Feedback...</div>;
-  if (error) return <div className={styles.cont}>Failed to load feedback.</div>;
-  if (!data?.success || !data.data) return <div className={styles.cont}>No feedback available.</div>;
+  const [feedbackList, setFeedbackList] = useState<IFeedbackItem[]>([]);
+  const [heading, setHeading] = useState("What Our <Customers> Are Saying?");
 
-  const feedbackList: IFeedbackItem[] = data.data;
-  const displayHeading = data.heading ?? "What Our <Customers> Are Saying?";
+  useEffect(() => {
+    if (liveHeading) setHeading(liveHeading);
+    else if (data?.heading) setHeading(data.heading);
+
+    if (liveFeedbackList) setFeedbackList(liveFeedbackList);
+    else if (data?.success && data.data) setFeedbackList(data.data);
+  }, [liveHeading, liveFeedbackList, data]);
+
+  if (!liveHeading && !liveFeedbackList) {
+    if (isLoading) return <div className={styles.cont}>Loading Feedback...</div>;
+    if (error) return <div className={styles.cont}>Failed to load feedback.</div>;
+    if (!data?.success || !data.data) return <div className={styles.cont}>No feedback available.</div>;
+  }
 
   const slides = feedbackList.map((item, index) => (
     <div className={styles.serviceItem} key={String(item._id ?? index)}>
@@ -67,7 +84,7 @@ const FeedBackSection: React.FC = () => {
     <div className={styles.cont}>
       <div className={styles.head}>
         <div className={styles.heading}>
-          {renderHeading(displayHeading)}
+          {renderHeading(heading)}
         </div>
       </div>
       <div className={styles.mobileEllipsis}>
