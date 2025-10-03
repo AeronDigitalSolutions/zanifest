@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { IFeedbackItem } from '@/models/feedback';
@@ -42,7 +43,7 @@ const renderHeading = (heading: string) => {
 
 const FeedbackAdmin: React.FC = () => {
   const [feedbackList, setFeedbackList] = useState<IFeedbackItem[]>([]);
-  const [heading, setHeading] = useState<string>('');
+  const [heading, setHeading] = useState<string>('What Our <Customers> Are Saying?');
   const [isEditingHeading, setIsEditingHeading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -148,7 +149,8 @@ const FeedbackAdmin: React.FC = () => {
     <>
       <div className={styles.previewBox}>
         <h3>Live Preview</h3>
-        <FeedBackSection />
+        {/* 🔹 अब Live preview props से आएगा */}
+        <FeedBackSection liveHeading={heading} liveFeedbackList={feedbackList} />
       </div>
 
       <div className={styles.cont} style={{ padding: '40px', backgroundColor: '#f9f9f9' }}>
@@ -187,6 +189,7 @@ const FeedbackAdmin: React.FC = () => {
               <strong>{item.name}</strong> - {item.post}
               <p>{item.desc}</p>
               <button onClick={() => openEditModal(item)}><FaEdit /> Edit</button>
+              <button onClick={() => handleDelete(String(item._id))}><FaTrashAlt /> Delete</button>
             </div>
           ))}
         </div>

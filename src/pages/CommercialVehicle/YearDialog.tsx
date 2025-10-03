@@ -16,7 +16,7 @@ interface YearDialogProps {
   onSelectYear: (year: number) => void;
 }
 
-const YearDialog: React.FC<YearDialogProps> = ({
+const yearDialog: React.FC<YearDialogProps> = ({
   onClose,
   vehicleNumber,
   selectedVehicle,
@@ -91,4 +91,4 @@ const YearDialog: React.FC<YearDialogProps> = ({
   );
 };
 
-export default YearDialog;
+export default yearDialog;

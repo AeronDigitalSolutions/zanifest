@@ -28,6 +28,11 @@ interface ServiceData {
   services: ServiceItem[];
 }
 
+interface BestServicesSectionProps {
+  liveHeading?: string;
+  liveServices?: ServiceItem[];
+}
+
 // Default fallback list
 const LIST_FALLBACK: ServiceItem[] = [
   {
@@ -66,14 +71,22 @@ const parseHeading = (text: string) => {
   return parts;
 };
 
-export default function BestServicesSection() {
+export default function BestServicesSection({
+  liveHeading,
+  liveServices,
+}: BestServicesSectionProps) {
   const { data } = useSWR<ServiceData>("/api/bestservice", (url: string) =>
     fetch(url).then((res) => res.json())
   );
 
-  const heading = data?.heading || "Best <Service>";
+  // Prefer live props from admin, else API, else fallback
+  const heading = liveHeading || data?.heading || "Best <Service>";
   const serviceList =
-    data?.services && data.services.length > 0 ? data.services : LIST_FALLBACK;
+    liveServices && liveServices.length > 0
+      ? liveServices
+      : data?.services && data.services.length > 0
+      ? data.services
+      : LIST_FALLBACK;
 
   return (
     <div className={styles.cont}>
