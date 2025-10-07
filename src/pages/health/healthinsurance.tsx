@@ -1,3 +1,4 @@
+"use client";
 import Footer from "@/components/ui/Footer";
 import Navbar from "@/components/ui/Navbar";
 import UserDetails from "@/components/ui/UserDetails";
@@ -23,7 +24,7 @@ const MEMBERS = [
 function HealthInsurance() {
   const [selectedMan, setSelectedMan] = useState<boolean>(true);
   const [selectedMembers, setSelectedMembers] = useState<number[]>([]);
-  const [memberCounts, setMemberCounts] = useState<{ [key: number]: number }>({}); // id → count
+  const [memberCounts, setMemberCounts] = useState<{ [key: number]: number }>({});
   const [showMore, setShowMore] = useState<boolean>(false);
   const router = useRouter();
 
@@ -39,10 +40,8 @@ function HealthInsurance() {
     });
   };
 
-  // Toggle selection for members except Son/Daughter
   const handleSelect = (id: number) => {
     if (id === 3 || id === 4) {
-      // For Son/Daughter → start counter from 1 if not already
       setMemberCounts((prev) => ({
         ...prev,
         [id]: prev[id] ? prev[id] : 1,
@@ -57,24 +56,47 @@ function HealthInsurance() {
     }
   };
 
-  // Increase count
   const increaseCount = (id: number) => {
     setMemberCounts((prev) => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
   };
 
-  // Decrease count
   const decreaseCount = (id: number) => {
     setMemberCounts((prev) => {
       const current = prev[id] || 0;
       if (current > 1) {
         return { ...prev, [id]: current - 1 };
       } else {
-        // if 1 → remove member completely
         const updated = { ...prev };
         delete updated[id];
         setSelectedMembers((sm) => sm.filter((m) => m !== id));
         return updated;
       }
+    });
+  };
+
+  const handleContinue = () => {
+    // Mandatory selection: Self or Spouse/Wife/Husband
+    const selfId = 1; // Self
+    const spouseId = 2; // Spouse
+    if (!selectedMembers.includes(selfId) && !selectedMembers.includes(spouseId)) {
+      alert("Please select Self or Wife/Husband");
+      return;
+    }
+
+    const adjusted = getAdjustedMembers();
+    const selected = adjusted
+      .filter((m) => selectedMembers.includes(m.id))
+      .flatMap((m) => {
+        const count = memberCounts[m.id] || 1;
+        return Array(count).fill({ name: m.name, image: m.image.src || m.image });
+      });
+
+    router.push({
+      pathname: "./health",
+      query: {
+        gender: selectedMan ? "male" : "female",
+        members: JSON.stringify(selected),
+      },
     });
   };
 
@@ -102,42 +124,35 @@ function HealthInsurance() {
             </button>
           </div>
 
-          <p style={{ fontWeight: "bold", marginTop:"20px"}}>Select member(s) you want to insure</p>
+          <p style={{ fontWeight: "bold", marginTop: "20px" }}>Select member(s) you want to insure</p>
         </div>
 
-        {/* First 6 */}
         <div className={styles.middle}>
           {getAdjustedMembers()
             .slice(0, 6)
             .map((item) => (
               <div key={item.id} className={styles.itemWrapper}>
                 <button
-                  className={`${styles.item} ${
-                    selectedMembers.includes(item.id) ? styles.selectedItem : ""
-                  }`}
+                  className={`${styles.item} ${selectedMembers.includes(item.id) ? styles.selectedItem : ""}`}
                   onClick={() => handleSelect(item.id)}
                 >
                   <Image src={item.image} alt={item.name} className={styles.itemImage} />
                   <h3 className={styles.itemName}>{item.name}</h3>
                 </button>
 
-                {/* Counter for Son/Daughter */}
                 {(item.id === 3 || item.id === 4) && selectedMembers.includes(item.id) && (
-                  <div className="{styles.counter-wrapper}">
-
-                  <div className={styles.counter}>
-                    <button onClick={() => decreaseCount(item.id)}>-</button>
-                    <span>{memberCounts[item.id] || 1}</span>
-                    <button onClick={() => increaseCount(item.id)}>+</button>
-                  </div>
+                  <div className={styles.counterWrapper}>
+                    <div className={styles.counter}>
+                      <button onClick={() => decreaseCount(item.id)}>-</button>
+                      <span>{memberCounts[item.id] || 1}</span>
+                      <button onClick={() => increaseCount(item.id)}>+</button>
                     </div>
-
+                  </div>
                 )}
               </div>
             ))}
         </div>
 
-        {/* More */}
         {showMore && (
           <div className={styles.middle}>
             {getAdjustedMembers()
@@ -145,9 +160,7 @@ function HealthInsurance() {
               .map((item) => (
                 <div key={item.id} className={styles.itemWrapper}>
                   <button
-                    className={`${styles.item} ${
-                      selectedMembers.includes(item.id) ? styles.selectedItem : ""
-                    }`}
+                    className={`${styles.item} ${selectedMembers.includes(item.id) ? styles.selectedItem : ""}`}
                     onClick={() => handleSelect(item.id)}
                   >
                     <Image src={item.image} alt={item.name} className={styles.itemImage} />
@@ -158,7 +171,6 @@ function HealthInsurance() {
           </div>
         )}
 
-        {/* Show More Link */}
         <p
           className={styles.moreLink}
           onClick={() => setShowMore(!showMore)}
@@ -167,13 +179,7 @@ function HealthInsurance() {
           {showMore ? "Show less" : "More members ▼"}
         </p>
 
-        <button
-          className={styles.continueButton}
-          onClick={() => {
-            console.log("Selected Members:", selectedMembers, "Counts:", memberCounts);
-            router.push("./health");
-          }}
-        >
+        <button className={styles.continueButton} onClick={handleContinue}>
           Continue <FaChevronRight size={10} />
         </button>
 
