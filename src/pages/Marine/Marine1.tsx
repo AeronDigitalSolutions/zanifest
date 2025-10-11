@@ -1,8 +1,11 @@
 "use client";
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import styles from "@/styles/pages/marine/marine.module.css";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 // Assets
 import tata from "@/assets/TATAAIGlogo.png";
@@ -10,8 +13,6 @@ import orientalinsurance from "@/assets/OrintalInsurance.png";
 import sbi from "@/assets/sbi.png";
 import hdfc from "@/assets/unitedindia.png";
 import marine from "@/assets/marine/marine-prequote-bannerv2.webp";
-import { MdArrowBackIos } from "react-icons/md";
-import { TbCirclePercentageFilled } from "react-icons/tb";
 import singletransit from "@/assets/pageImages/single-transit.svg";
 import annualopen from "@/assets/pageImages/annual-open.svg";
 
@@ -19,12 +20,15 @@ import annualopen from "@/assets/pageImages/annual-open.svg";
 import {
   FaCheck,
   FaChevronDown,
-  FaCogs,
   FaMobileAlt,
   FaShieldAlt,
   FaUserShield,
   FaWhatsapp,
 } from "react-icons/fa";
+import { MdArrowBackIos } from "react-icons/md";
+import { TbCirclePercentageFilled } from "react-icons/tb";
+
+// Components
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 
@@ -32,14 +36,14 @@ const Marine: React.FC = () => {
   const [whatsapp, setWhatsapp] = useState(true);
   const [step, setStep] = useState(1);
   const [mobileNumber, setMobileNumber] = useState("+91 ");
-
-  // Step 2 states
   const [commodity, setCommodity] = useState("");
   const [coverType, setCoverType] = useState("single");
   const [shipmentType, setShipmentType] = useState("inland");
   const [showDropdown, setShowDropdown] = useState(false);
 
-  // Commodity options array
+  const router = useRouter();
+
+  // Commodity list
   const commodityOptions = [
     "New machinery or equipment for industrial use",
     "Iron & steel rods, metal pipes, tubes",
@@ -51,9 +55,13 @@ const Marine: React.FC = () => {
     "Auto spare parts",
     "Graphite and marble",
   ];
-  const router = useRouter();
 
-  // Handler function for mobile number input
+  // AOS animation
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true });
+  }, []);
+
+  // Handle mobile input
   const handleMobileNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     const prefix = "+91 ";
@@ -65,16 +73,18 @@ const Marine: React.FC = () => {
 
     const digitsOnly = input.substring(prefix.length).replace(/[^0-9]/g, "");
     const limitedDigits = digitsOnly.slice(0, 10);
-
     setMobileNumber(prefix + limitedDigits);
   };
+
   return (
     <>
       <Navbar />
+
       <section className={styles.container}>
-        {/* === Left Section === */}
+        {/* LEFT SECTION */}
         <div className={styles.left}>
           <h4 className={styles.subheading}>Marine Insurance</h4>
+
           <h1 className={styles.heading}>
             <span className={styles.iconWrapper}>
               <TbCirclePercentageFilled />
@@ -83,7 +93,6 @@ const Marine: React.FC = () => {
             <sup className={styles.sup}>++</sup>
           </h1>
 
-          {/* Features */}
           <div className={styles.features}>
             <span>
               <FaCheck className={styles.tick} /> Overturning or Derailement
@@ -96,48 +105,31 @@ const Marine: React.FC = () => {
             </span>
           </div>
 
-          {/* Illustration + Partners */}
           <div className={styles.row}>
             <div className={styles.illustration}>
-              <Image src={marine} alt="Truck and Plane" priority />
+              <Image src={marine} alt="Truck and Plane" priority width={400} height={300} />
             </div>
+
             <div className={styles.partners}>
               <h3>10+ insurance partners</h3>
               <div className={styles.partnerRow}>
-                <Image
-                  className={styles.partnerLogo}
-                  src={hdfc}
-                  alt="HDFC Ergo"
-                />
-                <Image
-                  className={styles.partnerLogo}
-                  src={orientalinsurance}
-                  alt="Oriental Insurance"
-                />
-                <Image
-                  className={styles.partnerLogo}
-                  src={tata}
-                  alt="Tata AIG"
-                />
-                <Image
-                  className={styles.partnerLogo}
-                  src={sbi}
-                  alt="SBI General"
-                />
+                <Image src={hdfc} alt="HDFC Ergo" width={60} height={40} className={styles.partnerLogo} />
+                <Image src={orientalinsurance} alt="Oriental Insurance" width={60} height={40} className={styles.partnerLogo} />
+                <Image src={tata} alt="Tata AIG" width={60} height={40} className={styles.partnerLogo} />
+                <Image src={sbi} alt="SBI General" width={60} height={40} className={styles.partnerLogo} />
               </div>
             </div>
           </div>
         </div>
 
-        {/* === Right Section (Form Card) === */}
+        {/* RIGHT SECTION (FORM CARD) */}
         <div className={styles.right}>
-          <div className={styles.card}>
+          <div className={styles.card} data-aos="fade-left">
             {step === 1 && (
               <>
                 <div className={styles.header}>
                   <h2>
-                    Get <span className={styles.blue}>₹10 Lakh</span> cover
-                    starting at
+                    Get <span className={styles.blue}>₹10 Lakh</span> cover starting at
                   </h2>
                   <p className={styles.price}>
                     ₹591
@@ -148,7 +140,6 @@ const Marine: React.FC = () => {
                   <span className={styles.step}>Step 1/2</span>
                 </div>
 
-                {/* Input */}
                 <div className={styles.inputWrapper}>
                   <FaMobileAlt className={styles.inputIcon} />
                   <input
@@ -157,18 +148,16 @@ const Marine: React.FC = () => {
                     value={mobileNumber}
                     onChange={handleMobileNumberChange}
                     maxLength={14}
-                  />{" "}
+                  />
                   <span className={styles.note}>
-                    <FaShieldAlt /> We don't spam
+                    <FaShieldAlt /> We don’t spam
                   </span>
                 </div>
 
-                {/* CTA */}
                 <button className={styles.cta} onClick={() => setStep(2)}>
                   View plans <span className={styles.arrow}>›</span>
                 </button>
 
-                {/* Badge */}
                 <div className={styles.badge}>
                   <FaUserShield className={styles.badgeIcon} />
                   <p className={styles.badgetext}>
@@ -176,7 +165,6 @@ const Marine: React.FC = () => {
                   </p>
                 </div>
 
-                {/* WhatsApp toggle */}
                 <div className={styles.whatsappRow}>
                   <div className={styles.wpLeft}>
                     <FaWhatsapp className={styles.wpIcon} />
@@ -192,7 +180,6 @@ const Marine: React.FC = () => {
                   </label>
                 </div>
 
-                {/* Footer */}
                 <p className={styles.footer}>
                   By clicking on <b>"View plans"</b>, you agree to our{" "}
                   <a href="#">Privacy Policy</a>, <a href="#">Terms of Use</a> &{" "}
@@ -201,25 +188,30 @@ const Marine: React.FC = () => {
               </>
             )}
 
+
             {step === 2 && (
+              
               <>
+
+  <div
+    key="step2"
+    data-aos="fade-left"
+    data-aos-once="true"
+  >
+
                 <div className={styles.header}>
                   <MdArrowBackIos
                     size={20}
                     className={styles.arrow}
                     onClick={() => setStep(1)}
                   />
-
                   <h2>Let's get your goods insured</h2>
                   <span className={styles.step}>Step 2/2</span>
                 </div>
 
                 {/* Commodity Type */}
-                <label className={styles.label}>
-                  What type of goods are you sending?
-                </label>
+                <label className={styles.label}>What type of goods are you sending?</label>
 
-                {/* Dropdown Input */}
                 <div className={styles.dropdownWrapper}>
                   <div
                     className={styles.dropdownInput}
@@ -229,9 +221,8 @@ const Marine: React.FC = () => {
                       type="text"
                       placeholder="Commodity type"
                       value={commodity}
-                      onChange={(e) => setCommodity(e.target.value)}
-                      className={styles.commodityInput}
                       readOnly
+                      className={styles.commodityInput}
                     />
                     <FaChevronDown
                       className={`${styles.dropdownIcon} ${
@@ -260,9 +251,7 @@ const Marine: React.FC = () => {
                   )}
                 </div>
 
-                <p className={styles.popularText}>
-                  Select most popular commodity type
-                </p>
+                <p className={styles.popularText}>Select most popular commodity type</p>
                 <div className={styles.optionsGrid}>
                   {commodityOptions.slice(0, 5).map((item, i) => (
                     <button
@@ -279,9 +268,7 @@ const Marine: React.FC = () => {
                 </div>
 
                 {/* Type of Cover */}
-                <label className={styles.label}>
-                  What type of cover do you want?
-                </label>
+                <label className={styles.label}>What type of cover do you want?</label>
                 <div className={styles.radioRow}>
                   <label
                     className={`${styles.radioCard} ${
@@ -289,20 +276,10 @@ const Marine: React.FC = () => {
                     }`}
                     onClick={() => setCoverType("single")}
                   >
-                    <input
-                      type="radio"
-                      checked={coverType === "single"}
-                      readOnly
-                    />
-                    <Image
-                      src={singletransit}
-                      alt="Single Transit"
-                      className={styles.coverIcon}
-                    />
+                    <input type="radio" checked={coverType === "single"} readOnly />
+                    <Image src={singletransit} alt="Single Transit" width={60} height={60} />
                     <h4>Single transit</h4>
-                    <p>
-                      Covers your single journey from one location to another.
-                    </p>
+                    <p>Covers your single journey from one location to another.</p>
                   </label>
 
                   <label
@@ -311,25 +288,15 @@ const Marine: React.FC = () => {
                     }`}
                     onClick={() => setCoverType("annual")}
                   >
-                    <input
-                      type="radio"
-                      checked={coverType === "annual"}
-                      readOnly
-                    />
-                    <Image
-                      src={annualopen}
-                      alt="Annual Open"
-                      className={styles.coverIcon}
-                    />
+                    <input type="radio" checked={coverType === "annual"} readOnly />
+                    <Image src={annualopen} alt="Annual Open" width={60} height={60} />
                     <h4>Annual open</h4>
                     <p>Covers your shipments throughout the year.</p>
                   </label>
                 </div>
 
-                {/* Shipment type */}
-                <label className={styles.label}>
-                  Where will your goods be shipped?
-                </label>
+                {/* Shipment Type */}
+                <label className={styles.label}>Where will your goods be shipped?</label>
                 <div className={styles.radioRow}>
                   {["inland", "export", "import"].map((type) => (
                     <label
@@ -339,28 +306,26 @@ const Marine: React.FC = () => {
                       }`}
                       onClick={() => setShipmentType(type)}
                     >
-                      <input
-                        type="radio"
-                        checked={shipmentType === type}
-                        readOnly
-                      />
+                      <input type="radio" checked={shipmentType === type} readOnly />
                       {type.charAt(0).toUpperCase() + type.slice(1)}
                     </label>
                   ))}
                 </div>
 
-                {/* Continue */}
                 <button
                   className={styles.cta}
-                  onClick={() => router.push("Marine5")}
+                  onClick={() => router.push("Marine5")
+}
                 >
                   Continue ›
                 </button>
+                </div>
               </>
             )}
+            </div>
           </div>
-        </div>
       </section>
+
       <Footer />
     </>
   );

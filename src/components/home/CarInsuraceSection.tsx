@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FaEllipsisH } from "react-icons/fa";
@@ -66,8 +66,28 @@ export default function CarInsuraceSection({
     .map((name) => INSURANCELIST.find((it) => it.name === name))
     .filter(Boolean) as Item[];
 
+  // 👇 Fade-in animation on scroll
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const [animate, setAnimate] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setAnimate(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (sectionRef.current) observer.observe(sectionRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className={styles.cont}>
+    <div ref={sectionRef} className={`${styles.cont} ${animate ? styles.animateOnce : ""}`}>
       <div className={styles.head}>
         <div className={styles.heading}>
           {parseHeading(heading).map((part, idx) => (

@@ -7,6 +7,9 @@ import styles from "@/styles/pages/carinsurance.module.css";
 import Image from "next/image";
 import { FaArrowRight } from "react-icons/fa";
 import { useRouter } from "next/router";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 
 // ✅ Import dialogs
 import ChoosecarDialog from "./Location";
@@ -39,6 +42,11 @@ function Carinsurance() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
+   // AOS animation
+    useEffect(() => {
+      AOS.init({ duration: 1000, once: true });
+    }, []);
+
   return (
     <div>
       <UserDetails />
@@ -53,7 +61,7 @@ function Carinsurance() {
             className={styles.image}
           />
         </div>
-        <div className={styles.bottom}>
+        <div className={styles.bottom} data-aos="fade-left">
           <p className={styles.heading}>
             Compare & <b className={styles.bold}>save upto 90%</b> on car
             insurance

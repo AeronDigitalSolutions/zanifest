@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "@/styles/pages/TwoWheeler/twowheel.module.css";
 import Image from "next/image";
 import scooterImg from "@/assets/motorcycle.png";
@@ -9,9 +9,10 @@ import Navbar from "@/components/ui/Navbar";
 import UserDetails from "@/components/ui/UserDetails";
 import { FaArrowLeft } from "react-icons/fa";
 import {useRouter} from 'next/router';
-
+import AOS from "aos";
+import "aos/dist/aos.css";
 // Step 1: Years
-const years = Array.from({ length: 22 }, (_, i) => 2024 - i);
+const years = Array.from({ length: 20 }, (_, i) => 2024 - i);
 
 // Step 2: Makes
 const makes = [
@@ -43,6 +44,10 @@ export default function TwoWheeler() {
   const [step, setStep] = useState<"years" | "makes" | "models">("years");
     const router =useRouter();
 
+    // AOS animation
+    useEffect(() => {
+      AOS.init({ duration: 1000, once: true });
+    }, []);
   return (
     <div>
       <UserDetails />
@@ -62,8 +67,10 @@ export default function TwoWheeler() {
         </div>
 
         {/* RIGHT SECTION (Dynamic UI) */}
-        <div className={styles.rightSection}>
+        <div className={styles.rightSection} >
           {/* STEP 1: YEAR SELECTION */}
+          <div data-aos="fade-left">
+
           {step === "years" && (
             <>
               <h2 className={styles.question}>
@@ -82,6 +89,7 @@ export default function TwoWheeler() {
               </div>
             </>
           )}
+          </div>
 
           {/* STEP 2: POPULAR MAKES */}
           {step === "makes" && (
