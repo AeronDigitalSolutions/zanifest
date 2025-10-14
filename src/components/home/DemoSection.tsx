@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import styles from "@/styles/components/home/DemoSection.module.css";
 import { FaEllipsisH } from "react-icons/fa";
@@ -35,58 +35,67 @@ const DEMOLIST = [
   },
 ];
 
-// Parser to highlight text inside <> while preserving spaces
 const parseHeading = (text: string) => {
   const regex = /<([^>]+)>/g;
   const parts: { text: string; isTag: boolean }[] = [];
   let lastIndex = 0;
   let match;
-
   while ((match = regex.exec(text)) !== null) {
-    // Text before <>
     if (match.index > lastIndex) {
-      const before = text.slice(lastIndex, match.index);
-      if (before) parts.push({ text: before, isTag: false });
+      parts.push({ text: text.slice(lastIndex, match.index), isTag: false });
     }
-
-    // Text inside <>, trimmed
-    const tagText = match[1].trim();
-    if (tagText) parts.push({ text: tagText, isTag: true });
-
+    parts.push({ text: match[1].trim(), isTag: true });
     lastIndex = match.index + match[0].length;
   }
-
-  // Text after last <>
   if (lastIndex < text.length) {
-    const after = text.slice(lastIndex);
-    if (after) parts.push({ text: after, isTag: false });
+    parts.push({ text: text.slice(lastIndex), isTag: false });
   }
-
   return parts;
 };
 
 function DemoSection() {
-  const { data, error } = useSWR("/api/demoapi", fetcher, {
-    refreshInterval: 2000,
-  });
+  const { data } = useSWR("/api/demoapi", fetcher);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const [animateHeading, setAnimateHeading] = useState(false);
 
-  const heading = data?.heading || "Why is <ZANIFEST> India’s go-to for insurance?";
+  // Trigger animation only when section enters viewport
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setAnimateHeading(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (sectionRef.current) observer.observe(sectionRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
+  const heading =
+    data?.heading || "Why is <ZANIFEST> India’s go-to for insurance?";
   const subheading =
     data?.subheading ||
     "Zanifest is your trusted partner in insurance — providing transparent comparisons, affordable policies, and dedicated support.";
   const items = data?.items || DEMOLIST;
 
   return (
-    <div className={styles.cont}>
+    <div ref={sectionRef} className={styles.cont}>
       <div className={styles.head}>
-        {/* Heading with orangered for <> */}
-        <div className={styles.heading}>
+        <div
+          className={`${styles.heading} ${
+            animateHeading ? styles.animateOnce : ""
+          }`}
+        >
           {parseHeading(heading).map((part, idx) => (
             <span
               key={idx}
               style={{
                 color: part.isTag ? "orangered" : "black",
-                whiteSpace: "pre-wrap", // preserves spaces
+                whiteSpace: "pre-wrap",
               }}
             >
               {part.text}

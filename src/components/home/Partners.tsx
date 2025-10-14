@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styles from "@/styles/components/home/Partners.module.css";
 import Image, { StaticImageData } from "next/image";
 import useSWR from "swr";
@@ -9,7 +9,6 @@ import img1 from "@/assets/home/car/1.png";
 import img2 from "@/assets/home/car/2.png";
 import img3 from "@/assets/home/car/6.png";
 
-// ----------------- Types -----------------
 interface Category {
   name: string;
   icon: StaticImageData;
@@ -30,7 +29,6 @@ interface PartnersProps {
   liveImages?: string[];
 }
 
-// ----------------- Constants -----------------
 const CATEGORYLIST: Category[] = [
   { name: "Health Insurance", icon: img1 },
   { name: "Motor Insurance", icon: img2 },
@@ -39,20 +37,21 @@ const CATEGORYLIST: Category[] = [
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
-// ----------------- Component -----------------
 const Partners: React.FC<PartnersProps> = ({ liveHeading, liveImages }) => {
   const { data } = useSWR<PartnersApiResponse>("/api/partnersApi", fetcher);
 
   const [selectedCategory, setSelectedCategory] = useState<Category>(CATEGORYLIST[0]);
   const [heading, setHeading] = useState<string>("");
   const [partners, setPartners] = useState<string[]>([]);
+  const [animate, setAnimate] = useState(false); // <-- animation flag
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   // ----------------- Heading -----------------
   useEffect(() => {
     if (liveHeading !== undefined) {
       setHeading(liveHeading);
     } else if (data) {
-      setHeading(data.heading || ""); // fetch global heading
+      setHeading(data.heading || ""); 
     }
   }, [liveHeading, data]);
 
@@ -66,11 +65,32 @@ const Partners: React.FC<PartnersProps> = ({ liveHeading, liveImages }) => {
     }
   }, [liveImages, selectedCategory, data]);
 
+  // ----------------- Scroll Trigger -----------------
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setAnimate(true); // trigger animation
+            observer.unobserve(entry.target); // animate only once
+          }
+        });
+      },
+      { threshold: 0.3 } // trigger when 30% visible
+    );
+
+    if (sectionRef.current) observer.observe(sectionRef.current);
+
+    return () => {
+      if (sectionRef.current) observer.unobserve(sectionRef.current);
+    };
+  }, []);
+
   return (
-    <div className={styles.cont}>
+    <div ref={sectionRef} className={styles.cont}>
       {/* Heading */}
       <div className={styles.head}>
-        <p className={styles.heading}>
+        <p className={`${styles.heading} ${animate ? styles.animate : ""}`}>
           {heading.split(" ").slice(0, -1).join(" ")}{" "}
           <span className={styles.orange}>{heading.split(" ").slice(-1)}</span>
         </p>

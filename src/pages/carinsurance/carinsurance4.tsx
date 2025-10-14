@@ -9,6 +9,8 @@ import { useRouter } from "next/router";
 import { IoIosArrowBack } from "react-icons/io";
 import { FaArrowRight } from "react-icons/fa6";
 import indiaFlag from "@/assets/pageImages/Flag_of_India.png";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const daysOfWeek = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
 
@@ -34,6 +36,11 @@ const CarInsurance4 = () => {
   const [step, setStep] = useState<"form" | "calendar" | "claim">("form"); // toggle UI
   const [monthsShown, setMonthsShown] = useState<number>(2);
   const [currentMonth, setCurrentMonth] = useState<number>(7); // August 2025
+
+  // AOS animation
+    useEffect(() => {
+      AOS.init({ duration: 1000, once: true });
+    }, []);
 
   useEffect(() => {
     const updateMonths = () => {
@@ -75,7 +82,7 @@ const CarInsurance4 = () => {
         <div className={styles.leftSection}>
           {/* STEP 1: FORM */}
           {step === "form" && (
-            <div className={styles.formWrapper}>
+            <div className={styles.formWrapper} data-aos="fade-right">
               <div className={styles.header}>
                 <div className={styles.iconBox}>
                   <IoIosArrowBack className={styles.arrow} />
@@ -129,7 +136,7 @@ const CarInsurance4 = () => {
 
           {/* STEP 2: CALENDAR */}
           {step === "calendar" && (
-            <div className={styles.outerBox}>
+            <div className={styles.outerBox} data-aos="fade">
               <div className={styles.innerBox}>
                 <div className={styles.headingBox}>
                   <h2 className={styles.heading}>
@@ -239,7 +246,7 @@ const CarInsurance4 = () => {
 
           {/* STEP 3: CLAIM DETAILS (merged from carinsurance5) */}
           {step === "claim" && (
-            <div className={styles.outerBoxClaim}>
+            <div className={styles.outerBoxClaim} data-aos="fade">
               <div className={styles.innerBoxClaim}>
                 <div className={styles.claimDetails}>
                   <h2 className={styles.sectionTitle}>Claim detail</h2>

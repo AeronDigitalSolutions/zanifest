@@ -16,6 +16,7 @@
     "@splidejs/react-splide": "^0.7.12",
     "@splidejs/splide": "^4.1.4",
     "antd": "^5.27.1",
+    "aos": "^2.3.4",
     "axios": "^1.10.0",
     "bcryptjs": "^3.0.2",
     "chart.js": "^4.5.0",
@@ -54,6 +55,7 @@
     "swr": "^2.3.6"
   },
   "devDependencies": {
+    "@types/aos": "^3.0.7",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/mongoose-sequence": "^3.0.11",
     "@types/multer": "^2.0.0",

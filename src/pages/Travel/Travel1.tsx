@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation"; // ✅ Import router for navigation
+import { useRouter } from "next/navigation";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import styles from "@/styles/pages/Travel/travel1.module.css";
@@ -24,6 +24,9 @@ import ukImg from "@/assets/travel/liberty.jpg";
 import franceImg from "@/assets/travel/liberty.jpg";
 import netherlandsImg from "@/assets/travel/liberty.jpg";
 
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 type Country = { name: string; img: any };
 
 const countries: Country[] = [
@@ -44,7 +47,7 @@ function isoDate(d: Date) {
 
 type CalendarProps = {
   year: number;
-  month: number; // 0 = Jan
+  month: number;
   startDate: string;
   endDate: string;
   onSelectDate: (date: string) => void;
@@ -82,7 +85,10 @@ function CalendarMonth({
     (endDate && isoDate(d) === endDate);
 
   return (
-    <div className={styles.calendarMonth}>
+    <div
+      className={styles.calendarMonth}
+    
+    >
       <div className={styles.calendarHeader}>
         <button className={styles.navBtn} onClick={onPrevMonth}>
           <FiChevronLeft />
@@ -108,6 +114,7 @@ function CalendarMonth({
                 ${isInRange(d) ? styles.inRange : ""} 
                 ${isSelected(d) ? styles.selectedDate : ""}`}
               onClick={() => onSelectDate(isoDate(d))}
+             
             >
               {d.getDate()}
             </button>
@@ -121,7 +128,7 @@ function CalendarMonth({
 }
 
 export default function TravelInsurance() {
-  const router = useRouter(); // ✅ Initialize router
+  const router = useRouter();
 
   const today = new Date();
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
@@ -137,6 +144,10 @@ export default function TravelInsurance() {
   const [travellers, setTravellers] = useState<number>(1);
   const [travellerAge, setTravellerAge] = useState("");
   const [medicalCondition, setMedicalCondition] = useState<string>("No");
+
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true });
+  }, []);
 
   const toggleCountry = (name: string) => {
     setSelected((prev) =>
@@ -234,7 +245,11 @@ export default function TravelInsurance() {
         </section>
 
         {/* Right column */}
-        <section className={styles.rightSection} aria-label="Travel form">
+        <section
+          className={styles.rightSection}
+          aria-label="Travel form"
+          data-aos="fade-left"
+        >
           <h3 className={styles.formHeading}>Where are you travelling to?</h3>
 
           <div className={styles.searchWrap}>
@@ -335,7 +350,6 @@ export default function TravelInsurance() {
             </button>
           </div>
 
-          {/* ✅ Added Navigation to Travel4 */}
           <button
             className={styles.exploreBtn}
             onClick={() => router.push("/Travel/Travel4")}
@@ -344,13 +358,13 @@ export default function TravelInsurance() {
           </button>
         </section>
       </div>
+
       <Footer />
 
-      {/* ✅ Calendar Drawer Modal */}
+      {/* Calendar Drawer Modal */}
       {showCalendar && (
-        <div className={styles.drawerOverlay}>
+        <div className={styles.drawerOverlay} data-aos="fade">
           <div className={styles.drawer}>
-            {/* 🔽 Close button added here */}
             <button
               className={styles.closeBtn}
               onClick={() => setShowCalendar(false)}
@@ -420,7 +434,7 @@ export default function TravelInsurance() {
         </div>
       )}
 
-      {/* ✅ Travellers Drawer Modal */}
+      {/* Travellers Drawer Modal */}
       {showTravellerModal && (
         <div className={styles.drawerOverlay}>
           <div className={styles.drawer}>
