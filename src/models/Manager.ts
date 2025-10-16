@@ -66,6 +66,9 @@ const managerSchema = new mongoose.Schema({
   },
 
   accountStatus: { type: String, enum: ['active', 'inactive'], default: 'active' }, // NEW
+  // models/Manager.ts (add this field inside managerSchema)
+totalSales: { type: Number, default: 0 },
+
 
 }, {
   timestamps: true,

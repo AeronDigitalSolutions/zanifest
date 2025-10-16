@@ -92,8 +92,32 @@ const agentSchema = new mongoose.Schema({
     required: true,
   },
 
+  sales: {
+  type: Number,
+  default: 0,
+},
+// add in agentSchema
+lifetimeSales: { type: Number, default: 0 },   // cumulative for agent across all managers
+// keep assignedTo as you use it (string managerId or ref)
+
   accountStatus :{type: String, enum: ['active', 'inactive'], default: 'active'}
 });
+
+agentSchema.pre("save", function (next) {
+  if (this.lifetimeSales === undefined || this.lifetimeSales === null) {
+    this.lifetimeSales = 0;
+  }
+  next();
+});
+
+
+agentSchema.pre("save", function (next) {
+  if (this.sales === undefined || this.sales === null) {
+    this.sales = 0;
+  }
+  next();
+});
+
 
 export default mongoose.models.Agent || mongoose.model("Agent", agentSchema);
 

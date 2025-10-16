@@ -10,14 +10,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-      const { attachments, ...formFields } = req.body; // parsed JSON
-    if (!attachments) {
-      return res.status(400).json({ error: 'No attachments provided' });
-    }
+      const { attachments, sales: _sales,  ...formFields } = req.body; // parsed JSON
+
+    // if (!attachments) {
+    //   return res.status(400).json({ error: 'No attachments provided' });
+    // }
+
+    // const agent = new Agent({
+    //   ...formFields,
+    //   ...attachments,
+    //   sales: 0,
+    // });
 
     const agent = new Agent({
       ...formFields,
-      ...attachments
+      attachments: attachments || [], // ensure array
     });
 
     await agent.save();

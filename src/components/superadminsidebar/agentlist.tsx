@@ -17,6 +17,7 @@ interface Agent {
   city: string;
   state: string;
   accountStatus: "active" | "inactive";
+  sales: number;
 }
 
 const AgentsPage: React.FC = () => {
@@ -44,6 +45,11 @@ const AgentsPage: React.FC = () => {
   const [sortBy, setSortBy] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
+
+
+  const [salesModalVisible, setSalesModalVisible] = useState(false);
+  const [salesAmount, setSalesAmount] = useState<number>(0);
+
 
   // -------------------- Status Toggle --------------------
   const handleToggleStatus = (id: string, currentStatus: string) => {
@@ -203,6 +209,48 @@ const AgentsPage: React.FC = () => {
       return 0;
     });
 
+  // -------------------- confirm Add Sales --------------------
+    const confirmAddSales = async () => {
+      if (!selectedAgentId || salesAmount <= 0) {
+        toast.error("Enter a valid amount");
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem("adminToken");
+        const res = await axios.post("/api/agent/add-sales", {
+          agentId: selectedAgentId,
+          amount: salesAmount,
+        }, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        console.log("response data", res.data);
+        console.log("response data newsales", res.data?.newSales);
+
+        if (res.data?.newSales) {
+          toast.success(`Sales updated! New total: ${res.data.newSales}`);
+          console.log("updating agent state");
+          // Update agent in state
+          setAgents((prev) =>
+            prev.map((a) =>
+              a._id === selectedAgentId ? { ...a, sales: res.data.newSales } : a
+            )
+          );
+        }
+      } 
+      
+      catch (err) {
+        console.error(err);
+        toast.error("Failed to add sales");
+      } finally {
+        setSalesModalVisible(false);
+        setSalesAmount(0);
+        setSelectedAgentId(null);
+      }
+    };
+
+
   const indexOfLastAgent = currentPage * agentsPerPage;
   const indexOfFirstAgent = indexOfLastAgent - agentsPerPage;
   const currentAgents = filteredAgents.slice(
@@ -275,6 +323,25 @@ const AgentsPage: React.FC = () => {
         </select>
       </Modal>
 
+
+      <Modal
+        title="Add Sales"
+        open={salesModalVisible}
+        onOk={confirmAddSales}
+        onCancel={() => setSalesModalVisible(false)}
+        okText="Add"
+        cancelText="Cancel"
+        centered
+      >
+        <Input
+          type="number"
+          placeholder="Enter sales amount"
+          value={salesAmount}
+          onChange={(e) => setSalesAmount(Number(e.target.value))}
+        />
+      </Modal>
+
+
       <h1 className={styles.heading}>All Agents</h1>
 
       {/* Filter Bar */}
@@ -337,9 +404,12 @@ const AgentsPage: React.FC = () => {
                   <th className={styles.th}>District</th>
                   <th className={styles.th}>City</th>
                   <th className={styles.th}>State</th>
+                  <th className={styles.th}>Current Sales</th>
                   <th className={styles.th}>Assigned To</th>
                   <th className={styles.th}>Status</th>
                   <th className={styles.th}>Delete</th>
+                  <th className={styles.th}>Add Sales</th>
+                  
                 </tr>
               </thead>
               <tbody>
@@ -356,6 +426,29 @@ const AgentsPage: React.FC = () => {
                     <td className={styles.td}>{agent.district}</td>
                     <td className={styles.td}>{agent.city}</td>
                     <td className={styles.td}>{agent.state}</td>
+                    <td className={styles.td}>
+                      <div className={styles.assignedToWrapper}>
+                        <span>{agent.assignedTo || "Not Assigned"}</span>
+                        <button
+                          className={styles.editIconBtn}
+                          onClick={() =>
+                            openAssignModal(
+                              agent._id,
+                              typeof agent.assignedTo === "string"
+                                ? agent.assignedTo
+                                : ""
+                            )
+                          }
+                        >
+                          <FaEdit color="green" size={16} />
+                        </button>
+                      </div>
+                    </td>
+                    <td className={styles.td}>
+                      ₹{(agent.sales ?? 0).toLocaleString("en-IN")}
+                    </td>
+
+
                     <td className={styles.td}>
                       <div className={styles.assignedToWrapper}>
                         <span>{agent.assignedTo || "Not Assigned"}</span>
@@ -457,6 +550,20 @@ const AgentsPage: React.FC = () => {
                         </svg>
                       </button>
                     </td>
+
+                    <td className={styles.td}>
+                      <button
+                        className={styles.addSalesBtn}
+                        onClick={() => {
+                          setSelectedAgentId(agent._id);
+                          setSalesAmount(0); // new state for amount
+                          setSalesModalVisible(true); // new modal state
+                        }}
+                      >
+                        Add Sales
+                      </button>
+                    </td>
+
                   </tr>
                 ))}
               </tbody>
