@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 import useSWR from "swr";
 import styles from "@/styles/components/home/BestServicesSection.module.css";
 import { MdHeadsetMic } from "react-icons/md";
@@ -8,7 +8,6 @@ import { LuNotebookPen } from "react-icons/lu";
 import { LiaMoneyBillSolid } from "react-icons/lia";
 import { FaEllipsisH } from "react-icons/fa";
 
-// Mapping icons
 const iconMap = {
   support: <MdHeadsetMic size={40} />,
   claim: <LuNotebookPen size={40} />,
@@ -33,7 +32,6 @@ interface BestServicesSectionProps {
   liveServices?: ServiceItem[];
 }
 
-// Default fallback list
 const LIST_FALLBACK: ServiceItem[] = [
   {
     name: "24X7 Support",
@@ -52,7 +50,6 @@ const LIST_FALLBACK: ServiceItem[] = [
   },
 ];
 
-// Parser to highlight text inside <>
 const parseHeading = (text: string) => {
   const regex = /<([^>]+)>/g;
   const parts: { text: string; isTag: boolean }[] = [];
@@ -79,7 +76,6 @@ export default function BestServicesSection({
     fetch(url).then((res) => res.json())
   );
 
-  // Prefer live props from admin, else API, else fallback
   const heading = liveHeading || data?.heading || "Best <Service>";
   const serviceList =
     liveServices && liveServices.length > 0
@@ -88,10 +84,35 @@ export default function BestServicesSection({
       ? data.services
       : LIST_FALLBACK;
 
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisible(true);
+            observer.disconnect(); // Trigger only once
+          }
+        });
+      },
+      { threshold: 0.2 } // 20% visible
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
-    <div className={styles.cont}>
-      <div className={styles.head}>
-        {/* Heading with orangered for <> */}
+    <div ref={sectionRef} className={styles.cont}>
+      {/* Heading */}
+      <div className={`${styles.head} ${visible ? styles.animateOnce : ""}`}>
         <h1 className={styles.heading1}>
           {parseHeading(heading).map((part, idx) => (
             <span
@@ -108,9 +129,14 @@ export default function BestServicesSection({
         </div>
       </div>
 
+      {/* Services List */}
       <div className={styles.list}>
         {serviceList.map((item, index) => (
-          <div className={styles.item} key={item.type + "-" + index}>
+          <div
+            className={`${styles.item} ${visible ? styles.animateOnce : ""}`}
+            key={item.type + "-" + index}
+            style={{ animationDelay: `${0.2 * index}s` }} // stagger
+          >
             <div className={`${styles.imageCont} ${styles.selected}`}>
               {iconMap[item.type as ServiceType]}
             </div>

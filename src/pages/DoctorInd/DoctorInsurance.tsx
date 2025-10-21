@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation"; // ✅ Import router
 import styles from "@/styles/pages/DoctorInd/doctorinsurance.module.css";
@@ -7,6 +7,9 @@ import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import UserDetails from "@/components/ui/UserDetails";
 import manager from "@/assets/doctor/stethoscope.png";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 
 const InsurancePage: React.FC = () => {
   const [name, setName] = useState("");
@@ -49,15 +52,19 @@ const InsurancePage: React.FC = () => {
     setMobile(prefix + limitedDigits);
   };
 
+ // AOS animation
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true });
+  }, []);
   return (
     <>
       <UserDetails />
       <Navbar />
 
       <section className={styles.wrapper}>
-        <div className={styles.inner}>
+        <div className={styles.inner} >
           {/* Left Text Content */}
-          <div className={styles.textBlock}>
+          <div className={styles.textBlock} data-aos="fade-right">
             <h4 className={styles.subHeading}>
               Professional Indemnity Insurance for Doctors
             </h4>

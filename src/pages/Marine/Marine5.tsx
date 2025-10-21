@@ -10,6 +10,8 @@ import { FaTruck, FaPlane, FaShip, FaBox, FaTrain } from "react-icons/fa";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import { useRouter } from "next/navigation";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const Modal = ({
   showModal,
@@ -27,12 +29,27 @@ const Modal = ({
 }: any) => {
   if (!showModal) return null;
 
+  // ✅ Initialize AOS
+  useEffect(() => {
+    AOS.init({ duration: 800, once: false });
+  }, []);
+
+  // ✅ Step fade-in transition
+  const [fadeClass, setFadeClass] = useState(styles.fadeIn);
+  useEffect(() => {
+    setFadeClass(styles.fadeOut);
+    const timer = setTimeout(() => {
+      setFadeClass(styles.fadeIn);
+    }, 200);
+    return () => clearTimeout(timer);
+  }, [modalStep]);
+
   return (
     <div className={styles.modalOverlay}>
-      <div className={styles.modalContent}>
-        {/* Step 1 */}
+      <div className={`${styles.modalContent} ${fadeClass}`}>
+        {/* STEP 1 */}
         {modalStep === 1 && (
-          <>
+          <div data-aos="fade">
             <h3 className={styles.modalTitle}>
               Just one last thing before you get your quotes
             </h3>
@@ -61,12 +78,12 @@ const Modal = ({
             >
               Continue &gt;
             </button>
-          </>
+          </div>
         )}
 
-        {/* Step 2 */}
+        {/* STEP 2 */}
         {modalStep === 2 && (
-          <>
+          <div data-aos="fade">
             <h3 className={styles.modalTitle}>
               Just one last thing before you get your quotes
             </h3>
@@ -129,12 +146,12 @@ const Modal = ({
             >
               View quotes &gt;
             </button>
-          </>
+          </div>
         )}
 
-        {/* Step 3 */}
+        {/* STEP 3 */}
         {modalStep === 3 && (
-          <>
+          <div data-aos="fade">
             <h3 className={styles.modalTitle}>
               Just one last thing before you get your quotes
             </h3>
@@ -168,7 +185,7 @@ const Modal = ({
             >
               View quotes &gt;
             </button>
-          </>
+          </div>
         )}
       </div>
     </div>
@@ -188,16 +205,11 @@ const Marine5 = () => {
     setModalStep(1);
   }, []);
 
-  const handleModalComplete = () => {
-    setShowModal(false);
-  };
+  const handleModalComplete = () => setShowModal(false);
 
   const handleModalContinue = () => {
-    if (modalStep < 3) {
-      setModalStep(modalStep + 1);
-    } else {
-      handleModalComplete();
-    }
+    if (modalStep < 3) setModalStep(modalStep + 1);
+    else handleModalComplete();
   };
 
   const isContinueDisabled = () => {
@@ -207,29 +219,20 @@ const Marine5 = () => {
     return false;
   };
 
-  const formatNumber = (num: string) => {
-    const digits = num.replace(/\D/g, "");
-    return digits.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
+  const formatNumber = (num: string) =>
+    num.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const formattedValue = formatNumber(value);
-    setCoverAmount(formattedValue);
-  };
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setCoverAmount(formatNumber(e.target.value));
 
-  const handleCompanyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    const formattedValue = inputValue.replace(/\b\w/g, (char) =>
-      char.toUpperCase()
+  const handleCompanyChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setCompanyName(
+      e.target.value.replace(/\b\w/g, (char) => char.toUpperCase())
     );
-    setCompanyName(formattedValue);
-  };
 
   const numberToWords = (num: string) => {
     const numValue = parseInt(num.replace(/,/g, "")) || 0;
     if (numValue === 0) return "Zero Rupees";
-
     const units = [
       "",
       "One",
@@ -266,7 +269,6 @@ const Marine5 = () => {
       "Eighty",
       "Ninety",
     ];
-
     if (numValue < 10) return units[numValue] + " Rupees";
     if (numValue < 20) return teens[numValue - 10] + " Rupees";
     if (numValue < 100)
@@ -275,13 +277,11 @@ const Marine5 = () => {
         (numValue % 10 !== 0 ? " " + units[numValue % 10] : "") +
         " Rupees"
       );
-
     return "Rupees " + numValue.toLocaleString("en-IN");
   };
 
   return (
     <>
-      {/* ✅ Modal Overlay */}
       <Modal
         showModal={showModal}
         modalStep={modalStep}
@@ -297,7 +297,6 @@ const Marine5 = () => {
         handleCompanyChange={handleCompanyChange}
       />
 
-      {/* ✅ Background always rendered, blurred if modal is open */}
       <div
         className={`${styles.pageContent} ${showModal ? styles.blurred : ""}`}
       >
@@ -366,12 +365,12 @@ const Marine5 = () => {
                   <div className={styles.tagsRow}>
                     <div className={styles.tags}>
                       <span>
-                        <FaCheck size={12} className={styles.tick} />{" "}
-                        Theft/pilferage
+                        <FaCheck size={12} className={styles.tick} /> Theft /
+                        pilferage
                       </span>
                       <span>
-                        <FaCheck size={12} className={styles.tick} /> Loading
-                        and unloading
+                        <FaCheck size={12} className={styles.tick} /> Loading and
+                        unloading
                       </span>
                       <span>
                         <FaCheck size={12} className={styles.tick} /> Malicious
@@ -400,18 +399,15 @@ const Marine5 = () => {
                 <span className={styles.webinar}>Webinar (Online)</span>
               </p>
               <h5 className={styles.heading}>
-                {" "}
                 FIEO - Federation of Indian Export Organisation (Ministry of
-                commerce){" "}
+                commerce)
               </h5>
               <p className={styles.desc}>
-                {" "}
                 Moments from our recent webinar on Role of Insurance in managing
-                Export Supply Chain risk{" "}
+                Export Supply Chain risk
               </p>
               <a href="#" className={styles.link}>
-                {" "}
-                Read more →{" "}
+                Read more →
               </a>
             </div>
           </div>

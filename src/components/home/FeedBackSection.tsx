@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
-import useSWR from 'swr';
-import { IFeedbackItem } from '@/models/feedback';
-import Carousel from '../ui/CarousalHtml';
-import FeedbackMobile from '../ui/FeedbackMobile';
-import styles from '@/styles/components/home/FeedBackSection.module.css';
-import { FaEllipsisH } from 'react-icons/fa';
+"use client";
+import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import useSWR from "swr";
+import { IFeedbackItem } from "@/models/feedback";
+import Carousel from "../ui/CarousalHtml";
+import FeedbackMobile from "../ui/FeedbackMobile";
+import styles from "@/styles/components/home/FeedBackSection.module.css";
+import { FaEllipsisH } from "react-icons/fa";
 
 interface IFeedbackApiResponse {
   success: boolean;
@@ -19,7 +20,7 @@ interface FeedBackSectionProps {
   liveFeedbackList?: IFeedbackItem[];
 }
 
-const fetcher = (url: string) => fetch(url).then(res => res.json());
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 // 🔹 Helper to render heading with <...> styled
 const renderHeading = (heading: string) => {
@@ -36,15 +37,38 @@ const renderHeading = (heading: string) => {
   });
 };
 
-const FeedBackSection: React.FC<FeedBackSectionProps> = ({ liveHeading, liveFeedbackList }) => {
+const FeedBackSection: React.FC<FeedBackSectionProps> = ({
+  liveHeading,
+  liveFeedbackList,
+}) => {
   const { data, error, isLoading } = useSWR<IFeedbackApiResponse>(
-    liveHeading || liveFeedbackList ? null : '/api/feedback', // अगर live data है तो API call skip
+    liveHeading || liveFeedbackList ? null : "/api/feedback",
     fetcher,
     { refreshInterval: 5000 }
   );
 
   const [feedbackList, setFeedbackList] = useState<IFeedbackItem[]>([]);
   const [heading, setHeading] = useState("What Our <Customers> Are Saying?");
+
+  // 🔸 Animation: Trigger fade-in when in viewport
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const [animateheading, setAnimateheading] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setAnimateheading(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (sectionRef.current) observer.observe(sectionRef.current);
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (liveHeading) setHeading(liveHeading);
@@ -57,7 +81,8 @@ const FeedBackSection: React.FC<FeedBackSectionProps> = ({ liveHeading, liveFeed
   if (!liveHeading && !liveFeedbackList) {
     if (isLoading) return <div className={styles.cont}>Loading Feedback...</div>;
     if (error) return <div className={styles.cont}>Failed to load feedback.</div>;
-    if (!data?.success || !data.data) return <div className={styles.cont}>No feedback available.</div>;
+    if (!data?.success || !data.data)
+      return <div className={styles.cont}>No feedback available.</div>;
   }
 
   const slides = feedbackList.map((item, index) => (
@@ -81,14 +106,18 @@ const FeedBackSection: React.FC<FeedBackSectionProps> = ({ liveHeading, liveFeed
   ));
 
   return (
-    <div className={styles.cont}>
+    <div ref={sectionRef} className={styles.cont}>
       <div className={styles.head}>
-        <div className={styles.heading}>
+        <div
+          className={`${styles.heading} ${
+            animateheading ? styles.animateOnce : ""
+          }`}
+        >
           {renderHeading(heading)}
         </div>
       </div>
       <div className={styles.mobileEllipsis}>
-        <FaEllipsisH style={{ color: '#fa621a', fontSize: '25px' }} />
+        <FaEllipsisH style={{ color: "#fa621a", fontSize: "25px" }} />
       </div>
       <div className={styles.bottom}>
         <div className={styles.singlecar}>

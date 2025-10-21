@@ -43,16 +43,13 @@
 
 .bottom {
   width: 100%;
-    
-    align-self:center;
-
+  align-self: center;
 }
 
 .serviceItem {
-  position: relative; 
+  position: relative;
   min-width: 300px;
   max-width: 300px;
-  /* margin: 40px 10px; */
   flex-shrink: 0;
   background-color: white;
   padding: 20px;
@@ -62,7 +59,6 @@
   place-items: center;
   gap: 1rem;
 }
-
 
 .namePost {
   text-align: left;
@@ -117,7 +113,6 @@
   margin-top: 40px;
   display: grid;
   grid-template-columns: 2fr 1fr;
-
   padding: 50px 100px;
   background: url("../../../assets//home//claimbackground.png");
   color: white;
@@ -170,7 +165,6 @@
 .mobileEllipsis {
   display: none;
   row-gap: 2px;
- 
 }
 
 @media screen and (max-width: 1200px) {
@@ -182,15 +176,12 @@
   .serviceItem {
     max-width: 400px;
   }
-
   .claimCont {
     padding: 50px 0px;
   }
-
   .singlecar {
     display: block;
   }
-
   .multicar {
     display: none;
   }
@@ -230,14 +221,12 @@
   margin-bottom: 20px;
 }
 
-
- .track {
+.track {
   display: flex;
   transition: transform 0.5s ease-in-out;
-  gap: 20px; 
+  gap: 20px;
   justify-content: flex-center;
 }
-
 
 .serviceItem {
   min-width: 300px;
@@ -248,7 +237,6 @@
   background-color: white;
   padding: 20px;
   border-radius: 22px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   display: grid;
   place-items: center;
@@ -282,20 +270,20 @@
 }
 
 @media screen and (max-width: 768px) {
-
-  .heading{
+  .heading {
     font-size: 25px;
   }
 
- .left {
-  left: 20px;
-}
+  .left {
+    left: 20px;
+  }
 
-.right {
-  right: 20px;
-}
-.serviceItem{
-  min-width: 345px;
+  .right {
+    right: 20px;
+  }
+
+  .serviceItem {
+    min-width: 345px;
     max-width: 323px;
     margin: 20px;
     flex-shrink: 0;
@@ -303,18 +291,14 @@
     padding: 20px;
     border-radius: 22px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    display: grid
-;
+    display: grid;
     place-items: center;
-    grid-gap: 1rem;
     gap: 1rem;
-}
-  
+  }
 }
 
 @media screen and (max-width: 370px) {
- .heading{
+  .heading {
     font-size: 20px;
   }
   .serviceItem {
@@ -332,7 +316,7 @@
   }
 }
 @media screen and (max-width: 420px) {
- .heading{
+  .heading {
     font-size: 20px;
   }
   .serviceItem {
@@ -350,29 +334,46 @@
   }
 }
 
- @media screen and (max-width: 700px) {
+@media screen and (max-width: 700px) {
   .head::after {
     display: none;
   }
   .mobileEllipsis {
     display: block;
   }
-  .heading{
+  .heading {
     margin-bottom: 0%;
     padding-bottom: 0%;
   }
   .head {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 0px;
-  position: relative;
-}
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 0px;
+    position: relative;
+  }
 }
 
 .image {
   width: 100px;
   height: 100px;
-  border-radius: 50%;  
-  object-fit: cover;    
+  border-radius: 50%;
+  object-fit: cover;
 }
+
+/* --------------------- FADE-IN/OUT ANIMATION --------------------- */
+.animateOnce {
+  animation: fadeInStay 1.5s ease-in-out forwards;
+}
+
+@keyframes fadeInStay {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

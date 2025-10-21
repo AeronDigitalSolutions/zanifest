@@ -1,8 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/pages/Shop/shop1.module.css";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import AOS from "aos";
+import "aos/dist/aos.css";      
 
 // Illustrations & Logos
 import shopIllustration from "@/assets/pageImages/fire_insurance.png";
@@ -43,6 +45,10 @@ const Shop1: React.FC = () => {
     const limitedDigits = digitsOnly.slice(0, 6);
     setPincode(limitedDigits);
   };
+    // AOS animation
+    useEffect(() => {
+      AOS.init({ duration: 1000, once: true });
+    }, []);
   return (
     <>
       <Navbar />
@@ -93,7 +99,7 @@ const Shop1: React.FC = () => {
         </div>
 
         {/* RIGHT SECTION */}
-        <div className={styles.right}>
+        <div className={styles.right} data-aos="fade-left">
           <h2 className={styles.formHeading}>Get free quotes in 30 seconds</h2>
 
           {/* Radio group */}

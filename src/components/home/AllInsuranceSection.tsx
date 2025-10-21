@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 import useSWR from "swr";
 import Image from "next/image";
 import Link from "next/link";
@@ -74,10 +74,36 @@ function AllInsuranceSection({ previewHeading, previewServices }: AllInsuranceSe
 
   const headingParts = parseHeading(heading);
 
+  const headingRef = useRef<HTMLDivElement>(null);
+  const [animate, setAnimate] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setAnimate(true);
+            observer.disconnect(); // stop observing once triggered
+          }
+        });
+      },
+      { threshold: 0.3 } // triggers when 30% of the section is visible
+    );
+
+    if (headingRef.current) {
+      observer.observe(headingRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className={styles.cont}>
       <div className={styles.head}>
-        <div className={styles.heading}>
+        <div
+          ref={headingRef}
+          className={`${styles.heading} ${animate ? styles.animateText : ""}`}
+        >
           <span className={styles.text}>
             {headingParts.map((part, i) =>
               part.isTag ? (

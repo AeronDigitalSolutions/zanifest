@@ -1,11 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/pages/Home/homeinsurance.module.css";
 import { FiUser, FiPhone } from "react-icons/fi";
 import Footer from "@/components/ui/Footer";
 import Navbar from "@/components/ui/Navbar";
 import { FaCheckCircle, FaWhatsapp } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 
 const Homeinsurance: React.FC = () => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
@@ -53,6 +56,10 @@ const Homeinsurance: React.FC = () => {
 
     setMobile(prefix + limitedDigits);
   };
+   // AOS animation
+    useEffect(() => {
+      AOS.init({ duration: 1000, once: true });
+    }, []);
   return (
     <div>
       <Navbar />
@@ -80,7 +87,7 @@ const Homeinsurance: React.FC = () => {
         </div>
 
         {/* ✅ form with navigation */}
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <form className={styles.form} onSubmit={handleSubmit} data-aos="fade-right">
           <div className={styles.inputGroup}>
             <input
               type="text"
