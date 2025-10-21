@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import mongoose from 'mongoose';
 import dbConnect from '@/lib/dbConnect';
 import Agent from '@/models/Agent';
 
@@ -10,63 +11,56 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-      const { attachments, sales: _sales,  ...formFields } = req.body; // parsed JSON
+    const { attachments, ...formFields } = req.body;
+    console.log('Incoming data:', formFields);
 
-    // if (!attachments) {
-    //   return res.status(400).json({ error: 'No attachments provided' });
+    // 1️⃣ Required fields
+    const requiredFields = [
+      'firstName', 'lastName', 'email', 'password',
+      'phone', 'agentCode', 'city', 'district',
+      'state', 'pinCode', 'panNumber', 'adhaarNumber', 'assignedTo'
+    ];
+
+    console.log('Checking required fields');
+
+
+    for (const field of requiredFields) {
+      if (!formFields[field]) {
+        return res.status(400).json({ error: `Field '${field}' is required` });
+      }
+    }
+    console.log('All required fields are present');
+
+    // 2️⃣ Validate assignedTo is a valid ObjectId
+    // if (!mongoose.Types.ObjectId.isValid(formFields.assignedTo)) {
+    //   return res.status(400).json({ error: "assignedTo must be a valid manager ObjectId" });
     // }
 
-    // const agent = new Agent({
-    //   ...formFields,
-    //   ...attachments,
-    //   sales: 0,
-    // });
-
+    // 3️⃣ Create agent
     const agent = new Agent({
       ...formFields,
-      attachments: attachments || [], // ensure array
+      attachments: attachments || [],
+      lifetimeSales: formFields.lifetimeSales || 0,
+      currentDMSales: formFields.currentDMSales || 0,
     });
 
+    console.log('Agent instance created:', agent);
+
     await agent.save();
+
+    console.log('Agent created successfully:', agent._id);
+
     return res.status(201).json({ message: 'Agent created', agent });
+
   } catch (error: any) {
     console.error('Error creating agent:', error);
+
+    // 4️⃣ Handle duplicate key errors
+    if (error.code === 11000) {
+      const duplicateKey = Object.keys(error.keyValue)[0];
+      return res.status(400).json({ error: `${duplicateKey} already exists` });
+    }
+
     return res.status(400).json({ error: error.message || 'Failed to create agent' });
   }
 }
-
-
-
-
-
-
-// import dbConnect from "@/lib/dbConnect";
-// import Agent from "@/models/Agent";
-
-// export default async function handler(req: { method: string; body: any; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { message?: string; agent?: any; error?: any; }): void; new(): any; }; }; }) {
-//   await dbConnect();
-
-//   if (req.method === "POST") {
-//     try {
-//       const agent = new Agent(req.body);
-//       console.log("Creating agent with data:", agent);
-//       await agent.save();
-//       return res.status(201).json({ message: "Agent created", agent });
-//     } 
-    
-//     catch (error) {
-//       if (error instanceof Error) {
-//          console.log('error creating agent - error instanceof Error');
-//         console.error("Error creating agent:", error.message);
-//         return res.status(400).json({ error: error.message });
-       
-//       } 
-//       else {
-//          console.log('unknown error creating agent');
-//         return res.status(400).json({ error: "An unknown error occurred" });
-//       }
-//     }
-//   } else {
-//     res.status(405).json({ message: "Method not allowed" });
-//   }
-// }

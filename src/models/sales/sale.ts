@@ -12,7 +12,7 @@ const saleSchema = new mongoose.Schema(
       required: true,
     },
     districtManager: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Manager",
       required: true,
     },

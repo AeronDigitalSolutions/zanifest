@@ -4,8 +4,12 @@ import Agent from "@/models/Agent";
 import Manager from "@/models/Manager";
 import { NextApiResponse, NextApiRequest } from "next";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "POST") return res.status(405).json({ message: "Method not allowed" });
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method !== "POST")
+    return res.status(405).json({ message: "Method not allowed" });
 
   await dbConnect();
 
@@ -22,7 +26,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const districtManager = agent.assignedTo;
     if (!districtManager)
-      return res.status(400).json({ message: "Agent is not assigned to any District Manager" });
+      return res
+        .status(400)
+        .json({ message: "Agent is not assigned to any District Manager" });
 
     // ✅ 2️⃣ Create Sale
     const sale = await Sale.create({
@@ -53,7 +59,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (stateManager.assignedTo) {
           nationalManager = await Manager.findById(stateManager.assignedTo);
           if (nationalManager) {
-            nationalManager.totalSales = (nationalManager.totalSales || 0) + amount;
+            nationalManager.totalSales =
+              (nationalManager.totalSales || 0) + amount;
             await nationalManager.save();
           }
         }

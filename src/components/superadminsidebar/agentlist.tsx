@@ -404,11 +404,10 @@ const AgentsPage: React.FC = () => {
                   <th className={styles.th}>District</th>
                   <th className={styles.th}>City</th>
                   <th className={styles.th}>State</th>
-                  <th className={styles.th}>Current Sales</th>
                   <th className={styles.th}>Assigned To</th>
+                  <th className={styles.th}>Lifetime Sales</th>
                   <th className={styles.th}>Status</th>
                   <th className={styles.th}>Delete</th>
-                  <th className={styles.th}>Add Sales</th>
                   
                 </tr>
               </thead>
@@ -418,7 +417,7 @@ const AgentsPage: React.FC = () => {
                     <td className={styles.td}>
                       {(currentPage - 1) * agentsPerPage + index + 1}
                     </td>
-                    <td className={styles.td}>{agent.agentCode}</td>
+                    <td className={styles.td}>{agent?.agentCode}</td>
                     <td className={styles.td}>
                       {`${agent.firstName} ${agent.lastName}`}
                     </td>
@@ -446,26 +445,6 @@ const AgentsPage: React.FC = () => {
                     </td>
                     <td className={styles.td}>
                       ₹{(agent.sales ?? 0).toLocaleString("en-IN")}
-                    </td>
-
-
-                    <td className={styles.td}>
-                      <div className={styles.assignedToWrapper}>
-                        <span>{agent.assignedTo || "Not Assigned"}</span>
-                        <button
-                          className={styles.editIconBtn}
-                          onClick={() =>
-                            openAssignModal(
-                              agent._id,
-                              typeof agent.assignedTo === "string"
-                                ? agent.assignedTo
-                                : ""
-                            )
-                          }
-                        >
-                          <FaEdit color="green" size={16} />
-                        </button>
-                      </div>
                     </td>
 
                     <td className={styles.td}>
@@ -550,20 +529,6 @@ const AgentsPage: React.FC = () => {
                         </svg>
                       </button>
                     </td>
-
-                    <td className={styles.td}>
-                      <button
-                        className={styles.addSalesBtn}
-                        onClick={() => {
-                          setSelectedAgentId(agent._id);
-                          setSalesAmount(0); // new state for amount
-                          setSalesModalVisible(true); // new modal state
-                        }}
-                      >
-                        Add Sales
-                      </button>
-                    </td>
-
                   </tr>
                 ))}
               </tbody>
