@@ -17,10 +17,12 @@ type Agent = {
   _id: string;
   name: string;
   email: string;
-  district: string;
-  city: string;
-  state: string;
   assignedTo?: string;
+  lifetimeSales: number;
+  currentDMSales: number;
+  district?: string;
+  city?: string;
+  state?: string;
 };
 
 type MonthlySales = {
@@ -44,6 +46,7 @@ type DashboardContentProps = {
   filteredData: MonthlySales[];
 };
 
+
 const DashboardContent: React.FC<DashboardContentProps> = ({
   formattedTotalSales,
   formattedMonthlySales,
@@ -52,6 +55,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
   showAgentList,
   setShowAgentList,
   agentData,
+
   startDate,
   endDate,
   setStartDate,

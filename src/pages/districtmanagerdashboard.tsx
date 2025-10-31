@@ -4,89 +4,36 @@ import styles from "@/styles/pages/districtmanager.module.css";
 import { useRouter } from "next/router";
 import { useManager } from "@/lib/hooks/useManager";
 import axios from "axios";
-
 import DistrictManagerHeader from "@/components/districtmanagerdashboard/DistrictManagerHeader";
 import DistrictManagerSidebar from "@/components/districtmanagerdashboard/districtmanagersidebar";
 import DashboardContent from "@/components/districtmanagerdashboard/dashboardcontent";
 import ResetPassword from "@/components/districtmanagerdashboard/resetpassword";
-import ListOfAgent from "@/components/districtmanagerdashboard/listofagents";
 
+// ---------------------------
+// Type Definitions
+// ---------------------------
 type Agent = {
-  id: string;
-  name: string;
-  location: string;
-  totalSales: number;
-  monthlySales: number;
-  clients: number;
-};
-
-type AgentData = {
   _id: string;
   name: string;
   email: string;
-  district: string;
-  city: string;
-  state: string;
   assignedTo?: string;
+  lifetimeSales: number;
+  currentDMSales: number;
+  district?: string;
+  city?: string;
+  state?: string;
 };
+
 
 type MonthlySales = {
   month: string;
   sales: number;
 };
 
-const agents = [
-  {
-    _id: "AG101",
-    name: "Ravi Kumar",
-    email: "ravi.kumar@example.com",
-    assignedTo: "Manager1",
-    district: "Central",
-    city: "Delhi",
-    state: "Delhi",
-    totalSales: 90000,
-    monthlySales: 35000,
-    clients: 12,
-  },
-  {
-    _id: "AG102",
-    name: "Neha Singh",
-    email: "neha.singh@example.com",
-    assignedTo: "Manager1",
-    district: "West",
-    city: "Mumbai",
-    state: "Maharashtra",
-    totalSales: 15000,
-    monthlySales: 400,
-    clients: 15,
-  },
-  {
-    _id: "AG103",
-    name: "Amit Patel",
-    email: "amit.patel@example.com",
-    assignedTo: "Manager2",
-    district: "East",
-    city: "Ahmedabad",
-    state: "Gujarat",
-    totalSales: 10000,
-    monthlySales: 78890,
-    clients: 10,
-  },
-  {
-    _id: "AG104",
-    name: "Sunita Rao",
-    email: "sunita.rao@example.com",
-    assignedTo: "Manager2",
-    district: "South",
-    city: "Bangalore",
-    state: "Karnataka",
-    totalSales: 10000,
-    monthlySales: 345560,
-    clients: 5,
-  },
-];
-
-const monthlySalesData = [
+// ---------------------------
+// Sample Monthly Sales Data
+// ---------------------------
+const monthlySalesData: MonthlySales[] = [
   { month: "Jan 2025", sales: 12000 },
   { month: "Feb 2025", sales: 22000 },
   { month: "Mar 2025", sales: 30000 },
@@ -101,47 +48,63 @@ const monthlySalesData = [
   { month: "Dec 2025", sales: 47000 },
 ];
 
-const DistricManagerDashboard = () => {
+// ---------------------------
+// Dashboard Component
+// ---------------------------
+const DistrictManagerDashboard = () => {
   const router = useRouter();
   const { user } = useManager();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("dashboard");
-  const [showAgentList, setShowAgentList] = useState(false);
-  const [agentData, setAgentData] = useState([]);
+  const [agentData, setAgentData] = useState<Agent[]>([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [filteredData, setFilteredData] = useState(monthlySalesData);
+const [showAgentList, setShowAgentList] = useState(false);
 
-  const totalSales = agents.reduce((sum, agent) => sum + agent.totalSales, 0);
-  const monthlySales = agents.reduce(
-    (sum, agent) => sum + agent.monthlySales,
-    0
-  );
-  const totalClients = agents.reduce((sum, agent) => sum + agent.clients, 0);
   const [formattedTotalSales, setFormattedTotalSales] = useState("");
   const [formattedMonthlySales, setFormattedMonthlySales] = useState("");
+
+  // ---------------------------
+  // Fetch Agents Under This DM
+  // ---------------------------
+  const fetchAgents = async () => {
+    try {
+      const token = localStorage.getItem("managerToken");
+      if (!token) return;
+
+      const res = await axios.get("/api/manager/get-agents", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (res.data.success) {
+        setAgentData(res.data.agents || []);
+      }
+    } catch (err) {
+      console.error("Error fetching agents:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchAgents();
+  }, []);
+
+  // ---------------------------
+  // Total and Monthly Sales Computation
+  // ---------------------------
+  const totalSales = agentData.reduce((sum, agent) => sum + (agent.lifetimeSales || 0), 0);
+  const monthlySales = agentData.reduce((sum, agent) => sum + (agent.currentDMSales || 0), 0);
+  const totalClients = agentData.length;
 
   useEffect(() => {
     setFormattedTotalSales(totalSales.toLocaleString("en-IN"));
     setFormattedMonthlySales(monthlySales.toLocaleString("en-IN"));
   }, [totalSales, monthlySales]);
 
-  useEffect(() => {
-    const fetchAgents = async () => {
-      try {
-        const res = await fetch("/api/getagent");
-        console.log("number of agents for district manager:", res);
-        const data = await res.json();
-        setAgentData(data.agents || []);
-      } catch (err) {
-        console.error("Error fetching agents:", err);
-      }
-    };
-
-    fetchAgents();
-  }, []);
-
+  // ---------------------------
+  // Logout Handler
+  // ---------------------------
   const handleLogout = async () => {
     try {
       await axios.post("/api/manager/logout");
@@ -152,6 +115,9 @@ const DistricManagerDashboard = () => {
     }
   };
 
+  // ---------------------------
+  // Date Filter for Monthly Sales
+  // ---------------------------
   const handleFilter = () => {
     if (!startDate || !endDate) return;
     const start = new Date(startDate);
@@ -166,6 +132,9 @@ const DistricManagerDashboard = () => {
     setFilteredData(filtered);
   };
 
+  // ---------------------------
+  // Render
+  // ---------------------------
   return (
     <div className={styles.wrapper}>
       <DistrictManagerHeader
@@ -186,11 +155,11 @@ const DistricManagerDashboard = () => {
             <DashboardContent
               formattedTotalSales={formattedTotalSales}
               formattedMonthlySales={formattedMonthlySales}
-              agents={agents}
+              agents={agents} // current agents summary
               totalClients={totalClients}
               showAgentList={showAgentList}
               setShowAgentList={setShowAgentList}
-              agentData={agentData}
+              agentData={agentData} // full list fetched from backend
               startDate={startDate}
               endDate={endDate}
               setStartDate={setStartDate}
@@ -198,13 +167,13 @@ const DistricManagerDashboard = () => {
               handleFilter={handleFilter}
               filteredData={filteredData}
             />
+
           )}
           {activeSection === "resetpassword" && <ResetPassword />}
-          {activeSection === "listofagent" && <ListOfAgent />}
         </main>
       </div>
     </div>
   );
 };
 
-export default DistricManagerDashboard;
+export default DistrictManagerDashboard;
