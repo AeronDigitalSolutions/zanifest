@@ -61,10 +61,8 @@ const DistrictManagerDashboard = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [filteredData, setFilteredData] = useState(monthlySalesData);
-const [showAgentList, setShowAgentList] = useState(false);
+  const [showAgentList, setShowAgentList] = useState(false);
 
-  const [formattedTotalSales, setFormattedTotalSales] = useState("");
-  const [formattedMonthlySales, setFormattedMonthlySales] = useState("");
 
   // ---------------------------
   // Fetch Agents Under This DM
@@ -93,14 +91,10 @@ const [showAgentList, setShowAgentList] = useState(false);
   // ---------------------------
   // Total and Monthly Sales Computation
   // ---------------------------
-  const totalSales = agentData.reduce((sum, agent) => sum + (agent.lifetimeSales || 0), 0);
-  const monthlySales = agentData.reduce((sum, agent) => sum + (agent.currentDMSales || 0), 0);
-  const totalClients = agentData.length;
-
-  useEffect(() => {
-    setFormattedTotalSales(totalSales.toLocaleString("en-IN"));
-    setFormattedMonthlySales(monthlySales.toLocaleString("en-IN"));
-  }, [totalSales, monthlySales]);
+  // const totalSales = agentData.reduce((sum, agent) => sum + (agent.lifetimeSales || 0), 0);
+  const [formattedTotalSales, setFormattedTotalSales] = useState("0");
+  const [formattedMonthlySales, setFormattedMonthlySales] = useState("0");
+  const [totalClients, setTotalClients] = useState(0);
 
   // ---------------------------
   // Logout Handler
@@ -132,6 +126,34 @@ const [showAgentList, setShowAgentList] = useState(false);
     setFilteredData(filtered);
   };
 
+  const fetchManagerSales = async () => {
+    try {
+      const token = localStorage.getItem("managerToken");
+      console.log("Manager Token:", token);
+      if (!token) return;
+  
+      const res = await axios.get("/api/manager/salessummary", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log("Response Data:", res.data);
+  
+  
+      if (res.data.success) {
+      setFormattedTotalSales(res.data.totalSales.toLocaleString("en-IN"));
+      setFormattedMonthlySales(res.data.monthlySales?.toLocaleString("en-IN") || "0");
+      setTotalClients(res.data.totalClients || 0);
+    }
+      
+    } catch (err) {
+      console.error("Error fetching manager sales:", err);
+      alert("Failed to fetch manager sales");
+    }
+  };
+  
+  useEffect(() => {
+    fetchManagerSales();
+  }, []);
+
   // ---------------------------
   // Render
   // ---------------------------
@@ -155,11 +177,11 @@ const [showAgentList, setShowAgentList] = useState(false);
             <DashboardContent
               formattedTotalSales={formattedTotalSales}
               formattedMonthlySales={formattedMonthlySales}
-              agents={agents} // current agents summary
               totalClients={totalClients}
+              agents={agentData}
               showAgentList={showAgentList}
               setShowAgentList={setShowAgentList}
-              agentData={agentData} // full list fetched from backend
+              agentData={agentData}
               startDate={startDate}
               endDate={endDate}
               setStartDate={setStartDate}

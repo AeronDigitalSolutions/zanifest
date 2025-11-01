@@ -1,5 +1,6 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styles from "@/styles/pages/districtmanager.module.css";
 import { FaRupeeSign } from "react-icons/fa";
 import { FiBarChart2, FiUsers, FiUser } from "react-icons/fi";
@@ -13,6 +14,9 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+// ---------------------------
+// Type Definitions
+// ---------------------------
 type Agent = {
   _id: string;
   name: string;
@@ -46,7 +50,9 @@ type DashboardContentProps = {
   filteredData: MonthlySales[];
 };
 
-
+// ---------------------------
+// Component
+// ---------------------------
 const DashboardContent: React.FC<DashboardContentProps> = ({
   formattedTotalSales,
   formattedMonthlySales,
@@ -55,7 +61,6 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
   showAgentList,
   setShowAgentList,
   agentData,
-
   startDate,
   endDate,
   setStartDate,
@@ -63,6 +68,44 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
   handleFilter,
   filteredData,
 }) => {
+  const [dmTotalSales, setDmTotalSales] = useState("0");
+  const [loading, setLoading] = useState(false);
+
+  // ---------------------------
+  // Fetch DM’s total sales from backend
+  // ---------------------------
+  const fetchDistrictManagerSales = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("managerToken");
+      if (!token) {
+        console.warn("No manager token found!");
+        return;
+      }
+
+      const res = await axios.get("/api/manager/salessummary", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      console.log("DM Sales Summary:", res.data);
+
+      if (res.data.success && res.data.totalSales !== undefined) {
+        setDmTotalSales(res.data.totalSales.toLocaleString("en-IN"));
+      } else {
+        setDmTotalSales("0");
+      }
+    } catch (err) {
+      console.error("Error fetching DM sales:", err);
+      setDmTotalSales("0");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDistrictManagerSales();
+  }, []);
+
   return (
     <main className={styles.content}>
       <h2 className={styles.title}>District Manager Dashboard</h2>
@@ -73,9 +116,12 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
           <FaRupeeSign className={styles.cardIcon} />
           <div>
             <p>Total Sales</p>
-            <h3>₹{formattedTotalSales}</h3>
+            <h3>
+              {loading ? "Loading..." : `₹${dmTotalSales}`}
+            </h3>
           </div>
         </div>
+
         <div className={styles.card}>
           <FiBarChart2 className={styles.cardIcon} />
           <div>
@@ -83,6 +129,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
             <h3>₹{formattedMonthlySales}</h3>
           </div>
         </div>
+
         <div className={styles.card}>
           <FiUsers className={styles.cardIcon} />
           <div>
@@ -90,6 +137,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
             <h3>{agents.length}</h3>
           </div>
         </div>
+
         <div className={styles.card}>
           <FiUser className={styles.cardIcon} />
           <div>
@@ -98,49 +146,6 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
           </div>
         </div>
       </div>
-
-      {/* Agent List Toggle */}
-      {/* <div className={styles.agentListToggleWrapper}>
-        <div
-          className={styles.agentListToggle}
-          onClick={() => setShowAgentList(!showAgentList)}
-        >
-          List of Agents
-        </div>
-      </div> */}
-
-      {/* Agent Table */}
-      {/* {showAgentList && (
-        <div className={styles.agentTable}>
-          <h3 className={styles.tableTitle}>Agent List</h3>
-          <div className={styles.tableWrapper}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>District</th>
-                  <th>City</th>
-                  <th>State</th>
-                  <th>Assigned To</th>
-                </tr>
-              </thead>
-              <tbody>
-                {agentData.map((agent) => (
-                  <tr key={agent._id}>
-                    <td>{agent.name}</td>
-                    <td>{agent.email}</td>
-                    <td>{agent.district}</td>
-                    <td>{agent.city}</td>
-                    <td>{agent.state}</td>
-                    <td>{agent.assignedTo || "Unassigned"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )} */}
 
       {/* Date Filters */}
       <div className={styles.dateFilterSection}>

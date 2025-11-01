@@ -10,3 +10,8 @@ const reassignmentHistorySchema = new mongoose.Schema({
 
 export default mongoose.models.ReassignmentHistory ||
   mongoose.model("ReassignmentHistory", reassignmentHistorySchema);
+
+  // A1 - DM1 (100) 
+  // A1 - DM2 (300) 
+
+  // A1 lifetime = 400
