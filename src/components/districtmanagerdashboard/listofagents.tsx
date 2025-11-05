@@ -1,16 +1,34 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import styles from "@/styles/pages/districtmanager.module.css";
 
+// DB Agent structure
 type Agent = {
   _id: string;
-  firstName: string; // your API returns firstName, not "name"
+  firstName: string;
   lastName: string;
   email: string;
   district: string;
   city: string;
   state: string;
   assignedTo?: string;
+
+  totalSales?: number | string;
+  lifetimeSales?: number | string;
+  sales?: number | string;            // fallback monthly
+  currentDMSales?: number | string;   // fallback monthly
+  clients?: number | string;
+};
+
+// ✅ helper for getting total sales properly
+const getTotalSales = (a: Agent): number => {
+  return (
+    +a.totalSales! ||
+    +a.lifetimeSales! ||
+    +a.sales! ||
+    +a.currentDMSales! ||
+    0
+  );
 };
 
 const AgentTable: React.FC = () => {
@@ -22,11 +40,13 @@ const AgentTable: React.FC = () => {
       try {
         const res = await fetch("/api/getagent", {
           method: "GET",
-          credentials: "include", // so cookies like managerToken are sent
+          credentials: "include",
         });
+
         if (!res.ok) {
           throw new Error("Failed to fetch agents");
         }
+
         const data = await res.json();
         setAgents(data.agents || []);
       } catch (error) {
@@ -56,8 +76,12 @@ const AgentTable: React.FC = () => {
                 <th>City</th>
                 <th>State</th>
                 <th>Assigned To</th>
+
+                {/* ✅ NEW COLUMN */}
+                <th>Total Sales</th>
               </tr>
             </thead>
+
             <tbody>
               {agents.length > 0 ? (
                 agents.map((agent) => (
@@ -68,11 +92,14 @@ const AgentTable: React.FC = () => {
                     <td>{agent.city}</td>
                     <td>{agent.state}</td>
                     <td>{agent.assignedTo || "Unassigned"}</td>
+
+                    {/* ✅ Show Normalized Sales */}
+                    <td>₹{getTotalSales(agent).toLocaleString("en-IN")}</td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} style={{ textAlign: "center" }}>
+                  <td colSpan={7} style={{ textAlign: "center" }}>
                     No agents found
                   </td>
                 </tr>
