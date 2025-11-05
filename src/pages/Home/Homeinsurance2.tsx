@@ -1,34 +1,41 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/pages/Home/homeinsurance2.module.css";
 import { FiInfo } from "react-icons/fi";
 import Footer from "@/components/ui/Footer";
 import Navbar from "@/components/ui/Navbar";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { useRouter } from "next/navigation";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const Homeinsurance2: React.FC = () => {
   const [houseValue, setHouseValue] = useState("");
   const [householdValue, setHouseholdValue] = useState("");
   const [city, setCity] = useState("");
   const router = useRouter();
-
+  // AOS animation
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true });
+  }, []);
   return (
     <div>
       <Navbar />
-      <div className={styles.container}>
+      <div className={styles.container}data-aos="fade-left">
         <h2 className={styles.heading}>
           Please help us with your property details
         </h2>
 
         {/* House Value Input */}
-        <div className={styles.inputGroup}>
+        <div className={styles.inputGroup} >
           <input
-            type="text"
+            type="number"
             placeholder="Enter current market value of your house (₹)"
             value={houseValue}
-            onChange={(e) => setHouseValue(e.target.value)}
+            onChange={(e) => setHouseValue(e.target.value.replace(/\D/g, ""))}
             className={styles.input}
+            min="0"
+            step="1"
           />
           <FiInfo className={styles.icon} />
         </div>
@@ -45,11 +52,15 @@ const Homeinsurance2: React.FC = () => {
         {/* Household Items */}
         <div className={styles.inputGroup}>
           <input
-            type="text"
+            type="number"
             placeholder="Value of household items (Rs.)"
             value={householdValue}
-            onChange={(e) => setHouseholdValue(e.target.value)}
+            onChange={(e) =>
+              setHouseholdValue(e.target.value.replace(/\D/g, ""))
+            }
             className={styles.input}
+            min="0"
+            step="1"
           />
           <FiInfo className={styles.icon} />
         </div>

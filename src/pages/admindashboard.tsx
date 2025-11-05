@@ -4,6 +4,7 @@ import Image from "next/image";
 import logo from "@/assets/logo.png";
 import CreateAdmin from "@/components/superadminsidebar/createadmin";
 import CreateManager from "@/components/superadminsidebar/createmanager";
+import AgentList from "@/components/superadminsidebar/agentlist";
 import ManagerList from "@/components/superadminsidebar/managerlist";
 import UserList from "@/components/superadminsidebar/userList";
 import CreateAgent from "@/components/superadminsidebar/createagent";
@@ -187,7 +188,12 @@ const router = useRouter();
                 <span className={styles.label}>Manager List</span>
               </span>
             </li>
-            <li className={styles.menuItem}>
+            <li className={styles.menuItem}
+            onClick={()=>{
+              setActiveSection("agentList");
+              setSidebarOpen(false);
+            }}
+            >
               <span className={styles.iconLabel}>
                 <FiList className={styles.icon} />
                 <span className={styles.label}>Agent List</span>
@@ -273,6 +279,7 @@ const router = useRouter();
           {activeSection === "resetpassword" && <ResetPassword />}
           {activeSection === "userList" && <UserList />}
           {activeSection === "managerList" && <ManagerList />}
+          {activeSection === "agentList" && <AgentList />}
         </main>
       </div>
     </div>

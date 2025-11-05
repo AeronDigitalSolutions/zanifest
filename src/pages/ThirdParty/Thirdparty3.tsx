@@ -22,7 +22,12 @@ const Thirdparty3 = () => {
         <div className={styles.header}>
           <div className={styles.backBox}>
             <FiArrowLeft className={styles.backIcon} />
-            <span className={styles.backText}>Back</span>
+            <span
+              className={styles.backText}
+              onClick={() => router.push("Thirdparty2")}
+            >
+              Back
+            </span>
           </div>
           <h2 className={styles.title}>Summary</h2>
         </div>

@@ -32,6 +32,7 @@
   width: 80%;
   height: auto;
   object-fit: cover;
+  z-index: -1;
 }
 
 .headings {
@@ -45,7 +46,7 @@
   display: flex;
   flex-direction: column;
   height: 80%;
-  width: calc(100% - 40px);
+  width:100%;
   border-radius: 10px;
   margin-bottom: 50px;
   padding: 40px 20px;
@@ -81,7 +82,7 @@
 }
 
 .input {
-  width: 70%;
+  width: 100%;
   padding: 20px 20px;
   border-radius: 10px;
   border-color: #dfe0e2;
@@ -99,7 +100,7 @@
 
 .button {
   all: unset;
-  width: 70%;
+  width: 88%;
   padding: 20px 20px;
   border-radius: 10px;
   text-align: center;
@@ -109,6 +110,7 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
+  cursor: pointer;
 }
 
 .transparentButton {
@@ -119,6 +121,7 @@
   margin-top: auto;
   margin-bottom: auto;
   font-size: 16px;
+  display: none;
 }
 
 @media screen and (max-width: 1000px) {

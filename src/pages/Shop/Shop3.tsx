@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/pages/Shop/shop3.module.css";
 import { FaCheckCircle } from "react-icons/fa";
 import Image from "next/image";
@@ -7,9 +7,16 @@ import shriram from "@/assets/CommercialVehicle/shriram.png";
 import Footer from "@/components/ui/Footer";
 import Navbar from "@/components/ui/Navbar";
 import { useRouter } from "next/navigation";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 export default function Shop3() {
   const [isModalOpen, setIsModalOpen] = useState(false);
       const router = useRouter();
+       // AOS animation
+        useEffect(() => {
+          AOS.init({ duration: 1000, once: true });
+        }, []);
   return (
  // ✅ router instance
     
@@ -49,7 +56,7 @@ export default function Shop3() {
       </div>
 
       {/* Insurance Card */}
-      <div className={styles.planCard}>
+      <div className={styles.planCard} data-aos="fade">
         <div className={styles.planHeader}>
           <Image src={shriram} alt="Shriram" className={styles.logo} />
           <h3>Rs. 590/year</h3>
@@ -79,7 +86,7 @@ export default function Shop3() {
 
       {/* Buttons */}
       <div className={styles.buttons}>
-        <button className={styles.customize} onClick={() => setIsModalOpen(true)}
+        <button className={styles.customize} onClick={() => setIsModalOpen(true)} 
 >Customize my plan</button>
         <button
           className={styles.buyNow}
@@ -89,85 +96,94 @@ export default function Shop3() {
       </div>
 
       {/* Modal */}
-      {isModalOpen && (
-        <>
-          <div
-            className={styles.overlay}
-            onClick={() => setIsModalOpen(false)}
-          />
-          <div className={styles.modal}>
-            <div className={styles.modalHeader}>
-              <h3>Help us assess your risks</h3>
-              <button
-                className={styles.closeBtn}
-                onClick={() => setIsModalOpen(false)}
-              >
-                ✕
-              </button>
-            </div>
+      
+    {/* Modal */}
+{isModalOpen && (
+  <>
+    <div
+      className={styles.overlay}
+      onClick={() => setIsModalOpen(false)}
+      data-aos="fade-left"
+    />
+    <div className={styles.modal}>
+      <div className={styles.modalHeader}>
+        <h3>Help us assess your risks</h3>
+        <button
+          className={styles.closeBtn}
+          onClick={() => setIsModalOpen(false)}
+        >
+          ✕
+        </button>
+      </div>
 
-            {/* Q1 */}
-            <div className={styles.question}>
-              <p>Buying Shop insurance for the first time?</p>
-              <div className={styles.options}>
-                <label>
-                  <input type="radio" name="q1" /> Yes
-                </label>
-                <label>
-                  <input type="radio" name="q1" /> No
-                </label>
-              </div>
-            </div>
+      {/* Q1 */}
+      <div className={styles.question} data-aos="fade-left" data-aos-delay="100">
+        <p>Buying Shop insurance for the first time?</p>
+        <div className={styles.options}>
+          <label>
+            <input type="radio" name="q1" /> Yes
+          </label>
+          <label>
+            <input type="radio" name="q1" /> No
+          </label>
+        </div>
+      </div>
 
-            {/* Q2 */}
-            <div className={styles.question}>
-              <p>
-                Has your commercial property experienced any loss incidents in
-                the last 3 years?
-              </p>
-              <div className={styles.options}>
-                <label>
-                  <input type="radio" name="q2" /> Yes
-                </label>
-                <label>
-                  <input type="radio" name="q2" /> No
-                </label>
-              </div>
-            </div>
+      {/* Q2 */}
+      <div className={styles.question} data-aos="fade-left" data-aos-delay="200">
+        <p>
+          Has your commercial property experienced any loss incidents in
+          the last 3 years?
+        </p>
+        <div className={styles.options}>
+          <label>
+            <input type="radio" name="q2" /> Yes
+          </label>
+          <label>
+            <input type="radio" name="q2" /> No
+          </label>
+        </div>
+      </div>
 
-            {/* Q3 */}
-            <div className={styles.question}>
-              <p>What type of construction is your property?</p>
-              <div className={styles.options}>
-                <label>
-                  <input type="radio" name="q3" /> Pucca
-                </label>
-                <label>
-                  <input type="radio" name="q3" /> Kuchha
-                </label>
-              </div>
-            </div>
+      {/* Q3 */}
+      <div className={styles.question} data-aos="fade-left" data-aos-delay="300">
+        <p>What type of construction is your property?</p>
+        <div className={styles.options}>
+          <label>
+            <input type="radio" name="q3" /> Pucca
+          </label>
+          <label>
+            <input type="radio" name="q3" /> Kuchha
+          </label>
+        </div>
+      </div>
 
-            {/* Q4 */}
-            <div className={styles.question}>
-              <p>Do you need insurance for your basement?</p>
-              <div className={styles.options}>
-                <label>
-                  <input type="radio" name="q4" /> Yes
-                </label>
-                <label>
-                  <input type="radio" name="q4" /> No
-                </label>
-              </div>
-            </div>
+      {/* Q4 */}
+      <div className={styles.question} data-aos="fade-left" data-aos-delay="400">
+        <p>Do you need insurance for your basement?</p>
+        <div className={styles.options}>
+          <label>
+            <input type="radio" name="q4" /> Yes
+          </label>
+          <label>
+            <input type="radio" name="q4" /> No
+          </label>
+        </div>
+      </div>
 
-            {/* Continue */}
-            <button className={styles.continueBtn}            onClick={() => router.push("Shop5")}>
-              Save &amp; Continue →
-            </button>
-          </div>
-        </>
-      )}
+      {/* Continue Button */}
+      <button
+        className={styles.continueBtn}
+        onClick={() => router.push("Shop5")}
+        data-aos="fade-up"
+        data-aos-delay="500"
+      >
+        Save &amp; Continue →
+      </button>
+    </div>
+  </>
+)}
+
     </div>
     <Footer/>
     </>

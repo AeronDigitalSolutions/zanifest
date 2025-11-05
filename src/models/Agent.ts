@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 const agentSchema = new mongoose.Schema({
+  // Basic info
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
@@ -8,16 +9,19 @@ const agentSchema = new mongoose.Schema({
   phone: { type: String, required: true },
   agentCode: { type: String, required: true, unique: true },
 
+  // Address info
   city: { type: String, required: true },
   district: { type: String, required: true },
   state: { type: String, required: true },
   pinCode: { type: String, required: true },
 
+  // PAN / Aadhaar
   panNumber: { type: String, required: true },
-  panAttachment: String,
+  panAttachment: { type: String },
   adhaarNumber: { type: String, required: true },
-  adhaarAttachment: String,
+  adhaarAttachment: { type: String },
 
+  // Nominee details
   nomineeName: String,
   nomineeRelation: String,
   nomineePanNumber: String,
@@ -25,6 +29,7 @@ const agentSchema = new mongoose.Schema({
   nomineePanAttachment: String,
   nomineeAadhaarAttachment: String,
 
+  // Bank details
   accountHolderName: String,
   bankName: String,
   accountNumber: String,
@@ -41,64 +46,38 @@ const agentSchema = new mongoose.Schema({
     },
   ],
 
+  // 🔗 Current assigned manager
   assignedTo: {
     type: String,
     ref: "Manager",
     required: true,
   },
 
-  /** ✅ SALES SECTION — REQUIRED FOR YOUR UI **/
-  totalSales: {
-    type: Number,
-    default: 0,
-  },
+  // 💰 Sales tracking
+  lifetimeSales: { type: Number, default: 0 }, // cumulative across all DMs
+  currentDMSales: { type: Number, default: 0 }, // sales under current DM
 
-  // lifetime total sales
-  lifetimeSales: {
-    type: Number,
-    default: 0,
-  },
-
-  monthlySales: {
-    type: Number,
-    default: 0,
-  },
-
-  // number of total clients
-  clients: {
-    type: Number,
-    default: 0,
-  },
-
-  // sales history for graph
-  salesHistory: [
+  reassignmentHistory: [
     {
-      month: String,
-      price: Number,
-      date: Date,
+      fromManager: { type: String, ref: "Manager" },
+      toManager: { type: String, ref: "Manager" },
+      salesUnderPrevManager: { type: Number, default: 0 }, // sales made under old DM before reassignment
+      reassignedAt: { type: Date, default: Date.now },
     },
   ],
 
-  // DM History
-  dmHistory: [
-    {
-      dmId: String,
-      dmName: String,
-      sales: Number,
-    },
-  ],
-
-  // DM monthly
-  currentDMSales: {
-    type: Number,
-    default: 0,
+  accountStatus: {
+    type: String,
+    enum: ["active", "inactive"],
+    default: "active",
   },
+});
 
-  // legacy field (optional)
-  sales: {
-    type: Number,
-    default: 0,
-  },
+// Safety defaults
+agentSchema.pre("save", function (next) {
+  if (this.lifetimeSales == null) this.lifetimeSales = 0;
+  if (this.currentDMSales == null) this.currentDMSales = 0;
+  next();
 });
 
 export default mongoose.models.Agent || mongoose.model("Agent", agentSchema);

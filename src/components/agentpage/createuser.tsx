@@ -2,6 +2,7 @@
 "use client";
 import React, { useState } from "react";
 import styles from "@/styles/components/superadminsidebar/changepassword.module.css"; 
+import { toast } from 'react-hot-toast';
 
 const CreateUser = () => {
   const [userName, setUserName] = useState("");
@@ -32,13 +33,15 @@ const CreateUser = () => {
 
       const data = await res.json();
 
-      if (!res.ok) throw new Error(data.message || "Failed to create user");
+      if (!res.ok) {
+        toast.error(data.message || "Failed to create user");
+      }
 
-      alert("Email send to the user for password creation");
+      toast.success("Email send to the user for password creation");
       setUserName("");
       setEmail("");
     } catch (err: any) {
-      alert(err.message || "Something went wrong");
+      toast.error(err.message || "Something went wrong");
     }
   };
 

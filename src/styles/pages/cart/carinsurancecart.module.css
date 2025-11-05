@@ -1,111 +1,125 @@
 .container {
   background-color: #f5f8ff;
   padding: 2rem;
-  margin: 1rem 5rem 0rem 5rem;
+  margin: 1rem 10rem 0rem 10rem;
   font-family: 'Inter', sans-serif;
+}
+
+.heading {
+  font-style: bold;
+  font-weight: 600;
 }
 
 .pageTitle {
   color: #1c1c1c;
   font-size: 18px;
+  font-weight: 600;
   margin-bottom: 1rem;
+}
 
-  margin-left: 5rem;
-}
-.card h4{
-  font-style: none;
-}
-.sectionTitle{
-  background-color: aliceblue;
+.sectionTitle {
+  background-color: #f0f7ff;
   height: 40px;
-  width: 93.6%;
-  margin-top: 0;
-  padding: 20px;
-  border-top: 1px solid #c9cbd0 ;
+  width: 100%;
+  border-top: 1px solid #c9cbd0;
   border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-}
+  border-top-right-radius: 8px;
 
-.optionGroup p{
-padding-left:20px;
-}
-.optionGroup label{
-padding-left:20px;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1c1c1c;
+  padding-left: 20px;
 }
 
 .main {
   display: flex;
-  gap: 2rem;
+  justify-content: space-between; /* ✅ keeps consistent gap */
+  gap: 1.5rem;
 }
 
 .left {
-  flex: 2;
+  width: 58%; /* ✅ fixed proportion */
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
 .right {
-  flex: 1;
+  width: 36%; /* ✅ fixed proportion */
 }
 
 .card {
-      background: white;
-    border-radius: 8px;
-    height: 65vh;
-    width: 74%;
-    margin-left: 4rem;
-    border: 1px solid #c9cbd0 ;
-    padding: 0px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-  
+  background: white;
+  border-radius: 8px;
+  width: 100%;
+  border: 1px solid #c9cbd0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  padding-bottom: 1rem;
 }
+
 .card1 {
-      background: white;
-    border-radius: 8px;
-    height: 15vh;
-    border: 1px solid #c9cbd0 ;
-    width: 65%;
-    margin-left: 4rem;
-    padding: 0px 35px 35px 35px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-  
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #c9cbd0;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
-
-
 
 .optionGroup {
-  margin-bottom: 1rem;
+  padding: 1rem 1.5rem;
 }
 
 .optionGroup p {
-  font-size: 14px;
+  font-size: 15px;
   margin-bottom: 0.5rem;
+  font-weight: 600;
 }
 
 .optionGroup label {
-  margin-right: 1.5rem;
+  margin-right: 2rem;
   font-size: 14px;
+  cursor: pointer;
+}
+.optionGroup label {
+  margin-right: 2rem;
+  font-size: 14px;
+  cursor: pointer;
+
+  display: inline-flex;   /* ✅ radio + text ek line me */
+  align-items: center;    /* ✅ vertically center */
+  gap: 6px;               /* ✅ thoda spacing between radio & text */
 }
 
+.optionGroup input[type="radio"],
+.optionGroup input[type="checkbox"] {
+  margin: 0; /* ✅ extra top-bottom spacing remove */
+}
+
+
 .note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 12px;
-  color: #6c757d;
-  width:60%;
-  height:30px;
-  padding:15px;
-  margin-left: 20px;
-  background-color:#f8f5f4;
-  margin-top: 0.5rem;
-  border-radius:8px;
+  color: #5e5e5e;
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 0.8rem;
 }
 
 .carTitle {
   font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 0.25rem;
 }
 
 .carSubText {
-  font-size: 14px;
+  font-size: 13px;
   color: #555;
 }
 
@@ -113,17 +127,10 @@ padding-left:20px;
   background: white;
   border-radius: 8px;
   padding: 1.5rem;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e3e6eb;
 }
-.summary{
-  display: flex;
-  gap:2rem;
-  
-}
-.backArrow{
- margin-top: 2rem;
- margin-left: 1rem; 
-}
+
 .row {
   display: flex;
   justify-content: space-between;
@@ -143,9 +150,13 @@ padding-left:20px;
 .checkboxRow {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
   font-size: 13px;
   margin: 1rem 0;
+  gap: 0.5rem;
+}
+
+.checkboxRow label {
+  flex: 1;
 }
 
 .price {
@@ -164,44 +175,43 @@ padding-left:20px;
 }
 
 .priceBig {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
   color: #ff5722;
 }
 
 .payBtn {
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.9rem;
   background: #ff5722;
   color: white;
   border: none;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 15px;
   cursor: pointer;
 }
 
 .terms {
   font-size: 12px;
   margin-top: 1rem;
+  line-height: 1.5;
 }
 
 .terms span {
   color: #1e88e5;
   cursor: pointer;
+  text-decoration: underline;
 }
 
 .nextStep {
   margin-top: 1rem;
   background: #f5f5f5;
-  padding: 0.75rem;
+  padding: 0.9rem;
   font-size: 12px;
-  border-radius: 4px;
+  border-radius: 6px;
+  line-height: 1.4;
 }
-.backSummary{
-    color:blue;
-}
-
 
 /* Tablet (481px – 1024px) */
 @media (min-width: 481px) and (max-width: 1024px) {
@@ -211,21 +221,23 @@ padding-left:20px;
   }
 
   .main {
-    flex-direction: column;
+    flex-direction: column; /* ✅ Right panel moves below */
+    gap: 1.5rem;
   }
 
-  .card, .card1 {
-            width: auto;
+  .card,
+  .card1,
+  .summaryCard {
+    width: 100%; /* ✅ Full width on tablet */
     margin-left: 0;
-    height:auto;
+    height: auto;
   }
 
-  .left, .right {
+  .left,
+  .right {
     width: 100%;
   }
-.optionGroup{
-    width: max-content;
-}
+
   .note {
     width: 100%;
     margin-left: 0;
@@ -236,28 +248,26 @@ padding-left:20px;
     gap: 1rem;
   }
 
-  .summaryCard {
-            width: auto;
-  }
-  .backArrow {
-    margin: 1rem auto 0 auto;
-    display:none;
-  }
-  .backSummary{
-    display:none;
+  .backArrow,
+  .backSummary {
+    display: none;
   }
 }
-
 
 /* Mobile (≤480px) */
 @media (max-width: 480px) {
   .container {
-    padding: 0;
-    margin: 10px;
+    padding: 0.5rem;
+    margin: 0;
+  }
+
+  .optionGroup {
+    font-size: 11px;
+    margin-right: 0;
   }
 
   .main {
-    flex-direction: column;
+    flex-direction: column; /* ✅ Stacks nicely */
     gap: 1rem;
   }
 
@@ -267,43 +277,27 @@ padding-left:20px;
   }
 
   .card,
-  .card1 {
-    width: calc(100% - 32px); /* 16px margin left and right */
+  .card1,
+  .summaryCard {
+    width: 100%; /* ✅ Full width for mobile */
     margin: 0 auto;
     padding: 1rem;
     height: auto;
   }
 
   .sectionTitle {
-    width: calc(100% - 32px);
+    width: 100%;
     margin: 0 auto;
     padding: 14px;
   }
 
   .note {
-    width: calc(100% - 32px);
+    width: 100%;
     margin: 0 auto;
     padding: 10px;
   }
 
-  .optionGroup p,
-  .optionGroup label {
-    padding-left: 12px;
-  }
-
-  .summary {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .summaryCard {
-    width: calc(100% - 32px);
-    margin: 0 auto;
-    padding: 1rem;
-  }
-
   .row {
-
     gap: 0.5rem;
   }
 
@@ -315,15 +309,11 @@ padding-left:20px;
 
   .payBtn {
     font-size: 13px;
-    padding: 0.6rem;
+    padding: 0.7rem;
   }
 
   .priceBig {
     font-size: 18px;
-  }
-
-  .totalBox {
-    margin: 0.75rem 0;
   }
 
   .terms {
@@ -334,59 +324,46 @@ padding-left:20px;
   .nextStep {
     font-size: 11px;
     padding: 0.5rem;
-    width: calc(100% - 32px);
-    margin: 1rem auto 0;
+    margin-top: 1rem;
+    width: 100%;
   }
 
-  .backArrow {
-    margin: 1rem auto 0 auto;
-    display:none;
-  }
-  .backSummary{
-    display:none;
+  .backArrow,
+  .backSummary {
+    display: none;
   }
 }
-
-.backBtn {
-  position: absolute;
-  left: 6rem;
-  top: 26%;
-  transform: translateY(-50%);
-  background: transparent;
-  border: none;
+/* Checkbox / Radio proper vertical center */
+.checkboxRow,
+.optionGroup label,
+.summaryCard label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px; /* spacing between checkbox/radio and text */
   cursor: pointer;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: rgb(230, 230, 229);
-  z-index: 999;
 }
 
-.arrowBack {
-  color: #000;
-  font-size: 20px;
-  margin: 4px 3px 0px 0px;
-  justify-items: center;
+.checkboxRow input,
+.optionGroup input,
+.summaryCard input {
+  margin: 0; /* remove default extra spacing */
 }
 
-/* Tablet */
-@media screen and (max-width: 1024px) {
-  .backBtn {
-    left: 5rem;
-    top: 18%;
-  }
+/* Mandatory checkbox text alignment fix */
+.summaryCard .checkboxRow label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.4; /* better readability */
 }
 
-/* Mobile */
-@media screen and (max-width: 768px) {
-  .backBtn {
-    left: 1rem;
-    top: 16%;
-    width: 36px;
-    height: 36px;
-  }
-
-  .arrowBack {
-    font-size: 18px;
-  }
+/* Next step box padding fix */
+.nextStep {
+  margin-top: 1rem;
+  background: #f5f5f5;
+  padding: 1rem;   /* ✅ proper spacing inside */
+  font-size: 12px;
+  border-radius: 6px;
+  line-height: 1.4;
 }
+

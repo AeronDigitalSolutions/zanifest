@@ -11,13 +11,11 @@ export async function middleware(req: NextRequest) {
   || req.cookies.get('agentToken')?.value;
 
   console.log("token recieved in middleware:", token);
-  console.log("All cookies:", req.cookies.getAll());
+  // console.log("All cookies:", req.cookies.getAll());
 
+  // console.log("Token from cookies:", token);
 
-
-  console.log("Token from cookies:", token);
-
-  console.log("MIDDLEWAREEE");
+  // console.log("MIDDLEWAREEE");
 
   const url = req.nextUrl;
   console.log("Request URL:", url.pathname);
@@ -48,7 +46,7 @@ export async function middleware(req: NextRequest) {
   try {
     console.log("Raw token from cookies:", token);
 
-  const decoded = await verifyToken(token ?? "") as { role?: string } | null;
+  const decoded = await verifyToken(token ?? "") as { role?: string; accountStatus?:string; } | null;
   console.log("Decoded token:", decoded);
 
   if (!decoded || !decoded.role) {
@@ -62,6 +60,28 @@ export async function middleware(req: NextRequest) {
   console.log("Requested path:", pathname);
 
   console.log("Decoded role:", role, "Requested path:", pathname);
+
+    // ✅ Add status check for managers only
+    if (['national', 'state', 'district'].includes(role)) {
+      if (decoded.accountStatus !== 'active') {
+        console.log(`Manager with role=${role} blocked due to inactive status`);
+        return NextResponse.redirect(new URL('/managerlogin', req.url));
+      }
+    }
+
+     if (decoded.role === "agent") {
+      if (decoded.accountStatus !== "active") {
+        console.log(`agent with role=${role} blocked due to inactive status`);
+        return NextResponse.redirect(new URL('/agentlogin', req.url));
+      }
+    }
+
+    if (decoded.role === "admin") {
+      if (decoded.accountStatus !== "active") {
+        console.log(`agent with role=${role} blocked due to inactive status`);
+        return NextResponse.redirect(new URL('/adminlogin', req.url));
+      }
+    }
 
   // Role-based access logic
   if (role === "superadmin" && pathname.startsWith("/superadmin")) {

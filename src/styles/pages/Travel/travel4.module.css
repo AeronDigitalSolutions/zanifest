@@ -407,7 +407,7 @@
 }
 
 .featureValue {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
   color: #111827;
 }
@@ -421,7 +421,7 @@
 }
 
 .compareCheck {
-  font-size: 13px;
+  font-size: 15px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -430,7 +430,7 @@
 }
 
 .viewFeatures {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
   color: #2563eb;
   background: none;
@@ -508,8 +508,8 @@
 }
 
 .logoWrap {
-  width: 64px;
-  height: 64px;
+  width: 128px;
+  height: 128px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -531,7 +531,7 @@
 
 /* Brand + plan spacing */
 .brand {
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 600;
   margin: 0;
 }
@@ -591,7 +591,7 @@
 }
 
 .priceCaption {
-  font-size: 12px;
+  font-size: 13px;
   color: #6b7280;
   margin-bottom: 4px;
 }
@@ -821,7 +821,7 @@
 }
 
 .planName {
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 600;
   color: #111827;
   margin-bottom: 4px;
@@ -849,7 +849,7 @@
 .featureLabel {
   color: #6b7280;
   margin-bottom: 2px;
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .featureValue {
@@ -998,6 +998,8 @@
 .railLogo img {
   width: 60px;
   height: auto;
+  align-items: center;
+  margin-left:35%;
 }
 
 .railBrand {
@@ -1012,7 +1014,7 @@
 }
 
 .railMeta {
-  font-size: 12px;
+  font-size: 14px;
   margin: 6px 0;
 }
 
@@ -1150,6 +1152,13 @@
   .railLogo img {
     width: 50px;
   }
+  .featureValue {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  margin-left: 5px;
+}
+
 }
 
 /* ====== Mobile Plan Card Fix ====== */
@@ -1317,6 +1326,19 @@
     border-radius: 6px;
     text-align: center;
   }
+  
+.planName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 4px;
+}
+.featureLabel {
+  color: #6b7280;
+  margin-bottom: 2px;
+  font-size: 13px;
+  margin-left: 5px;
+}
 }
 
 /* Even smaller phones */
@@ -1326,15 +1348,15 @@
   }
 
   .logoImg {
-width: 50%;
+width: 25%;
         height: auto;
         object-fit: fill;
         border-radius: 8px;
-        margin-top: 100px;
+        margin-top: 50px;
   }
 
   .price {
-    font-size: 15px;
+    font-size: 20travelpx;
   }
 .feature{
       margin-top: 15px;
@@ -1342,13 +1364,30 @@ width: 50%;
 }
 .brand{
       text-align: center;
-      margin-top: 19px;
+      margin-top: -10px;
 }
   .cta,
   .buyBtn {
     font-size: 13px;
     padding: 10px;
   }
+  .viewFeatures {
+  font-size: 10px;
+  color: #2563eb;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.compareCheck {
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
 }
 @media (max-width: 768px) {
   .compareRow {

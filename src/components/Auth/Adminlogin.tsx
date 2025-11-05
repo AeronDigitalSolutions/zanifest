@@ -1,7 +1,11 @@
+"use client";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import styles from "@/styles/components/Auth/Login.module.css";
 import Image from "next/image";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { toast } from 'react-hot-toast';
+
 
 export default function AdminLogin() {
   const [password, setPassword] = useState<string>("");
@@ -12,51 +16,54 @@ export default function AdminLogin() {
 
   const router = useRouter();
 
-   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true); // ✅ show loader
+    setError(false);
 
-  try {
-    const res = await fetch("/api/admin/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const data = await res.json();
-    // console.log("Login response:", data);
+      const data = await res.json();
 
-    // if (data.token) {
-    //   localStorage.setItem('token', data.token);  // ✅ Save it
-    //   // console.log('Token saved:', data.token);
-    // }
+      if (!res.ok) {
+        setError(true);
+        toast.error(data.message || "Login failed");
+        setLoading(false);
+        return;
+      }
 
-    if (!res.ok) {
-      alert(data.message || "Login failed");
-      return;
+      if (data.role === "superadmin") {
+        router.push("/superadmin");
+      } else if (data.role === "admin") {
+        router.push("/admindashboard");
+      } else {
+        toast.error("Unauthorized Role");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false); // ✅ hide loader
     }
-
-    // Redirect based on role
-    if (data.role === "superadmin") {
-      // window.location.href = "/superadmin";
-      router.push("/superadmin");
-    } else if (data.role === "admin") {
-      // window.location.href = "/admin";
-      router.push("/admindashboard");
-    } else {
-      alert("Unauthorized Role");
-    }
-  } catch (error) 
-  {
-    console.error("Login error:", error);
-    alert("Something went wrong");
-  }
-};
-
+  };
 
   return (
     <div className={styles.cont}>
+      {/* 🔥 Full Page Loader */}
+      {loading && (
+        <div className={styles.loaderOverlay}>
+          <AiOutlineLoading3Quarters className={styles.pageLoader} />
+          <p>Loading, please wait...</p>
+        </div>
+      )}
+
       <div className={styles.left}>
         <Image
           src={require("@/assets/loginbanner.png")}
@@ -75,9 +82,7 @@ export default function AdminLogin() {
             />
           </div>
 
-          <h1 className={styles.heading}>
-            Admin Login 
-          </h1>
+          <h1 className={styles.heading}>Admin Login</h1>
           <p className={styles.headingp}>
             Access to the most powerful tool in the entire design and web
             industry.
@@ -127,18 +132,8 @@ export default function AdminLogin() {
               disabled={loading}
               type="submit"
             >
-              {loading ? "Loading" : "Login"}
+              Login
             </button>
-
-            {/* <p className={styles.signupLink}>
-              Don't have an account?{" "}
-              <span
-                className={styles.signupText}
-                onClick={() => router.push("/signup")}
-              >
-                Sign Up
-              </span>
-            </p> */}
           </form>
         </div>
       </div>

@@ -14,11 +14,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { email, password } = req.body;
   console.log("Received data:", { email, password });
+
   if (!email || !password) {
     return res.status(400).json({ message: "Email and password are required" });
   }
 
   try {
+
     await connectDB();
     console.log("Connected to database - for manager login");
 
@@ -30,17 +32,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const isMatch = await bcrypt.compare(password, manager.password);
+
     if (!isMatch) {
       console.log("Password mismatch for manager:", email);
       return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+        // 🔴 Check status
+    if (manager.accountStatus !== 'active') {
+      return res.status(403).json({ message: 'Account is inactive. Contact admin.' });
     }
 
     const token = jwt.sign(
       {
         id: manager._id,
         role: manager.category, 
+        accountStatus: manager.accountStatus,
         name: `${manager.firstName} ${manager.lastName}`,
-    email: manager.email,
+        email: manager.email,
     // assuming 'category' is the field for role
       },
       process.env.JWT_SECRET as string,
@@ -64,7 +73,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       name: `${manager.firstName} ${manager.lastName}`,
       
     });
-
   } 
   
   catch (error) {

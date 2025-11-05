@@ -81,6 +81,7 @@ Car video inspection required. Details will be shared after payment.
           </div>
 
           <div className={styles.card1}>
+            <h3>Car Details</h3>
             <p className={styles.carTitle}>
               SKODA SLAVIA Style Matte 1.0 TSI AT (999cc)
             </p>
@@ -90,6 +91,7 @@ Car video inspection required. Details will be shared after payment.
 
         <div className={styles.right}>
           <div className={styles.summaryCard}>
+            <h2 className={styles.heading}>Plan Summary</h2>
             <div className={styles.row}>
               <span>IDV Cover</span>
               <span>₹8,84,240</span>

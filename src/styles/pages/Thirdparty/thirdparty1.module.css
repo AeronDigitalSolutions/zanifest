@@ -112,7 +112,16 @@
 .bottomText a:hover {
   text-decoration: underline;
 }
-
+.input {
+  text-transform: uppercase;
+  font-weight: bold;
+  text-align: center;
+}
+.input::placeholder {
+  text-transform: none;
+  text-align: center;
+  font-weight: normal;
+}
 /* Responsive */
 
 

@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import styles from "@/styles/pages/bikeinsurance.module.css";
 import UserDetails from "@/components/ui/UserDetails";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import Image from "next/image";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 import {
   MdOutlineKeyboardDoubleArrowRight,
   MdKeyboardArrowRight,
@@ -19,6 +22,11 @@ function bikeinsurance() {
   React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
+
+    // AOS animation
+    useEffect(() => {
+      AOS.init({ duration: 1000, once: true });
+    }, []);
   return (
     <div>
       <UserDetails />
@@ -31,7 +39,7 @@ function bikeinsurance() {
             className={styles.image}
           />
         </div>
-        <div>
+<div data-aos="fade-right">
           <h1 className={styles.headings}>TWO - WHEELER INSURANCE</h1>
           <div className={styles.bottom}>
             <p className={styles.heading}>

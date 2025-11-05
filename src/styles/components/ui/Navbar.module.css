@@ -10,7 +10,6 @@
    position: sticky;
   top: 0;
 }
-
 .hidden {
   display: none !important;
 }
@@ -170,6 +169,7 @@ animation: dropdownAnimation 0.3s ease-in;
   padding: 10px 32px;
   font-size: 20px;
   transition: all 0.4s;
+  margin-top: 15px;
 }
 
 .loginLogo{
@@ -262,4 +262,21 @@ animation: dropdownAnimation 0.3s ease-in;
     height: 3rem;
     
   }
+}
+.dropDown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  min-width: 220px;   
+  width: max-content; 
+  left: 0;
+  background-color: white;
+  border: 1px solid #101010;
+  padding: 8px 0;
+  font-size: 1rem;
+  color: #494949;
+  z-index: 4;
+  border-radius: 10px;
+  gap: 0.4rem;
+  animation: dropdownAnimation 0.3s ease-in;
 }

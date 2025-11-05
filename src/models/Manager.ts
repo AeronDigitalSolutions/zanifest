@@ -7,7 +7,6 @@ const managerSchema = new mongoose.Schema({
  
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-
   email: { type: String, required: true, unique: true },
   phone: {type: String},
   managerId: {
@@ -65,6 +64,12 @@ const managerSchema = new mongoose.Schema({
     ref: 'Manager',
     default: null,
   },
+
+  accountStatus: { type: String, enum: ['active', 'inactive'], default: 'active' }, // NEW
+  // models/Manager.ts (add this field inside managerSchema)
+totalSales: { type: Number, default: 0 },
+
+
 }, {
   timestamps: true,
 });

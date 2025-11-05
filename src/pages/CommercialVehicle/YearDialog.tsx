@@ -11,11 +11,12 @@ interface YearDialogProps {
   selectedVehicle: string;
   selectedBrand: string;
   selectedModel: string;
+   onBack: () => void; 
   selectedVariant: string;
   onSelectYear: (year: number) => void;
 }
 
-const YearDialog: React.FC<YearDialogProps> = ({
+const yearDialog: React.FC<YearDialogProps> = ({
   onClose,
   vehicleNumber,
   selectedVehicle,
@@ -23,6 +24,7 @@ const YearDialog: React.FC<YearDialogProps> = ({
   selectedModel,
   selectedVariant,
   onSelectYear,
+  onBack
 }) => {
   const years: number[] = [
     2024, 2023, 2022, 2021, 2020,
@@ -40,23 +42,18 @@ const YearDialog: React.FC<YearDialogProps> = ({
           <div className={styles.selectionList}>
             <div className={styles.selectionItem}>
               <FiMapPin className={styles.icon} /> {vehicleNumber}
-              <FiEdit2 className={styles.editIcon} />
             </div>
             <div className={styles.selectionItem}>
               <FaTruck className={styles.icon} /> {selectedVehicle}
-              <FiEdit2 className={styles.editIcon} />
             </div>
             <div className={styles.selectionItem}>
               <FaCar className={styles.icon} /> {selectedBrand}
-              <FiEdit2 className={styles.editIcon} />
             </div>
             <div className={styles.selectionItem}>
               <FaCar className={styles.icon} /> {selectedModel}
-              <FiEdit2 className={styles.editIcon} />
             </div>
             <div className={styles.selectionItem}>
               <GiGearStickPattern className={styles.icon} /> {selectedVariant}
-              <FiEdit2 className={styles.editIcon} />
             </div>
           </div>
         </div>
@@ -64,7 +61,7 @@ const YearDialog: React.FC<YearDialogProps> = ({
         {/* Right Section */}
         <div className={styles.yearBox}>
           <div className={styles.yearHeader}>
-            <button className={styles.arrowBtn} onClick={onClose}>
+  <button className={styles.arrowBtn} onClick={onBack}>
               ‹
             </button>
             <span>Select Year</span>
@@ -94,4 +91,4 @@ const YearDialog: React.FC<YearDialogProps> = ({
   );
 };
 
-export default YearDialog;
+export default yearDialog;

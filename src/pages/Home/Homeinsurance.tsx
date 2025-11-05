@@ -1,15 +1,20 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/pages/Home/homeinsurance.module.css";
 import { FiUser, FiPhone } from "react-icons/fi";
 import Footer from "@/components/ui/Footer";
 import Navbar from "@/components/ui/Navbar";
 import { FaCheckCircle, FaWhatsapp } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 
 const Homeinsurance: React.FC = () => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [whatsappUpdates, setWhatsappUpdates] = useState(false);
+  const [fullName, setFullName] = useState("");
+  const [mobile, setMobile] = useState("+91 ");
   const router = useRouter();
 
   const handleOptionChange = (option: string) => {
@@ -26,6 +31,35 @@ const Homeinsurance: React.FC = () => {
     router.push("Homeinsurance2");
   };
 
+  // ✅ Full Name handler (capitalize each word)
+  const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let input = e.target.value.replace(/[^a-zA-Z\s]/g, ""); // sirf letters & space
+    input = input
+      .split(" ")
+      .filter(Boolean) // extra spaces hatao
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+    setFullName(input);
+  };
+
+  // ✅ Mobile handler
+  const handleMobileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const prefix = "+91 ";
+    let input = e.target.value;
+
+    if (!input.startsWith(prefix)) {
+      input = prefix;
+    }
+
+    const digitsOnly = input.substring(prefix.length).replace(/\D/g, "");
+    const limitedDigits = digitsOnly.slice(0, 10);
+
+    setMobile(prefix + limitedDigits);
+  };
+   // AOS animation
+    useEffect(() => {
+      AOS.init({ duration: 1000, once: true });
+    }, []);
   return (
     <div>
       <Navbar />
@@ -53,14 +87,27 @@ const Homeinsurance: React.FC = () => {
         </div>
 
         {/* ✅ form with navigation */}
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <form className={styles.form} onSubmit={handleSubmit} data-aos="fade-right">
           <div className={styles.inputGroup}>
-            <input type="text" placeholder="Full Name" className={styles.input} />
+            <input
+              type="text"
+              placeholder="Full Name"
+              className={styles.input}
+              value={fullName}
+              onChange={handleFullNameChange}
+            />{" "}
             <FiUser className={styles.inputIcon} />
           </div>
 
           <div className={styles.inputGroup}>
-            <input type="text" placeholder="Mobile Number" className={styles.input} />
+            <input
+              type="tel"
+              placeholder="Mobile Number"
+              className={styles.input}
+              value={mobile}
+              onChange={handleMobileChange}
+              maxLength={14} // +91 + 10 digits = 14 chars
+            />{" "}
             <FiPhone className={styles.inputIcon} />
             <span className={styles.noSpam}>We don’t spam</span>
           </div>

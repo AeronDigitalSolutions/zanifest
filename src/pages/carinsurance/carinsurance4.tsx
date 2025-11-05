@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Navbar from "@/components/ui/Navbar";
@@ -8,6 +7,10 @@ import carImage from "@/assets/pageImages/blackcar.png";
 import UserDetails from "@/components/ui/UserDetails";
 import { useRouter } from "next/router";
 import { IoIosArrowBack } from "react-icons/io";
+import { FaArrowRight } from "react-icons/fa6";
+import indiaFlag from "@/assets/pageImages/Flag_of_India.png";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const daysOfWeek = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
 
@@ -30,19 +33,23 @@ const generateMonth: GenerateMonthFn = (year, month) => {
 const CarInsurance4 = () => {
   const router = useRouter();
 
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [step, setStep] = useState<"form" | "calendar" | "claim">("form"); // toggle UI
   const [monthsShown, setMonthsShown] = useState<number>(2);
-  const [currentMonth, setCurrentMonth] = useState<number>(7); // Start from August 2025
+  const [currentMonth, setCurrentMonth] = useState<number>(7); // August 2025
+
+  // AOS animation
+    useEffect(() => {
+      AOS.init({ duration: 1000, once: true });
+    }, []);
 
   useEffect(() => {
     const updateMonths = () => {
       if (window.innerWidth <= 768) {
-        setMonthsShown(1); // mobile
+        setMonthsShown(1);
       } else {
-        setMonthsShown(2); // desktop
+        setMonthsShown(2);
       }
     };
-
     updateMonths();
     window.addEventListener("resize", updateMonths);
     return () => window.removeEventListener("resize", updateMonths);
@@ -69,118 +76,211 @@ const CarInsurance4 = () => {
     <div className={styles.mainContainer}>
       <UserDetails />
       <Navbar />
- {/* <button
-    className={styles.backBtn}
-    onClick={() => router.push("./carinsurance2")} // or use router.back() for dynamic back
-  >
-    <IoIosArrowBack className={styles.arrowBack} />
-  </button> */}
+
       <div className={styles.pageContainer}>
+        {/* LEFT SECTION */}
         <div className={styles.leftSection}>
-          <div className={styles.outerBox}>
-            <div className={styles.innerBox}>
-              <div className={styles.headingBox}>
-                <h2 className={styles.heading}>
-                  When does your 'Own Damage' policy expire?
-                </h2>
-                <p className={styles.subtext}>
-                  This is the policy you bought last year
+          {/* STEP 1: FORM */}
+          {step === "form" && (
+            <div className={styles.formWrapper} data-aos="fade-right">
+              <div className={styles.header}>
+                <div className={styles.iconBox}>
+                  <IoIosArrowBack className={styles.arrow} />
+                </div>
+                <p className={styles.titleText}>
+                  Almost done! Just one last step
                 </p>
               </div>
 
-             <div className={styles.datepickerWrapper}>
-  <div className={styles.calendarWrapper}>
-    {/* === Current Month === */}
-    <div className={styles.calendar}>
-      <div className={styles.header}>
-        <span
-          className={styles.arrow}
-          onClick={() => setCurrentMonth((prev) => prev - 1)}
-        >
-          ◀
-        </span>
+              <input
+                type="text"
+                placeholder="Full Name"
+                aria-label="Full Name"
+                className={styles.input}
+              />
 
-        <span className={styles.monthYear}>{current.label}</span>
+              <div className={styles.mobileInputGroup}>
+                <div className={styles.flagWrapper}>
+                  <Image
+                    className={styles.flagImg}
+                    src={indiaFlag}
+                    alt="India Flag"
+                    width={24}
+                    height={16}
+                  />
+                  <span>+91</span>
+                </div>
+                <input
+                  type="text"
+                  aria-label="Mobile Number"
+                  placeholder="Mobile number"
+                  className={styles.mobileInput}
+                />
+              </div>
 
-        {/* ✅ Add right arrow ONLY when showing 1 month (mobile) */}
-        {monthsShown === 1 && (
-          <span
-            className={styles.arrow}
-            onClick={() => setCurrentMonth((prev) => prev + 1)}
-          >
-            ▶
-          </span>
-        )}
-      </div>
+              <button
+                className={styles.submitButton}
+                onClick={() => setStep("calendar")}
+                aria-label="View Prices"
+              >
+                View Prices <FaArrowRight />
+              </button>
 
-      <div className={styles.daysRow}>
-        {daysOfWeek.map((day) => (
-          <div key={day} className={styles.day}>
-            {day}
-          </div>
-        ))}
-        {current.dates.map((date, index) => (
-          <div
-            key={index}
-            className={`${styles.date} ${date ? styles.clickable : ""}`}
-            onClick={(e) => {
-              e.stopPropagation();
-              if (date) router.push("./carinsurance5");
-            }}
-          >
-            {date}
-          </div>
-        ))}
-      </div>
-    </div>
-
-    {/* === Next Month (Desktop Only) === */}
-    {monthsShown === 2 && (
-      <div className={styles.calendar}>
-        <div className={styles.header}>
-          <span className={styles.monthYear}>{next.label}</span>
-          <span
-            className={styles.arrow}
-            onClick={() => setCurrentMonth((prev) => prev + 1)}
-          >
-            ▶
-          </span>
-        </div>
-
-        <div className={styles.daysRow}>
-          {daysOfWeek.map((day) => (
-            <div key={day} className={styles.day}>
-              {day}
+              <p className={styles.terms}>
+                By clicking on "View Prices", you agree to our{" "}
+                <span className={styles.link}>Privacy Policy</span> &{" "}
+                <span className={styles.link}>Terms of Use</span>
+              </p>
             </div>
-          ))}
-          {next.dates.map((date, index) => (
-            <div
-              key={index}
-              className={`${styles.date} ${date ? styles.clickable : ""}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                if (date) router.push("./carinsurance5");
-              }}
-            >
-              {date}
-            </div>
-          ))}
-        </div>
-      </div>
-    )}
-  </div>
-</div>
+          )}
 
+          {/* STEP 2: CALENDAR */}
+          {step === "calendar" && (
+            <div className={styles.outerBox} data-aos="fade">
+              <div className={styles.innerBox}>
+                <div className={styles.headingBox}>
+                  <h2 className={styles.heading}>
+                    When does your 'Own Damage' policy expire?
+                  </h2>
+                  <p className={styles.subtext}>
+                    This is the policy you bought last year
+                  </p>
+                </div>
 
-              <div className={styles.helpLinkContainer}>
-                <a href="#" className={styles.helpLink}>
-                  Don't know policy expiry date?
-                </a>
+                <div className={styles.datepickerWrapper}>
+                  <div className={styles.calendarWrapper}>
+                    {/* Current Month */}
+                    <div className={styles.calendar}>
+                      <div className={styles.header}>
+                        <span
+                          className={styles.arrow}
+                          onClick={() => setCurrentMonth((prev) => prev - 1)}
+                        >
+                          ◀
+                        </span>
+                        <span className={styles.monthYear}>
+                          {current.label}
+                        </span>
+                        {monthsShown === 1 && (
+                          <span
+                            className={styles.arrow}
+                            onClick={() => setCurrentMonth((prev) => prev + 1)}
+                          >
+                            ▶
+                          </span>
+                        )}
+                      </div>
+                      <div className={styles.daysRow}>
+                        {daysOfWeek.map((day) => (
+                          <div key={day} className={styles.day}>
+                            {day}
+                          </div>
+                        ))}
+                        {current.dates.map((date, index) => (
+                          <div
+                            key={index}
+                            className={`${styles.date} ${
+                              date ? styles.clickable : ""
+                            }`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (date) setStep("claim");
+                            }}
+                          >
+                            {date}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Next Month (desktop only) */}
+                    {monthsShown === 2 && (
+                      <div className={styles.calendar}>
+                        <div className={styles.header}>
+                          <span className={styles.monthYear}>
+                            {next.label}
+                          </span>
+                          <span
+                            className={styles.arrow}
+                            onClick={() =>
+                              setCurrentMonth((prev) => prev + 1)
+                            }
+                          >
+                            ▶
+                          </span>
+                        </div>
+                        <div className={styles.daysRow}>
+                          {daysOfWeek.map((day) => (
+                            <div key={day} className={styles.day}>
+                              {day}
+                            </div>
+                          ))}
+                          {next.dates.map((date, index) => (
+                            <div
+                              key={index}
+                              className={`${styles.date} ${
+                                date ? styles.clickable : ""
+                              }`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (date) setStep("claim");
+                              }}
+                            >
+                              {date}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className={styles.helpLinkContainer}>
+                  <a href="#" className={styles.helpLink}>
+                    Don't know policy expiry date?
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
+          )}
+
+          {/* STEP 3: CLAIM DETAILS (merged from carinsurance5) */}
+          {step === "claim" && (
+            <div className={styles.outerBoxClaim} data-aos="fade">
+              <div className={styles.innerBoxClaim}>
+                <div className={styles.claimDetails}>
+                  <h2 className={styles.sectionTitle}>Claim detail</h2>
+                </div>
+                <p className={styles.question}>
+                  Did you make a claim in your existing policy?
+                </p>
+
+                <div className={styles.options}>
+                  <button
+                    className={styles.optionButton}
+                    onClick={() => router.push("./carinsurance3")}
+                  >
+                    Yes
+                  </button>
+                  <button
+                    className={styles.optionButton}
+                    onClick={() => router.push("./carinsurance3")}
+                  >
+                    No
+                  </button>
+                  <button
+                    className={styles.optionButton}
+                    onClick={() => router.push("./carinsurance3")}
+                  >
+                    Not sure
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
+        {/* RIGHT SECTION */}
         <div className={styles.rightSection}>
           <div className={styles.imageContainer}>
             <Image
@@ -189,7 +289,9 @@ const CarInsurance4 = () => {
               className={styles.carImage}
               priority
               fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              sizes="(max-width: 768px) 100vw, 
+                     (max-width: 1200px) 50vw, 
+                     33vw"
             />
           </div>
         </div>

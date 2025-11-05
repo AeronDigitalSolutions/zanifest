@@ -82,7 +82,7 @@ const Checkout: React.FC<Props> = ({
 
         <p className={styles.lead}>
           Thank you <span className={styles.highlight}>{name}</span> for choosing{" "}
-          <strong>Policybazaar</strong> for your Professional Indemnity
+          <strong>Zanifest</strong> for your Professional Indemnity
           requirements.
         </p>
 

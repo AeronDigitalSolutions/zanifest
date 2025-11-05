@@ -1,8 +1,10 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/pages/Shop/shop1.module.css";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import AOS from "aos";
+import "aos/dist/aos.css";      
 
 // Illustrations & Logos
 import shopIllustration from "@/assets/pageImages/fire_insurance.png";
@@ -15,8 +17,38 @@ import Footer from "@/components/ui/Footer";
 import { IoLogoWhatsapp } from "react-icons/io";
 
 const Shop1: React.FC = () => {
+  const [mobileNumber, setMobileNumber] = useState("+91 ");
+  const [pincode, setPincode] = useState("");
+
   const router = useRouter(); // ✅ router instance
 
+  // Handler function for mobile number input
+  const handleMobileNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+    const prefix = "+91 ";
+
+    if (!input.startsWith(prefix)) {
+      setMobileNumber(prefix);
+      return;
+    }
+
+    const digitsOnly = input.substring(prefix.length).replace(/[^0-9]/g, "");
+    const limitedDigits = digitsOnly.slice(0, 10);
+
+    setMobileNumber(prefix + limitedDigits);
+  };
+
+  // Handler function for pincode input
+  const handlePincodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+    const digitsOnly = input.replace(/\D/g, "");
+    const limitedDigits = digitsOnly.slice(0, 6);
+    setPincode(limitedDigits);
+  };
+    // AOS animation
+    useEffect(() => {
+      AOS.init({ duration: 1000, once: true });
+    }, []);
   return (
     <>
       <Navbar />
@@ -25,8 +57,9 @@ const Shop1: React.FC = () => {
         <div className={styles.left}>
           <p className={styles.subHeading}>Shop Insurance</p>
           <h1 className={styles.heading}>
-            Get <span className={styles.highlight}>₹50 Lakh</span> cover starting
-            at just <span className={styles.highlightRed}>₹3,400/year</span>
+            Get <span className={styles.highlight}>₹50 Lakh</span> cover
+            starting at just{" "}
+            <span className={styles.highlightRed}>₹3,400/year</span>
             <sup>+</sup>
           </h1>
 
@@ -66,10 +99,8 @@ const Shop1: React.FC = () => {
         </div>
 
         {/* RIGHT SECTION */}
-        <div className={styles.right}>
-          <h2 className={styles.formHeading}>
-            Get free quotes in 30 seconds
-          </h2>
+        <div className={styles.right} data-aos="fade-left">
+          <h2 className={styles.formHeading}>Get free quotes in 30 seconds</h2>
 
           {/* Radio group */}
           <div className={styles.radioGroup}>
@@ -85,13 +116,19 @@ const Shop1: React.FC = () => {
 
           {/* Input fields */}
           <input
-            type="text"
+            type="tel"
             placeholder="Enter your shop pincode"
+            value={pincode}
+            onChange={handlePincodeChange}
+            maxLength={6}
             className={styles.input}
           />
           <input
-            type="text"
-            placeholder="Enter your mobile number"
+            type="tel"
+            placeholder="Mobile number"
+            value={mobileNumber}
+            onChange={handleMobileNumberChange}
+            maxLength={14}
             className={styles.input}
           />
 

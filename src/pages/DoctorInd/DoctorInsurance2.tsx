@@ -470,7 +470,7 @@ const InsuranceComparison: React.FC = () => {
 
             {/* RIGHT: Why Doctors buy */}
             <aside className={styles.right}>
-              <h3>Why Doctors buy from Policybazaar for Business ?</h3>
+              <h3>Why Doctors buy from Zanifest for Business ?</h3>
 
               <div className={styles.reason}>
                 <Image className={styles.logo1} src={balance} alt="Future Generali" />

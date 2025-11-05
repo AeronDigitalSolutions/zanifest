@@ -8,6 +8,7 @@ export interface IAdmin extends Document {
   email: string;
   password: string;
   role: "admin" | "superadmin";
+  accountStatus?: "active" | "inactive";
 }
 
 const AdminSchema = new Schema<IAdmin>(
@@ -36,6 +37,11 @@ const AdminSchema = new Schema<IAdmin>(
       default: "admin",
       required: true,
     },
+    accountStatus: {
+      type: String,
+      enum: ["active", "inactive"],
+      default: "active",
+    }
   },
   { timestamps: true }
 );

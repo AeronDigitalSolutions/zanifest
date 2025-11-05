@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation"; // ✅ Import router
 import styles from "@/styles/pages/DoctorInd/doctorinsurance.module.css";
@@ -7,10 +7,13 @@ import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import UserDetails from "@/components/ui/UserDetails";
 import manager from "@/assets/doctor/stethoscope.png";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 
 const InsurancePage: React.FC = () => {
   const [name, setName] = useState("");
-  const [mobile, setMobile] = useState("");
+  const [mobile, setMobile] = useState("+91 "); 
   const [whatsapp, setWhatsapp] = useState(true);
 
   const router = useRouter(); // ✅ Initialize router
@@ -20,16 +23,48 @@ const InsurancePage: React.FC = () => {
     // Navigate to DoctorInsurance2 page
     router.push("DoctorInsurance2"); // ✅ Replace with your actual route
   };
+  
+  // ✅ Capitalize each word in full name
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+    const capitalized = input
+      .split(" ")
+      .map((word) =>
+        word ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() : ""
+      )
+      .join(" ");
+    setName(capitalized);
+  };
 
+    // ✅ Mobile handler (always +91 prefix, only digits, max 10 numbers)
+  const handleMobileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const prefix = "+91 ";
+    let input = e.target.value;
+
+    // Ensure prefix stays
+    if (!input.startsWith(prefix)) {
+      input = prefix;
+    }
+
+       const digitsOnly = input.substring(prefix.length).replace(/\D/g, "");
+    const limitedDigits = digitsOnly.slice(0, 10);
+
+    setMobile(prefix + limitedDigits);
+  };
+
+ // AOS animation
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true });
+  }, []);
   return (
     <>
       <UserDetails />
       <Navbar />
 
       <section className={styles.wrapper}>
-        <div className={styles.inner}>
+        <div className={styles.inner} >
           {/* Left Text Content */}
-          <div className={styles.textBlock}>
+          <div className={styles.textBlock} data-aos="fade-right">
             <h4 className={styles.subHeading}>
               Professional Indemnity Insurance for Doctors
             </h4>
@@ -45,11 +80,11 @@ const InsurancePage: React.FC = () => {
 
             <form className={styles.form} onSubmit={handleSubmit} noValidate>
               <div className={styles.inputWrap}>
-                <input
+              <input
                   type="text"
-                  placeholder="Enter name"
+                  placeholder="Enter full name"
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={handleNameChange}
                   className={styles.input}
                   autoComplete="name"
                 />
@@ -57,15 +92,16 @@ const InsurancePage: React.FC = () => {
               </div>
 
               <div className={styles.inputWrap}>
-                <input
+              <input
                   type="tel"
                   placeholder="Enter mobile number"
                   value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
+                  onChange={handleMobileChange}
                   className={styles.input}
                   autoComplete="tel"
+                  maxLength={14} 
                 />
-                {mobile && <span className={styles.check}>✔</span>}
+                {mobile.length === 14 && <span className={styles.check}>✔</span>}
               </div>
 
               <button className={styles.btn} type="submit">

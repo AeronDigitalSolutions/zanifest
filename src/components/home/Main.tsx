@@ -7,7 +7,7 @@ const images = [carousalImage, carousalImage, carousalImage];
 function Main() {
   return (
     <>
-      <Carousel images={images} />
+      <Carousel refresh={1} />
     </>
   );
 }

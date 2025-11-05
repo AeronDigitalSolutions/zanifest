@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "@/styles/pages/nationalmanager.module.css";
 import { useRouter } from "next/router";
-
 import { useManager } from "@/lib/hooks/useManager";
 import NationalManagerHeader from "@/components/nationalmanagerdashboard/nationalmanagerheader";
 import NationalManagerSidebar from "@/components/nationalmanagerdashboard/nationalmanagersidebar";
@@ -102,18 +101,6 @@ const NationalManagerDashboard = () => {
     };
     fetchStateManagers();
   }, []);
-  // profile edit 
-  useEffect(() => {
-    if (activeSection === "profileEdit") {
-      setLoading(true);
-      axios
-        .get("/api/managers/me") 
-        .then((res) => setManager(res.data))
-        .catch((err) => console.error("Error fetching manager:", err))
-        .finally(() => setLoading(false));
-    }
-  }, [activeSection]);
-
   
   const handleLogout = async () => {
     try {
@@ -138,6 +125,24 @@ const NationalManagerDashboard = () => {
 
     setFilteredData(filtered);
   };
+
+  // profile edit 
+  useEffect(() => {
+    if (activeSection === "profileEdit") {
+      setLoading(true);
+      axios
+        .get("/api/manager/getmanagerdetails", {
+          // Not needed if cookie is httpOnly; else use Authorization
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("managerToken")}`,
+          },
+        })
+        .then((res) => setManager(res.data))
+        .catch((err) => console.error("Error fetching manager:", err))
+        .finally(() => setLoading(false));
+    }
+  }, [activeSection]);
+
 
   return (
     <div className={styles.wrapper}>
