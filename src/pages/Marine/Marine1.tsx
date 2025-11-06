@@ -1,3 +1,4 @@
+// marine1.tsx
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -76,6 +77,73 @@ const Marine: React.FC = () => {
     setMobileNumber(prefix + limitedDigits);
   };
 
+  const handleViewPlans = async () => {
+    const Number = mobileNumber.replace(/\s+/g, ""); // "+91XXXXXXXXXX"
+
+    if (!/^(\+91)?[6-9]\d{9}$/.test(Number)) {
+      alert("Please enter a valid Indian phone number");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/p", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phoneNumber: Number }),
+      });
+
+      const result = await response.json();
+      console.log("API Response:", result);
+
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to save phone number");
+      }
+
+      // ✅ Persist phone for next pages (Marine5 expects it in localStorage)
+      localStorage.setItem("phoneNumber", Number);
+      console.log("Saved phoneNumber to localStorage:", Number);
+
+      setStep(2);
+    } catch (error) {
+      console.error(" Error saving phone number:", error);
+      alert("Failed to save phone number. Please check your connection");
+    }
+  };
+
+  const handleContinueStep2 = async () => {
+    try {
+      const payload = {
+        phoneNumber: mobileNumber.replace(/\s+/g, ""),
+        commodity,
+        coverType,
+        shipmentType,
+      };
+
+      const response = await fetch("/api/p", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message);
+
+      console.log(" Step 2 Data Saved:", result);
+
+      // persist to localStorage (so Marine5 can read these if needed)
+      localStorage.setItem("phoneNumber", payload.phoneNumber);
+      localStorage.setItem("commodity", commodity || "");
+      localStorage.setItem("coverType", coverType || "");
+      localStorage.setItem("shipmentType", shipmentType || "");
+
+      // route to Marine5
+      router.push("Marine5");
+    } catch (err) {
+      console.error(" Error saving step 2:", err);
+      alert("Failed to save details. Please try again.");
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -107,16 +175,46 @@ const Marine: React.FC = () => {
 
           <div className={styles.row}>
             <div className={styles.illustration}>
-              <Image src={marine} alt="Truck and Plane" priority width={400} height={300} />
+              <Image
+                src={marine}
+                alt="Truck and Plane"
+                priority
+                width={400}
+                height={300}
+              />
             </div>
 
             <div className={styles.partners}>
               <h3>10+ insurance partners</h3>
               <div className={styles.partnerRow}>
-                <Image src={hdfc} alt="HDFC Ergo" width={60} height={40} className={styles.partnerLogo} />
-                <Image src={orientalinsurance} alt="Oriental Insurance" width={60} height={40} className={styles.partnerLogo} />
-                <Image src={tata} alt="Tata AIG" width={60} height={40} className={styles.partnerLogo} />
-                <Image src={sbi} alt="SBI General" width={60} height={40} className={styles.partnerLogo} />
+                <Image
+                  src={hdfc}
+                  alt="HDFC Ergo"
+                  width={60}
+                  height={40}
+                  className={styles.partnerLogo}
+                />
+                <Image
+                  src={orientalinsurance}
+                  alt="Oriental Insurance"
+                  width={60}
+                  height={40}
+                  className={styles.partnerLogo}
+                />
+                <Image
+                  src={tata}
+                  alt="Tata AIG"
+                  width={60}
+                  height={40}
+                  className={styles.partnerLogo}
+                />
+                <Image
+                  src={sbi}
+                  alt="SBI General"
+                  width={60}
+                  height={40}
+                  className={styles.partnerLogo}
+                />
               </div>
             </div>
           </div>
@@ -129,7 +227,8 @@ const Marine: React.FC = () => {
               <>
                 <div className={styles.header}>
                   <h2>
-                    Get <span className={styles.blue}>₹10 Lakh</span> cover starting at
+                    Get <span className={styles.blue}>₹10 Lakh</span> cover
+                    starting at
                   </h2>
                   <p className={styles.price}>
                     ₹591
@@ -154,7 +253,7 @@ const Marine: React.FC = () => {
                   </span>
                 </div>
 
-                <button className={styles.cta} onClick={() => setStep(2)}>
+                <button className={styles.cta} onClick={handleViewPlans}>
                   View plans <span className={styles.arrow}>›</span>
                 </button>
 
@@ -188,142 +287,161 @@ const Marine: React.FC = () => {
               </>
             )}
 
-
             {step === 2 && (
-              
               <>
-
-  <div
-    key="step2"
-    data-aos="fade-left"
-    data-aos-once="true"
-  >
-
-                <div className={styles.header}>
-                  <MdArrowBackIos
-                    size={20}
-                    className={styles.arrow}
-                    onClick={() => setStep(1)}
-                  />
-                  <h2>Let's get your goods insured</h2>
-                  <span className={styles.step}>Step 2/2</span>
-                </div>
-
-                {/* Commodity Type */}
-                <label className={styles.label}>What type of goods are you sending?</label>
-
-                <div className={styles.dropdownWrapper}>
-                  <div
-                    className={styles.dropdownInput}
-                    onClick={() => setShowDropdown(!showDropdown)}
-                  >
-                    <input
-                      type="text"
-                      placeholder="Commodity type"
-                      value={commodity}
-                      readOnly
-                      className={styles.commodityInput}
+                <div key="step2" data-aos="fade-left" data-aos-once="true">
+                  <div className={styles.header}>
+                    <MdArrowBackIos
+                      size={20}
+                      className={styles.arrow}
+                      onClick={() => setStep(1)}
                     />
-                    <FaChevronDown
-                      className={`${styles.dropdownIcon} ${
-                        showDropdown ? styles.rotated : ""
-                      }`}
-                    />
+                    <h2>Let's get your goods insured</h2>
+                    <span className={styles.step}>Step 2/2</span>
                   </div>
 
-                  {showDropdown && (
-                    <div className={styles.dropdownList}>
-                      {commodityOptions.map((item, i) => (
-                        <div
-                          key={i}
-                          className={`${styles.dropdownItem} ${
-                            commodity === item ? styles.selectedItem : ""
-                          }`}
-                          onClick={() => {
-                            setCommodity(item);
-                            setShowDropdown(false);
-                          }}
-                        >
-                          {item}
-                        </div>
-                      ))}
+                  {/* Commodity Type */}
+                  <label className={styles.label}>
+                    What type of goods are you sending?
+                  </label>
+
+                  <div className={styles.dropdownWrapper}>
+                    <div
+                      className={styles.dropdownInput}
+                      onClick={() => setShowDropdown(!showDropdown)}
+                    >
+                      <input
+                        type="text"
+                        placeholder="Commodity type"
+                        value={commodity}
+                        readOnly
+                        className={styles.commodityInput}
+                      />
+                      <FaChevronDown
+                        className={`${styles.dropdownIcon} ${
+                          showDropdown ? styles.rotated : ""
+                        }`}
+                      />
                     </div>
-                  )}
-                </div>
 
-                <p className={styles.popularText}>Select most popular commodity type</p>
-                <div className={styles.optionsGrid}>
-                  {commodityOptions.slice(0, 5).map((item, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      className={`${styles.optionBtn} ${
-                        commodity === item ? styles.activeOption : ""
-                      }`}
-                      onClick={() => setCommodity(item)}
-                    >
-                      {item}
-                    </button>
-                  ))}
-                </div>
+                    {showDropdown && (
+                      <div className={styles.dropdownList}>
+                        {commodityOptions.map((item, i) => (
+                          <div
+                            key={i}
+                            className={`${styles.dropdownItem} ${
+                              commodity === item ? styles.selectedItem : ""
+                            }`}
+                            onClick={() => {
+                              setCommodity(item);
+                              setShowDropdown(false);
+                            }}
+                          >
+                            {item}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
 
-                {/* Type of Cover */}
-                <label className={styles.label}>What type of cover do you want?</label>
-                <div className={styles.radioRow}>
-                  <label
-                    className={`${styles.radioCard} ${
-                      coverType === "single" ? styles.activeCard : ""
-                    }`}
-                    onClick={() => setCoverType("single")}
-                  >
-                    <input type="radio" checked={coverType === "single"} readOnly />
-                    <Image src={singletransit} alt="Single Transit" width={60} height={60} />
-                    <h4>Single transit</h4>
-                    <p>Covers your single journey from one location to another.</p>
+                  <p className={styles.popularText}>
+                    Select most popular commodity type
+                  </p>
+                  <div className={styles.optionsGrid}>
+                    {commodityOptions.slice(0, 5).map((item, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        className={`${styles.optionBtn} ${
+                          commodity === item ? styles.activeOption : ""
+                        }`}
+                        onClick={() => setCommodity(item)}
+                      >
+                        {item}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Type of Cover */}
+                  <label className={styles.label}>
+                    What type of cover do you want?
                   </label>
-
-                  <label
-                    className={`${styles.radioCard} ${
-                      coverType === "annual" ? styles.activeCard : ""
-                    }`}
-                    onClick={() => setCoverType("annual")}
-                  >
-                    <input type="radio" checked={coverType === "annual"} readOnly />
-                    <Image src={annualopen} alt="Annual Open" width={60} height={60} />
-                    <h4>Annual open</h4>
-                    <p>Covers your shipments throughout the year.</p>
-                  </label>
-                </div>
-
-                {/* Shipment Type */}
-                <label className={styles.label}>Where will your goods be shipped?</label>
-                <div className={styles.radioRow}>
-                  {["inland", "export", "import"].map((type) => (
+                  <div className={styles.radioRow}>
                     <label
-                      key={type}
-                      className={`${styles.radioBtn} ${
-                        shipmentType === type ? styles.activeRadio : ""
+                      className={`${styles.radioCard} ${
+                        coverType === "single" ? styles.activeCard : ""
                       }`}
-                      onClick={() => setShipmentType(type)}
+                      onClick={() => setCoverType("single")}
                     >
-                      <input type="radio" checked={shipmentType === type} readOnly />
-                      {type.charAt(0).toUpperCase() + type.slice(1)}
+                      <input
+                        type="radio"
+                        checked={coverType === "single"}
+                        readOnly
+                      />
+                      <Image
+                        src={singletransit}
+                        alt="Single Transit"
+                        width={60}
+                        height={60}
+                      />
+                      <h4>Single transit</h4>
+                      <p>
+                        Covers your single journey from one location to another.
+                      </p>
                     </label>
-                  ))}
-                </div>
 
-                <button
-                  className={styles.cta}
-                  onClick={() => router.push("Marine5")
-}
-                >
-                  Continue ›
-                </button>
+                    <label
+                      className={`${styles.radioCard} ${
+                        coverType === "annual" ? styles.activeCard : ""
+                      }`}
+                      onClick={() => setCoverType("annual")}
+                    >
+                      <input
+                        type="radio"
+                        checked={coverType === "annual"}
+                        readOnly
+                      />
+                      <Image
+                        src={annualopen}
+                        alt="Annual Open"
+                        width={60}
+                        height={60}
+                      />
+                      <h4>Annual open</h4>
+                      <p>Covers your shipments throughout the year.</p>
+                    </label>
+                  </div>
+
+                  {/* Shipment Type */}
+                  <label className={styles.label}>
+                    Where will your goods be shipped?
+                  </label>
+                  <div className={styles.radioRow}>
+                    {["inland", "export", "import"].map((type) => (
+                      <label
+                        key={type}
+                        className={`${styles.radioBtn} ${
+                          shipmentType === type ? styles.activeRadio : ""
+                        }`}
+                        onClick={() => setShipmentType(type)}
+                      >
+                        <input
+                          type="radio"
+                          checked={shipmentType === type}
+                          readOnly
+                        />
+                        {type.charAt(0).toUpperCase() + type.slice(1)}
+                      </label>
+                    ))}
+                  </div>
+                  <button className={styles.cta} onClick={handleContinueStep2}>
+                    Continue ›
+                  </button>
                 </div>
               </>
             )}
-            </div>
           </div>
+        </div>
       </section>
 
       <Footer />

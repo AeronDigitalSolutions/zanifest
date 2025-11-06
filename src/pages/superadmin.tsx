@@ -13,6 +13,11 @@ import ChangePassword from "@/components/superadminsidebar/changepasswords";
 import ResetPassword from "@/components/superadminsidebar/resetpassword";
 import styles from "@/styles/pages/admindashboard.module.css";
 import HomeSection from "@/components/superadminsidebar/mainpage";
+import MarineInsuranceList from "@/components/superadminsidebar/marineinsurancelist";
+import TravelInsuranceList from "@/components/superadminsidebar/travelinsurancelist";
+import ShopInsuranceList from "@/components/superadminsidebar/shopinsurancelist";
+
+
 import { useAdmin } from "@/lib/hooks/useAdmin";
 import axios from "axios";
 
@@ -92,8 +97,9 @@ const SuperAdminDashboard = () => {
             .length
         );
         setDistrictManagerCount(
-          managers.filter((m: { category: string }) => m.category === "district")
-            .length
+          managers.filter(
+            (m: { category: string }) => m.category === "district"
+          ).length
         );
       } catch (err) {
         console.error("Error fetching managers:", err);
@@ -326,7 +332,7 @@ const SuperAdminDashboard = () => {
               onClick={() => {
                 setActiveSection("homeSection");
                 if (window.innerWidth <= 768) {
-                  setSidebarOpen(false); 
+                  setSidebarOpen(false);
                 }
               }}
               className={`${styles.menuItem} ${
@@ -337,6 +343,36 @@ const SuperAdminDashboard = () => {
                 <FiLock className={styles.icon} />
                 <span className={styles.label}>Home Section</span>
               </span>
+            </li>
+
+            {/* Module*/}
+            <p className={styles.sectionTitle}>Module</p>
+            <li
+              onClick={() => setActiveSection("marineinsurancelist")}
+              className={`${styles.menuItem} ${
+                activeSection === "marineinsurancelist" ? styles.activeMenu : ""
+              }`}
+            >
+              <FiList className={styles.icon} />
+              <span>Marine Insurance</span>
+            </li>
+            <li
+              onClick={() => setActiveSection("travelinsurancelist")}
+              className={`${styles.menuItem} ${
+                activeSection === "travelinsurancelist" ? styles.activeMenu : ""
+              }`}
+            >
+              <FiList className={styles.icon} />
+              <span>Travel Insurance</span>
+            </li>
+            <li
+              onClick={() => setActiveSection("shopinsurancelist")}
+              className={`${styles.menuItem} ${
+                activeSection === "shopinsurancelist" ? styles.activeMenu : ""
+              }`}
+            >
+              <FiList className={styles.icon} />
+              <span>Shop Insurance</span>
             </li>
           </ul>
 
@@ -387,6 +423,10 @@ const SuperAdminDashboard = () => {
             <CreateAdmin initialData={adminData} mode="edit" />
           )}
           {activeSection === "homeSection" && <HomeSection />}
+          {activeSection === "marineinsurancelist" && <MarineInsuranceList />}
+          {activeSection === "travelinsurancelist" && <TravelInsuranceList />}
+{activeSection === "shopinsurancelist" && <ShopInsuranceList />}
+
         </main>
       </div>
     </div>

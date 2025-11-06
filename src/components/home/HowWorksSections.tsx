@@ -5,6 +5,8 @@ import Image from "next/image";
 import { FaEllipsisH } from "react-icons/fa";
 import useSWR from "swr";
 import axios from "axios";
+import 'aos/dist/aos.css';
+import AOS from 'aos';
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data.data);
 
@@ -17,22 +19,24 @@ export default function HowWorksSections() {
   const [animateheading, setAnimateheading] = useState(false);
 
   // Trigger animation only when section enters viewport 
+  // useEffect(() => {
+  //   const observer = new IntersectionObserver(
+  //     (entries) => {
+  //       if (entries[0].isIntersecting) {
+  //         setAnimateheading(true);
+  //         observer.disconnect();
+  //       }
+  //     },
+  //     { threshold: 0.3 }
+  //   );
+
+  //   if (sectionRef.current) observer.observe(sectionRef.current);
+
+  //   return () => observer.disconnect();
+  // }, []);
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setAnimateheading(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    if (sectionRef.current) observer.observe(sectionRef.current);
-
-    return () => observer.disconnect();
-  }, []);
-
+            AOS.init({ duration: 1000, once: true }); 
+},[]);
   if (error) return <p>Failed to load data</p>;
   if (!data) return <p>Loading...</p>;
 
@@ -58,11 +62,12 @@ export default function HowWorksSections() {
     );
   };
 
+
   return (
     <div ref={sectionRef} className={styles.cont}>
       {/* Main Heading */}
       <div className={styles.head}>
-        <div
+        <div  data-aos="fade-up" data-aos-duration="2000"  data-aos-easing="ease-in"
           className={`${styles.heading} ${
             animateheading ? styles.animateOnce : ""
           }`}
@@ -95,7 +100,7 @@ export default function HowWorksSections() {
 
       {/* Services Heading */}
       <div className={styles.servciesCont}>
-        <div
+        <div  data-aos="fade-up" data-aos-duration="2000"  data-aos-easing="ease-in-sine"
           className={`${styles.heading} ${
             animateheading ? styles.animateOnce : ""
           }`}
