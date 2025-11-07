@@ -18,12 +18,15 @@ import opp from "@/assets/OPP.webp";
 import buildingImg from "@/assets/office-building.png";
 import contentImg from "@/assets/content.jpg";
 import stockImg from "@/assets/stock.webp";
-
+import { useRouter } from "next/navigation";
 import Footer from "@/components/ui/Footer";
 import Navbar from "@/components/ui/Navbar";
 
 const Officepackagepolicy: React.FC = () => {
   const [whatsapp, setWhatsapp] = useState(true);
+    const [companyName, setCompanyName] = useState("");
+  const [mobile, setMobile] = useState("");
+
   const [step, setStep] = useState(1);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [values, setValues] = useState<{ [key: string]: string }>({
@@ -42,16 +45,41 @@ const Officepackagepolicy: React.FC = () => {
         : [...prev, option]
     );
   };
+  const router = useRouter();
 
-  // 🔹 Handle Indian currency formatting
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>, key: string) => {
-    let raw = e.target.value.replace(/[^\d]/g, "");
-    if (!raw) {
-      setValues((p) => ({ ...p, [key]: "" }));
+    const raw = e.target.value.replace(/[^\d]/g, ""); // only numbers
+    setValues((p) => ({ ...p, [key]: raw }));
+  };
+
+  const handleBlur = (key: string) => {
+    setValues((p) => {
+      const num = p[key].replace(/[^\d]/g, "");
+      if (!num) return { ...p, [key]: "" };
+      const formatted = new Intl.NumberFormat("en-IN").format(Number(num));
+      return { ...p, [key]: formatted };
+    });
+  };
+   const handleContinue = () => {
+    if (!companyName.trim() || mobile.trim().length !== 10) {
+      alert("Please enter company name & valid mobile number");
       return;
     }
-    const formatted = new Intl.NumberFormat("en-IN").format(Number(raw));
-    setValues((p) => ({ ...p, [key]: formatted }));
+
+    const payload = {
+      companyName,
+      mobile,
+      options: selectedOptions.map((opt) => ({
+        name: opt,
+        checked: true,
+        amount: values[opt]?.replace(/,/g, ""),
+      })),
+    };
+
+    // ✅ Save Step-1 + Step-2 details
+    sessionStorage.setItem("officepackage_initial", JSON.stringify(payload));
+
+    router.push("./officepackagepolicy2");
   };
 
   return (
@@ -61,7 +89,8 @@ const Officepackagepolicy: React.FC = () => {
         {/* ---------------- Left Section ---------------- */}
         <div className={styles.left}>
           <h1 className={styles.mainHeading}>
-            Get <span>₹3 Crore</span> cover starting at <span>₹23,600 / year</span>+
+            Get <span>₹3 Crore</span> cover starting at{" "}
+            <span>₹23,600 / year</span>+
           </h1>
 
           <div className={styles.features}>
@@ -69,8 +98,8 @@ const Officepackagepolicy: React.FC = () => {
               <FaCheck className={styles.tick} /> Litigation and defense cost
             </span>
             <span>
-              <FaCheck className={styles.tick} /> Coverage for assets of directors
-              and officers
+              <FaCheck className={styles.tick} /> Coverage for assets of
+              directors and officers
             </span>
           </div>
 
@@ -89,10 +118,34 @@ const Officepackagepolicy: React.FC = () => {
             <div className={styles.partners}>
               <h3>10+ insurance partners</h3>
               <div className={styles.partnerRow}>
-                <Image src={hdfc} alt="HDFC Ergo" width={60} height={40} className={styles.partnerLogo} />
-                <Image src={orientalinsurance} alt="Oriental Insurance" width={60} height={40} className={styles.partnerLogo} />
-                <Image src={tata} alt="Tata AIG" width={60} height={40} className={styles.partnerLogo} />
-                <Image src={sbi} alt="SBI General" width={60} height={40} className={styles.partnerLogo} />
+                <Image
+                  src={hdfc}
+                  alt="HDFC Ergo"
+                  width={60}
+                  height={40}
+                  className={styles.partnerLogo}
+                />
+                <Image
+                  src={orientalinsurance}
+                  alt="Oriental Insurance"
+                  width={60}
+                  height={40}
+                  className={styles.partnerLogo}
+                />
+                <Image
+                  src={tata}
+                  alt="Tata AIG"
+                  width={60}
+                  height={40}
+                  className={styles.partnerLogo}
+                />
+                <Image
+                  src={sbi}
+                  alt="SBI General"
+                  width={60}
+                  height={40}
+                  className={styles.partnerLogo}
+                />
               </div>
             </div>
           </div>
@@ -108,16 +161,31 @@ const Officepackagepolicy: React.FC = () => {
                 <span className={styles.step}>Step 1 / 2</span>
               </h2>
 
-              <label className={styles.label}>Company Name</label>
-              <div className={styles.inputWrap}>
-                <input type="text" placeholder="Enter company name" />
-              </div>
+             <label className={styles.label}>Company Name</label>
+<div className={styles.inputWrap}>
+  <input
+    type="text"
+    placeholder="Enter company name"
+    value={companyName}
+    onChange={(e) => setCompanyName(e.target.value)}
+  />
+</div>
 
-              <label className={styles.label}>Mobile number</label>
-              <div className={styles.inputWrap}>
-                <input type="text" placeholder="Enter mobile number" />
-                <FaCheck className={styles.iconCheck} />
-              </div>
+<label className={styles.label}>Mobile number</label>
+<div className={styles.inputWrap}>
+  <input
+    type="text"
+    placeholder="Enter mobile number"
+    maxLength={10}
+    value={mobile}
+    onChange={(e) => {
+      const value = e.target.value.replace(/\D/g, ""); // digits only
+      setMobile(value);
+    }}
+  />
+  <FaCheck className={styles.iconCheck} />
+</div>
+
 
               <span className={styles.note}>
                 <FaShieldAlt /> We don’t spam
@@ -150,17 +218,25 @@ const Officepackagepolicy: React.FC = () => {
               </div>
 
               <p className={styles.disclaimer}>
-                By clicking <span className={styles.bold}>“View quotes”</span>, you
-                agree to our 
-                <a href="#" className={styles.link}>Privacy Policy</a>, 
-                <a href="#" className={styles.link}>Terms of Use</a> & 
-                <a href="#" className={styles.link}>Disclaimer</a>
+                By clicking <span className={styles.bold}>“View quotes”</span>,
+                you agree to our
+                <a href="#" className={styles.link}>
+                  Privacy Policy
+                </a>
+                ,
+                <a href="#" className={styles.link}>
+                  Terms of Use
+                </a>{" "}
+                &
+                <a href="#" className={styles.link}>
+                  Disclaimer
+                </a>
               </p>
             </div>
           )}
 
           {/* ---------- Step 2 ---------- */}
-         {step === 2 && (
+{step === 2 && (
   <div className={styles.stepTwoCard}>
     <button className={styles.backBtn} onClick={prevStep}>
       <FaChevronLeft /> Back
@@ -211,7 +287,10 @@ const Officepackagepolicy: React.FC = () => {
           </div>
 
           {selectedOptions.includes(key) && (
-            <div className={styles.valueInputBox}>
+            <div
+              className={styles.valueInputBox}
+              onClick={(e) => e.stopPropagation()} 
+            >
               <label>{key} Value (₹)</label>
               <div className={styles.currencyField}>
                 <span className={styles.rupee}>₹</span>
@@ -219,6 +298,8 @@ const Officepackagepolicy: React.FC = () => {
                   type="text"
                   value={values[key]}
                   onChange={(e) => handleInput(e, key)}
+                  onBlur={() => handleBlur(key)}
+                  onClick={(e) => e.stopPropagation()}
                   placeholder="Enter amount"
                 />
               </div>
@@ -228,7 +309,10 @@ const Officepackagepolicy: React.FC = () => {
       ))}
     </div>
 
-    <button className={styles.continueBtn}>Continue →</button>
+   
+              <button className={styles.continueBtn} onClick={handleContinue}>
+                Continue →
+              </button>
   </div>
 )}
 

@@ -16,6 +16,8 @@ import Image from "next/image";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import UserDetails from "@/components/ui/UserDetails";
+import axios from "axios";
+
 
 const Check = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden>
@@ -45,13 +47,13 @@ const Bullet = ({ bg = "#EAF2FF", dot = "#3B82F6" }: { bg?: string; dot?: string
 
 type Stage = "drawer" | "center" | "done";
 
-const InsuranceComparison: React.FC = () => {
+const doctorInsurance2: React.FC = () => {
   const router = useRouter(); // ✅ initialize router
 
   const [stage, setStage] = useState<Stage>("drawer");
   const [selectedSpec, setSelectedSpec] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
-
+  const [saving, setSaving] = useState(false);
   const [firstTime, setFirstTime] = useState<null | "yes" | "no">(null);
   const [facility, setFacility] = useState<null | "yes" | "no">(null);
 
@@ -85,6 +87,32 @@ const InsuranceComparison: React.FC = () => {
     ...g,
     items: g.items.filter((i) => i.toLowerCase().includes(searchQuery.toLowerCase())),
   }));
+
+const handleFinalSubmit = async () => {
+  try {
+    const id = localStorage.getItem("doctorId");
+    if (!id) return alert("Missing doctor ID. Please start again.");
+    setSaving(true);
+
+    const res = await axios.put(`/api/doctorinsurance?id=${id}`, {
+      specialization: selectedSpec,
+      firstTime,
+      facility,
+    });
+
+    if (res.data.success) {
+      alert("Data saved successfully!");
+      setStage("done"); 
+    } else {
+      alert("Failed to save updates.");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Error updating data");
+  } finally {
+    setSaving(false);
+  }
+};
 
   return (
     <>
@@ -241,8 +269,7 @@ const InsuranceComparison: React.FC = () => {
               <button
                 className={styles.continueBtn}
                 disabled={!(firstTime && facility)}
-                onClick={() => setStage("done")}
-              >
+                  onClick={handleFinalSubmit}              >
                 Continue <ArrowRight />
               </button>
             </div>
@@ -528,4 +555,4 @@ const InsuranceComparison: React.FC = () => {
   );
 };
 
-export default InsuranceComparison;
+export default doctorInsurance2;

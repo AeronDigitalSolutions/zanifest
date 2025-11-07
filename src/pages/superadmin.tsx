@@ -16,7 +16,11 @@ import HomeSection from "@/components/superadminsidebar/mainpage";
 import MarineInsuranceList from "@/components/superadminsidebar/marineinsurancelist";
 import TravelInsuranceList from "@/components/superadminsidebar/travelinsurancelist";
 import ShopInsuranceList from "@/components/superadminsidebar/shopinsurancelist";
-
+import Healthinsurancelist from "@/components/superadminsidebar/Healthinsurancelist";
+import Homeinsurancelist from "@/components/superadminsidebar/Homeinsurancelist";
+import Doctorinsurancelist from "@/components/superadminsidebar/Doctorinsurancelist";
+import Officepackagepolicylist from "@/components/superadminsidebar/Officepackagepolicylist";
+import Directorlist from "@/components/superadminsidebar/Directorlist";
 
 import { useAdmin } from "@/lib/hooks/useAdmin";
 import axios from "axios";
@@ -54,7 +58,7 @@ const SuperAdminDashboard = () => {
     }
   };
 
-  // ✅ Admin Count
+  // Admin Count
   useEffect(() => {
     const fetchAdminCount = async () => {
       try {
@@ -69,7 +73,7 @@ const SuperAdminDashboard = () => {
     fetchAdminCount();
   }, []);
 
-  // ✅ Agent Count
+  // Agent Count
   useEffect(() => {
     const fetchAgentCount = async () => {
       try {
@@ -374,6 +378,51 @@ const SuperAdminDashboard = () => {
               <FiList className={styles.icon} />
               <span>Shop Insurance</span>
             </li>
+             <li
+              onClick={() => setActiveSection("healthinsurancelist")}
+              className={`${styles.menuItem} ${
+                activeSection === "healthinsurancelist" ? styles.activeMenu : ""
+              }`}
+            >
+              <FiList className={styles.icon} />
+              <span>Health Insurance</span>
+            </li>
+            <li
+              onClick={() => setActiveSection("homeinsurancelist")}
+              className={`${styles.menuItem} ${
+                activeSection === "homeinsurancelist" ? styles.activeMenu : ""
+              }`}
+            >
+              <FiList className={styles.icon} />
+              <span>Home Insurance</span>
+            </li>
+              <li
+              onClick={() => setActiveSection("doctorinsurancelist")}
+              className={`${styles.menuItem} ${
+                activeSection === "doctorinsurancelist" ? styles.activeMenu : ""
+              }`}
+            >
+              <FiList className={styles.icon} />
+              <span>Doctor Insurance</span>
+            </li>
+             <li
+              onClick={() => setActiveSection("officepackagepolicylist")}
+              className={`${styles.menuItem} ${
+                activeSection === "officepackagepolicylist" ? styles.activeMenu : ""
+              }`}
+            >
+              <FiList className={styles.icon} />
+              <span>officepackagepolicy</span>  
+            </li>
+              <li
+              onClick={() => setActiveSection("directorlist")}
+              className={`${styles.menuItem} ${
+                activeSection === "directorlist" ? styles.activeMenu : ""
+              }`}
+            >
+              <FiList className={styles.icon} />
+              <span>Director&OfficerLiability</span>
+            </li>
           </ul>
 
           <div className={styles.mobileOnlyLogout}>
@@ -426,6 +475,12 @@ const SuperAdminDashboard = () => {
           {activeSection === "marineinsurancelist" && <MarineInsuranceList />}
           {activeSection === "travelinsurancelist" && <TravelInsuranceList />}
 {activeSection === "shopinsurancelist" && <ShopInsuranceList />}
+{activeSection === "shopinsurancelist" && <ShopInsuranceList />}
+{activeSection === "healthinsurancelist" && <Healthinsurancelist />}
+{activeSection === "homeinsurancelist" && <Homeinsurancelist />}
+{activeSection === "doctorinsurancelist" && <Doctorinsurancelist />}
+{activeSection === "officepackagepolicylist" && <Officepackagepolicylist />}
+{activeSection === "directorlist" && <Directorlist />}
 
         </main>
       </div>

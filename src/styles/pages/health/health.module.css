@@ -775,13 +775,7 @@
 }
 
 /* ---------- HEADER (BACK + ICON) ---------- */
-.step1Header {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  gap: 12px;
-  margin-bottom: 20px;
-}
+
 
 .step1BackBtn {
   background: #e6e6e5;
@@ -954,7 +948,7 @@
   position: absolute;
   top: 8rem; 
   left: 0;
-  width: 100%;
+  width: 20%;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -1258,8 +1252,8 @@
   background: #e6e6e5;
   border: none;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 27px;
+  height: 27px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -1298,9 +1292,9 @@
 
 .step1Header {
   display: flex;
-  align-items: center;
+  align-items: center; 
   gap: 12px;
-  width: 100%;
+  width: 20%;
   margin-bottom: 20px;
 }
 

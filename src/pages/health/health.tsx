@@ -15,19 +15,31 @@ import styles from "@/styles/pages/health/health.module.css";
 const Health = () => {
   const [step, setStep] = useState<number>(1);
   const [gender, setGender] = useState<string>("male");
-  const [members, setMembers] = useState<{ name: string; image: string }[]>([]);
+  const [members, setMembers] = useState<{ name: string; image: any }[]>([]);
   const [ages, setAges] = useState<{ [key: number]: string }>({});
   const [isOpenIndex, setIsOpenIndex] = useState<number | null>(null);
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [mobile, setMobile] = useState("");
   const [fullName, setFullName] = useState("");
+  const [selectedDiseases, setSelectedDiseases] = useState<string[]>([]);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  const cities = ["Delhi", "Bengaluru", "Pune", "Hyderabad", "Mumbai", "Thane", "Gurgaon", "Chennai", "Ghaziabad", "Ernakulam"];
+  const cities = [
+    "Delhi",
+    "Bengaluru",
+    "Pune",
+    "Hyderabad",
+    "Mumbai",
+    "Thane",
+    "Gurgaon",
+    "Chennai",
+    "Ghaziabad",
+    "Ernakulam",
+  ];
   const ageOptions = Array.from({ length: 101 }, (_, i) => i.toString());
 
-  // Capture gender & selected members from query
+  // 🧠 Capture gender & selected members from query
   useEffect(() => {
     if (router.query.gender) setGender(router.query.gender as string);
 
@@ -50,11 +62,17 @@ const Health = () => {
     setIsOpenIndex(null);
   };
 
+  // 🧩 Members UI
   const renderMembers = () => (
     <div className={styles.step1MembersList}>
       {members.map((m, idx) => (
         <div key={idx} className={styles.step1MemberCard}>
-          <Image src={m.image} alt={m.name} className={styles.step1MemberIcon} />
+          {/* Image: if m.image is a string use it, otherwise let Next/Image handle static import */}
+          <Image
+            src={typeof m.image === "string" ? (m.image as string) : (m.image as any)}
+            alt={m.name}
+            className={styles.step1MemberIcon}
+          />
           <p>{m.name}</p>
 
           <div className={styles.step1Dropdown} ref={dropdownRef}>
@@ -64,7 +82,9 @@ const Health = () => {
               onClick={() => setIsOpenIndex(isOpenIndex === idx ? null : idx)}
             >
               {ages[idx] ? `Age: ${ages[idx]}` : "Select Age"}{" "}
-              <span className={`${styles.step1Arrow} ${isOpenIndex === idx ? styles.up : ""}`}>▼</span>
+              <span className={`${styles.step1Arrow} ${isOpenIndex === idx ? styles.up : ""}`}>
+                ▼
+              </span>
             </button>
 
             {isOpenIndex === idx && (
@@ -86,18 +106,119 @@ const Health = () => {
     </div>
   );
 
+  // 🧠 Submit data to backend (robust)
+  const handleSubmit = async () => {
+    try {
+      // validation: ages for all members
+      if (!members || members.length === 0) {
+        alert("No members selected. Please go back and select members.");
+        router.push("/healthinsurance");
+        return;
+      }
+
+      for (let i = 0; i < members.length; i++) {
+        const ageStr = ages[i];
+        if (!ageStr) {
+          alert(`Please select age for all members. Missing age for ${members[i].name}`);
+          setStep(1);
+          return;
+        }
+        const ageNum = Number(ageStr);
+        if (isNaN(ageNum)) {
+          alert(`Invalid age selected for ${members[i].name}`);
+          setStep(1);
+          return;
+        }
+      }
+
+      if (!selectedCity) {
+        alert("Please select a city.");
+        setStep(2);
+        return;
+      }
+
+      if (!fullName || fullName.trim().length < 2) {
+        alert("Please enter a valid full name.");
+        setStep(3);
+        return;
+      }
+
+      if (!/^[0-9]\d{10}$/.test(mobile)) {
+        alert("Please enter a valid 10-digit mobile number starting with 6-9.");
+        setStep(3);
+        return;
+      }
+
+      const payload = {
+        gender,
+        members: members.map((m, i) => {
+          const img = typeof m.image === "string" ? m.image : (m.image as any)?.src || "";
+          return {
+            name: m.name,
+            image: img,
+            age: Number(ages[i]),
+          };
+        }),
+        city: selectedCity || "",
+        fullName,
+        mobile,
+        medicalHistory: selectedDiseases,
+      };
+
+      console.debug("Submitting payload:", payload);
+
+      const res = await fetch("/api/healthinsurance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      // read raw text first (robust if server returns non-json)
+      const raw = await res.text();
+      let data: any = null;
+      try {
+        data = raw ? JSON.parse(raw) : null;
+      } catch (err) {
+        console.warn("Response not JSON:", raw);
+      }
+
+      if (!res.ok) {
+        // server returned non-2xx
+        console.error("API returned non-OK:", res.status, raw);
+        const message = data?.message || raw || res.statusText;
+        alert("❌ Failed to save data: " + message);
+        return;
+      }
+
+      // if server returned 2xx
+      if (data && data.success) {
+        alert("Health insurance data saved successfully!");
+        router.push("./health6");
+      } else {
+        // if data is absent but res.ok, show raw
+        const message = data?.message || raw || "Unknown response from server";
+        console.error("Save response but success flag false:", data, raw);
+        alert("❌ Failed to save data: " + message);
+      }
+    } catch (error: any) {
+      console.error("Submit error:", error);
+      alert("Something went wrong while saving data. " + (error?.message || ""));
+    }
+  };
+
   return (
     <div>
       <UserDetails />
       <Navbar />
 
       <div className={styles.wrapper}>
-        {/* ---------------- STEP 1 ---------------- */}
         <div className={styles.step1Wrapper}>
           <div className={styles.step1Header}>
             <button
               className={styles.step1BackBtn}
-              onClick={() => (step > 1 ? setStep(step - 1) : router.push("./healthinsurance"))}
+              onClick={() =>
+                step > 1 ? setStep(step - 1) : router.push("/healthinsurance")
+              }
             >
               <IoIosArrowBack />
             </button>
@@ -111,6 +232,7 @@ const Health = () => {
             )}
           </div>
 
+          {/* Step 1 */}
           {step === 1 && (
             <>
               <h2 className={styles.step1Heading}>Select Age for Each Member</h2>
@@ -130,12 +252,18 @@ const Health = () => {
             </>
           )}
 
-          {/* ---------------- STEP 2 ---------------- */}
+          {/* Step 2 */}
           {step === 2 && (
             <div className={styles.rightContent}>
               <h2>Select your city</h2>
               <div className={styles.searchBar}>
-                <input type="text" placeholder="Search your city" />
+                <input
+                  type="text"
+                  placeholder="Search your city"
+                  onChange={(e) => {
+                    // optional: you can implement search to filter `cities`
+                  }}
+                />
                 <FaSearch className={styles.searchIcon} />
               </div>
               <div className={styles.popularCities}>
@@ -155,7 +283,7 @@ const Health = () => {
             </div>
           )}
 
-          {/* ---------------- STEP 3 ---------------- */}
+          {/* Step 3 */}
           {step === 3 && (
             <div className={styles.formSection}>
               <h2 className={styles.heading}>Save your progress</h2>
@@ -188,7 +316,7 @@ const Health = () => {
             </div>
           )}
 
-          {/* ---------------- STEP 4 ---------------- */}
+          {/* Step 4 */}
           {step === 4 && (
             <div className={styles.content}>
               <h2 className={styles.title}>Medical history</h2>
@@ -208,13 +336,29 @@ const Health = () => {
                   "None of these",
                 ].map((option) => (
                   <label className={styles.option} key={option}>
-                    <input type="checkbox" />
+                    <input
+                      type="checkbox"
+                      checked={selectedDiseases.includes(option)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          if (option === "None of these") {
+                            setSelectedDiseases(["None of these"]);
+                          } else {
+                            setSelectedDiseases((prev) =>
+                              prev.filter((x) => x !== "None of these").concat(option)
+                            );
+                          }
+                        } else {
+                          setSelectedDiseases((prev) => prev.filter((d) => d !== option));
+                        }
+                      }}
+                    />
                     <span>{option}</span>
                   </label>
                 ))}
               </div>
 
-              <button className={styles.button} onClick={() => router.push("./health6")}>
+              <button className={styles.button} onClick={handleSubmit}>
                 View plans ›
               </button>
             </div>

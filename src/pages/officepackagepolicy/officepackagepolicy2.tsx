@@ -13,9 +13,26 @@ import yes from "@/assets/F&B_yes_icon.webp";
 import no from "@/assets/F&B_no_icon.webp";
 import step3 from "@/assets/loss.png";
 
-const Modal = ({
+interface ModalProps {
+  showModal: boolean;
+  modalStep: number;
+  setModalStep: (n: number) => void;
+  companyName: string;
+  setCompanyName: (s: string) => void;
+  transportMode: string;
+  setTransportMode: (s: string) => void;
+  coverAmount: string;
+  handleAmountChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  numberToWords: (num: string) => string;
+  isContinueDisabled: () => boolean;
+  handleModalContinue: () => Promise<void> | void;
+  setShowModal: (b: boolean) => void;
+}
+
+const Modal: React.FC<ModalProps> = ({
   showModal,
   modalStep,
+  setModalStep,
   companyName,
   setCompanyName,
   transportMode,
@@ -25,7 +42,8 @@ const Modal = ({
   numberToWords,
   isContinueDisabled,
   handleModalContinue,
-}: any) => {
+  setShowModal,
+}) => {
   if (!showModal) return null;
 
   useEffect(() => {
@@ -35,12 +53,13 @@ const Modal = ({
   const [fadeClass, setFadeClass] = useState(styles.fadeIn);
 
   useEffect(() => {
+    // animate fade when step changes
     setFadeClass(styles.fadeOut);
     const timer = setTimeout(() => setFadeClass(styles.fadeIn), 200);
     return () => clearTimeout(timer);
   }, [modalStep]);
 
-  // Allow only 6 digits for pincode
+  // Allow only digits and limit to 6 chars for pincode
   const handleCompanyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\D/g, "").slice(0, 6);
     setCompanyName(value);
@@ -55,9 +74,7 @@ const Modal = ({
             <h3 className={styles.modalTitle}>
               Best quotes for you are just moments away!
             </h3>
-            <p className={styles.modalSubtitle}>
-              Enter your pincode to get started.
-            </p>
+            <p className={styles.modalSubtitle}>Enter your pincode to get started.</p>
 
             <div className={styles.inputGroup}>
               <label htmlFor="pincode" className={styles.inputLabel}>
@@ -76,11 +93,11 @@ const Modal = ({
             </div>
 
             <button
-              onClick={handleModalContinue}
+              onClick={() => {
+                if (!isContinueDisabled()) handleModalContinue();
+              }}
               disabled={isContinueDisabled()}
-              className={`${styles.continueBtn} ${
-                isContinueDisabled() ? styles.disabled : ""
-              }`}
+              className={`${styles.continueBtn} ${isContinueDisabled() ? styles.disabled : ""}`}
             >
               Continue &gt;
             </button>
@@ -90,19 +107,15 @@ const Modal = ({
         {/* STEP 2 - YES / NO CHOICE */}
         {modalStep === 2 && (
           <div data-aos="fade" className={styles.step2Container}>
-            <h3 className={styles.modalTitle}>
-              Best quotes for you are just moments away!
-            </h3>
-            <p className={styles.modalSubtitle}>
-              Buying fire & burglary insurance for the first time?
-            </p>
+            <h3 className={styles.modalTitle}>Best quotes for you are just moments away!</h3>
+            <p className={styles.modalSubtitle}>Buying fire & burglary insurance for the first time?</p>
 
             <div className={styles.choiceGrid}>
               <div
-                className={`${styles.choiceCard} ${
-                  transportMode === "Yes" ? styles.activeChoice : ""
-                }`}
+                className={`${styles.choiceCard} ${transportMode === "Yes" ? styles.activeChoice : ""}`}
                 onClick={() => setTransportMode("Yes")}
+                role="button"
+                tabIndex={0}
               >
                 <div className={styles.choiceIcon}>
                   <Image src={yes} alt="Yes" width={50} height={50} />
@@ -117,18 +130,16 @@ const Modal = ({
               </div>
 
               <div
-                className={`${styles.choiceCard} ${
-                  transportMode === "No" ? styles.activeChoice : ""
-                }`}
+                className={`${styles.choiceCard} ${transportMode === "No" ? styles.activeChoice : ""}`}
                 onClick={() => setTransportMode("No")}
+                role="button"
+                tabIndex={0}
               >
                 <div className={styles.choiceIcon}>
                   <Image src={no} alt="No" width={50} height={50} />
                 </div>
                 <p className={styles.choiceTitle}>No</p>
-                <p className={styles.choiceDesc}>
-                  Existing policy is expiring
-                </p>
+                <p className={styles.choiceDesc}>Existing policy is expiring</p>
                 {transportMode === "No" && (
                   <div className={styles.checkmark}>
                     <FaCheck />
@@ -138,11 +149,11 @@ const Modal = ({
             </div>
 
             <button
-              onClick={handleModalContinue}
+              onClick={() => {
+                if (!isContinueDisabled()) handleModalContinue();
+              }}
               disabled={isContinueDisabled()}
-              className={`${styles.viewQuoteBtn} ${
-                isContinueDisabled() ? styles.disabled : ""
-              }`}
+              className={`${styles.viewQuoteBtn} ${isContinueDisabled() ? styles.disabled : ""}`}
             >
               Continue &gt;
             </button>
@@ -159,23 +170,18 @@ const Modal = ({
             </div>
 
             <p className={styles.lossQuestion}>
-              Has your commercial property experienced any loss incidents in the
-              last 3 years?
+              Has your commercial property experienced any loss incidents in the last 3 years?
             </p>
 
             <div className={styles.lossChoiceRow}>
               <button
-                className={`${styles.lossBtn} ${
-                  transportMode === "Yes" ? styles.activeLossBtn : ""
-                }`}
+                className={`${styles.lossBtn} ${transportMode === "Yes" ? styles.activeLossBtn : ""}`}
                 onClick={() => setTransportMode("Yes")}
               >
                 Yes
               </button>
               <button
-                className={`${styles.lossBtn} ${
-                  transportMode === "No" ? styles.activeLossBtn : ""
-                }`}
+                className={`${styles.lossBtn} ${transportMode === "No" ? styles.activeLossBtn : ""}`}
                 onClick={() => setTransportMode("No")}
               >
                 No
@@ -183,11 +189,11 @@ const Modal = ({
             </div>
 
             <button
-              onClick={handleModalContinue}
+              onClick={() => {
+                if (!isContinueDisabled()) handleModalContinue();
+              }}
               disabled={isContinueDisabled()}
-              className={`${styles.viewQuotesBtn} ${
-                isContinueDisabled() ? styles.disabled : ""
-              }`}
+              className={`${styles.viewQuotesBtn} ${isContinueDisabled() ? styles.disabled : ""}`}
             >
               View quotes &gt;
             </button>
@@ -198,33 +204,13 @@ const Modal = ({
   );
 };
 
-const Officepackagepolicy2 = () => {
+const Officepackagepolicy2: React.FC = () => {
   const [showModal, setShowModal] = useState(true);
   const [modalStep, setModalStep] = useState(1);
-  const [companyName, setCompanyName] = useState("");
+  const [companyName, setCompanyName] = useState(""); // used as pincode in modal
   const [transportMode, setTransportMode] = useState("");
   const [coverAmount, setCoverAmount] = useState("");
   const router = useRouter();
-
-  // After final modal step, close modal and reveal page
-  const handleModalComplete = () => {
-    setShowModal(false);
-  };
-
-  const handleModalContinue = () => {
-    if (modalStep < 3) {
-      setModalStep(modalStep + 1);
-    } else {
-      handleModalComplete(); 
-    }
-  };
-
-  const isContinueDisabled = () => {
-    if (modalStep === 1) return !companyName.trim();
-    if (modalStep === 2) return !transportMode;
-    if (modalStep === 3) return !transportMode;
-    return false;
-  };
 
   const formatNumber = (num: string) =>
     num.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -232,13 +218,87 @@ const Officepackagepolicy2 = () => {
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setCoverAmount(formatNumber(e.target.value));
 
-  const numberToWords = (num: string) => "One Rupee"; // placeholder
+  const numberToWords = (num: string) => "One Rupee"; 
+
+  const isContinueDisabled = () => {
+    if (modalStep === 1) return !companyName.trim() || companyName.trim().length < 6;
+    if (modalStep === 2) return !transportMode;
+    if (modalStep === 3) return !transportMode;
+    return false;
+  };
+
+  // Single handler in parent that moves through steps and performs final save on step 3
+  const handleModalContinue = async () => {
+    // Prevent continue if disabled
+    if (isContinueDisabled()) return;
+
+    // Move through steps
+    if (modalStep < 3) {
+      setModalStep((s) => s + 1);
+      return;
+    }
+
+    // FINAL STEP: save data to backend
+    try {
+      const raw = sessionStorage.getItem("officepackage_initial");
+      const step1step2 = raw ? JSON.parse(raw) : null;
+
+      if (!step1step2) {
+        alert("Something went wrong! Please re-enter details.");
+        router.push("/officepackagepolicy");
+        return;
+      }
+
+      const payload = {
+        companyName: step1step2.companyName ?? "",
+        mobile: step1step2.mobile ?? "",
+        options: step1step2.options ?? {},
+        pincode: companyName, // from modal
+        firstTimeBuying: transportMode === "Yes",
+        lossHistory: transportMode === "Yes",
+      };
+
+      const res = await fetch("/api/officepackagepolicyinsurance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        // Attempt to read error body if available
+        let errText = "";
+        try {
+          const errJson = await res.json();
+          errText = errJson?.message ? `: ${errJson.message}` : "";
+        } catch {
+          // ignore parse error
+        }
+        throw new Error(`Failed to save data${errText}`);
+      }
+
+      // const saved = await res.json(); // optionally use saved result
+      alert("Data saved successfully!");
+      setShowModal(false);
+
+      // Optionally navigate to a results page (uncomment & adjust if you have one)
+      // router.push("/officepackage/results");
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong! Please try again.");
+    }
+  };
+
+  // If user closes modal via some external action you can call this
+  const handleModalComplete = () => {
+    setShowModal(false);
+  };
 
   return (
     <>
       <Modal
         showModal={showModal}
         modalStep={modalStep}
+        setModalStep={setModalStep}
         companyName={companyName}
         setCompanyName={setCompanyName}
         transportMode={transportMode}
@@ -248,6 +308,7 @@ const Officepackagepolicy2 = () => {
         numberToWords={numberToWords}
         isContinueDisabled={isContinueDisabled}
         handleModalContinue={handleModalContinue}
+        setShowModal={setShowModal}
       />
 
       {/* Page content blurred while modal is active */}
@@ -256,10 +317,7 @@ const Officepackagepolicy2 = () => {
 
         {/* ---------- TOP BAR ---------- */}
         <div className={styles.topBar}>
-          <button
-            className={styles.backBtn}
-            onClick={() => router.push("Marine1")}
-          >
+          <button className={styles.backBtn} onClick={() => router.push("/Marine1")}>
             ←
           </button>
           <div className={styles.info}>
@@ -303,10 +361,7 @@ const Officepackagepolicy2 = () => {
                     <span className={styles.coveredLabel}>Covered amount</span>
                     <strong className={styles.coveredValue}>₹ 54,45,556</strong>
                   </div>
-                  <button
-                    className={styles.quoteBtn}
-                    onClick={() => router.push("Marine6")}
-                  >
+                  <button className={styles.quoteBtn} onClick={() => router.push("/Marine6")}>
                     Get quote
                   </button>
                 </div>
@@ -317,16 +372,13 @@ const Officepackagepolicy2 = () => {
                   <div className={styles.tagsRow}>
                     <div className={styles.tags}>
                       <span>
-                        <FaCheck size={12} className={styles.tick} /> Theft /
-                        pilferage
+                        <FaCheck size={12} className={styles.tick} /> Theft / pilferage
                       </span>
                       <span>
-                        <FaCheck size={12} className={styles.tick} /> Loading and
-                        unloading
+                        <FaCheck size={12} className={styles.tick} /> Loading and unloading
                       </span>
                       <span>
-                        <FaCheck size={12} className={styles.tick} /> Malicious
-                        damage
+                        <FaCheck size={12} className={styles.tick} /> Malicious damage
                       </span>
                       <span className={styles.more}>+4 risks covered</span>
                     </div>
@@ -347,16 +399,13 @@ const Officepackagepolicy2 = () => {
                 <button className={styles.playBtn}>▶</button>
               </div>
               <p className={styles.date}>
-                13th February | 3:00 PM |{" "}
-                <span className={styles.webinar}>Webinar (Online)</span>
+                13th February | 3:00 PM | <span className={styles.webinar}>Webinar (Online)</span>
               </p>
               <h5 className={styles.heading}>
-                FIEO - Federation of Indian Export Organisation (Ministry of
-                commerce)
+                FIEO - Federation of Indian Export Organisation (Ministry of commerce)
               </h5>
               <p className={styles.desc}>
-                Moments from our recent webinar on Role of Insurance in managing
-                Export Supply Chain risk
+                Moments from our recent webinar on Role of Insurance in managing Export Supply Chain risk
               </p>
               <a href="#" className={styles.link}>
                 Read more →
