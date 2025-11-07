@@ -1,4 +1,3 @@
-
 "use client";
 import React from "react";
 import styles from "@/styles/pages/nationalmanager.module.css";
@@ -33,7 +32,6 @@ type ChartData = {
 };
 
 type Props = {
-  agents: any[]; 
   totalClients: number;
   totalDistrictManagers: number;
   totalStateManagers: number;
@@ -51,7 +49,6 @@ type Props = {
 };
 
 const DashboardContent: React.FC<Props> = ({
-  agents,
   totalClients,
   totalDistrictManagers,
   totalStateManagers,
@@ -81,6 +78,7 @@ const DashboardContent: React.FC<Props> = ({
               <h3>₹{formattedTotalSales}</h3>
             </div>
           </div>
+
           <div className={styles.card}>
             <FiBarChart2 className={styles.cardIcon} />
             <div>
@@ -88,14 +86,16 @@ const DashboardContent: React.FC<Props> = ({
               <h3>₹{formattedMonthlySales}</h3>
             </div>
           </div>
+
           <div className={styles.card}>
             <FiUsers className={styles.cardIcon} />
             <div>
               <p>Number of Agents</p>
-              <h3>{agents.length}</h3>
+              <h3>{totalClients}</h3>
             </div>
           </div>
-           <div className={styles.card}>
+
+          <div className={styles.card}>
             <FiUser className={styles.cardIcon} />
             <div>
               <p>Total Clients</p>
@@ -105,7 +105,7 @@ const DashboardContent: React.FC<Props> = ({
         </div>
 
         <div className={styles.cardGrid}>
-         
+
           <div className={styles.card}>
             <FiUser className={styles.cardIcon} />
             <div>
@@ -113,6 +113,7 @@ const DashboardContent: React.FC<Props> = ({
               <h3>{totalDistrictManagers}</h3>
             </div>
           </div>
+
           <div className={styles.card}>
             <FiUser className={styles.cardIcon} />
             <div>
@@ -120,6 +121,7 @@ const DashboardContent: React.FC<Props> = ({
               <h3>{totalStateManagers}</h3>
             </div>
           </div>
+
         </div>
       </div>
 
@@ -129,7 +131,7 @@ const DashboardContent: React.FC<Props> = ({
           {[
             { icon: <FaRupeeSign />, label: "Total Sales", value: `₹${formattedTotalSales}` },
             { icon: <FiBarChart2 />, label: "Monthly Sales", value: `₹${formattedMonthlySales}` },
-            { icon: <FiUsers />, label: "Number of Agents", value: agents.length },
+            { icon: <FiUsers />, label: "Number of Agents", value: totalClients },
             { icon: <FiUser />, label: "Total Clients", value: totalClients },
             { icon: <FiUser />, label: "Total District Managers", value: totalDistrictManagers },
             { icon: <FiUser />, label: "Total State Managers", value: totalStateManagers },
@@ -145,55 +147,18 @@ const DashboardContent: React.FC<Props> = ({
         </div>
       </div>
 
-      {/* STATE MANAGER TABLE */}
-      {/* <div className={styles.agentListToggle} onClick={() => setShowAgentList(!showAgentList)}>
-        <span>List of State Manager</span>
-      </div> */}
-{/* 
-      {showAgentList && (
-        <div className={styles.agentTable}>
-          <h3 className={styles.tableTitle}>State Managers List</h3>
-          <div className={styles.tableWrapper}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>State</th>
-                </tr>
-              </thead>
-              <tbody>
-                {stateManagers.length > 0 ? (
-                  stateManagers.map((manager) => (
-                    <tr key={manager._id}>
-                      <td>{manager.name}</td>
-                      <td>{manager.email}</td>
-                      <td>{manager.location?.state || ""}</td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={3} style={{ textAlign: "center", padding: "10px" }}>
-                      No state managers found.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )} */}
-
-      {/* FILTER SECTION */}
+      {/* Date Filter */}
       <div className={styles.dateFilterSection}>
         <label className={styles.dateLabel}>
           Start Date:
           <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
         </label>
+
         <label className={styles.dateLabel}>
           End Date:
           <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
         </label>
+
         <div className={styles.buttonWrapper}>
           <button className={styles.filterButton} onClick={handleFilter}>
             Show
@@ -210,12 +175,7 @@ const DashboardContent: React.FC<Props> = ({
             <XAxis dataKey="month" />
             <YAxis />
             <Tooltip />
-            <Line
-              type="monotone"
-              dataKey="sales"
-              stroke="#007bff"
-              strokeWidth={2}
-            />
+            <Line type="monotone" dataKey="sales" stroke="#007bff" strokeWidth={2} />
           </LineChart>
         </ResponsiveContainer>
       </div>

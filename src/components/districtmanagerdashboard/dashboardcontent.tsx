@@ -14,19 +14,14 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-// ---------------------------
-// Type Definitions
-// ---------------------------
 type Agent = {
   _id: string;
-  name: string;
+  name?: string;
+  firstName?: string;
+  lastName?: string;
   email: string;
-  assignedTo?: string;
   lifetimeSales: number;
   currentDMSales: number;
-  district?: string;
-  city?: string;
-  state?: string;
 };
 
 type MonthlySales = {
@@ -39,28 +34,19 @@ type DashboardContentProps = {
   formattedMonthlySales: string;
   agents: Agent[];
   totalClients: number;
-  showAgentList: boolean;
-  setShowAgentList: (value: boolean) => void;
-  agentData: Agent[];
   startDate: string;
   endDate: string;
-  setStartDate: (date: string) => void;
-  setEndDate: (date: string) => void;
+  setStartDate: (d: string) => void;
+  setEndDate: (d: string) => void;
   handleFilter: () => void;
   filteredData: MonthlySales[];
 };
 
-// ---------------------------
-// Component
-// ---------------------------
 const DashboardContent: React.FC<DashboardContentProps> = ({
   formattedTotalSales,
   formattedMonthlySales,
   agents,
   totalClients,
-  showAgentList,
-  setShowAgentList,
-  agentData,
   startDate,
   endDate,
   setStartDate,
@@ -71,25 +57,17 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
   const [dmTotalSales, setDmTotalSales] = useState("0");
   const [loading, setLoading] = useState(false);
 
-  // ---------------------------
-  // Fetch DM’s total sales from backend
-  // ---------------------------
   const fetchDistrictManagerSales = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("managerToken");
-      if (!token) {
-        console.warn("No manager token found!");
-        return;
-      }
+      if (!token) return;
 
-      const res = await axios.get("/api/manager/salessummary", {
+      const res = await axios.get("/api/manager/sales-summary", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      console.log("DM Sales Summary:", res.data);
-
-      if (res.data.success && res.data.totalSales !== undefined) {
+      if (res.data?.success && res.data.totalSales !== undefined) {
         setDmTotalSales(res.data.totalSales.toLocaleString("en-IN"));
       } else {
         setDmTotalSales("0");
@@ -110,15 +88,13 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
     <main className={styles.content}>
       <h2 className={styles.title}>District Manager Dashboard</h2>
 
-      {/* Summary Cards */}
+      {/* Cards */}
       <div className={styles.cardGrid}>
         <div className={styles.card}>
           <FaRupeeSign className={styles.cardIcon} />
           <div>
             <p>Total Sales</p>
-            <h3>
-              {loading ? "Loading..." : `₹${dmTotalSales}`}
-            </h3>
+            <h3>{loading ? "Loading..." : `₹${dmTotalSales}`}</h3>
           </div>
         </div>
 
@@ -147,36 +123,34 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
         </div>
       </div>
 
-      {/* Date Filters */}
+      {/* Date Filter */}
       <div className={styles.dateFilterSection}>
-        <div className={styles.dateInputsWrapper}>
-          <label className={styles.dateLabel}>
-            Start Date:
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-          </label>
-          <label className={styles.dateLabel}>
-            End Date:
-            <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-            />
-          </label>
-        </div>
-        <div className={styles.buttonWrapper}>
-          <button className={styles.filterButton} onClick={handleFilter}>
-            Show
-          </button>
-        </div>
+        <label>
+          Start Date:
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+        </label>
+
+        <label>
+          End Date:
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+        </label>
+
+        <button className={styles.filterButton} onClick={handleFilter}>
+          Show
+        </button>
       </div>
 
-      {/* Line Chart */}
+      {/* Chart */}
       <div className={styles.chartContainer}>
-        <h3 className={styles.chartTitle}>Monthly Sales Chart</h3>
+        <h3 className={styles.chartTitle}>Monthly Sales Overview</h3>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={filteredData}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -187,7 +161,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
               type="monotone"
               dataKey="sales"
               stroke="#007bff"
-              strokeWidth={2}
+              strokeWidth={3}
             />
           </LineChart>
         </ResponsiveContainer>

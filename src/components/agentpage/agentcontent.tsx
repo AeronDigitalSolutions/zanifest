@@ -14,17 +14,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const allData = [
-  { month: "Jan", price: 30, date: "2025-01-15" },
-  { month: "Feb", price: 40, date: "2025-02-10" },
-  { month: "Mar", price: 40, date: "2025-03-20" },
-  { month: "Apr", price: 50, date: "2025-04-18" },
-  { month: "May", price: 35, date: "2025-05-05" },
-  { month: "Jun", price: 55, date: "2025-06-22" },
-  { month: "Jul", price: 65, date: "2025-07-12" },
-  { month: "Aug", price: 70, date: "2025-08-08" },
-];
-
 interface AgentContentProps {
   agentName: string;
   agentSales: number;
@@ -32,46 +21,102 @@ interface AgentContentProps {
   assignedTo?: string;
 }
 
+interface SaleRecord {
+  amount: number;
+  saleDate: string;
+}
+
 const AgentContent: React.FC<AgentContentProps> = ({
   agentName,
   agentSales,
   agentId,
-  assignedTo: initialAssignedTo, // renamed prop for clarity
+  assignedTo: initialAssignedTo,
 }) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [chartData, setChartData] = useState(allData);
+  const [chartData, setChartData] = useState<any[]>([]);
   const [salesAmount, setSalesAmount] = useState<number>(0);
   const [totalSales, setTotalSales] = useState<number>(agentSales);
   const [salesBreakdown, setSalesBreakdown] = useState<{ lifetime: number; underCurrentDM: number } | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  // ✅ Added missing state
   const [assignedTo, setAssignedTo] = useState<string>(initialAssignedTo || "");
 
- const [dmHistory, setDmHistory] = useState<
-  { dmId: string; dmName: string; sales: number }[]
->([]);
+  const [dmHistory, setDmHistory] = useState<
+    { dmId: string; sales: number }[]
+  >([]);
 
-const fetchAgentSales = async () => {
-  try {
-    const token = localStorage.getItem("agentToken");
-    const res = await axios.get("/api/agent/get-sales", {
-      headers: { Authorization: `Bearer ${token}` },
+  const [salesList, setSalesList] = useState<SaleRecord[]>([]);
+  const [monthlySales, setMonthlySales] = useState<number>(0);
+
+  // ✅ NEW — dynamic (0 for now)
+  const [totalClients, setTotalClients] = useState<number>(0);
+
+  const [showBreakdownModal, setShowBreakdownModal] = useState(false);
+
+  // ✅ Total transferred sale  
+  const combinedDmSales = dmHistory.reduce((sum, entry) => sum + entry.sales, 0);
+
+  const fetchAgentSales = async () => {
+    try {
+      const token = localStorage.getItem("agentToken");
+      const res = await axios.get("/api/agent/get-sales", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (res.data.success) {
+        setSalesBreakdown(res.data.sales);
+        setTotalSales(res.data.sales.lifetime);
+        setAssignedTo(res.data.assignedTo || "");
+        setDmHistory(res.data.sales.dmHistory || []);
+
+        setSalesList(res.data.sales.allSales || []);
+
+        updateMonthlySales(res.data.sales.allSales || []);
+
+        // ✅ clients → 0 for now
+        setTotalClients(0);
+      }
+    } catch (err) {
+      console.error("Failed to fetch sales:", err);
+      toast.error("Failed to fetch sales data");
+    }
+  };
+
+  // ✅ Monthly calc
+  const updateMonthlySales = (sales: SaleRecord[]) => {
+    const now = new Date();
+    const month = now.getMonth();
+    const year = now.getFullYear();
+
+    const filtered = sales.filter((s) => {
+      const d = new Date(s.saleDate);
+      return (
+        d.getMonth() === month &&
+        d.getFullYear() === year &&
+        d.getDate() >= 1
+      );
     });
 
-    if (res.data.success) {
-      setSalesBreakdown(res.data.sales);
-      setTotalSales(res.data.sales.lifetime);
-      setAssignedTo(res.data.assignedTo || "");
-      setDmHistory(res.data.sales.dmHistory || []); // ✅ here it comes
-    }
-  } catch (err) {
-    console.error("Failed to fetch sales:", err);
-    toast.error("Failed to fetch sales data");
-  }
-};
+    const total = filtered.reduce((sum, s) => sum + (s.amount || 0), 0);
+    setMonthlySales(total);
 
+    updateChart(filtered);
+  };
+
+  const updateChart = (sales: SaleRecord[]) => {
+    const formatted = sales
+      .sort((a, b) => new Date(a.saleDate).getTime() - new Date(b.saleDate).getTime())
+      .map((s) => ({
+        date: new Date(s.saleDate).toLocaleDateString("en-IN", {
+          day: "numeric",
+          month: "short",
+        }),
+        price: s.amount,
+      }));
+
+    setChartData(formatted);
+  };
 
   useEffect(() => {
     fetchAgentSales();
@@ -79,14 +124,14 @@ const fetchAgentSales = async () => {
 
   const handleFilter = () => {
     if (!startDate || !endDate) {
-      setChartData(allData);
+      updateMonthlySales(salesList);
       return;
     }
-    const filtered = allData.filter((item) => {
-      const itemDate = new Date(item.date);
+    const filtered = salesList.filter((item) => {
+      const itemDate = new Date(item.saleDate);
       return itemDate >= new Date(startDate) && itemDate <= new Date(endDate);
     });
-    setChartData(filtered);
+    updateChart(filtered);
   };
 
   const handleAddSale = async () => {
@@ -119,34 +164,71 @@ const fetchAgentSales = async () => {
     <main className={styles.content}>
       <h2 className={styles.dashboardTitle}>Hello, {agentName}</h2>
 
-      {/* Info Cards */}
+      {/* ✅ Info Cards */}
       <div className={styles.cardGrid}>
+
+        {/* ✅ DM HISTORY */}
         {dmHistory.length > 0 && (
+          <div className={styles.infoCard}>
+            <h3>DM History</h3>
+
+            <h4>Total Transferred Sale: ₹{combinedDmSales}</h4>
+
+            <button
+              className={styles.breakdownBtn}
+              onClick={() => setShowBreakdownModal(true)}
+            >
+              Breakdown
+            </button>
+          </div>
+        )}
+
         <div className={styles.infoCard}>
-          <h3>DM History</h3>
-          <div className={styles.dmHistoryContainer}>
-            {dmHistory.map((dm, index) => (
-              <div key={index} className={styles.dmHistoryItem}>
-                <strong>{dm.dmName}</strong> ({dm.dmId})<br />
-                <span className={styles.amount}>₹{dm.sales}</span>
-              </div>
-            ))}
+          <h3>Sales This Month</h3>
+          <p className={styles.amount}>₹{monthlySales}</p>
+        </div>
+
+        <div className={styles.infoCard}>
+          <h3>Number of Clients</h3>
+          {/* ✅ Dynamic — 0 for now */}
+          <p className={styles.amount}>{totalClients}</p>
+        </div>
+      </div>
+
+      {/* ✅ BREAKDOWN MODAL */}
+      {showBreakdownModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalBox}>
+            <h2>DM Breakdown</h2>
+
+            <table className={styles.modalTable}>
+              <thead>
+                <tr>
+                  <th>DM ID</th>
+                  <th>Sale</th>
+                </tr>
+              </thead>
+              <tbody>
+                {dmHistory.map((dm) => (
+                  <tr key={dm.dmId}>
+                    <td>{dm.dmId}</td>
+                    <td>₹{dm.sales}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <button
+              className={styles.closeBtn}
+              onClick={() => setShowBreakdownModal(false)}
+            >
+              Close
+            </button>
           </div>
         </div>
       )}
 
-
-        <div className={styles.infoCard}>
-          <h3>Sales This Month</h3>
-          <p className={styles.amount}>₹35,000</p>
-        </div>
-        <div className={styles.infoCard}>
-          <h3>Number of Clients</h3>
-          <p className={styles.amount}>42</p>
-        </div>
-      </div>
-
-      {/* Add Sales Section */}
+      {/* ✅ ADD SALES */}
       <div className={styles.addSalesSection}>
         <h3>Add New Sale</h3>
         <div className={styles.addSalesForm}>
@@ -167,7 +249,7 @@ const fetchAgentSales = async () => {
         </div>
       </div>
 
-      {/* Date Filter Section */}
+      {/* ✅ DATE FILTER */}
       <div className={styles.dateFilterSection}>
         <label className={styles.dateLabel}>
           Start Date:
@@ -192,13 +274,13 @@ const fetchAgentSales = async () => {
         </div>
       </div>
 
-      {/* Chart Section */}
+      {/* ✅ GRAPH */}
       <div className={styles.chartContainer}>
         <h3 className={styles.chartTitle}>Monthly Sales Overview</h3>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" />
+            <XAxis dataKey="date" />
             <YAxis />
             <Tooltip />
             <Line

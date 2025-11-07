@@ -1,541 +1,123 @@
-// "use client";
-// import React, { useState, useEffect } from "react";
-// import Image from "next/image";
-// import logo from "@/assets/logo.png";
-// import { useRouter } from "next/router";
-// import styles from "@/styles/pages/districtmanager.module.css";
-
-// import { FiUsers, FiBarChart2, FiHome, FiUser, FiMenu, FiX } from "react-icons/fi";
-// import { FaRupeeSign } from "react-icons/fa";
-// import {
-//   LineChart,
-//   Line,
-//   XAxis,
-//   YAxis,
-//   Tooltip,
-//   CartesianGrid,
-//   ResponsiveContainer,
-// } from "recharts";
-// import { useManager } from "@/lib/hooks/useManager";
-// import axios from "axios";
-
-// const agents = [
-//   {
-//     id: "AG101",
-//     name: "Ravi Kumar",
-//     location: "Delhi",
-//     totalSales: 90000,
-//     monthlySales: 35000,
-//     clients: 12,
-//   },
-//   {
-//     id: "AG102",
-//     name: "Neha Singh",
-//     location: "Mumbai",
-//     totalSales: 15000,
-//     monthlySales: 400,
-//     clients: 15,
-//   },
-//   {
-//     id: "AG103",
-//     name: "Amit Patel",
-//     location: "Ahmedabad",
-//     totalSales: 10000,
-//     monthlySales: 78890,
-//     clients: 10,
-//   },
-//   {
-//     id: "AG104",
-//     name: "Sunita Rao",
-//     location: "Bangalore",
-//     totalSales: 10000,
-//     monthlySales: 345560,
-//     clients: 5,
-//   },
-// ];
-
-// const monthlySalesData = [
-//   { month: "Jan 2025", sales: 12000 },
-//   { month: "Feb 2025", sales: 22000 },
-//   { month: "Mar 2025", sales: 30000 },
-//   { month: "Apr 2025", sales: 35000 },
-//   { month: "May 2025", sales: 27000 },
-//   { month: "Jun 2025", sales: 40000 },
-//   { month: "Jul 2025", sales: 38000 },
-//   { month: "Aug 2025", sales: 42000 },
-//   { month: "Sep 2025", sales: 31000 },
-//   { month: "Oct 2025", sales: 45000 },
-//   { month: "Nov 2025", sales: 50000 },
-//   { month: "Dec 2025", sales: 47000 },
-// ];
-
-// interface Agent {
-//   _id: string;
-//   name: string;
-//   email: string;
-//   assignedTo: string;
-//   district: string;
-//   city: string;
-//   state: string;
-//   totalSales?: number;
-//   monthlySales?: number;
-//   clients?: number;
-// }
-
-// const DistricManagerDashboard = () => {
-//   const router = useRouter();
-//   const [showAgentList, setShowAgentList] = useState(false);
-//   const [agentData, setAgentData] = useState<Agent[]>([]);
-//   const [startDate, setStartDate] = useState("");
-//   const [endDate, setEndDate] = useState("");
-//   const [filteredData, setFilteredData] = useState(monthlySalesData);
-//   const [sidebarOpen, setSidebarOpen] = useState(false);
-//   const [formattedTotalSales, setFormattedTotalSales] = useState("");
-//   const [formattedMonthlySales, setFormattedMonthlySales] = useState("");
-//     const [activeSection, setActiveSection] = useState("dashboard");
-
-//   const { user } = useManager();
-
-//   const handleLogout = async () => {
-//     try {
-//       await axios.post("/api/manager/logout");
-//       localStorage.removeItem("managerToken");
-//       router.replace("/managerlogin");
-//     } catch (error) {
-//       console.error("Logout failed:", error);
-//     }
-//   };
-
-//   const totalSales = agents.reduce((sum, agent) => sum + agent.totalSales, 0);
-//   const monthlySales = agents.reduce((sum, agent) => sum + agent.monthlySales, 0);
-//   const totalClients = agents.reduce((sum, agent) => sum + agent.clients, 0);
-
-//   useEffect(() => {
-//     setFormattedTotalSales(totalSales.toLocaleString("en-IN"));
-//     setFormattedMonthlySales(monthlySales.toLocaleString("en-IN"));
-//   }, [totalSales, monthlySales]);
-
-//   useEffect(() => {
-//     const fetchAgents = async () => {
-//       try {
-//         const res = await fetch("/api/getagent");
-//         const data = await res.json();
-//         setAgentData(data.agents || []);
-//       } catch (err) {
-//         console.error("Error fetching agents:", err);
-//       }
-//     };
-
-//     fetchAgents();
-//   }, []);
-
-//   const handleFilter = () => {
-//     if (!startDate || !endDate) return;
-//     const start = new Date(startDate);
-//     const end = new Date(endDate);
-
-//     const filtered = monthlySalesData.filter((entry) => {
-//       const [monthName, year] = entry.month.split(" ");
-//       const monthIndex = new Date(`${monthName} 1, ${year}`).getTime();
-//       return monthIndex >= start.getTime() && monthIndex <= end.getTime();
-//     });
-
-//     setFilteredData(filtered);
-//   };
-
-//   return (
-//     <div className={styles.wrapper}>
-//       {/* Header */}
-//       <header className={styles.header}>
-//         <h3>Hi {user?.name ?? "District Manager"}</h3>
-//         <div className={styles.logoContainer}>
-//           <Image src={logo} alt="Logo" width={150} height={45} className={styles.logo} />
-//         </div>
-//         <button className={styles.menuToggle} onClick={() => setSidebarOpen(!sidebarOpen)}>
-//           {sidebarOpen ? <FiX size={22} /> : <FiMenu size={22} />}
-//         </button>
-//         <div className={styles.desktopOnlyLogout}>
-//           <button className={styles.logoutButton} onClick={handleLogout}>
-//             Logout
-//           </button>
-//         </div>
-//       </header>
-
-//       {/* Sidebar + Content */}
-//       <div className={styles.mainArea}>
-//         {/* Sidebar */}
-//         <aside className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarMobile : ""}`}>
-//           <ul className={styles.menu}>
-//             <li className={styles.menuItem}>
-//               <div className={styles.iconLabel}>
-//                 <span className={styles.icon}>
-//                   <FiHome />
-//                 </span>
-//                 <span className={styles.label}
-//                   onClick={() => {
-//                 setActiveSection("dashboard");
-//                 setSidebarOpen(false);
-//               }}
-//               >Dashboard</span>
-//               </div>
-//             </li>
-//           </ul>
-
-//           <div className={styles.mobileOnlyLogout}>
-//             <button className={styles.logoutButton} onClick={handleLogout}>
-//               Logout
-//             </button>
-//           </div>
-//         </aside>
-
-//         {/* Main Content */}
-//         <main className={styles.content}>
-//           <h2 className={styles.title}>District Manager Dashboard</h2>
-
-//           <div className={styles.cardGrid}>
-//             <div className={styles.card}>
-//               <FaRupeeSign className={styles.cardIcon} />
-//               <div>
-//                 <p>Total Sales</p>
-//                 <h3>₹{formattedTotalSales}</h3>
-//               </div>
-//             </div>
-//             <div className={styles.card}>
-//               <FiBarChart2 className={styles.cardIcon} />
-//               <div>
-//                 <p>Monthly Sales</p>
-//                 <h3>₹{formattedMonthlySales}</h3>
-//               </div>
-//             </div>
-//             <div className={styles.card}>
-//               <FiUsers className={styles.cardIcon} />
-//               <div>
-//                 <p>Number of Agents</p>
-//                 <h3>{agents.length}</h3>
-//               </div>
-//             </div>
-//             <div className={styles.card}>
-//               <FiUser className={styles.cardIcon} />
-//               <div>
-//                 <p>Total Clients</p>
-//                 <h3>{totalClients}</h3>
-//               </div>
-//             </div>
-//           </div>
-
-//                   <div className={styles.agentListToggleWrapper}>
-//   <div className={styles.agentListToggle} onClick={() => setShowAgentList(!showAgentList)}>List of Agents</div>
-// </div>
-
-//           {showAgentList && (
-//             <div className={styles.agentTable}>
-//               <h3 className={styles.tableTitle}>Agent List</h3>
-//               <div className={styles.tableWrapper}>
-//                 <table className={styles.table}>
-//                   <thead>
-//                     <tr>
-//                       <th>Name</th>
-//                       <th>Email</th>
-//                       <th>District</th>
-//                       <th>City</th>
-//                       <th>State</th>
-//                       <th>Assigned To</th>
-//                     </tr>
-//                   </thead>
-//                   <tbody>
-//                     {agentData.map((agent: Agent) => (
-//                       <tr key={agent._id}>
-//                         <td>{agent.name}</td>
-//                         <td>{agent.email}</td>
-//                         <td>{agent.district}</td>
-//                         <td>{agent.city}</td>
-//                         <td>{agent.state}</td>
-//                         <td>{agent.assignedTo || "Unassigned"}</td>
-//                       </tr>
-//                     ))}
-//                   </tbody>
-//                 </table>
-//               </div>
-//             </div>
-//           )}
-
-// <div className={styles.dateFilterSection}>
-//   <div className={styles.dateInputsWrapper}>
-//     <label className={styles.dateLabel}>
-//       Start Date:
-//       <input
-//         type="date"
-//         value={startDate}
-//         onChange={(e) => setStartDate(e.target.value)}
-//       />
-//     </label>
-//     <label className={styles.dateLabel}>
-//       End Date:
-//       <input
-//         type="date"
-//         value={endDate}
-//         onChange={(e) => setEndDate(e.target.value)}
-//       />
-//     </label>
-//   </div>
-//   <div className={styles.buttonWrapper}>
-//     <button className={styles.filterButton} onClick={handleFilter}>
-//       Show
-//     </button>
-//   </div>
-// </div>
-
-//           <div className={styles.chartContainer}>
-//             <h3 className={styles.chartTitle}>Monthly Sales Chart</h3>
-//             <ResponsiveContainer width="100%" height={300}>
-//               <LineChart data={filteredData}>
-//                 <CartesianGrid strokeDasharray="3 3" />
-//                 <XAxis dataKey="month" />
-//                 <YAxis />
-//                 <Tooltip />
-//                 <Line type="monotone" dataKey="sales" stroke="#007bff" strokeWidth={2} />
-//               </LineChart>
-//             </ResponsiveContainer>
-//           </div>
-//         </main>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default DistricManagerDashboard;
 "use client";
-import React, { useState, useEffect, useMemo } from "react";
+
+import React, { useState, useEffect } from "react";
 import styles from "@/styles/pages/districtmanager.module.css";
 import { useRouter } from "next/router";
 import { useManager } from "@/lib/hooks/useManager";
 import axios from "axios";
+
 import DistrictManagerHeader from "@/components/districtmanagerdashboard/DistrictManagerHeader";
 import DistrictManagerSidebar from "@/components/districtmanagerdashboard/districtmanagersidebar";
 import DashboardContent from "@/components/districtmanagerdashboard/dashboardcontent";
 import ResetPassword from "@/components/districtmanagerdashboard/resetpassword";
+import AgentTable from "@/components/districtmanagerdashboard/listofagents";
 
 type Agent = {
-  id: string;
-  name: string;
-  location: string;
-  totalSales: number;
-  monthlySales: number;
-  clients: number;
-};
-
-type AgentData = {
   _id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  district: string;
-  city: string;
-  state: string;
-  assignedTo?: string;
+  lifetimeSales: number;
+  currentDMSales: number;
 };
 
-type MonthlySales = {
-  month: string;
-  sales: number;
+type SalesResponse = {
+  success: boolean;
+  totalSales: number;
+  totalAgents: number;
+  sales: { month: string; sales: number }[];
 };
 
-const agents = [
-  {
-    _id: "AG101",
-    name: "Ravi Kumar",
-    email: "ravi.kumar@example.com",
-    assignedTo: "Manager1",
-    district: "Central",
-    city: "Delhi",
-    state: "Delhi",
-    totalSales: 90000,
-    monthlySales: 35000,
-    clients: 12,
-  },
-  {
-    _id: "AG102",
-    name: "Neha Singh",
-    email: "neha.singh@example.com",
-    assignedTo: "Manager1",
-    district: "West",
-    city: "Mumbai",
-    state: "Maharashtra",
-    totalSales: 15000,
-    monthlySales: 400,
-    clients: 15,
-  },
-  {
-    _id: "AG103",
-    name: "Amit Patel",
-    email: "amit.patel@example.com",
-    assignedTo: "Manager2",
-    district: "East",
-    city: "Ahmedabad",
-    state: "Gujarat",
-    totalSales: 10000,
-    monthlySales: 78890,
-    clients: 10,
-  },
-  {
-    _id: "AG104",
-    name: "Sunita Rao",
-    email: "sunita.rao@example.com",
-    assignedTo: "Manager2",
-    district: "South",
-    city: "Bangalore",
-    state: "Karnataka",
-    totalSales: 10000,
-    monthlySales: 345560,
-    clients: 5,
-  },
-];
-
-const monthlySalesData = [
-  { month: "Jan 2025", sales: 12000 },
-  { month: "Feb 2025", sales: 22000 },
-  { month: "Mar 2025", sales: 30000 },
-  { month: "Apr 2025", sales: 35000 },
-  { month: "May 2025", sales: 27000 },
-  { month: "Jun 2025", sales: 40000 },
-  { month: "Jul 2025", sales: 38000 },
-  { month: "Aug 2025", sales: 42000 },
-  { month: "Sep 2025", sales: 31000 },
-  { month: "Oct 2025", sales: 45000 },
-  { month: "Nov 2025", sales: 50000 },
-  { month: "Dec 2025", sales: 47000 },
-];
-
-// ---------------------------
-// Dashboard Component
-// ---------------------------
 const DistrictManagerDashboard = () => {
   const router = useRouter();
   const { user } = useManager();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("dashboard");
-  const [showAgentList, setShowAgentList] = useState(false);
-  const [agentData, setAgentData] = useState([]);
+
+  const [agentData, setAgentData] = useState<Agent[]>([]);
+
+  const [formattedTotalSales, setFormattedTotalSales] = useState("0");
+  const [formattedMonthlySales, setFormattedMonthlySales] = useState("0");
+  const [totalClients, setTotalClients] = useState(0);
+
+  const [monthlySalesData, setMonthlySalesData] = useState<any[]>([]);
+  const [filteredData, setFilteredData] = useState<any[]>([]);
+
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [filteredData, setFilteredData] = useState(monthlySalesData);
 
-  const totalSales = agents.reduce((sum, agent) => sum + agent.totalSales, 0);
-  const monthlySales = agents.reduce(
-    (sum, agent) => sum + agent.monthlySales,
-    0
-  );
-  const totalClients = agents.reduce((sum, agent) => sum + agent.clients, 0);
-  const [formattedTotalSales, setFormattedTotalSales] = useState("");
-  const [formattedMonthlySales, setFormattedMonthlySales] = useState("");
+  // ✅ Fetch Agents
+  const fetchAgents = async () => {
+    try {
+      const res = await axios.get("/api/getagent", {
+        withCredentials: true,
+      });
 
-  useEffect(() => {
-    setFormattedTotalSales(totalSales.toLocaleString("en-IN"));
-    setFormattedMonthlySales(monthlySales.toLocaleString("en-IN"));
-  }, [totalSales, monthlySales]);
-
-  useEffect(() => {
-    const fetchAgents = async () => {
-      try {
-        const res = await fetch("/api/getagent");
-        console.log("number of agents for district manager:", res);
-        const data = await res.json();
-        setAgentData(data.agents || []);
-      } catch (err) {
-        console.error("Error fetching agents:", err);
+      if (res.data?.agents) {
+        setAgentData(res.data.agents);
       }
-    };
+    } catch (err) {
+      console.error("Error fetching agents:", err);
+    }
+  };
+
+  // ✅ Fetch DM Sales Summary
+  const fetchManagerSales = async () => {
+    try {
+      const token = localStorage.getItem("managerToken");
+      if (!token) return;
+
+      const res = await axios.get<SalesResponse>("/api/manager/sales-summary", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (res.data?.success) {
+        const total = res.data.totalSales ?? 0;
+
+        setFormattedTotalSales(total.toLocaleString("en-IN"));
+        setFormattedMonthlySales(total.toLocaleString("en-IN"));
+        setTotalClients(res.data.totalAgents || 0);
+
+        const monthlyArr =
+          res.data.sales?.map((s: any) => ({
+            month: s.month,
+            sales: s.sales,
+          })) || [];
+
+        setMonthlySalesData(monthlyArr);
+        setFilteredData(monthlyArr);
+      }
+    } catch (err) {
+      console.error("Error fetching manager sales:", err);
+    }
+  };
 
   useEffect(() => {
     fetchAgents();
-  }, [router]);
+    fetchManagerSales();
+  }, []);
 
-  // ---- FIELD MAPPING HELPERS ----
-  const getTotalSales = (a: AgentDoc) =>
-    (+a.totalSales! || +a.lifetimeSales! || 0);
-
-  const getMonthlySales = (a: AgentDoc) =>
-    (+a.monthlySales! || +a.sales! || +a.currentDMSales! || 0);
-
-  const getClients = (a: AgentDoc) =>
-    (+a.clients! || 0); // adjust here if you later add a field like a.clientCount
-
-  // ---- DERIVED TOTALS (Option B + mapping) ----
-  const totalSalesNum = useMemo(
-    () => agentData.reduce((sum, a) => sum + getTotalSales(a), 0),
-    [agentData]
-  );
-
-  const monthlySalesNum = useMemo(
-    () => agentData.reduce((sum, a) => sum + getMonthlySales(a), 0),
-    [agentData]
-  );
-
-  const totalClientsNum = useMemo(
-    () => agentData.reduce((sum, a) => sum + getClients(a), 0),
-    [agentData]
-  );
-
-  const numAgents = agentData.length;
-  const formattedTotalSales = `₹${totalSalesNum.toLocaleString("en-IN")}`;
-  const formattedMonthlySales = `₹${monthlySalesNum.toLocaleString("en-IN")}`;
-
-  const simpleAgents: SimpleAgent[] = useMemo(
-    () =>
-      agentData.map((a) => ({
-        id: a._id,
-        name: `${a.firstName ?? ""} ${a.lastName ?? ""}`.trim() || a.email,
-        location: a.city || a.district || a.state || "—",
-        totalSales: getTotalSales(a),
-        monthlySales: getMonthlySales(a),
-        clients: getClients(a),
-      })),
-    [agentData]
-  );
-
-  const agentTableData = useMemo(
-    () =>
-      agentData.map((a) => ({
-        _id: a._id,
-        name: `${a.firstName ?? ""} ${a.lastName ?? ""}`.trim() || a.email,
-        email: a.email,
-        district: a.district ?? "",
-        city: a.city ?? "",
-        state: a.state ?? "",
-        assignedTo: a.assignedTo,
-      })),
-    [agentData]
-  );
-
+  // ✅ DATE FILTER
   const handleFilter = () => {
     if (!startDate || !endDate) {
       setFilteredData(monthlySalesData);
       return;
     }
-    const start = new Date(startDate).getTime();
-    const end = new Date(endDate).getTime();
-    const filtered = monthlySalesData.filter((p) => {
-      const [mName, y] = p.month.split(" ");
-      const t = new Date(`${mName} 1, ${y}`).getTime();
-      return t >= start && t <= end;
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    const filtered = monthlySalesData.filter((entry: any) => {
+      const d = new Date(entry.month);
+      return d >= start && d <= end;
     });
+
     setFilteredData(filtered);
   };
 
-  // ---------------------------
-  // Total and Monthly Sales Computation
-  // ---------------------------
-  // const totalSales = agentData.reduce((sum, agent) => sum + (agent.lifetimeSales || 0), 0);
-  const [formattedTotalSales, setFormattedTotalSales] = useState("0");
-  const [formattedMonthlySales, setFormattedMonthlySales] = useState("0");
-  const [totalClients, setTotalClients] = useState(0);
-
-  // ---------------------------
-  // Logout Handler
-  // ---------------------------
   const handleLogout = async () => {
     try {
-      await axios.post("/api/manager/logout");
       localStorage.removeItem("managerToken");
       router.replace("/managerlogin");
     } catch (error) {
@@ -543,51 +125,6 @@ const DistrictManagerDashboard = () => {
     }
   };
 
-  const handleFilter = () => {
-    if (!startDate || !endDate) return;
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-
-    const filtered = monthlySalesData.filter((entry) => {
-      const [monthName, year] = entry.month.split(" ");
-      const monthIndex = new Date(`${monthName} 1, ${year}`).getTime();
-      return monthIndex >= start.getTime() && monthIndex <= end.getTime();
-    });
-
-    setFilteredData(filtered);
-  };
-
-  const fetchManagerSales = async () => {
-    try {
-      const token = localStorage.getItem("managerToken");
-      console.log("Manager Token:", token);
-      if (!token) return;
-  
-      const res = await axios.get("/api/manager/salessummary", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      console.log("Response Data:", res.data);
-  
-  
-      if (res.data.success) {
-      setFormattedTotalSales(res.data.totalSales.toLocaleString("en-IN"));
-      setFormattedMonthlySales(res.data.monthlySales?.toLocaleString("en-IN") || "0");
-      setTotalClients(res.data.totalClients || 0);
-    }
-      
-    } catch (err) {
-      console.error("Error fetching manager sales:", err);
-      alert("Failed to fetch manager sales");
-    }
-  };
-  
-  useEffect(() => {
-    fetchManagerSales();
-  }, []);
-
-  // ---------------------------
-  // Render
-  // ---------------------------
   return (
     <div className={styles.wrapper}>
       <DistrictManagerHeader
@@ -610,24 +147,18 @@ const DistrictManagerDashboard = () => {
             <DashboardContent
               formattedTotalSales={formattedTotalSales}
               formattedMonthlySales={formattedMonthlySales}
-              agents={agents}
               totalClients={totalClients}
-              showAgentList={showAgentList}
-              setShowAgentList={setShowAgentList}
-              agentData={agentTableData}
+              agents={agentData}
               startDate={startDate}
               endDate={endDate}
               setStartDate={setStartDate}
               setEndDate={setEndDate}
               handleFilter={handleFilter}
               filteredData={filteredData}
-              loading={loading}
-              error={error}
-              numAgents={numAgents}
             />
-
           )}
 
+          {activeSection === "listofagent" && <AgentTable />}
           {activeSection === "resetpassword" && <ResetPassword />}
         </main>
       </div>
