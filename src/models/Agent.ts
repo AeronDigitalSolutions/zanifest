@@ -81,13 +81,13 @@ const agentSchema = new mongoose.Schema({
       {
         filename: String,
         data: Buffer,
-        url: String, // ✅ Add this to store the accessible path
+        url: String, 
         mimetype: String,
       }
     ],
 
   assignedTo: {
-    type: String, // or String, depending on your Manager schema
+    type: String, 
     ref: "Manager",
     required: true,
   },

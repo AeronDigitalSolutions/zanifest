@@ -18,22 +18,7 @@ export default function HowWorksSections() {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const [animateheading, setAnimateheading] = useState(false);
 
-  // Trigger animation only when section enters viewport 
-  // useEffect(() => {
-  //   const observer = new IntersectionObserver(
-  //     (entries) => {
-  //       if (entries[0].isIntersecting) {
-  //         setAnimateheading(true);
-  //         observer.disconnect();
-  //       }
-  //     },
-  //     { threshold: 0.3 }
-  //   );
 
-  //   if (sectionRef.current) observer.observe(sectionRef.current);
-
-  //   return () => observer.disconnect();
-  // }, []);
   useEffect(() => {
             AOS.init({ duration: 1000, once: true }); 
 },[]);
