@@ -35,7 +35,7 @@ export default function Login() {
     const data = await res.json();
 
     if (res.ok) {
-      setUser({ name: data.name || "", email: data.email || "" }); // update AuthContext with user data in a structured way
+      setUser({ name: data.name || "", email: data.email || "" });
       router.push("/dashboard");
     } else {
       setError(true);
@@ -94,17 +94,7 @@ export default function Login() {
               />
             </div>
 
-            {/* <div className={styles.formInput}>
-              <input
-                type={showPassword ? "text" : "password"}
-                name="pass"
-                id="pass"
-                placeholder="Password"
-                required
-                className={styles.input}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div> */}
+           
  <div className={styles.formInput} style={{ position: "relative" }}>
               <input
                 type={showPassword ? "text" : "password"}
@@ -128,15 +118,7 @@ export default function Login() {
                 {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
               </span>
             </div>
-            {/* <div className={styles.showPasswordDiv}>
-              <input
-                type="checkbox"
-                id="showP"
-                className={styles.passCheck}
-                onClick={() => setShowPassword(!showPassword)}
-              />
-              <label htmlFor="showP">Show Password</label>
-            </div> */}
+          
 
             <button
               className={styles.loginButton}
