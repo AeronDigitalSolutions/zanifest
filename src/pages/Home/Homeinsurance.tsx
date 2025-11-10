@@ -25,15 +25,30 @@ const Homeinsurance: React.FC = () => {
     );
   };
 
-  // ✅ Just navigate to /homeinsurance2
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    router.push("Homeinsurance2");
+ // ✅ Just navigate to /homeinsurance2 and save step 1 data
+const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault();
+
+  const step1Data = {
+    fullName,
+  phoneNumber: mobile.replace(/\s+/g, ""),
+    coverOptions: {
+      homeStructure: selectedOptions.includes("Home Structure"),
+      householdItems: selectedOptions.includes("Household Items"),
+      homeLoanProtection: selectedOptions.includes("Home Loan Protection"),
+      insuranceForLoan: selectedOptions.includes("Insurance For Loan"),
+      jewelleryAndValuables: selectedOptions.includes("Jewellery & Valuables"),
+    },
   };
+
+  localStorage.setItem("homeInsuranceStep1", JSON.stringify(step1Data));
+  router.push("Homeinsurance2");
+};
+
 
   // ✅ Full Name handler (capitalize each word)
   const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let input = e.target.value.replace(/[^a-zA-Z\s]/g, ""); // sirf letters & space
+    let input = e.target.value.replace(/[^a-zA-Z\s]/g, ""); 
     input = input
       .split(" ")
       .filter(Boolean) // extra spaces hatao
@@ -60,6 +75,7 @@ const Homeinsurance: React.FC = () => {
     useEffect(() => {
       AOS.init({ duration: 1000, once: true });
     }, []);
+
   return (
     <div>
       <Navbar />

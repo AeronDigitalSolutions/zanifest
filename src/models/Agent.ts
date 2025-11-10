@@ -21,34 +21,36 @@ const agentSchema = new mongoose.Schema({
   adhaarNumber: { type: String, required: true },
   adhaarAttachment: { type: String },
 
-  // Nominee details
-  nomineeName: String,
-  nomineeRelation: String,
-  nomineePanNumber: String,
-  nomineeAadharNumber: String,
-  nomineePanAttachment: String,
-  nomineeAadhaarAttachment: String,
+  // Nominee Details
+  
+    nomineeName: String,
+    nomineeRelation: String,
+    nomineePanNumber: String,
+    nomineeAadharNumber: String,
+    nomineePanAttachment: String,
+    nomineeAadhaarAttachment: String,
+  
 
-  // Bank details
-  accountHolderName: String,
-  bankName: String,
-  accountNumber: String,
-  ifscCode: String,
-  branchLocation: String,
-  cancelledChequeAttachment: String,
-
-  attachments: [
-    {
-      filename: String,
-      data: Buffer,
-      url: String,
-      mimetype: String,
-    },
-  ],
+  // Bank Details
+  
+    accountHolderName: String,
+    bankName: String,
+    accountNumber: String,
+    ifscCode: String,
+    branchLocation: String,
+    cancelledChequeAttachment: String,
+    attachments: [
+      {
+        filename: String,
+        data: Buffer,
+        url: String, 
+        mimetype: String,
+      }
+    ],
 
   // 🔗 Current assigned manager
   assignedTo: {
-    type: String,
+    type: String, 
     ref: "Manager",
     required: true,
   },

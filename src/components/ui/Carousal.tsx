@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import styles from "@/styles/components/ui/Carousal.module.css";
+import Loader from "@/components/ui/loader";
 
 interface ImageType {
   _id: string;
@@ -10,20 +11,21 @@ interface ImageType {
 }
 
 interface CarouselProps {
-  
-  refresh: number; 
+  refresh: number;
 }
 
 const Carousel: React.FC<CarouselProps> = ({ refresh }) => {
   const [images, setImages] = useState<ImageType[]>([]);
+  const [loading, setLoading] = useState(true); 
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const isHoveredRef = useRef(false);
 
-  // ✅ Fetch images dynamically from DB
+  // Fetch images dynamically from DB
   const fetchImages = async () => {
     try {
+      setLoading(true);
       const res = await fetch("/api/getimage");
       const data = await res.json();
       if (data.success) {
@@ -31,12 +33,14 @@ const Carousel: React.FC<CarouselProps> = ({ refresh }) => {
       }
     } catch (err) {
       console.error("Error fetching images:", err);
+    } finally {
+      setLoading(false); //  Hide loader after fetch completes
     }
   };
 
   useEffect(() => {
     fetchImages();
-  }, [refresh]); // refetch whenever refresh changes
+  }, [refresh]);
 
   const startAutoSlide = () => {
     if (intervalRef.current) clearInterval(intervalRef.current);
@@ -77,8 +81,14 @@ const Carousel: React.FC<CarouselProps> = ({ refresh }) => {
     isHoveredRef.current = false;
   };
 
+  // Show only Zanfest loader while fetching
+  if (loading) {
+    return <Loader />;
+  }
+
+  //  No “Loading images…” text anymore — just skip to carousel
   if (images.length === 0) {
-    return <div className={styles.carousel}>Loading images...</div>;
+    return null;
   }
 
   return (

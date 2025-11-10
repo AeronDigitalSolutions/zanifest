@@ -1,10 +1,9 @@
+// marine5.tsx
 "use client";
 import React, { useState, useEffect } from "react";
 import styles from "@/styles/pages/marine/marine5.module.css";
 import Image from "next/image";
 import bajaj from "@/assets/pageImages/bajaj.png";
-import chola from "@/assets/home/chola ms.png";
-import digit from "@/assets/pageImages/digit.png";
 import { FaCheck } from "react-icons/fa";
 import { FaTruck, FaPlane, FaShip, FaBox, FaTrain } from "react-icons/fa";
 import Navbar from "@/components/ui/Navbar";
@@ -13,6 +12,7 @@ import { useRouter } from "next/navigation";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
+/* ----------------------------- MODAL COMPONENT ----------------------------- */
 const Modal = ({
   showModal,
   modalStep,
@@ -29,12 +29,11 @@ const Modal = ({
 }: any) => {
   if (!showModal) return null;
 
-  // ✅ Initialize AOS
+  // animation
   useEffect(() => {
     AOS.init({ duration: 800, once: false });
   }, []);
 
-  // ✅ Step fade-in transition
   const [fadeClass, setFadeClass] = useState(styles.fadeIn);
   useEffect(() => {
     setFadeClass(styles.fadeOut);
@@ -76,7 +75,7 @@ const Modal = ({
                 isContinueDisabled() ? styles.disabled : ""
               }`}
             >
-              Continue &gt;
+              Continue
             </button>
           </div>
         )}
@@ -91,51 +90,22 @@ const Modal = ({
               How will your goods be making their journey?
             </p>
             <div className={styles.transportOptions}>
-              <div
-                className={`${styles.transportOption} ${
-                  transportMode === "Road" ? styles.selected : ""
-                }`}
-                onClick={() => setTransportMode("Road")}
-              >
-                <FaTruck className={styles.transportIcon} />
-                Road
-              </div>
-              <div
-                className={`${styles.transportOption} ${
-                  transportMode === "Air" ? styles.selected : ""
-                }`}
-                onClick={() => setTransportMode("Air")}
-              >
-                <FaPlane className={styles.transportIcon} />
-                Air
-              </div>
-              <div
-                className={`${styles.transportOption} ${
-                  transportMode === "Sea" ? styles.selected : ""
-                }`}
-                onClick={() => setTransportMode("Sea")}
-              >
-                <FaShip className={styles.transportIcon} />
-                Sea
-              </div>
-              <div
-                className={`${styles.transportOption} ${
-                  transportMode === "Courier" ? styles.selected : ""
-                }`}
-                onClick={() => setTransportMode("Courier")}
-              >
-                <FaBox className={styles.transportIcon} />
-                Courier
-              </div>
-              <div
-                className={`${styles.transportOption} ${
-                  transportMode === "Rail" ? styles.selected : ""
-                }`}
-                onClick={() => setTransportMode("Rail")}
-              >
-                <FaTrain className={styles.transportIcon} />
-                Rail
-              </div>
+              {["Road", "Air", "Sea", "Courier", "Rail"].map((mode) => (
+                <div
+                  key={mode}
+                  className={`${styles.transportOption} ${
+                    transportMode === mode ? styles.selected : ""
+                  }`}
+                  onClick={() => setTransportMode(mode)}
+                >
+                  {mode === "Road" && <FaTruck className={styles.transportIcon} />}
+                  {mode === "Air" && <FaPlane className={styles.transportIcon} />}
+                  {mode === "Sea" && <FaShip className={styles.transportIcon} />}
+                  {mode === "Courier" && <FaBox className={styles.transportIcon} />}
+                  {mode === "Rail" && <FaTrain className={styles.transportIcon} />}
+                  {mode}
+                </div>
+              ))}
             </div>
             <button
               onClick={handleModalContinue}
@@ -183,7 +153,7 @@ const Modal = ({
                 isContinueDisabled() ? styles.disabled : ""
               }`}
             >
-              View quotes &gt;
+              Save Details &gt;
             </button>
           </div>
         )}
@@ -192,12 +162,15 @@ const Modal = ({
   );
 };
 
+/* ----------------------------- MAIN COMPONENT ----------------------------- */
 const Marine5 = () => {
   const [showModal, setShowModal] = useState(true);
   const [modalStep, setModalStep] = useState(1);
   const [companyName, setCompanyName] = useState("");
   const [transportMode, setTransportMode] = useState("");
   const [coverAmount, setCoverAmount] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+
   const router = useRouter();
 
   useEffect(() => {
@@ -205,13 +178,70 @@ const Marine5 = () => {
     setModalStep(1);
   }, []);
 
-  const handleModalComplete = () => setShowModal(false);
+  // 🟢 Step 1 — Load phone number saved from previous step
+  useEffect(() => {
+    const savedPhone = localStorage.getItem("phoneNumber");
+    if (savedPhone) {
+      setPhoneNumber(savedPhone);
+      console.log("📞 Loaded phone number:", savedPhone);
+    } else {
+      console.warn("⚠️ No phone number found in localStorage!");
+      // keep modal open and allow user to fill, but we will show careful validation on submit
+    }
+  }, []);
 
-  const handleModalContinue = () => {
-    if (modalStep < 3) setModalStep(modalStep + 1);
-    else handleModalComplete();
+  /* Continue modal steps */
+  const handleModalContinue = async () => {
+    if (modalStep < 3) {
+      setModalStep((s) => s + 1);
+      return;
+    }
+
+    // 🟢 Final validation check
+    if (!phoneNumber) {
+      alert("❌ Missing phone number. Please complete step 1 in Marine page first.");
+      return;
+    }
+
+    try {
+      const payload = {
+        phoneNumber: phoneNumber.replace(/\s+/g, ""),
+        companyName,
+        transportMode,
+        // remove commas for backend
+        coverAmount: coverAmount ? coverAmount.replace(/,/g, "") : "",
+      };
+
+      console.log("📤 Sending payload:", payload);
+
+      const res = await fetch("/api/p", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      console.log("📥 Response:", data);
+
+      if (res.ok) {
+        alert("✅ Data saved successfully!");
+        // persist locally in case user navigates back or refreshes
+        localStorage.setItem("companyName", companyName || "");
+        localStorage.setItem("transportMode", transportMode || "");
+        localStorage.setItem("coverAmount", payload.coverAmount || "");
+
+        // close modal and un-blur UI
+        setShowModal(false);
+      } else {
+        alert("❌ Failed to save data: " + (data.message || "Server error"));
+      }
+    } catch (error) {
+      console.error("⚠️ Error sending data:", error);
+      alert("Error sending data. Check console for details.");
+    }
   };
 
+  /* Validation */
   const isContinueDisabled = () => {
     if (modalStep === 1) return !companyName.trim();
     if (modalStep === 2) return !transportMode;
@@ -220,7 +250,9 @@ const Marine5 = () => {
   };
 
   const formatNumber = (num: string) =>
-    num.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    num
+      .replace(/\D/g, "")
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setCoverAmount(formatNumber(e.target.value));
@@ -280,6 +312,13 @@ const Marine5 = () => {
     return "Rupees " + numValue.toLocaleString("en-IN");
   };
 
+  // Grab some persisted search details if present (used in the top bar)
+  const persistedCommodity = typeof window !== "undefined" ? localStorage.getItem("commodity") : null;
+  const persistedCoverType = typeof window !== "undefined" ? localStorage.getItem("coverType") : null;
+  const persistedShipmentType = typeof window !== "undefined" ? localStorage.getItem("shipmentType") : null;
+  const persistedMode = typeof window !== "undefined" ? localStorage.getItem("transportMode") : null;
+  const persistedCoverAmount = typeof window !== "undefined" ? localStorage.getItem("coverAmount") : null;
+
   return (
     <>
       <Modal
@@ -313,23 +352,33 @@ const Marine5 = () => {
           <div className={styles.info}>
             <div>
               <span className={styles.label}>Commodity details</span>
-              <span className={styles.value}>Electronic and white goods</span>
+              <span className={styles.value}>
+                {persistedCommodity || "Electronic and white goods"}
+              </span>
             </div>
             <div>
               <span className={styles.label}>Cover amount</span>
-              <span className={styles.value}>₹ 1,23,456</span>
+              <span className={styles.value}>
+                {persistedCoverAmount ? `₹ ${formatNumber(persistedCoverAmount)}` : "₹ 1,23,456"}
+              </span>
             </div>
             <div>
               <span className={styles.label}>Cover type</span>
-              <span className={styles.value}>Annual open</span>
+              <span className={styles.value}>
+                {persistedCoverType || "Annual open"}
+              </span>
             </div>
             <div>
               <span className={styles.label}>Shipment type</span>
-              <span className={styles.value}>Export</span>
+              <span className={styles.value}>
+                {persistedShipmentType || "Export"}
+              </span>
             </div>
             <div>
               <span className={styles.label}>Mode of transport</span>
-              <span className={styles.value}>Road</span>
+              <span className={styles.value}>
+                {persistedMode || "Road"}
+              </span>
             </div>
             <button className={styles.editBtn}>✎ Edit your search</button>
           </div>

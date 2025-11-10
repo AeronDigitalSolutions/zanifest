@@ -8,9 +8,10 @@ import Footer from "@/components/ui/Footer";
 import Navbar from "@/components/ui/Navbar";
 import UserDetails from "@/components/ui/UserDetails";
 import { FaArrowLeft } from "react-icons/fa";
-import {useRouter} from 'next/router';
+import { useRouter } from "next/router";
 import AOS from "aos";
 import "aos/dist/aos.css";
+
 // Step 1: Years
 const years = Array.from({ length: 20 }, (_, i) => 2024 - i);
 
@@ -42,12 +43,18 @@ const otherModels = [
 
 export default function TwoWheeler() {
   const [step, setStep] = useState<"years" | "makes" | "models">("years");
-    const router =useRouter();
+  const router = useRouter();
 
-    // AOS animation
-    useEffect(() => {
-      AOS.init({ duration: 1000, once: true });
-    }, []);
+  // Initialize AOS
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true });
+  }, []);
+
+  // Refresh AOS whenever step changes
+  useEffect(() => {
+    AOS.refresh();
+  }, [step]);
+
   return (
     <div>
       <UserDetails />
@@ -67,12 +74,10 @@ export default function TwoWheeler() {
         </div>
 
         {/* RIGHT SECTION (Dynamic UI) */}
-        <div className={styles.rightSection} >
+        <div className={styles.rightSection}>
           {/* STEP 1: YEAR SELECTION */}
-          <div data-aos="fade-left">
-
           {step === "years" && (
-            <>
+            <div data-aos="fade-left" key="years">
               <h2 className={styles.question}>
                 When did you buy your Bike/Scooter?
               </h2>
@@ -87,13 +92,12 @@ export default function TwoWheeler() {
                   </button>
                 ))}
               </div>
-            </>
+            </div>
           )}
-          </div>
 
-          {/* STEP 2: POPULAR MAKES */}
+          {/* STEP 2: MAKES */}
           {step === "makes" && (
-            <div className={styles.makesWrapper}>
+            <div data-aos="fade-left" key="makes" className={styles.makesWrapper}>
               <button
                 className={styles.backButton}
                 onClick={() => setStep("years")}
@@ -115,12 +119,6 @@ export default function TwoWheeler() {
                     onClick={() => setStep("models")}
                   >
                     <div className={styles.makeImageWrapper}>
-                      {/* <Image
-                        src={make.image}
-                        alt={make.name}
-                        width={60}
-                        className={styles.makeIcon}
-                      /> */}
                     </div>
                     <span className={styles.makeText}>{make.name}</span>
                   </div>
@@ -134,7 +132,7 @@ export default function TwoWheeler() {
 
           {/* STEP 3: MODELS */}
           {step === "models" && (
-            <div className={styles.modelsWrapper}>
+            <div data-aos="fade-left" key="models" className={styles.modelsWrapper}>
               <button
                 className={styles.backButton}
                 onClick={() => setStep("makes")}
@@ -151,7 +149,11 @@ export default function TwoWheeler() {
               <p className={styles.sectionTitle}>Popular models</p>
               <div className={styles.grids}>
                 {popularModels.map((model, idx) => (
-                <div key={idx} className={styles.modelCard} onClick={()=>{router.push('./twowheeler5')}} >
+                  <div
+                    key={idx}
+                    className={styles.modelCard}
+                    onClick={() => router.push("./twowheeler5")}
+                  >
                     {model}
                   </div>
                 ))}
@@ -160,8 +162,11 @@ export default function TwoWheeler() {
               <p className={styles.sectionTitle}>Other models</p>
               <div className={styles.grids}>
                 {otherModels.map((model, idx) => (
-                    <div key={idx} className={styles.modelCard} onClick={()=>{router.push('./twowheeler5')}} >
-
+                  <div
+                    key={idx}
+                    className={styles.modelCard}
+                    onClick={() => router.push("./twowheeler5")}
+                  >
                     {model}
                   </div>
                 ))}

@@ -7,6 +7,8 @@ import { MdHeadsetMic } from "react-icons/md";
 import { LuNotebookPen } from "react-icons/lu";
 import { LiaMoneyBillSolid } from "react-icons/lia";
 import { FaEllipsisH } from "react-icons/fa";
+import 'aos/dist/aos.css';
+import AOS from 'aos';
 
 const iconMap = {
   support: <MdHeadsetMic size={40} />,
@@ -86,7 +88,9 @@ export default function BestServicesSection({
 
   const sectionRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
-
+useEffect(() => {
+            AOS.init({ duration: 1000, once: true }); 
+   },[]);
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -113,7 +117,7 @@ export default function BestServicesSection({
     <div ref={sectionRef} className={styles.cont}>
       {/* Heading */}
       <div className={`${styles.head} ${visible ? styles.animateOnce : ""}`}>
-        <h1 className={styles.heading1}>
+        <h1 className={styles.heading1} data-aos="fade-up">
           {parseHeading(heading).map((part, idx) => (
             <span
               key={idx}

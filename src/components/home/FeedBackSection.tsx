@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import useSWR from "swr";
@@ -7,6 +8,8 @@ import Carousel from "../ui/CarousalHtml";
 import FeedbackMobile from "../ui/FeedbackMobile";
 import styles from "@/styles/components/home/FeedBackSection.module.css";
 import { FaEllipsisH } from "react-icons/fa";
+import "aos/dist/aos.css";
+import AOS from "aos";
 
 interface IFeedbackApiResponse {
   success: boolean;
@@ -50,7 +53,7 @@ const FeedBackSection: React.FC<FeedBackSectionProps> = ({
   const [feedbackList, setFeedbackList] = useState<IFeedbackItem[]>([]);
   const [heading, setHeading] = useState("What Our <Customers> Are Saying?");
 
-  // 🔸 Animation: Trigger fade-in when in viewport
+  // 🔸 Optional: intersection-based fade-in trigger for extra CSS animation
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const [animateheading, setAnimateheading] = useState(false);
 
@@ -66,10 +69,16 @@ const FeedBackSection: React.FC<FeedBackSectionProps> = ({
     );
 
     if (sectionRef.current) observer.observe(sectionRef.current);
-
     return () => observer.disconnect();
   }, []);
 
+  // 🔸 Initialize AOS
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true });
+    AOS.refresh();
+  }, []);
+
+  // 🔸 Handle heading and data from props or SWR
   useEffect(() => {
     if (liveHeading) setHeading(liveHeading);
     else if (data?.heading) setHeading(data.heading);
@@ -78,6 +87,7 @@ const FeedBackSection: React.FC<FeedBackSectionProps> = ({
     else if (data?.success && data.data) setFeedbackList(data.data);
   }, [liveHeading, liveFeedbackList, data]);
 
+  // Loading / error states
   if (!liveHeading && !liveFeedbackList) {
     if (isLoading) return <div className={styles.cont}>Loading Feedback...</div>;
     if (error) return <div className={styles.cont}>Failed to load feedback.</div>;
@@ -85,6 +95,7 @@ const FeedBackSection: React.FC<FeedBackSectionProps> = ({
       return <div className={styles.cont}>No feedback available.</div>;
   }
 
+  //  Build slides
   const slides = feedbackList.map((item, index) => (
     <div className={styles.serviceItem} key={String(item._id ?? index)}>
       <h6 className={styles.desc}>{item.desc}</h6>
@@ -105,6 +116,7 @@ const FeedBackSection: React.FC<FeedBackSectionProps> = ({
     </div>
   ));
 
+  // Render
   return (
     <div ref={sectionRef} className={styles.cont}>
       <div className={styles.head}>
@@ -112,17 +124,25 @@ const FeedBackSection: React.FC<FeedBackSectionProps> = ({
           className={`${styles.heading} ${
             animateheading ? styles.animateOnce : ""
           }`}
+          data-aos="fade-up"
+          data-aos-duration="2000"
+          data-aos-easing="ease-in"
         >
           {renderHeading(heading)}
         </div>
       </div>
+
       <div className={styles.mobileEllipsis}>
         <FaEllipsisH style={{ color: "#fa621a", fontSize: "25px" }} />
       </div>
+
       <div className={styles.bottom}>
+        {/* Mobile Carousel */}
         <div className={styles.singlecar}>
           <FeedbackMobile items={slides} />
         </div>
+
+        {/* Desktop Carousel */}
         <div className={styles.multicar}>
           <Carousel items={feedbackList} />
         </div>

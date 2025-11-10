@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation"; // ✅ Import router
+import { useRouter } from "next/navigation";
 import styles from "@/styles/pages/DoctorInd/doctorinsurance.module.css";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
@@ -9,22 +9,41 @@ import UserDetails from "@/components/ui/UserDetails";
 import manager from "@/assets/doctor/stethoscope.png";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import axios from "axios";
 
-
-const InsurancePage: React.FC = () => {
+const DoctorInsurance: React.FC = () => {
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("+91 "); 
   const [whatsapp, setWhatsapp] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter(); 
 
-  const router = useRouter(); // ✅ Initialize router
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Navigate to DoctorInsurance2 page
-    router.push("DoctorInsurance2"); // ✅ Replace with your actual route
+    try {
+      setLoading(true);
+      const res = await axios.post("/api/doctorinsurance", {
+        name,
+        mobile,
+        whatsapp,
+      });
+
+      if (res.data.success) {
+        const doctorId = res.data.data._id;
+        localStorage.setItem("doctorId", doctorId);
+        alert("data saved successfully");
+        router.push("DoctorInsurance2");
+      } else {
+        alert("Failed to save data");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error saving data");
+    } finally {
+      setLoading(false);
+    }
   };
   
-  // ✅ Capitalize each word in full name
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     const capitalized = input
@@ -41,7 +60,6 @@ const InsurancePage: React.FC = () => {
     const prefix = "+91 ";
     let input = e.target.value;
 
-    // Ensure prefix stays
     if (!input.startsWith(prefix)) {
       input = prefix;
     }
@@ -107,6 +125,7 @@ const InsurancePage: React.FC = () => {
               <button className={styles.btn} type="submit">
                 View plans
               </button>
+               
             </form>
 
             <div className={styles.inlineSmall}>
@@ -166,4 +185,4 @@ const InsurancePage: React.FC = () => {
   );
 };
 
-export default InsurancePage;
+export default DoctorInsurance;

@@ -317,3 +317,79 @@
   .cardHeading { font-size: 16px; }
   .continueBtn { font-size: 14px; padding: 10px; }
 }
+.optionBtn {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  border-radius: 25px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.optionBtn:hover {
+  background: #f3f4f6;
+}
+
+.optionBtn.active {
+  border: 2px solid #1e40af;
+  color: #1e40af;
+  background: #e0ecff;
+}
+
+/* ---------- Input box ---------- */
+.otherInputBox {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.textField {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+  min-width: 200px;
+}
+
+.textField:focus {
+  border-color: #1e40af;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .optionBtn {
+    font-size: 13px;
+    padding: 7px 12px;
+  }
+
+  .otherInputBox {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .textField {
+    width: 100%;
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .optionBtn {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .textField {
+    font-size: 12px;
+  }
+
+  .otherInputBox {
+    gap: 8px;
+  }
+}

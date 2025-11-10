@@ -4,9 +4,7 @@ import styles from "@/styles/pages/Shop/shop1.module.css";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import AOS from "aos";
-import "aos/dist/aos.css";      
-
-// Illustrations & Logos
+import "aos/dist/aos.css";
 import shopIllustration from "@/assets/pageImages/fire_insurance.png";
 import digit from "@/assets/pageImages/digit.png";
 import reliance from "@/assets/pageImages/reliance.png";
@@ -19,36 +17,44 @@ import { IoLogoWhatsapp } from "react-icons/io";
 const Shop1: React.FC = () => {
   const [mobileNumber, setMobileNumber] = useState("+91 ");
   const [pincode, setPincode] = useState("");
+  const [shopType, setShopType] = useState<"rented" | "owned">("rented");
+  const router = useRouter();
 
-  const router = useRouter(); // ✅ router instance
-
-  // Handler function for mobile number input
   const handleMobileNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     const prefix = "+91 ";
-
     if (!input.startsWith(prefix)) {
       setMobileNumber(prefix);
       return;
     }
-
     const digitsOnly = input.substring(prefix.length).replace(/[^0-9]/g, "");
     const limitedDigits = digitsOnly.slice(0, 10);
-
     setMobileNumber(prefix + limitedDigits);
   };
 
-  // Handler function for pincode input
   const handlePincodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const input = e.target.value;
-    const digitsOnly = input.replace(/\D/g, "");
-    const limitedDigits = digitsOnly.slice(0, 6);
-    setPincode(limitedDigits);
+    const input = e.target.value.replace(/\D/g, "").slice(0, 6);
+    setPincode(input);
   };
-    // AOS animation
-    useEffect(() => {
-      AOS.init({ duration: 1000, once: true });
-    }, []);
+
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true });
+  }, []);
+
+  // ✅ Handle Next Button Click
+  const handleNext = () => {
+    const shopData = {
+      shopType,
+      pincode,
+      phone: mobileNumber.replace("+91 ", ""), // remove prefix
+    };
+
+    // Save data temporarily to localStorage
+    localStorage.setItem("shopDataStep1", JSON.stringify(shopData));
+
+    router.push("Shop2");
+  };
+
   return (
     <>
       <Navbar />
@@ -63,21 +69,18 @@ const Shop1: React.FC = () => {
             <sup>+</sup>
           </h1>
 
-          {/* Features */}
           <ul className={styles.features}>
             <li>Fire & Natural Disaster</li>
             <li>Theft within 7 days of Peril Occurrence</li>
           </ul>
 
           <div className={styles.middle}>
-            {/* Illustration */}
             <Image
               src={shopIllustration}
               alt="Shop Fire Insurance Illustration"
               className={styles.illustration}
             />
 
-            {/* Insurance partners */}
             <div className={styles.partnersBox}>
               <p className={styles.partnerHeading}>10+ insurance partners</p>
               <div className={styles.partnersGrid}>
@@ -102,19 +105,29 @@ const Shop1: React.FC = () => {
         <div className={styles.right} data-aos="fade-left">
           <h2 className={styles.formHeading}>Get free quotes in 30 seconds</h2>
 
-          {/* Radio group */}
           <div className={styles.radioGroup}>
             <label>
-              <input type="radio" name="shopType" defaultChecked />
+              <input
+                type="radio"
+                name="shopType"
+                value="rented"
+                checked={shopType === "rented"}
+                onChange={() => setShopType("rented")}
+              />
               Rented Shop
             </label>
             <label>
-              <input type="radio" name="shopType" />
+              <input
+                type="radio"
+                name="shopType"
+                value="owned"
+                checked={shopType === "owned"}
+                onChange={() => setShopType("owned")}
+              />
               Owned Shop
             </label>
           </div>
 
-          {/* Input fields */}
           <input
             type="tel"
             placeholder="Enter your shop pincode"
@@ -123,6 +136,7 @@ const Shop1: React.FC = () => {
             maxLength={6}
             className={styles.input}
           />
+
           <input
             type="tel"
             placeholder="Mobile number"
@@ -132,15 +146,10 @@ const Shop1: React.FC = () => {
             className={styles.input}
           />
 
-          {/* CTA */}
-          <button
-            className={styles.cta}
-            onClick={() => router.push("Shop2")} // ✅ Navigate to Shop2
-          >
+          <button className={styles.cta} onClick={handleNext}>
             View Free Quotes
           </button>
 
-          {/* WhatsApp line */}
           <div className={styles.whatsapp}>
             Get updates on WhatsApp
             <IoLogoWhatsapp className={styles.whatsappIcon} />
