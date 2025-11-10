@@ -33,11 +33,17 @@ export default function Managerlogin() {
         return;
       }
 
+      // ✅ Store token in cookie
       document.cookie = `managerToken=${data.token}; path=/;`;
-      console.log("Manager token set in cookie:", data.token);
+
+      // ✅ NEW: Store token in localStorage so dashboard can read
+      localStorage.setItem("managerToken", data.token);
+
+      console.log("✅ Manager token saved:", data.token);
 
       setError(false);
 
+      // ✅ Redirect based on role
       if (data.role === "national") {
         router.push("/nationalmanagerdashboard");
       } else if (data.role === "state") {

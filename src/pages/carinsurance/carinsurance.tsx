@@ -8,7 +8,7 @@ import Image from "next/image";
 import { FaArrowRight } from "react-icons/fa";
 import { useRouter } from "next/router";
 import AOS from "aos";
-import "aos/dist/aos.css";
+// import "aos/dist/aos.css";
 
 
 // ✅ Import dialogs

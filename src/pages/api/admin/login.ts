@@ -40,6 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(401).json({ message: "Invalid email or password" });
     }
     const status = admin.accountStatus ?? "active";
+
     
     if(admin.role==='admin' && status === 'inactive') {
       console.log(`Login attempt blocked for inactive account: ${email}`);
@@ -74,6 +75,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         maxAge: 60 * 60 * 24, // 1 day
       })
     );
+console.log("DB email:", admin.email);
+console.log("Login email:", email);
+console.log("Entered password:", password);
+console.log("DB password:", admin.password);
+
 
     console.log("Token set in cookie for admin:", admin.userFirstName);
 
@@ -84,6 +90,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   
   catch (err) {
     console.error("Login server error:", err);
+
+    
     return res.status(500).json({ message: "Internal Server Error" });
   }
 }
