@@ -4,12 +4,15 @@
   place-items: center;
   height: 5rem;
   width: 100vw;
-  /* padding: 5px 0; */
   z-index: 3;
   background-color: white;
-   position: sticky;
+  position: sticky;
   top: 0;
+  
+
+
 }
+
 .hidden {
   display: none !important;
 }
@@ -47,9 +50,10 @@
   right: 0.5rem;
   z-index: 4;
   display: none;
-  margin-left:5rem;
+  margin-left: 5rem;
 }
 
+/* MOBILE MENU */
 .mobileMenuList {
   display: none;
   position: absolute;
@@ -82,7 +86,7 @@
 .menuCont {
   display: flex;
   width: 100%;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 4rem;
   font-size: 1.5rem;
 }
@@ -96,6 +100,7 @@
 .menuItem:hover .dropDown {
   display: grid;
 }
+
 .menuItem:hover .arrow {
   transform: rotate(-180deg);
 }
@@ -108,10 +113,19 @@
   align-items: center;
 }
 
+/* YOU ASKED: MAIN ITEMS BLUE, SAME SIZE */
+.headingBlue {
+  color: #1c75bb !important;
+  font-size: 17px !important;
+}
+
+
+
 .mobilearrow {
   transition: all 0.4s;
   transform: translateY(20%) translateX(6px);
 }
+
 .arrow {
   transition: all 0.4s;
   transform: translateY(20%) translateX(6px);
@@ -122,33 +136,40 @@
   font-size: 17px;
 }
 
+/* DROPDOWN */
 .dropDown {
-display: none;
-position: absolute;
-top: 100%;
-width:14vw;
-left: 0;
-background-color: white;
-border: 1px solid #101010;
-padding: 8px 0;
-font-size: 1rem;
-color: #494949;
-z-index: 4;
-border-radius: 10px;
-gap: 0.4rem;
-animation: dropdownAnimation 0.3s ease-in;
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+
+  min-width: 600px;
+  background-color: white;
+  border: 1px solid #101010;
+  padding: 15px;
+  font-size: 1rem;
+  color: #494949;
+  z-index: 4;
+  border-radius: 10px;
+
+  animation: dropdownAnimation 0.3s ease-in;
 }
 
 .dropItem {
-  transition: all 0.4s;
-  padding: 8px 10px;
-  font-size: 15px;
+  padding: 10px;
+  transition: all 0.3s;
+  cursor: pointer;
 }
 
+/* YOU ASKED: REMOVE BACKGROUND, ADD UNDERLINE */
 .dropItem:hover {
-  background-color: #f2661a;
-  color: white;
-  translate: 0px -5px;
+  background-color: transparent !important;
+  color: #fa621a;
+  text-decoration: underline #fa621a;
+  transform: none;
 }
 
 .loginCont {
@@ -164,7 +185,6 @@ animation: dropdownAnimation 0.3s ease-in;
 
 .loginText {
   color: white;
-
   background-color: #fa621a;
   padding: 10px 32px;
   font-size: 20px;
@@ -172,14 +192,11 @@ animation: dropdownAnimation 0.3s ease-in;
   margin-top: 15px;
 }
 
-.loginLogo{
-    margin-left: 8px; 
+.loginLogo {
+  margin-left: 8px;
   font-size: 20px;
   translate: 0 3px;
 }
-
-
-
 
 @media screen and (max-width: 1200px) {
   .menuCont {
@@ -199,84 +216,25 @@ animation: dropdownAnimation 0.3s ease-in;
   .cont {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    justify-content: space-evenly;
   }
 
   .loginCont {
-    justify-content: flex-end;
-    padding-right: 2rem;
     display: none;
   }
 }
-@media screen and (max-width: 1200px) {
-  .loginText {
-    font-size: 20px;
+
+@media screen and (max-width: 1000px) {
+  .logoImage {
+    height: 3rem;
   }
 }
 
 @keyframes dropdownAnimation {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes slideInFromLeft {
-  0% {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideOutToLeft {
-  0% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-}
-
-@keyframes dropdownAppear {
-  0% {
-    transform: translateY(-20px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-
-@media screen and (max-width: 1000px){
-  .logoImage{
-    height: 3rem;
-    
-  }
-}
-.dropDown {
-  display: none;
-  position: absolute;
-  top: 100%;
-  min-width: 220px;   
-  width: max-content; 
-  left: 0;
-  background-color: white;
-  border: 1px solid #101010;
-  padding: 8px 0;
-  font-size: 1rem;
-  color: #494949;
-  z-index: 4;
-  border-radius: 10px;
-  gap: 0.4rem;
-  animation: dropdownAnimation 0.3s ease-in;
+  from { transform: translateX(-100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
 }
