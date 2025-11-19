@@ -2,8 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 import cookie, { serialize } from "cookie";
 import bcrypt from "bcryptjs";
-import dbConnect from "@/lib/dbConnect"; // your DB logic
-import User from "@/models/User"; // your User model
+import dbConnect from "@/lib/dbConnect"; 
+import User from "@/models/User"; 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") return res.status(405).end();
@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(401).json({ message: "Invalid credentials" });
   }
 
-  const token = jwt.sign(
+  const token = jwt.sign( 
     { id: user._id, email: user.email, userName: user.userName },
     process.env.JWT_SECRET!,
     { expiresIn: "1d" }
@@ -25,6 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   res.setHeader("Set-Cookie", serialize("userToken", token, {
     httpOnly: true,
+     secure: process.env.NODE_ENV === "production", 
     path: "/",
     sameSite: "lax",
     maxAge: 60 * 60 * 24,

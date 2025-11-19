@@ -1,18 +1,20 @@
 "use client";
 import React, { useState } from "react";
 import styles from "@/styles/pages/CommercialVehicle/VehicleModelDialog.module.css";
-import { FiMapPin, FiEdit2, FiSearch } from "react-icons/fi";
-import { FaTruck, FaCar } from "react-icons/fa";
+import { FiMapPin, FiSearch } from "react-icons/fi";
+import { FaCar } from "react-icons/fa";
 
 interface VehicleModelDialogProps {
   onClose: () => void;
-    onBack: () => void;   
-  onNext: () => void;
   vehicleNumber: string;
   selectedVehicle: string;
   selectedBrand: string;
   onSelectModel: (model: string) => void;
+  onBack: () => void;
+  onNext: () => void;
 }
+
+const models = ["Swift", "WagonR", "Baleno", "Dezire", "Ertiga", "Ciaz", "Alto"];
 
 const VehicleModelDialog: React.FC<VehicleModelDialogProps> = ({
   onClose,
@@ -20,20 +22,15 @@ const VehicleModelDialog: React.FC<VehicleModelDialogProps> = ({
   selectedVehicle,
   selectedBrand,
   onSelectModel,
-   onBack,
+  onBack,
   onNext,
 }) => {
   const [search, setSearch] = useState("");
+  const [activeModel, setActiveModel] = useState("");
 
-  const models = [
-    "swift",
-    "WagonR",
-    "Baleno",
-    "Dezire",
-    "Ertiga",
-    "Ciaz",
-    "Alto",
-  ];
+  const filteredModels = models.filter((m) =>
+    m.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className={styles.overlay}>
@@ -46,7 +43,7 @@ const VehicleModelDialog: React.FC<VehicleModelDialogProps> = ({
               <FiMapPin className={styles.icon} /> {vehicleNumber}
             </div>
             <div className={styles.selectionItem}>
-              <FaTruck className={styles.icon} /> {selectedVehicle}
+              <FiMapPin className={styles.icon} /> {selectedVehicle}
             </div>
             <div className={styles.selectionItem}>
               <FaCar className={styles.icon} /> {selectedBrand}
@@ -61,12 +58,16 @@ const VehicleModelDialog: React.FC<VehicleModelDialogProps> = ({
               ‹
             </button>
             <span>Search car Model</span>
-            <button className={styles.arrowBtn} onClick={onNext}>
+            <button
+              className={styles.arrowBtn}
+              onClick={() => {
+                if (activeModel) onNext();
+              }}
+            >
               ›
-            </button>            
+            </button>
           </div>
 
-          {/* Search Bar */}
           <div className={styles.searchBox}>
             <FiSearch className={styles.searchIcon} />
             <input
@@ -77,22 +78,22 @@ const VehicleModelDialog: React.FC<VehicleModelDialogProps> = ({
             />
           </div>
 
-          {/* Models List */}
           <div className={styles.modelsGrid}>
-            {models
-              .filter((m) =>
-                m.toLowerCase().includes(search.toLowerCase())
-              )
-              .map((model, i) => (
-                <button
-                  key={i}
-                  className={styles.modelBtn}
-                  onClick={() => onSelectModel(model)}
-                >
-                  {model}
-                  <span className={styles.arrow}>›</span>
-                </button>
-              ))}
+            {filteredModels.map((model, i) => (
+              <button
+                key={i}
+                className={`${styles.modelBtn} ${
+                  activeModel === model ? styles.active : ""
+                }`}
+                onClick={() => {
+                  setActiveModel(model);
+                  onSelectModel(model);
+                }}
+              >
+                {model}
+                <span className={styles.arrow}>›</span>
+              </button>
+            ))}
           </div>
         </div>
       </div>

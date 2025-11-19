@@ -4,6 +4,9 @@
   place-items: center;
   margin-top: 40px;
 }
+.orange {
+  color: orangered;
+}
 
 .head {
   display: flex;
@@ -13,26 +16,23 @@
 }
 .mobileEllipsis {
   display: none;
- 
 }
 .head::after {
-  /* content: ""; */
   position: absolute;
-  bottom: -15px; /* consistent 7px offset below text */
-  width: 25%; /* underline length */
-  height: 5px; /* double thickness */
-  background-color: #fa621a; /* underline color */
+  bottom: -15px;
+  width: 25%;
+  height: 5px;
+  background-color: #fa621a;
   border-radius: 3px;
 }
 
 .heading {
   font-size: 2.5rem;
   font-weight: bold;
-  color: #000; 
+  color: #000;
   margin-bottom: 20px;
   position: relative;
   align-self: center;
-
 }
 
 .heading::after {
@@ -46,8 +46,6 @@
   left: 50%;
   transform: translateX(-50%);
 }
-
-
 
 .orange {
   color: #fa621a;
@@ -63,7 +61,6 @@
 }
 
 .item {
-  /* padding: 20px; */
   display: grid;
   place-items: center;
   gap: 1rem;
@@ -99,20 +96,13 @@
   text-align: center;
   align-self: center;
 }
-/* 
-.services {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  width: 80%;
-  gap: 5rem;
-} */
 
 .services {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  width: 100%; 
-  max-width: 1100px; 
-  margin: 0 auto; 
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
   gap: 5rem;
   margin-top: 25px;
 }
@@ -125,7 +115,7 @@
   border-radius: 22px;
   background-color: white;
   cursor: pointer;
-      width: 100%;
+  width: 100%;
 }
 
 .servicetop {
@@ -156,12 +146,9 @@
   text-align: center;
   padding: 5px 12px;
   transition: all 0.3s;
-
-  border-radius: 8px; 
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); 
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
-
-
 
 @media screen and (max-width: 1200px) {
   .bottom {
@@ -188,69 +175,81 @@
 }
 
 @media screen and (max-width: 768px) {
-
-  .heading{
+  .heading {
     font-size: 25px;
   }
-.servciesCont{
-      margin-top: 20px;
-}
-  .serviceImage{
+
+  .servciesCont {
+    margin-top: 20px;
+  }
+
+  .serviceImage {
     border-radius: 50px;
   }
-  .cont{
+
+  .cont {
     display: grid;
-  width: 100%;
-  place-items: center;
-  margin-top: 40px;
-  /* margin-bottom:40px; */
-  }
-  .item{
-    padding: 0px;
-    display: grid
-;
+    width: 100%;
     place-items: center;
-    grid-gap: 2rem;
+    margin-top: 40px;
+  }
+
+  .item {
+    padding: 0px;
+    display: grid;
+    place-items: center;
     gap: 1rem;
     cursor: pointer;
   }
 
-  .services{
+  .services {
     gap: 1rem;
   }
-
- 
-  
 }
-
 
 @media screen and (max-width: 700px) {
   .head {
-    
-    text-align: center; /* center text */
+    text-align: center;
     margin-bottom: 0px;
     position: relative;
   }
 
   .head::after {
-    display: none; 
+    display: none;
   }
-  .heading{
-    margin-bottom: 0%;
 
+  .heading {
+    margin-bottom: 0%;
   }
-  .heading::after{
+
+  .heading::after {
     display: none;
   }
 
   .mobileEllipsis {
-    display: block;              
-    text-align: center;           
-    font-size: 20px;             
+    display: block;
+    text-align: center;
+    font-size: 20px;
   }
-  
+
   .head {
-    flex-direction: column;      
-    align-items: center;         
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* --------------------- FADE-IN/OUT ANIMATION --------------------- */
+.animateOnce {
+  animation: fadeInStay 1.5s ease-in-out forwards;
+}
+
+@keyframes fadeInStay {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

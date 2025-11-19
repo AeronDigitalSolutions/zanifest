@@ -17,6 +17,7 @@ interface Agent {
   city: string;
   state: string;
   accountStatus: "active" | "inactive";
+  sales: number;
 }
 
 const AgentsPage: React.FC = () => {
@@ -44,6 +45,11 @@ const AgentsPage: React.FC = () => {
   const [sortBy, setSortBy] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
+
+
+  const [salesModalVisible, setSalesModalVisible] = useState(false);
+  const [salesAmount, setSalesAmount] = useState<number>(0);
+
 
   // -------------------- Status Toggle --------------------
   const handleToggleStatus = (id: string, currentStatus: string) => {
@@ -203,6 +209,48 @@ const AgentsPage: React.FC = () => {
       return 0;
     });
 
+  // -------------------- confirm Add Sales --------------------
+    const confirmAddSales = async () => {
+      if (!selectedAgentId || salesAmount <= 0) {
+        toast.error("Enter a valid amount");
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem("adminToken");
+        const res = await axios.post("/api/agent/add-sales", {
+          agentId: selectedAgentId,
+          amount: salesAmount,
+        }, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        console.log("response data", res.data);
+        console.log("response data newsales", res.data?.newSales);
+
+        if (res.data?.newSales) {
+          toast.success(`Sales updated! New total: ${res.data.newSales}`);
+          console.log("updating agent state");
+          // Update agent in state
+          setAgents((prev) =>
+            prev.map((a) =>
+              a._id === selectedAgentId ? { ...a, sales: res.data.newSales } : a
+            )
+          );
+        }
+      } 
+      
+      catch (err) {
+        console.error(err);
+        toast.error("Failed to add sales");
+      } finally {
+        setSalesModalVisible(false);
+        setSalesAmount(0);
+        setSelectedAgentId(null);
+      }
+    };
+
+
   const indexOfLastAgent = currentPage * agentsPerPage;
   const indexOfFirstAgent = indexOfLastAgent - agentsPerPage;
   const currentAgents = filteredAgents.slice(
@@ -275,6 +323,25 @@ const AgentsPage: React.FC = () => {
         </select>
       </Modal>
 
+
+      <Modal
+        title="Add Sales"
+        open={salesModalVisible}
+        onOk={confirmAddSales}
+        onCancel={() => setSalesModalVisible(false)}
+        okText="Add"
+        cancelText="Cancel"
+        centered
+      >
+        <Input
+          type="number"
+          placeholder="Enter sales amount"
+          value={salesAmount}
+          onChange={(e) => setSalesAmount(Number(e.target.value))}
+        />
+      </Modal>
+
+
       <h1 className={styles.heading}>All Agents</h1>
 
       {/* Filter Bar */}
@@ -338,8 +405,10 @@ const AgentsPage: React.FC = () => {
                   <th className={styles.th}>City</th>
                   <th className={styles.th}>State</th>
                   <th className={styles.th}>Assigned To</th>
+                  <th className={styles.th}>Lifetime Sales</th>
                   <th className={styles.th}>Status</th>
                   <th className={styles.th}>Delete</th>
+                  
                 </tr>
               </thead>
               <tbody>
@@ -348,7 +417,7 @@ const AgentsPage: React.FC = () => {
                     <td className={styles.td}>
                       {(currentPage - 1) * agentsPerPage + index + 1}
                     </td>
-                    <td className={styles.td}>{agent.agentCode}</td>
+                    <td className={styles.td}>{agent?.agentCode}</td>
                     <td className={styles.td}>
                       {`${agent.firstName} ${agent.lastName}`}
                     </td>
@@ -373,6 +442,9 @@ const AgentsPage: React.FC = () => {
                           <FaEdit color="green" size={16} />
                         </button>
                       </div>
+                    </td>
+                    <td className={styles.td}>
+                      ₹{(agent.sales ?? 0).toLocaleString("en-IN")}
                     </td>
 
                     <td className={styles.td}>

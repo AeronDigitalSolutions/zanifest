@@ -6,7 +6,26 @@ export interface IUser extends Document {
   password: string;
   resetPasswordToken?: string;
   resetPasswordExpires?: Date;
+
+  aadhaarKyc?: {
+    aadhaarLast4: string;
+    name: string;
+    dob: string;
+    verified: boolean;
+    verifiedAt: Date;
+  };
 }
+
+const AadhaarSchema = new Schema(
+  {
+    aadhaarLast4: String,
+    name: String,
+    dob: String,
+    verified: { type: Boolean, default: false },
+    verifiedAt: Date,
+  },
+  { _id: false }
+);
 
 const UserSchema = new Schema<IUser>({
   userName: { type: String, required: true, trim: true },
@@ -14,6 +33,8 @@ const UserSchema = new Schema<IUser>({
   password: { type: String },
   resetPasswordToken: { type: String },
   resetPasswordExpires: { type: Date },
+
+  aadhaarKyc: { type: AadhaarSchema, default: null },
 });
 
 export default mongoose.models.User || mongoose.model<IUser>("User", UserSchema);

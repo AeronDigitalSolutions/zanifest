@@ -1,46 +1,33 @@
-// // pages/api/users/me.ts
-// import type { NextApiRequest, NextApiResponse } from "next";
-// import dbConnect from "@/lib/dbConnect";
-// import Manager from "@/models/Manager";
-// import jwt from "jsonwebtoken";
-// import { verifyToken } from '../../../utils/verifyToken';
+import { NextApiRequest, NextApiResponse } from "next";
+import jwt from "jsonwebtoken";
 
-// export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-//   await dbConnect();
+/**
+ * This API route verifies the user's JWT token from cookies
+ * and returns their user info so the frontend (AuthContext)
+ * can keep them logged in after page refresh.
+ */
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    // 1️⃣ Get JWT token from cookies
+    const token = req.cookies.userToken;
 
-//   if (req.method !== "GET") {
-//     console.log("Invalid method:", req.method);
-//     return res.status(405).json({ message: "Method not allowed" });
-//   }
+    if (!token) {
+      return res.status(401).json({ message: "Not logged in" });
+    }
 
-//   try {
-//     console.log("GET /api/managers/me called");
-//     const authHeader = req.headers.authorization;
-//     console.log("Authorization header:", authHeader);
+    // 2️⃣ Verify the token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any;
 
-//     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-//       console.log("No authorization header or invalid format");
-//       return res.status(401).json({ message: "No token provided" });
-//     }
+    // 3️⃣ Normalize the user object for frontend consistency
+    const userData = {
+      name: decoded.userName || decoded.name || "",
+      email: decoded.email || "",
+    };
 
-//     const token = authHeader.split(" ")[1];
-//     const decoded = verifyToken(token, process.env.JWT_SECRET!) as { id: string };
-//     console.log("Decoded token:", decoded);
-
-//     const manager = await Manager.findById(decoded.id).select("-password");
-//     console.log("Manager found:", manager);
-
-//     if (!manager) {
-//       console.log("Manager not found with ID:", decoded.id);
-//       return res.status(404).json({ message: "Manager not found" });
-//     }
-
-//     return res.status(200).json(manager);
-//   } 
-//   catch (err) {
-
-//     console.log("error caught in /api/managers/me:");
-//     console.error("Error in /api/managers/me:", err);
-//     return res.status(401).json({ message: "Invalid or expired token" });
-//   }
-// }
+    // 4️⃣ Send user data back to frontend
+    return res.status(200).json(userData);
+  } catch (err) {
+    console.error("Error verifying token:", err);
+    return res.status(401).json({ message: "Invalid or expired token" });
+  }
+}

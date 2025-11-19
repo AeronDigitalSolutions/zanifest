@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { IFeedbackItem } from '@/models/feedback';
@@ -25,9 +26,24 @@ interface EditModalState {
   isNew: boolean;
 }
 
+// 🔹 Helper to render heading with <...> styled
+const renderHeading = (heading: string) => {
+  const parts = heading.split(/(<[^>]+>)/g);
+  return parts.map((part, idx) => {
+    if (part.startsWith("<") && part.endsWith(">")) {
+      return (
+        <span key={idx} style={{ color: "orangered" }}>
+          {part.replace(/[<>]/g, "")}
+        </span>
+      );
+    }
+    return <span key={idx} style={{ color: "black" }}>{part}</span>;
+  });
+};
+
 const FeedbackAdmin: React.FC = () => {
   const [feedbackList, setFeedbackList] = useState<IFeedbackItem[]>([]);
-  const [heading, setHeading] = useState<string>('');
+  const [heading, setHeading] = useState<string>('What Our <Customers> Are Saying?');
   const [isEditingHeading, setIsEditingHeading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -45,7 +61,7 @@ const FeedbackAdmin: React.FC = () => {
       const data = await res.json();
       if (data.success) {
         setFeedbackList(data.data as IFeedbackItem[]);
-        setHeading(data.heading || "What Our Customers Are Saying?");
+        setHeading(data.heading || "What Our <Customers> Are Saying?");
       } else setError(data.message || 'Failed to fetch feedback.');
     } catch (e: any) {
       setError('Network error: ' + (e.message || ''));
@@ -130,73 +146,79 @@ const FeedbackAdmin: React.FC = () => {
   if (error) return <div className={styles.cont} style={{ color: 'red' }}>{error}</div>;
 
   return (
-    <div className={styles.cont} style={{ padding: '40px', backgroundColor: '#f9f9f9' }}>
-      <h2>Feedback Admin Panel</h2>
+    <>
+      <div className={styles.previewBox}>
+        <h3>Live Preview</h3>
+        {/* 🔹 अब Live preview props से आएगा */}
+        <FeedBackSection liveHeading={heading} liveFeedbackList={feedbackList} />
+      </div>
 
-      <div style={{ marginBottom: '30px', padding: '15px', borderRadius: '4px' }}>
-        {isEditingHeading ? (
-          <div>
-            <input
-              type="text"
-              value={heading}
-              onChange={(e) => setHeading(e.target.value)}
-              style={{ width: '80%', padding: '8px', marginRight: '10px' }}
-            />
-            <button onClick={handleSaveHeading} style={{ marginRight: '5px' }}>Save</button>
-            <button onClick={() => { setHeading("What Our Customers Are Saying?"); setIsEditingHeading(false); }}>Cancel</button>
-          </div>
-        ) : (
-          <div style={{ display: 'flex', alignItems: 'center', flexDirection:"column" }}>
-            <p style={{ fontWeight: 'bold', marginRight: '10px' }}>{heading}</p>
-            <button onClick={() => setIsEditingHeading(true)}><FaEdit /> Edit Heading</button>
+      <div className={styles.cont} style={{ padding: '40px', backgroundColor: '#f9f9f9' }}>
+        <h2>Feedback Admin Panel</h2>
+
+        <div style={{ marginBottom: '30px', padding: '15px', borderRadius: '4px' }}>
+          {isEditingHeading ? (
+            <div>
+              <input
+                type="text"
+                value={heading}
+                onChange={(e) => setHeading(e.target.value)}
+                style={{ width: '80%', padding: '8px', marginRight: '10px' }}
+              />
+              <button onClick={handleSaveHeading} style={{ marginRight: '5px' }}>Save</button>
+              <button onClick={() => { setHeading("What Our <Customers> Are Saying?"); setIsEditingHeading(false); }}>Cancel</button>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', alignItems: 'center', flexDirection:"column" }}>
+              <p style={{ fontWeight: 'bold', marginRight: '10px' }}>
+                {renderHeading(heading)}
+              </p>
+              <button onClick={() => setIsEditingHeading(true)}><FaEdit /> Edit Heading</button>
+            </div>
+          )}
+        </div>
+
+        <button onClick={openNewModal} style={{ marginBottom: '20px' }}>
+          <FaPlus /> Add New Card
+        </button>
+
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px' }}>
+          {feedbackList.map((item, index) => (
+            <div key={String(item._id ?? index)} style={{ border: '1px solid #ddd', padding: '10px', borderRadius: '6px', width: '300px' }}>
+              <Image src={item.image} alt={item.name} width={50} height={50} style={{ borderRadius: '50%' }} unoptimized />
+              <strong>{item.name}</strong> - {item.post}
+              <p>{item.desc}</p>
+              <button onClick={() => openEditModal(item)}><FaEdit /> Edit</button>
+              <button onClick={() => handleDelete(String(item._id))}><FaTrashAlt /> Delete</button>
+            </div>
+          ))}
+        </div>
+
+        {editModal.isOpen && editModal.item && (
+          <div className={styles.modalBackdrop}>
+            <div className={styles.modalContent}>
+              <button onClick={closeEditModal} className={styles.closeButton}><FaTimes /></button>
+              <h3>{editModal.isNew ? 'Add Feedback' : 'Edit Feedback'}</h3>
+              <form onSubmit={e => { e.preventDefault(); handleSave(editModal.item!); }}>
+                <input type="text" placeholder="Name" value={editModal.item?.name || ''} onChange={e => setEditModal({ ...editModal, item: { ...editModal.item!, name: e.target.value } })} required />
+                <input type="text" placeholder="Post" value={editModal.item?.post || ''} onChange={e => setEditModal({ ...editModal, item: { ...editModal.item!, post: e.target.value } })} required />
+                <textarea placeholder="Description" value={editModal.item?.desc || ''} onChange={e => setEditModal({ ...editModal, item: { ...editModal.item!, desc: e.target.value } })} required />
+                <input type="file" accept="image/*" onChange={async e => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  const base64 = await fileToBase64(file);
+                  setEditModal({ ...editModal, item: { ...editModal.item!, image: base64 } });
+                }} required={editModal.isNew} />
+                {editModal.item.image && (
+                  <Image src={editModal.item.image} alt="Preview" width={100} height={100} unoptimized />
+                )}
+                <button type="submit">{editModal.isNew ? 'Add' : 'Save'}</button>
+              </form>
+            </div>
           </div>
         )}
       </div>
-
-      <button onClick={openNewModal} style={{ marginBottom: '20px' }}>
-        <FaPlus /> Add New Card
-      </button>
-
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px' }}>
-        {feedbackList.map((item, index) => (
-          <div key={String(item._id ?? index)} style={{ border: '1px solid #ddd', padding: '10px', borderRadius: '6px', width: '300px' }}>
-            <Image src={item.image} alt={item.name} width={50} height={50} style={{ borderRadius: '50%' }} unoptimized />
-            <strong>{item.name}</strong> - {item.post}
-            <p>{item.desc}</p>
-            <button onClick={() => openEditModal(item)}><FaEdit /> Edit</button>
-          </div>
-        ))}
-      </div>
-
-      {editModal.isOpen && editModal.item && (
-        <div className={styles.modalBackdrop}>
-          <div className={styles.modalContent}>
-            <button onClick={closeEditModal} className={styles.closeButton}><FaTimes /></button>
-            <h3>{editModal.isNew ? 'Add Feedback' : 'Edit Feedback'}</h3>
-            <form onSubmit={e => { e.preventDefault(); handleSave(editModal.item!); }}>
-              <input type="text" placeholder="Name" value={editModal.item?.name || ''} onChange={e => setEditModal({ ...editModal, item: { ...editModal.item!, name: e.target.value } })} required />
-              <input type="text" placeholder="Post" value={editModal.item?.post || ''} onChange={e => setEditModal({ ...editModal, item: { ...editModal.item!, post: e.target.value } })} required />
-              <textarea placeholder="Description" value={editModal.item?.desc || ''} onChange={e => setEditModal({ ...editModal, item: { ...editModal.item!, desc: e.target.value } })} required />
-              <input type="file" accept="image/*" onChange={async e => {
-                const file = e.target.files?.[0];
-                if (!file) return;
-                const base64 = await fileToBase64(file);
-                setEditModal({ ...editModal, item: { ...editModal.item!, image: base64 } });
-              }} required={editModal.isNew} />
-              {editModal.item.image && (
-                <Image src={editModal.item.image} alt="Preview" width={100} height={100} unoptimized />
-              )}
-              <button type="submit">{editModal.isNew ? 'Add' : 'Save'}</button>
-            </form>
-          </div>
-        </div>
-      )}
-
-      <div className={styles.previewBox}>
-        <h3>Live Preview</h3>
-        <FeedBackSection />
-      </div>
-    </div>
+    </>
   );
 };
 

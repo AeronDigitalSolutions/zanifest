@@ -3,14 +3,15 @@ import React, { useState, useEffect } from "react";
 import styles from "@/styles/pages/marine/marine5.module.css";
 import Image from "next/image";
 import bajaj from "@/assets/pageImages/bajaj.png";
-import chola from "@/assets/home/chola ms.png";
-import digit from "@/assets/pageImages/digit.png";
-import { FaCheck } from "react-icons/fa";
-import { FaTruck, FaPlane, FaShip, FaBox, FaTrain } from "react-icons/fa";
+import { FaCheck, FaTruck, FaPlane, FaShip, FaBox, FaTrain } from "react-icons/fa";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import { useRouter } from "next/navigation";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { useAuth } from "@/context/AuthContext";
 
+/* ----------------------------- MODAL COMPONENT ----------------------------- */
 const Modal = ({
   showModal,
   modalStep,
@@ -27,22 +28,27 @@ const Modal = ({
 }: any) => {
   if (!showModal) return null;
 
+  useEffect(() => {
+    AOS.init({ duration: 800, once: false });
+  }, []);
+
+  const [fadeClass, setFadeClass] = useState(styles.fadeIn);
+  useEffect(() => {
+    setFadeClass(styles.fadeOut);
+    const timer = setTimeout(() => setFadeClass(styles.fadeIn), 200);
+    return () => clearTimeout(timer);
+  }, [modalStep]);
+
   return (
     <div className={styles.modalOverlay}>
-      <div className={styles.modalContent}>
-        {/* Step 1 */}
+      <div className={`${styles.modalContent} ${fadeClass}`}>
+        {/* STEP 1: Company Name */}
         {modalStep === 1 && (
-          <>
-            <h3 className={styles.modalTitle}>
-              Just one last thing before you get your quotes
-            </h3>
-            <p className={styles.modalSubtitle}>
-              Tell us the name of your company
-            </p>
+          <div data-aos="fade">
+            <h3 className={styles.modalTitle}>Just one last thing before you get your quotes</h3>
+            <p className={styles.modalSubtitle}>Tell us the name of your company</p>
             <div className={styles.inputGroup}>
-              <label htmlFor="companyName" className={styles.inputLabel}>
-                Company name
-              </label>
+              <label htmlFor="companyName" className={styles.inputLabel}>Company name</label>
               <input
                 id="companyName"
                 type="text"
@@ -55,96 +61,49 @@ const Modal = ({
             <button
               onClick={handleModalContinue}
               disabled={isContinueDisabled()}
-              className={`${styles.continueBtn} ${
-                isContinueDisabled() ? styles.disabled : ""
-              }`}
+              className={`${styles.continueBtn} ${isContinueDisabled() ? styles.disabled : ""}`}
             >
-              Continue &gt;
+              Continue
             </button>
-          </>
+          </div>
         )}
 
-        {/* Step 2 */}
+        {/* STEP 2: Transport Mode */}
         {modalStep === 2 && (
-          <>
-            <h3 className={styles.modalTitle}>
-              Just one last thing before you get your quotes
-            </h3>
-            <p className={styles.modalSubtitle}>
-              How will your goods be making their journey?
-            </p>
+          <div data-aos="fade">
+            <h3 className={styles.modalTitle}>How will your goods be making their journey?</h3>
             <div className={styles.transportOptions}>
-              <div
-                className={`${styles.transportOption} ${
-                  transportMode === "Road" ? styles.selected : ""
-                }`}
-                onClick={() => setTransportMode("Road")}
-              >
-                <FaTruck className={styles.transportIcon} />
-                Road
-              </div>
-              <div
-                className={`${styles.transportOption} ${
-                  transportMode === "Air" ? styles.selected : ""
-                }`}
-                onClick={() => setTransportMode("Air")}
-              >
-                <FaPlane className={styles.transportIcon} />
-                Air
-              </div>
-              <div
-                className={`${styles.transportOption} ${
-                  transportMode === "Sea" ? styles.selected : ""
-                }`}
-                onClick={() => setTransportMode("Sea")}
-              >
-                <FaShip className={styles.transportIcon} />
-                Sea
-              </div>
-              <div
-                className={`${styles.transportOption} ${
-                  transportMode === "Courier" ? styles.selected : ""
-                }`}
-                onClick={() => setTransportMode("Courier")}
-              >
-                <FaBox className={styles.transportIcon} />
-                Courier
-              </div>
-              <div
-                className={`${styles.transportOption} ${
-                  transportMode === "Rail" ? styles.selected : ""
-                }`}
-                onClick={() => setTransportMode("Rail")}
-              >
-                <FaTrain className={styles.transportIcon} />
-                Rail
-              </div>
+              {["Road", "Air", "Sea", "Courier", "Rail"].map((mode) => (
+                <div
+                  key={mode}
+                  className={`${styles.transportOption} ${transportMode === mode ? styles.selected : ""}`}
+                  onClick={() => setTransportMode(mode)}
+                >
+                  {mode === "Road" && <FaTruck className={styles.transportIcon} />}
+                  {mode === "Air" && <FaPlane className={styles.transportIcon} />}
+                  {mode === "Sea" && <FaShip className={styles.transportIcon} />}
+                  {mode === "Courier" && <FaBox className={styles.transportIcon} />}
+                  {mode === "Rail" && <FaTrain className={styles.transportIcon} />}
+                  {mode}
+                </div>
+              ))}
             </div>
             <button
               onClick={handleModalContinue}
               disabled={isContinueDisabled()}
-              className={`${styles.continueBtn} ${
-                isContinueDisabled() ? styles.disabled : ""
-              }`}
+              className={`${styles.continueBtn} ${isContinueDisabled() ? styles.disabled : ""}`}
             >
               View quotes &gt;
             </button>
-          </>
+          </div>
         )}
 
-        {/* Step 3 */}
+        {/* STEP 3: Cover Amount */}
         {modalStep === 3 && (
-          <>
-            <h3 className={styles.modalTitle}>
-              Just one last thing before you get your quotes
-            </h3>
-            <p className={styles.modalSubtitle}>
-              How much cover amount are you looking for?
-            </p>
+          <div data-aos="fade">
+            <h3 className={styles.modalTitle}>How much cover amount are you looking for?</h3>
             <div className={styles.inputGroup}>
-              <label htmlFor="coverAmount" className={styles.inputLabel}>
-                Cover amount
-              </label>
+              <label htmlFor="coverAmount" className={styles.inputLabel}>Cover amount</label>
               <input
                 id="coverAmount"
                 type="text"
@@ -154,33 +113,33 @@ const Modal = ({
                 placeholder="0"
               />
               <p className={styles.amountInWords}>
-                {coverAmount
-                  ? `${numberToWords(coverAmount)} Only`
-                  : "Enter amount to see in words"}
+                {coverAmount ? `${numberToWords(coverAmount)} Only` : "Enter amount to see in words"}
               </p>
             </div>
             <button
               onClick={handleModalContinue}
               disabled={isContinueDisabled()}
-              className={`${styles.continueBtn} ${
-                isContinueDisabled() ? styles.disabled : ""
-              }`}
+              className={`${styles.continueBtn} ${isContinueDisabled() ? styles.disabled : ""}`}
             >
-              View quotes &gt;
+              Save Details &gt;
             </button>
-          </>
+          </div>
         )}
       </div>
     </div>
   );
 };
 
+/* ----------------------------- MAIN COMPONENT ----------------------------- */
 const Marine5 = () => {
   const [showModal, setShowModal] = useState(true);
   const [modalStep, setModalStep] = useState(1);
   const [companyName, setCompanyName] = useState("");
   const [transportMode, setTransportMode] = useState("");
   const [coverAmount, setCoverAmount] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+
+  const { user, loading: authLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -188,15 +147,51 @@ const Marine5 = () => {
     setModalStep(1);
   }, []);
 
-  const handleModalComplete = () => {
-    setShowModal(false);
-  };
+  useEffect(() => {
+    const savedPhone = localStorage.getItem("phoneNumber");
+    if (savedPhone) setPhoneNumber(savedPhone);
+  }, []);
 
-  const handleModalContinue = () => {
+  const handleModalContinue = async () => {
     if (modalStep < 3) {
-      setModalStep(modalStep + 1);
-    } else {
-      handleModalComplete();
+      setModalStep((s) => s + 1);
+      return;
+    }
+
+    if (!phoneNumber) {
+      alert("Please complete step 1 on Marine page first.");
+      return;
+    }
+
+    // determine userEmail
+    let userEmailToSave = !authLoading && user?.email ? user.email : `null`;
+
+    const payload = {
+      phoneNumber: phoneNumber.replace(/\s+/g, ""),
+      companyName,
+      transportMode,
+      coverAmount: coverAmount.replace(/,/g, ""),
+email: userEmailToSave,
+    };
+
+    try {
+      const res = await fetch("/api/p", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) throw new Error("Failed to save data");
+
+      localStorage.setItem("companyName", companyName);
+      localStorage.setItem("transportMode", transportMode);
+      localStorage.setItem("coverAmount", coverAmount);
+
+      setShowModal(false);
+      alert("Data saved successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Error saving data. Check console for details.");
     }
   };
 
@@ -207,81 +202,29 @@ const Marine5 = () => {
     return false;
   };
 
-  const formatNumber = (num: string) => {
-    const digits = num.replace(/\D/g, "");
-    return digits.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
+  const formatNumber = (num: string) =>
+    num.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const formattedValue = formatNumber(value);
-    setCoverAmount(formattedValue);
-  };
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setCoverAmount(formatNumber(e.target.value));
 
-  const handleCompanyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    const formattedValue = inputValue.replace(/\b\w/g, (char) =>
-      char.toUpperCase()
-    );
-    setCompanyName(formattedValue);
-  };
+  const handleCompanyChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setCompanyName(e.target.value.replace(/\b\w/g, (c) => c.toUpperCase()));
 
   const numberToWords = (num: string) => {
-    const numValue = parseInt(num.replace(/,/g, "")) || 0;
-    if (numValue === 0) return "Zero Rupees";
-
-    const units = [
-      "",
-      "One",
-      "Two",
-      "Three",
-      "Four",
-      "Five",
-      "Six",
-      "Seven",
-      "Eight",
-      "Nine",
-    ];
-    const teens = [
-      "Ten",
-      "Eleven",
-      "Twelve",
-      "Thirteen",
-      "Fourteen",
-      "Fifteen",
-      "Sixteen",
-      "Seventeen",
-      "Eighteen",
-      "Nineteen",
-    ];
-    const tens = [
-      "",
-      "Ten",
-      "Twenty",
-      "Thirty",
-      "Forty",
-      "Fifty",
-      "Sixty",
-      "Seventy",
-      "Eighty",
-      "Ninety",
-    ];
-
-    if (numValue < 10) return units[numValue] + " Rupees";
-    if (numValue < 20) return teens[numValue - 10] + " Rupees";
-    if (numValue < 100)
-      return (
-        tens[Math.floor(numValue / 10)] +
-        (numValue % 10 !== 0 ? " " + units[numValue % 10] : "") +
-        " Rupees"
-      );
-
-    return "Rupees " + numValue.toLocaleString("en-IN");
+    const val = parseInt(num.replace(/,/g, "")) || 0;
+    if (val === 0) return "Zero Rupees";
+    return `Rupees ${val.toLocaleString("en-IN")}`;
   };
+
+  const persistedCommodity = typeof window !== "undefined" ? localStorage.getItem("commodity") : null;
+  const persistedCoverType = typeof window !== "undefined" ? localStorage.getItem("coverType") : null;
+  const persistedShipmentType = typeof window !== "undefined" ? localStorage.getItem("shipmentType") : null;
+  const persistedMode = typeof window !== "undefined" ? localStorage.getItem("transportMode") : null;
+  const persistedCoverAmount = typeof window !== "undefined" ? localStorage.getItem("coverAmount") : null;
 
   return (
     <>
-      {/* ✅ Modal Overlay */}
       <Modal
         showModal={showModal}
         modalStep={modalStep}
@@ -297,48 +240,42 @@ const Marine5 = () => {
         handleCompanyChange={handleCompanyChange}
       />
 
-      {/* ✅ Background always rendered, blurred if modal is open */}
-      <div
-        className={`${styles.pageContent} ${showModal ? styles.blurred : ""}`}
-      >
+      <div className={`${styles.pageContent} ${showModal ? styles.blurred : ""}`}>
         <Navbar />
 
-        {/* ---------- TOP BAR ---------- */}
+        {/* TOP BAR */}
         <div className={styles.topBar}>
-          <button
-            className={styles.backBtn}
-            onClick={() => router.push("Marine1")}
-          >
-            ←
-          </button>
+          <button className={styles.backBtn} onClick={() => router.push("Marine1")}>←</button>
           <div className={styles.info}>
             <div>
               <span className={styles.label}>Commodity details</span>
-              <span className={styles.value}>Electronic and white goods</span>
+              <span className={styles.value}>{persistedCommodity || "Electronic and white goods"}</span>
             </div>
             <div>
               <span className={styles.label}>Cover amount</span>
-              <span className={styles.value}>₹ 1,23,456</span>
+              <span className={styles.value}>
+                {persistedCoverAmount ? `₹ ${formatNumber(persistedCoverAmount)}` : "₹ 1,23,456"}
+              </span>
             </div>
             <div>
               <span className={styles.label}>Cover type</span>
-              <span className={styles.value}>Annual open</span>
+              <span className={styles.value}>{persistedCoverType || "Annual open"}</span>
             </div>
             <div>
               <span className={styles.label}>Shipment type</span>
-              <span className={styles.value}>Export</span>
+              <span className={styles.value}>{persistedShipmentType || "Export"}</span>
             </div>
             <div>
               <span className={styles.label}>Mode of transport</span>
-              <span className={styles.value}>Road</span>
+              <span className={styles.value}>{persistedMode || "Road"}</span>
             </div>
             <button className={styles.editBtn}>✎ Edit your search</button>
           </div>
         </div>
 
-        {/* ---------- WRAPPER ---------- */}
+        {/* MAIN WRAPPER */}
         <div className={styles.wrapper}>
-          {/* LEFT SECTION */}
+          {/* LEFT */}
           <div className={styles.leftsection}>
             {[...Array(5)].map((_, idx) => (
               <div className={styles.card} key={idx}>
@@ -352,12 +289,7 @@ const Marine5 = () => {
                     <span className={styles.coveredLabel}>Covered amount</span>
                     <strong className={styles.coveredValue}>₹ 54,45,556</strong>
                   </div>
-                  <button
-                    className={styles.quoteBtn}
-                    onClick={() => router.push("Marine6")}
-                  >
-                    Get quote
-                  </button>
+                  <button className={styles.quoteBtn} onClick={() => router.push("Marine6")}>Get quote</button>
                 </div>
                 <div className={styles.coverages}>
                   <div className={styles.linetext}>
@@ -365,54 +297,27 @@ const Marine5 = () => {
                   </div>
                   <div className={styles.tagsRow}>
                     <div className={styles.tags}>
-                      <span>
-                        <FaCheck size={12} className={styles.tick} />{" "}
-                        Theft/pilferage
-                      </span>
-                      <span>
-                        <FaCheck size={12} className={styles.tick} /> Loading
-                        and unloading
-                      </span>
-                      <span>
-                        <FaCheck size={12} className={styles.tick} /> Malicious
-                        damage
-                      </span>
+                      <span><FaCheck size={12} className={styles.tick} /> Theft / pilferage</span>
+                      <span><FaCheck size={12} className={styles.tick} /> Loading and unloading</span>
+                      <span><FaCheck size={12} className={styles.tick} /> Malicious damage</span>
                       <span className={styles.more}>+4 risks covered</span>
                     </div>
-                    <label className={styles.compare}>
-                      <input type="checkbox" /> Add to compare
-                    </label>
+                    <label className={styles.compare}><input type="checkbox" /> Add to compare</label>
                   </div>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* RIGHT SECTION */}
+          {/* RIGHT */}
           <div className={styles.rightsection}>
             <div className={styles.right}>
               <h4 className={styles.title}>Events & Conference</h4>
-              <div className={styles.thumbnail}>
-                <button className={styles.playBtn}>▶</button>
-              </div>
-              <p className={styles.date}>
-                13th February | 3:00 PM |{" "}
-                <span className={styles.webinar}>Webinar (Online)</span>
-              </p>
-              <h5 className={styles.heading}>
-                {" "}
-                FIEO - Federation of Indian Export Organisation (Ministry of
-                commerce){" "}
-              </h5>
-              <p className={styles.desc}>
-                {" "}
-                Moments from our recent webinar on Role of Insurance in managing
-                Export Supply Chain risk{" "}
-              </p>
-              <a href="#" className={styles.link}>
-                {" "}
-                Read more →{" "}
-              </a>
+              <div className={styles.thumbnail}><button className={styles.playBtn}>▶</button></div>
+              <p className={styles.date}>13th February | 3:00 PM | <span className={styles.webinar}>Webinar (Online)</span></p>
+              <h5 className={styles.heading}>FIEO - Federation of Indian Export Organisation (Ministry of commerce)</h5>
+              <p className={styles.desc}>Moments from our recent webinar on Role of Insurance in managing Export Supply Chain risk</p>
+              <a href="#" className={styles.link}>Read more →</a>
             </div>
           </div>
         </div>

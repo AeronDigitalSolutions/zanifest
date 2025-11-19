@@ -1,9 +1,7 @@
-
 "use client";
 import React, { useState } from "react";
 import styles from "@/styles/pages/CommercialVehicle/VehicleBrandDialog.module.css";
-import { FiArrowLeft, FiSearch, FiEdit2, FiMapPin } from "react-icons/fi";
-import { FaTruck } from "react-icons/fa";
+import { FiArrowLeft, FiSearch, FiMapPin } from "react-icons/fi";
 
 const brands = [
   "Maruti Suzuki",
@@ -11,7 +9,6 @@ const brands = [
   "Tata Motors",
   "Mahindra",
   "Honda",
-  "Skoda",
   "Skoda",
   "Renault",
   "TOYOTA",
@@ -22,20 +19,21 @@ interface VehicleBrandDialogProps {
   onClose: () => void;
   vehicleNumber: string;
   selectedVehicle: string;
-   onBackToChooseVehicle: () => void;   
-  onNextToVehicleModel: () => void;   
-  onSelectBrand: (brand: string) => void; 
+  onBackToChooseVehicle: () => void;
+  onNextToVehicleModel: () => void;
+  onSelectBrand: (brand: string) => void;
 }
 
 const VehicleBrandDialog: React.FC<VehicleBrandDialogProps> = ({
   onClose,
   vehicleNumber,
   selectedVehicle,
-  onSelectBrand,
-    onBackToChooseVehicle,
+  onBackToChooseVehicle,
   onNextToVehicleModel,
+  onSelectBrand,
 }) => {
   const [search, setSearch] = useState("");
+  const [activeBrand, setActiveBrand] = useState("");
 
   const filteredBrands = brands.filter((b) =>
     b.toLowerCase().includes(search.toLowerCase())
@@ -47,20 +45,12 @@ const VehicleBrandDialog: React.FC<VehicleBrandDialogProps> = ({
         {/* Left Panel */}
         <div className={styles.leftPanel}>
           <h3>Your selection</h3>
-
-          {/* Vehicle Number */}
           <div className={styles.selectionBox}>
             <div className={styles.selectionItem}>
-              <FiMapPin className={styles.icon} />
-              <span>{vehicleNumber}</span>
+              <FiMapPin className={styles.icon} /> {vehicleNumber}
             </div>
-          </div>
-
-          {/* Selected Vehicle */}
-          <div className={styles.selectionBox}>
             <div className={styles.selectionItem}>
-              <FiMapPin className={styles.icon} />
-              <span>{selectedVehicle}</span>
+              <FiMapPin className={styles.icon} /> {selectedVehicle}
             </div>
           </div>
         </div>
@@ -72,12 +62,16 @@ const VehicleBrandDialog: React.FC<VehicleBrandDialogProps> = ({
               ‹
             </button>
             <span>Search Car Brand</span>
-            <button className={styles.arrowBtn} onClick={onNextToVehicleModel}>
+            <button
+              className={styles.arrowBtn}
+              onClick={() => {
+                if (activeBrand) onNextToVehicleModel();
+              }}
+            >
               ›
-            </button>            
+            </button>
           </div>
 
-          {/* Search */}
           <div className={styles.searchBox}>
             <FiSearch size={18} className={styles.searchIcon} />
             <input
@@ -88,13 +82,17 @@ const VehicleBrandDialog: React.FC<VehicleBrandDialogProps> = ({
             />
           </div>
 
-          {/* Brand List */}
           <div className={styles.brandGrid}>
             {filteredBrands.map((brand, idx) => (
               <button
                 key={idx}
-                className={styles.brandBtn}
-                onClick={() => onSelectBrand(brand)} 
+                className={`${styles.brandBtn} ${
+                  activeBrand === brand ? styles.active : ""
+                }`}
+                onClick={() => {
+                  setActiveBrand(brand);
+                  onSelectBrand(brand);
+                }}
               >
                 {brand}
                 <span>›</span>

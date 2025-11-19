@@ -1,7 +1,5 @@
-// File: components/home/DemoSection.tsx
 "use client";
-
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import styles from "@/styles/components/home/DemoSection.module.css";
 import { FaEllipsisH } from "react-icons/fa";
@@ -37,19 +35,73 @@ const DEMOLIST = [
   },
 ];
 
-function DemoSection() {
-  const { data, error } = useSWR("/api/demoapi", fetcher, {
-    refreshInterval: 2000,
-  });
+const parseHeading = (text: string) => {
+  const regex = /<([^>]+)>/g;
+  const parts: { text: string; isTag: boolean }[] = [];
+  let lastIndex = 0;
+  let match;
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push({ text: text.slice(lastIndex, match.index), isTag: false });
+    }
+    parts.push({ text: match[1].trim(), isTag: true });
+    lastIndex = match.index + match[0].length;
+  }
+  if (lastIndex < text.length) {
+    parts.push({ text: text.slice(lastIndex), isTag: false });
+  }
+  return parts;
+};
 
-  const heading = data?.heading || "Why is ZANIFEST India’s go-to for insurance?";
-  const subheading = data?.subheading || "Zanifest is your trusted partner in insurance — providing transparent comparisons, affordable policies, and dedicated support.";
+function DemoSection() {
+  const { data } = useSWR("/api/demoapi", fetcher);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const [animateHeading, setAnimateHeading] = useState(false);
+
+  // Trigger animation only when section enters viewport
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setAnimateHeading(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (sectionRef.current) observer.observe(sectionRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
+  const heading =
+    data?.heading || "Why is <ZANIFEST> India’s go-to for insurance?";
+  const subheading =
+    data?.subheading ||
+    "Zanifest is your trusted partner in insurance — providing transparent comparisons, affordable policies, and dedicated support.";
   const items = data?.items || DEMOLIST;
 
   return (
-    <div className={styles.cont}>
+    <div ref={sectionRef} className={styles.cont}>
       <div className={styles.head}>
-        <div className={styles.heading}>{heading}</div>
+        <div
+          className={`${styles.heading} ${
+            animateHeading ? styles.animateOnce : ""
+          }`}
+        >
+          {parseHeading(heading).map((part, idx) => (
+            <span
+              key={idx}
+              style={{
+                color: part.isTag ? "orangered" : "black",
+                whiteSpace: "pre-wrap",
+              }}
+            >
+              {part.text}
+            </span>
+          ))}
+        </div>
 
         <div className={styles.mobileEllipsis}>
           <FaEllipsisH style={{ color: "#fa621a", fontSize: "25px" }} />
@@ -74,7 +126,14 @@ function DemoSection() {
                   height={60}
                 />
               ) : (
-                <div style={{ width: 60, height: 60, background: item.color, borderRadius: '50%' }}></div>
+                <div
+                  style={{
+                    width: 60,
+                    height: 60,
+                    background: item.color,
+                    borderRadius: "50%",
+                  }}
+                ></div>
               )}
             </div>
             <div className={styles.content}>

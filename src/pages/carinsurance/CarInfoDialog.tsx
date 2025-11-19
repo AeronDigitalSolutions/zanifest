@@ -84,6 +84,7 @@ const VehicleInfoDialog: React.FC<VehicleInfoDialogProps> = ({
         </button>
 
         {/* Left Section */}
+        {/* Left Section */}
         <div className={styles.left}>
           <h3 className={styles.heading}>✅ We have found your vehicle</h3>
 
@@ -111,20 +112,10 @@ const VehicleInfoDialog: React.FC<VehicleInfoDialogProps> = ({
               <span>{selectedModel}</span>
               <FiEdit2 className={styles.editIcon} onClick={onChooseModel} />
             </div>
-            <div className={styles.item}>
-              <BsFuelPumpDiesel
- className={styles.icon} />
-              <span>{selectedVariant}</span>
-              <FiEdit2
-                className={styles.editIcon}
-                onClick={onChooseFuelVariant}
-              />
-            </div>
 
-            {/* ✅ Fuel Type row */}
+            {/* ✅ Fuel row comes before Variant row */}
             <div className={styles.item}>
-              <GiGearStickPattern
- className={styles.icon} />
+              <BsFuelPumpDiesel className={styles.icon} />
               <span>{selectedFuel}</span>
               <FiEdit2
                 className={styles.editIcon}
@@ -132,7 +123,15 @@ const VehicleInfoDialog: React.FC<VehicleInfoDialogProps> = ({
               />
             </div>
 
-           
+            {/* Variant row after Fuel */}
+            <div className={styles.item}>
+              <GiGearStickPattern className={styles.icon} />
+              <span>{selectedVariant}</span>
+              <FiEdit2
+                className={styles.editIcon}
+                onClick={onChooseFuelVariant}
+              />
+            </div>
           </div>
         </div>
 

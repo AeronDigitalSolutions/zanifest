@@ -6,9 +6,6 @@ import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 
-
-
-
 export default function Login() {
   const [userName, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -35,7 +32,7 @@ export default function Login() {
     const data = await res.json();
 
     if (res.ok) {
-      setUser({ name: data.name || "", email: data.email || "" }); // update AuthContext with user data in a structured way
+      setUser({ name: data.name || "", email: data.email || "" });
       router.push("/dashboard");
     } else {
       setError(true);
@@ -93,19 +90,8 @@ export default function Login() {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-
-            {/* <div className={styles.formInput}>
-              <input
-                type={showPassword ? "text" : "password"}
-                name="pass"
-                id="pass"
-                placeholder="Password"
-                required
-                className={styles.input}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div> */}
- <div className={styles.formInput} style={{ position: "relative" }}>
+           
+            <div className={styles.formInput} style={{ position: "relative" }}>
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
@@ -128,17 +114,9 @@ export default function Login() {
                 {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
               </span>
             </div>
-            {/* <div className={styles.showPasswordDiv}>
-              <input
-                type="checkbox"
-                id="showP"
-                className={styles.passCheck}
-                onClick={() => setShowPassword(!showPassword)}
-              />
-              <label htmlFor="showP">Show Password</label>
-            </div> */}
-
-            <button
+          
+          
+              <button
               className={styles.loginButton}
               disabled={loading}
               type="submit"

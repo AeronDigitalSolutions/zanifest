@@ -60,6 +60,7 @@ export default function FAQAdmin() {
           <FaSave /> Save
         </button>
       </div>
+     
 
       {/* Questions editor */}
       <div className={styles.questionsWrapper}>

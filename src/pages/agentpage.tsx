@@ -3,18 +3,21 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "@/styles/pages/agent.module.css";
 import axios from "axios";
+import Agent from "@/models/Agent";
 import AgentHeader from "@/components/agentpage/agentheader";
 import AgentSidebar from "@/components/agentpage/agentsidebar";
 import AgentContent from "@/components/agentpage/agentcontent";
 import ResetPassword from "@/components/districtmanagerdashboard/resetpassword";
 import CreateUser from "@/components/agentpage/createuser";
 import CreateAgent from "@/components/superadminsidebar/createagent";
+import AgentSale from "@/components/agentpage/agentsale";
 
 const AgentDashboard = () => {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("dashboard");
   const [agentName, setAgentName] = useState<string>("");
+  const [agentSales, setAgentSales] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [agent, setagent] = useState<any>(null);
 
@@ -27,6 +30,8 @@ const AgentDashboard = () => {
     }
   }, []);
 
+
+
   // profile edit
   useEffect(() => {
     if (activeSection === "profileEdit") {
@@ -38,6 +43,7 @@ const AgentDashboard = () => {
         .finally(() => setLoading(false));
     }
   }, [activeSection]);
+  
 
   const handleLogout = async () => {
     try {
@@ -51,21 +57,28 @@ const AgentDashboard = () => {
 
   return (
     <div className={styles.wrapper}>
+
+
       <AgentHeader
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
         handleLogout={handleLogout}
       />
+
+
       <div className={styles.mainArea}>
+
+
         <AgentSidebar
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
           setActiveSection={setActiveSection}
           handleLogout={handleLogout}
         />
+
         <main className={styles.content}>
           {activeSection === "dashboard" && (
-            <AgentContent agentName={agentName} />
+            <AgentContent agentName={agentName} agentSales={agentSales} agentId={""} />
           )}
 
           {activeSection === "resetpassword" && <ResetPassword />}
@@ -73,6 +86,7 @@ const AgentDashboard = () => {
           {activeSection === "profileEdit" && (
             <CreateAgent mode="edit" initialData={agent} />
           )}
+          {activeSection === "addsale" && <AgentSale />}
         </main>
       </div>
     </div>

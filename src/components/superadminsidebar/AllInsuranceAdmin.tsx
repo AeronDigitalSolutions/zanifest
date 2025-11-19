@@ -58,78 +58,86 @@ const AllInsuranceCAdmin = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <h2 className={styles.title}>Edit All Insurance Section</h2>
-
-      <div className={styles.headingBox}>
-        <label>Heading:</label>
-        <input
-          type="text"
-          value={heading}
-          onChange={(e) => setHeading(e.target.value)}
-          className={styles.headingInput}
-        />
-        <button onClick={handleHeadingSave} className={styles.updateHeadingBtn}>
-          Update Heading
-        </button>
-      </div>
-
-      <div className={styles.servicesGrid}>
-        {serviceForms.map((service, index) => (
-          <div key={index} className={styles.serviceCard}>
-            <h4>Item {index + 1}</h4>
-
-            <input
-              type="text"
-              value={service.name}
-              onChange={(e) => handleFormChange(index, "name", e.target.value)}
-              className={styles.input}
-              placeholder="Service Name"
-            />
-
-            <textarea
-              value={service.desc}
-              onChange={(e) => handleFormChange(index, "desc", e.target.value)}
-              className={styles.textarea}
-              placeholder="Service Description"
-            />
-
-            <input
-              type="file"
-              onChange={(e) => handleImageChange(e, index)}
-              className={styles.fileInput}
-            />
-            {service.image && (
-              <img
-                src={service.image}
-                alt="preview"
-                className={styles.imagePreview}
-              />
-            )}
-
-            <input
-              type="text"
-              value={service.link}
-              onChange={(e) => handleFormChange(index, "link", e.target.value)}
-              className={styles.input}
-              placeholder="Service Link"
-            />
-
-            <button
-              onClick={() => handleServiceSave(index)}
-              className={styles.updateBtn}
-            >
-              Update Item {index + 1}
-            </button>
-          </div>
-        ))}
-      </div>
-
+    <>
+      {/* Live Preview */}
       <div className={styles.previewBox}>
         <h3 className={styles.previewTitle}>Live Preview</h3>
-        <AllInsuranceSection />
+        <AllInsuranceSection
+          previewHeading={heading}
+          previewServices={serviceForms}
+        />
       </div>
-    </div>
+
+      <div className={styles.container}>
+        <h2 className={styles.pageTitle}>Edit All Insurance Section</h2>
+
+        {/* Heading Box */}
+        <div className={styles.headingBox}>
+          <h3>Heading:</h3>
+          <input
+            type="text"
+            value={heading}
+            onChange={(e) => setHeading(e.target.value)}
+            className={styles.headingInput}
+          />
+          <button onClick={handleHeadingSave} className={styles.headingBtn}>
+            Update Heading
+          </button>
+        </div>
+
+        {/* Services Grid */}
+        <div className={styles.servicesGrid}>
+          {serviceForms.map((service, index) => (
+            <div key={index} className={styles.serviceCard}>
+              <h4>Item {index + 1}</h4>
+
+              <input
+                type="text"
+                value={service.name}
+                onChange={(e) => handleFormChange(index, "name", e.target.value)}
+                className={styles.input}
+                placeholder="Service Name"
+              />
+
+              <textarea
+                value={service.desc}
+                onChange={(e) => handleFormChange(index, "desc", e.target.value)}
+                className={styles.textarea}
+                placeholder="Service Description"
+              />
+
+              <input
+                type="file"
+                onChange={(e) => handleImageChange(e, index)}
+                className={styles.fileInput}
+              />
+              {service.image && (
+                <img
+                  src={service.image}
+                  alt="preview"
+                  className={styles.imagePreview}
+                />
+              )}
+
+              <input
+                type="text"
+                value={service.link}
+                onChange={(e) => handleFormChange(index, "link", e.target.value)}
+                className={styles.input}
+                placeholder="Service Link"
+              />
+
+              <button
+                onClick={() => handleServiceSave(index)}
+                className={styles.updateBtn}
+              >
+                Update Item {index + 1}
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
   );
 };
 

@@ -22,7 +22,7 @@ const DROPDOWNLIST = [
 
 function Navbar() {
   const router = useRouter();
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout, user } = useAuth();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [listIndex, setListIndex] = useState<number>(0);
 
@@ -41,7 +41,12 @@ function Navbar() {
             className={styles.logoImage}
           />
         </h3>
-        
+         {/* Username Display (Top right corner) */}
+      {isLoggedIn && (
+        <div className={styles.userName}>
+          👋 Hello, <strong>{user?.name}</strong>
+        </div>
+      )}
       </div>
 
       <div

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation"; // ✅ router for navigation
+import { useRouter } from "next/navigation";
 import styles from "@/styles/pages/DoctorInd/doctorinsurance2.module.css";
 import futureImg from "@/assets/doctor/Future_Generali_India_Life_Insurance_logo.jpg";
 import nationalInsurance from "@/assets/doctor/download.jpeg";
@@ -16,7 +16,9 @@ import Image from "next/image";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import UserDetails from "@/components/ui/UserDetails";
+import axios from "axios";
 
+/* ---------- Small icons as components ---------- */
 const Check = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden>
     <path fill="#16a34a" d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z" />
@@ -43,15 +45,16 @@ const Bullet = ({ bg = "#EAF2FF", dot = "#3B82F6" }: { bg?: string; dot?: string
   </span>
 );
 
+/* ---------- Types ---------- */
 type Stage = "drawer" | "center" | "done";
 
-const InsuranceComparison: React.FC = () => {
-  const router = useRouter(); // ✅ initialize router
-
+/* ---------- Component ---------- */
+const DoctorInsurance2: React.FC = () => {
+  const router = useRouter();
   const [stage, setStage] = useState<Stage>("drawer");
   const [selectedSpec, setSelectedSpec] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
-
+  const [saving, setSaving] = useState(false);
   const [firstTime, setFirstTime] = useState<null | "yes" | "no">(null);
   const [facility, setFacility] = useState<null | "yes" | "no">(null);
 
@@ -85,6 +88,46 @@ const InsuranceComparison: React.FC = () => {
     ...g,
     items: g.items.filter((i) => i.toLowerCase().includes(searchQuery.toLowerCase())),
   }));
+
+  /* ---------- Final submit: update saved doctor record ---------- */
+  const handleFinalSubmit = async () => {
+    try {
+      const id = localStorage.getItem("doctorId");
+      if (!id) {
+        alert("Missing doctor ID. Please start again.");
+        return;
+      }
+
+      setSaving(true);
+
+      // Build payload
+      const payload = {
+        specialization: selectedSpec || null,
+        firstTime: firstTime || null,
+        facility: facility || null,
+      };
+
+      const res = await axios.put(`/api/doctorinsurance?id=${id}`, payload, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
+
+      if (res?.data?.success) {
+        // Success — show confirmation and go to done stage
+        alert("Data saved successfully!");
+        setStage("done");
+        // Optionally redirect to quotes page:
+        // router.push("/Doctor/DoctorInsurance5");
+      } else {
+        alert("Failed to save updates.");
+      }
+    } catch (err: any) {
+      console.error("Error updating doctor:", err);
+      alert("Error updating data. See console for details.");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <>
@@ -140,26 +183,28 @@ const InsuranceComparison: React.FC = () => {
                 </div>
               </div>
 
-              {filteredGroups.map(
-                (g) =>
-                  g.items.length > 0 && (
-                    <div className={styles.specializationGroup} key={g.group}>
-                      <h4>{g.group}</h4>
-                      {g.items.map((item) => (
-                        <label key={item} className={styles.radioRow}>
-                          <input
-                            type="radio"
-                            name="spec"
-                            value={item}
-                            checked={selectedSpec === item}
-                            onChange={(e) => setSelectedSpec(e.target.value)}
-                          />
-                          <span>{item}</span>
-                        </label>
-                      ))}
-                    </div>
-                  )
-              )}
+              <div className={styles.specializationsList}>
+                {filteredGroups.map(
+                  (g) =>
+                    g.items.length > 0 && (
+                      <div className={styles.specializationGroup} key={g.group}>
+                        <h4>{g.group}</h4>
+                        {g.items.map((item) => (
+                          <label key={item} className={styles.radioRow}>
+                            <input
+                              type="radio"
+                              name="spec"
+                              value={item}
+                              checked={selectedSpec === item}
+                              onChange={(e) => setSelectedSpec(e.target.value)}
+                            />
+                            <span>{item}</span>
+                          </label>
+                        ))}
+                      </div>
+                    )
+                )}
+              </div>
 
               <button
                 className={styles.continueBtn}
@@ -184,7 +229,9 @@ const InsuranceComparison: React.FC = () => {
                 <p>Are you buying for the first time?</p>
                 <div className={styles.optionRow}>
                   <label
-                    className={`${styles.optionBox} ${firstTime === "yes" ? styles.optionSelected : ""}`}
+                    className={`${styles.optionBox} ${
+                      firstTime === "yes" ? styles.optionSelected : ""
+                    }`}
                   >
                     <input
                       type="radio"
@@ -196,7 +243,9 @@ const InsuranceComparison: React.FC = () => {
                     <span>Yes</span>
                   </label>
                   <label
-                    className={`${styles.optionBox} ${firstTime === "no" ? styles.optionSelected : ""}`}
+                    className={`${styles.optionBox} ${
+                      firstTime === "no" ? styles.optionSelected : ""
+                    }`}
                   >
                     <input
                       type="radio"
@@ -209,7 +258,9 @@ const InsuranceComparison: React.FC = () => {
                   </label>
                 </div>
 
-                <p>Do you operate/ own a medical facility such as a clinic, hospital or similar?</p>
+                <p>
+                  Do you operate/ own a medical facility such as a clinic, hospital or similar?
+                </p>
                 <div className={styles.optionRow}>
                   <label
                     className={`${styles.optionBox} ${facility === "yes" ? styles.optionSelected : ""}`}
@@ -240,10 +291,10 @@ const InsuranceComparison: React.FC = () => {
 
               <button
                 className={styles.continueBtn}
-                disabled={!(firstTime && facility)}
-                onClick={() => setStage("done")}
+                disabled={!(firstTime && facility) || saving}
+                onClick={handleFinalSubmit}
               >
-                Continue <ArrowRight />
+                {saving ? "Saving..." : "Continue"} <ArrowRight />
               </button>
             </div>
           </div>
@@ -270,7 +321,7 @@ const InsuranceComparison: React.FC = () => {
             <div className={styles.field}>
               <label>Specialization</label>
               <div className={styles.input}>
-                <span>Anaesthesiologist</span>
+                <span>{selectedSpec || "Anaesthesiologist"}</span>
                 <i />
               </div>
             </div>
@@ -299,7 +350,6 @@ const InsuranceComparison: React.FC = () => {
                       <span>Add to compare</span>
                     </label>
 
-                    {/* ✅ Navigate on click */}
                     <button
                       className={styles.priceBtn}
                       onClick={() => router.push("DoctorInsurance5")}
@@ -351,7 +401,6 @@ const InsuranceComparison: React.FC = () => {
                       <span>Add to compare</span>
                     </label>
 
-                    {/* ✅ Navigate on click */}
                     <button
                       className={styles.priceBtn}
                       onClick={() => router.push("DoctorInsurance5")}
@@ -408,7 +457,6 @@ const InsuranceComparison: React.FC = () => {
                       <span>Add to compare</span>
                     </label>
 
-                    {/* ✅ Navigate on click */}
                     <button
                       className={styles.priceBtn}
                       onClick={() => router.push("DoctorInsurance5")}
@@ -473,7 +521,7 @@ const InsuranceComparison: React.FC = () => {
               <h3>Why Doctors buy from Zanifest for Business ?</h3>
 
               <div className={styles.reason}>
-                <Image className={styles.logo1} src={balance} alt="Future Generali" />
+                <Image className={styles.logo1} src={balance} alt="Balance" />
                 <div>
                   <strong>Medico-Legal Lawyer Panel</strong>
                   <p>Expert panel of medico-legal lawyers to represent doctors</p>
@@ -481,7 +529,7 @@ const InsuranceComparison: React.FC = () => {
               </div>
 
               <div className={styles.reason}>
-                <Image className={styles.logo1} src={call} alt="Future Generali" />
+                <Image className={styles.logo1} src={call} alt="Call" />
                 <div>
                   <strong>Within 4 hrs Lawyer Allocation Promise</strong>
                   <p>You will have legal representation allocated within 4 hours</p>
@@ -489,7 +537,7 @@ const InsuranceComparison: React.FC = () => {
               </div>
 
               <div className={styles.reason}>
-                <Image className={styles.logo1} src={ruppee} alt="Future Generali" />
+                <Image className={styles.logo1} src={ruppee} alt="Rupee" />
                 <div>
                   <strong>Affordable Pricing</strong>
                   <p>We provide you the best prices in the market with excellent services</p>
@@ -497,7 +545,7 @@ const InsuranceComparison: React.FC = () => {
               </div>
 
               <div className={styles.reason}>
-                <Image className={styles.logo1} src={manager} alt="Future Generali" />
+                <Image className={styles.logo1} src={manager} alt="Manager" />
                 <div>
                   <strong>Dedicated Relationship Manager</strong>
                   <p>A full-time relationship manager is assigned for all your insurance needs</p>
@@ -505,7 +553,7 @@ const InsuranceComparison: React.FC = () => {
               </div>
 
               <div className={styles.reason}>
-                <Image className={styles.logo1} src={flag} alt="Future Generali" />
+                <Image className={styles.logo1} src={flag} alt="Flag" />
                 <div>
                   <strong>365 Days Claim Assistance</strong>
                   <p>Our claim experts are available 365 days to help you with claim initiation and status</p>
@@ -513,7 +561,7 @@ const InsuranceComparison: React.FC = () => {
               </div>
 
               <div className={styles.reason}>
-                <Image className={styles.logo1} src={quick} alt="Future Generali" />
+                <Image className={styles.logo1} src={quick} alt="Quick" />
                 <div>
                   <strong>Instant Policy Copy</strong>
                   <p>Get policy copy instantly in 5 clicks</p>
@@ -523,9 +571,10 @@ const InsuranceComparison: React.FC = () => {
           </div>
         </div>
       </div>
+
       <Footer />
     </>
   );
 };
 
-export default InsuranceComparison;
+export default DoctorInsurance2;

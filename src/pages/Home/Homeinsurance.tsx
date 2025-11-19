@@ -1,13 +1,20 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/pages/Home/homeinsurance.module.css";
 import { FiUser, FiPhone } from "react-icons/fi";
 import Footer from "@/components/ui/Footer";
 import Navbar from "@/components/ui/Navbar";
 import { FaCheckCircle, FaWhatsapp } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { useAuth } from "@/context/AuthContext";   // <-- Add this import
+
+
 
 const Homeinsurance: React.FC = () => {
+    const { user } = useAuth();           // <-- FIXED (Correct place)
+
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [whatsappUpdates, setWhatsappUpdates] = useState(false);
   const [fullName, setFullName] = useState("");
@@ -22,15 +29,34 @@ const Homeinsurance: React.FC = () => {
     );
   };
 
-  // ✅ Just navigate to /homeinsurance2
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    router.push("Homeinsurance2");
+ // ✅ Just navigate to /homeinsurance2 and save step 1 data
+const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault();
+
+  const step1Data = {
+    fullName,
+    phoneNumber: mobile.replace(/\s+/g, ""),
+
+    // ⭐ SAME AS TRAVEL MODULE
+    email: user?.email || null,
+
+    coverOptions: {
+      homeStructure: selectedOptions.includes("Home Structure"),
+      householdItems: selectedOptions.includes("Household Items"),
+      homeLoanProtection: selectedOptions.includes("Home Loan Protection"),
+      insuranceForLoan: selectedOptions.includes("Insurance For Loan"),
+      jewelleryAndValuables: selectedOptions.includes("Jewellery & Valuables"),
+    },
   };
+
+  localStorage.setItem("homeInsuranceStep1", JSON.stringify(step1Data));
+  router.push("Homeinsurance2");
+};
+
 
   // ✅ Full Name handler (capitalize each word)
   const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let input = e.target.value.replace(/[^a-zA-Z\s]/g, ""); // sirf letters & space
+    let input = e.target.value.replace(/[^a-zA-Z\s]/g, ""); 
     input = input
       .split(" ")
       .filter(Boolean) // extra spaces hatao
@@ -53,6 +79,11 @@ const Homeinsurance: React.FC = () => {
 
     setMobile(prefix + limitedDigits);
   };
+   // AOS animation
+    useEffect(() => {
+      AOS.init({ duration: 1000, once: true });
+    }, []);
+
   return (
     <div>
       <Navbar />
@@ -80,7 +111,7 @@ const Homeinsurance: React.FC = () => {
         </div>
 
         {/* ✅ form with navigation */}
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <form className={styles.form} onSubmit={handleSubmit} data-aos="fade-right">
           <div className={styles.inputGroup}>
             <input
               type="text"
@@ -99,7 +130,7 @@ const Homeinsurance: React.FC = () => {
               className={styles.input}
               value={mobile}
               onChange={handleMobileChange}
-              maxLength={14} // +91 + 10 digits = 14 chars
+              maxLength={14} 
             />{" "}
             <FiPhone className={styles.inputIcon} />
             <span className={styles.noSpam}>We don’t spam</span>

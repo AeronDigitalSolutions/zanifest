@@ -280,3 +280,8 @@ animation: dropdownAnimation 0.3s ease-in;
   gap: 0.4rem;
   animation: dropdownAnimation 0.3s ease-in;
 }
+.userName {
+  font-weight: 500;
+  color: #333;
+
+}

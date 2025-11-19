@@ -8,6 +8,9 @@ import DemoAdmin from "./DemoAdmin";
 import BestServicesAdmin from "./BestServicesAdmin";
 // import HowWorksAdmin from "./HowWorksAdmin";
 import FeedbackAdmin from "./feedbackadmin";
+import PartnerAdmin from "./partneradmin";
+import AdminInsurancePage from "./carinsuranceadmin";
+import HowWorksAdmin from "./HowWorksAdmin";
 
 
 
@@ -116,12 +119,12 @@ const MainPage = () => {
 
           {/* Render section dynamically */}
           {activeSection === "carousel" && <HomeSection />}
-          {/* {activeSection === "insurance" && <CarInsuranceAdminPage/>} */}
+          {activeSection === "insurance" && <AdminInsurancePage/>}
           {activeSection === "why" && <DemoAdmin/>}
           {activeSection === "best" && <BestServicesAdmin/>}
-          {/* {activeSection === "partner" && <PartnerAdmin/>} */}
+          {activeSection === "partner" && <PartnerAdmin/>}
           {activeSection === "services" && <AllInsuranceCAdmin/>}
-          {/* {activeSection === "how" &&  <HowWorksAdmin/> } */}
+          {activeSection === "how" &&  <HowWorksAdmin/>}
           {activeSection === "testimonials" && <FeedbackAdmin/>}
           {activeSection === "faq" && <FAQAdmin/>}
         </>

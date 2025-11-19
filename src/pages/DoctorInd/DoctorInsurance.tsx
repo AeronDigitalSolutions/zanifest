@@ -1,63 +1,82 @@
 "use client";
-import React, { useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation"; // ✅ Import router
+import { useRouter } from "next/navigation";
 import styles from "@/styles/pages/DoctorInd/doctorinsurance.module.css";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import UserDetails from "@/components/ui/UserDetails";
 import manager from "@/assets/doctor/stethoscope.png";
+import axios from "axios";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
-const InsurancePage: React.FC = () => {
+const DoctorInsurance: React.FC = () => {
   const [name, setName] = useState("");
-  const [mobile, setMobile] = useState("+91 "); 
+  const [mobile, setMobile] = useState("+91 ");
   const [whatsapp, setWhatsapp] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  const router = useRouter(); // ✅ Initialize router
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Navigate to DoctorInsurance2 page
-    router.push("DoctorInsurance2"); // ✅ Replace with your actual route
+    try {
+      setLoading(true);
+      const res = await axios.post("/api/doctorinsurance", {
+        name,
+        mobile,
+        whatsapp,
+      });
+
+      if (res.data.success) {
+        localStorage.setItem("doctorId", res.data.data._id);
+        alert("Data saved successfully");
+        router.push("DoctorInsurance2");
+      } else {
+        alert("Failed to save");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error saving data");
+    } finally {
+      setLoading(false);
+    }
   };
-  
-  // ✅ Capitalize each word in full name
+
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
-    const capitalized = input
+    const formatted = input
       .split(" ")
-      .map((word) =>
-        word ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() : ""
-      )
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
       .join(" ");
-    setName(capitalized);
+    setName(formatted);
   };
 
-    // ✅ Mobile handler (always +91 prefix, only digits, max 10 numbers)
   const handleMobileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const prefix = "+91 ";
     let input = e.target.value;
 
-    // Ensure prefix stays
-    if (!input.startsWith(prefix)) {
-      input = prefix;
-    }
+    if (!input.startsWith(prefix)) input = prefix;
 
-       const digitsOnly = input.substring(prefix.length).replace(/\D/g, "");
-    const limitedDigits = digitsOnly.slice(0, 10);
-
-    setMobile(prefix + limitedDigits);
+    const digits = input.substring(4).replace(/\D/g, "").slice(0, 10);
+    setMobile(prefix + digits);
   };
 
+  useEffect(() => {
+    AOS.init({ duration: 900, once: true });
+  }, []);
+  
   return (
     <>
       <UserDetails />
       <Navbar />
 
       <section className={styles.wrapper}>
-        <div className={styles.inner}>
+        <div className={styles.inner} >
           {/* Left Text Content */}
-          <div className={styles.textBlock}>
+          <div className={styles.textBlock} data-aos="fade-right">
             <h4 className={styles.subHeading}>
               Professional Indemnity Insurance for Doctors
             </h4>
@@ -100,6 +119,7 @@ const InsurancePage: React.FC = () => {
               <button className={styles.btn} type="submit">
                 View plans
               </button>
+               
             </form>
 
             <div className={styles.inlineSmall}>
@@ -159,4 +179,4 @@ const InsurancePage: React.FC = () => {
   );
 };
 
-export default InsurancePage;
+export default DoctorInsurance;

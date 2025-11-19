@@ -5,15 +5,14 @@ import { useRouter } from "next/router";
 
 type Manager = {
   _id: string;
-  managerId?: String;
+  managerId?: string;
   firstName?: string;
   lastName?: string;
-  city: String;
-  district?: string;
+  city?: string;
   state?: string;
-  panNumber: string;
-  adhaarNumber: string;
- 
+  district?: string;
+  email?: string;
+  totalSales: number;
 };
 
 const DistrictManagerTable: React.FC = () => {
@@ -24,9 +23,11 @@ const DistrictManagerTable: React.FC = () => {
   useEffect(() => {
     async function fetchDistrictManagers() {
       try {
-        const res = await fetch("/api/manager/getdistrictmanagers", {
+        const token = localStorage.getItem("managerToken");
+
+        const res = await fetch("/api/manager/district-with-sales", {
           method: "GET",
-          credentials: "include", // so managerToken cookie is sent
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         if (!res.ok) {
@@ -48,7 +49,8 @@ const DistrictManagerTable: React.FC = () => {
 
   return (
     <div className={styles.agentTable}>
-      <h3 className={styles.tableTitle}>District Manager's List</h3>
+      <h3 className={styles.tableTitle}>District Managers List</h3>
+
       <div className={styles.tableWrapper}>
         {loading ? (
           <p style={{ textAlign: "center" }}>Loading...</p>
@@ -62,37 +64,21 @@ const DistrictManagerTable: React.FC = () => {
                 <th>City</th>
                 <th>State</th>
                 <th>District</th>
-                <th>PAN number</th>
-                <th>Adhaar Number</th>
+                <th>Total Sales</th>
               </tr>
             </thead>
+
             <tbody>
               {districtManagers.length > 0 ? (
                 districtManagers.map((manager) => (
                   <tr key={manager._id}>
-                    <td>{manager.managerId || manager._id.slice(-4)}</td>
+                    <td>{manager.managerId || manager._id.slice(-5)}</td>
                     <td>{`${manager.firstName || ""} ${manager.lastName || ""}`}</td>
-                    <td>
-                      {manager.district || "N/A"},{" "}
-                      {manager.state || "N/A"}
-                    </td>
+                    <td>{manager.email || "N/A"}</td>
                     <td>{manager.city}</td>
                     <td>{manager.state}</td>
                     <td>{manager.district}</td>
-                    <td>{manager.panNumber}</td>
-                    <td>{manager.adhaarNumber}</td>
-
-                    
-                    {/* <td>
-                      <button
-                        onClick={() =>
-                          router.push(`/districtmanagerdashboard?id=${manager._id}`)
-                        }
-                        className={styles.viewProfileButton}
-                      >
-                        View Profile
-                      </button>
-                    </td> */}
+                    <td>₹ {manager.totalSales?.toLocaleString("en-IN")}</td>
                   </tr>
                 ))
               ) : (

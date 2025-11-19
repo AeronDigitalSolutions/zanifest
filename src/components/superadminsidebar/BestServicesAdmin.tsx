@@ -6,9 +6,12 @@ import useSWR, { mutate } from "swr";
 import BestServicesSection from "@/components/home/BestServicesSection";
 import styles from "@/styles/components/superadminsidebar/BestServicesAdmin.module.css";
 
-interface ServiceItem {
+// Shared ServiceType
+export type ServiceType = "support" | "claim" | "installment";
+
+export interface ServiceItem {
   _id?: string;
-  type: string;
+  type: ServiceType;  // Fixed from string
   name: string;
   desc: string;
 }
@@ -87,61 +90,66 @@ export default function BestServicesAdmin() {
   };
 
   return (
-    <div className={styles.container}>
-      <h2 className={styles.pageTitle}>Edit Best Services </h2>
-
-      {/* Single Heading Input */}
-      <div className={styles.headingBox}>
-        <h3>Edit Heading</h3>
-        <input
-          type="text"
-          value={heading}
-          onChange={(e) => setHeading(e.target.value)}
-          disabled={!isDataLoaded}
-          placeholder="Enter heading (e.g. Best Service)"
-          className={styles.headingInput}
-        />
-        <button onClick={handleSaveAll} disabled={!isDataLoaded || saving}>
-          {saving ? "Saving..." : "Save All"}
-        </button>
-      </div>
-
-      {/* Services Form */}
-      <div className={styles.servicesGrid}>
-        {serviceItems.map((item, index) => (
-          <div key={item.type + "-" + index} className={styles.serviceCard}>
-            <h4>{item.type.toUpperCase()}</h4>
-            <input
-              type="text"
-              value={item.name}
-              onChange={(e) =>
-                handleServiceChange(index, "name", e.target.value)
-              }
-              disabled={!isDataLoaded}
-            />
-            <textarea
-              value={item.desc}
-              onChange={(e) =>
-                handleServiceChange(index, "desc", e.target.value)
-              }
-              disabled={!isDataLoaded}
-              rows={3}
-            />
-            <button
-              onClick={handleSaveAll}
-              disabled={!isDataLoaded || saving}
-            >
-              Save {item.type}
-            </button>
-          </div>
-        ))}
-      </div>
-
-      {/* Preview */}
+    <>
+      {/* Live Preview */}
       <div className={styles.previewBox}>
         <h3>Live Preview</h3>
-        <BestServicesSection />
+        <BestServicesSection
+          liveHeading={heading}
+          liveServices={serviceItems}
+        />
       </div>
-    </div>
+
+      <div className={styles.container}>
+        <h2 className={styles.pageTitle}>Edit Best Services </h2>
+
+        {/* Single Heading Input */}
+        <div className={styles.headingBox}>
+          <h3>Edit Heading</h3>
+          <input
+            type="text"
+            value={heading}
+            onChange={(e) => setHeading(e.target.value)}
+            disabled={!isDataLoaded}
+            placeholder="Enter heading (e.g. Best Service)"
+            className={styles.headingInput}
+          />
+          <button onClick={handleSaveAll} disabled={!isDataLoaded || saving}>
+            {saving ? "Saving..." : "Save All"}
+          </button>
+        </div>
+
+        {/* Services Form */}
+        <div className={styles.servicesGrid}>
+          {serviceItems.map((item, index) => (
+            <div key={item.type + "-" + index} className={styles.serviceCard}>
+              <h4>{item.type.toUpperCase()}</h4>
+              <input
+                type="text"
+                value={item.name}
+                onChange={(e) =>
+                  handleServiceChange(index, "name", e.target.value)
+                }
+                disabled={!isDataLoaded}
+              />
+              <textarea
+                value={item.desc}
+                onChange={(e) =>
+                  handleServiceChange(index, "desc", e.target.value)
+                }
+                disabled={!isDataLoaded}
+                rows={3}
+              />
+              <button
+                onClick={handleSaveAll}
+                disabled={!isDataLoaded || saving}
+              >
+                Save {item.type}
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
   );
 }

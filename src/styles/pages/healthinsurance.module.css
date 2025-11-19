@@ -154,13 +154,12 @@
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  width: 20px;   /* ✅ smaller button size */
+  width: 20px;   
   height: 20px;
   line-height: 18px;
   text-align: center;
   border-radius: 50%;
   transition: background 0.2s ease;
-  /* translate: 95px -25px; */
 }
 
 .counter button:hover {

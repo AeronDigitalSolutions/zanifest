@@ -1106,3 +1106,275 @@
 .closeBtn:hover {
   color: #000;
 }
+
+/* ===== ADDITIONS: multi-age grid and per-traveller condition UI ====== */
+
+/* Grid for multiple age selectors in modal */
+.multipleAgeGrid {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.ageSelectWrap {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ageLabel {
+  font-size: 14px;
+  color: #374151;
+  font-weight: 600;
+}
+
+/* Custom radio buttons (Yes/No) in drawer */
+.radioGroupCustom {
+  display: flex;
+  gap: 12px;
+  margin: 16px 0 18px 0;
+}
+
+.radioCustom {
+  flex: 1;
+  border: 1px solid #e0e6ef;
+  padding: 12px;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  font-weight: 600;
+  color: #1f2937;
+  text-align: center;
+}
+
+.radioCustom:hover {
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.06);
+}
+
+.radioActive {
+  background: #e8f1ff;
+  border: 2px solid #2563eb;
+  color: #2563eb;
+}
+
+/* Text above per-traveller selection */
+.selectTravellersText {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+/* Grid for per-traveller condition cards */
+.conditionGrid {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.conditionCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 336px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #e6eefc;
+  cursor: pointer;
+  transition: box-shadow 0.18s, transform 0.12s;
+}
+
+.conditionCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(37, 99, 235, 0.06);
+}
+
+.conditionChecked {
+  background: #e8f1ff;
+  border: 2px solid #2563eb;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.conditionCheckbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #2563eb;
+  pointer-events: none;
+}
+
+/* Text inside condition card */
+.conditionText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.conditionTitle {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.conditionSub {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Make sure Done button in drawer uses existing modalContinueBtn1 */
+.modalContinueBtn1 {
+  background: #ff3b00;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  transition: background 0.2s;
+}
+
+.modalContinueBtn1:hover {
+  background: #e63600;
+}
+
+/* Small responsive tweaks for the new grids */
+@media (max-width: 768px) {
+  .multipleAgeGrid {
+    flex-direction: column;
+  }
+  .conditionGrid {
+    flex-direction: column;
+  }
+}
+.closeBtn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.closeBtn:hover {
+  color: #000;
+}
+/* =======================
+   Traveller Number Box (for +6 button logic)
+   ======================= */
+.customTravellerBox {
+  display: flex;
+  /* align-items: center; */
+  justify-content: right;
+  gap: 14px;
+  margin-top: 12px;
+  background: #f8f9fb;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 12px 16px;
+  transition: all 0.3s ease;
+}
+
+.customTravellerBox:hover {
+  background: #f1f4f9;
+  border-color: #c8d1e0;
+}
+
+/* + / - buttons */
+.iconBtn {
+  background: #fff;
+  color: #f1621a;
+  border: 1px solid orangered;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  font-size: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.iconBtn:hover {
+  background: orangered;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* Number display */
+.travellerNumber {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  min-width: 30px;
+  text-align: center;
+}
+
+
+
+.travellerInputBox {
+  background: #ffffff;
+  border: 1px solid #e5e7eb; /* light gray border */
+  border-radius: 12px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.travellerInputBox label {
+  font-size: 15px;
+  font-weight: 500;
+  color: #1e293b; /* slate-800 */
+}
+
+.travellerCounter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.counterBtn {
+  background-color: #eaf2ff;
+  color: #2563eb; /* blue-600 */
+  border: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.counterBtn:hover {
+  background-color: #dbeafe;
+  transform: scale(1.05);
+}
+
+.travellerCountDisplay {
+  width: 40px;
+  height: 34px;
+  border: 1px solid #d1d5db; /* gray-300 */
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  color: #1e293b;
+  background-color: #fff;
+}
+
