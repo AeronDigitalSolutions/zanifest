@@ -1,97 +1,55 @@
-// pages/api/p.ts
 import type { NextApiRequest, NextApiResponse } from "next";
-import connectDB from "@/lib/dbConnect";
-import PlanRequest from "@/models/Marinemodule";
+import mongoose from "mongoose";
+import Marine from "@/models/Marinemodule";
+import User from "@/models/User";
+import { verifyToken } from "@/utils/verifyToken";
+
+const MONGODB_URI = process.env.MONGODB_URI || "";
+
+async function connectDB() {
+  if (mongoose.connection.readyState >= 1) return;
+  await mongoose.connect(MONGODB_URI);
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await connectDB();
 
-  console.log("📩 Incoming request:", req.method, req.body);
+  let email: string | null = null;
+
+  // ⭐ SAME AS TRAVEL
+  const token = req.cookies?.userToken;
+  if (token) {
+    try {
+      const decoded: any = await verifyToken(token);
+      if (decoded?.id) {
+        const user = await User.findById(decoded.id).select("email");
+        if (user) email = user.email;
+      }
+    } catch (err) {
+      console.log("Token verification failed");
+    }
+  }
 
   try {
-    //CREATE (POST)
-    if (req.method === "POST") {
-      let {
-        phoneNumber,
-        commodity,
-        coverType,
-        shipmentType,
-        companyName,
-        transportMode,
-        coverAmount,
-      } = req.body;
+    switch (req.method) {
+      case "POST": {
+        const record = await Marine.create({
+          ...req.body,
+          email, // ⭐ TRAVEL LOGIC
+        });
 
-      if (!phoneNumber) {
-        return res.status(400).json({ success: false, message: "Phone number is required" });
+        return res.status(201).json({ success: true, data: record });
       }
 
-      // Normalize phone - remove spaces
-      phoneNumber = String(phoneNumber).replace(/\s+/g, "");
-
-      // If it's 10 digits without +91, prefix +91 for consistency
-      if (/^\d{10}$/.test(phoneNumber)) {
-        phoneNumber = "+91" + phoneNumber;
+      case "GET": {
+        const all = await Marine.find().sort({ createdAt: -1 });
+        return res.status(200).json({ success: true, data: all });
       }
 
-      // Validate Indian phone number format
-      if (!/^(\+91)?[6-9]\d{9}$/.test(phoneNumber)) {
-        return res.status(400).json({ success: false, message: "Invalid phone number format" });
-      }
-
-      // Optionally normalize coverAmount to string (remove commas) if provided
-      if (coverAmount && typeof coverAmount === "string") {
-        coverAmount = coverAmount.replace(/,/g, "");
-      }
-
-      const record = await PlanRequest.findOneAndUpdate(
-        { phoneNumber },
-        {
-          $set: {
-            ...(commodity && { commodity }),
-            ...(coverType && { coverType }),
-            ...(shipmentType && { shipmentType }),
-            ...(companyName && { companyName }),
-            ...(transportMode && { transportMode }),
-            ...(coverAmount && { coverAmount }),
-          },
-        },
-        { new: true, upsert: true }
-      );
-
-      console.log("Saved record:", record);
-      return res.status(200).json({ success: true, data: record });
+      default:
+        return res.status(405).json({ success: false, message: "Method not allowed" });
     }
-
-    // READ ALL
-    if (req.method === "GET") {
-      const allData = await PlanRequest.find().sort({ createdAt: -1 });
-      console.log("Fetched records:", allData);
-      return res.status(200).json(allData);
-    }
-
-    // UPDATE (PUT)
-    if (req.method === "PUT") {
-      const { id, ...updates } = req.body;
-      if (!id) return res.status(400).json({ message: "ID is required for update" });
-
-      const updated = await PlanRequest.findByIdAndUpdate(id, updates, { new: true });
-      console.log("Updated record:", updated);
-      return res.status(200).json(updated);
-    }
-
-    // DELETE BY ID
-    if (req.method === "DELETE") {
-      const { id } = req.query;
-      if (!id) return res.status(400).json({ message: "ID is required for delete" });
-
-      await PlanRequest.findByIdAndDelete(id);
-      return res.status(200).json({ success: true });
-    }
-
-    //Invalid Method
-    return res.status(405).json({ message: "Method not allowed" });
   } catch (err: any) {
-    console.error("API Error:", err);
-    return res.status(500).json({ success: false, message: err.message });
+    return res.status(500).json({ success: false, error: err.message });
   }
 }

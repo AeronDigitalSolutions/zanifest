@@ -16,6 +16,7 @@ export interface ITravelInsurance extends Document {
   travellers: number;
   travellersInfo: ITraveller[];
   medicalCondition: "Yes" | "No";
+  email: string | null;     
   createdAt: Date;
 }
 
@@ -38,46 +39,48 @@ const TravellerSchema = new Schema<ITraveller>(
       default: false,
     },
   },
-  { _id: false } 
+  { _id: false }
 );
 
 const TravelInsuranceSchema = new Schema<ITravelInsurance>(
   {
     countries: {
       type: [String],
-      required: [true, "Please select at least one country"],
-      validate: {
-        validator: (arr: string[]) => arr.length > 0,
-        message: "At least one country is required",
-      },
+      required: true,
     },
 
     startDate: {
       type: String,
-      required: [true, "Start date is required"],
+      required: true,
     },
 
     endDate: {
       type: String,
-      required: [true, "End date is required"],
+      required: true,
     },
 
     travellers: {
       type: Number,
-      required: [true, "Total number of travellers is required"],
-      min: [1, "At least 1 traveller required"],
-      max: [10, "Maximum 10 travellers allowed"],
+      required: true,
+      min: 1,
+      max: 10,
     },
 
     travellersInfo: {
       type: [TravellerSchema],
-      required: [true, "Please add traveller information"],
+      required: true,
     },
 
     medicalCondition: {
       type: String,
       enum: ["Yes", "No"],
       default: "No",
+    },
+
+    // ⭐ ADD EMAIL 
+    email: {
+      type: String,
+      default: null,
     },
 
     createdAt: {
@@ -90,7 +93,6 @@ const TravelInsuranceSchema = new Schema<ITravelInsurance>(
   }
 );
 
-delete mongoose.models.TravelInsurance;
 
 const TravelInsurance =
   models.TravelInsurance ||

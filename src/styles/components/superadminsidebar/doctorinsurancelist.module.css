@@ -2,7 +2,6 @@
 .wrapper {
   padding: 40px 20px;
   font-family: "Poppins", sans-serif;
-  min-height: 100vh;
 }
 
 .title {
@@ -12,10 +11,11 @@
   margin-bottom: 25px;
 }
 
-/* Loading / Error / No Data */
+/* Loading / Error / No data */
 .loading,
 .noData {
   text-align: center;
+  margin-top: 20px;
   font-size: 18px;
   color: #777;
 }
@@ -24,13 +24,13 @@
   text-align: center;
   color: red;
   font-size: 18px;
+  margin-top: 20px;
 }
 
 /* Table Wrapper */
 .tableWrapper {
   width: 100%;
   overflow-x: auto;
-  background: white;
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
@@ -54,7 +54,6 @@
   border-bottom: 1px solid #e6e6e6;
   white-space: nowrap;
   font-size: 13px;
-  text-align: left;
 }
 
 .table tbody tr:hover {
@@ -84,7 +83,7 @@
   background: #c4ccd6;
 }
 
-/* Mobile Responsive */
+/* Responsive */
 @media (max-width: 600px) {
   .wrapper {
     padding: 20px 10px;

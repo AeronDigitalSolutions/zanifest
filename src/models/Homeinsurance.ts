@@ -3,6 +3,7 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface IHomeInsurance extends Document {
   fullName: string;
   phoneNumber: string;
+  email: string | null; 
   coverOptions: {
     homeStructure: boolean;
     householdItems: boolean;
@@ -21,29 +22,32 @@ export interface IHomeInsurance extends Document {
 
 const HomeInsuranceSchema: Schema = new Schema(
   {
-    fullName: {
+    fullName: { type: String, required: true, trim: true },
+
+    phoneNumber: {
       type: String,
-      required: [true, "Full name is required"],
-      trim: true,
+      required: true,
+      match: [/^\+91\d{10}$/, "Invalid Indian mobile number format"],
+      set: (v: string) => v.replace(/\s+/g, ""),
     },
-   phoneNumber: {
-  type: String,
-  required: [true, "Phone number is required"],
-  match: [/^\+91\d{10}$/, "Invalid Indian mobile number format"],
-  set: (v: string) => v.replace(/\s+/g, ""), 
-},
+
+    email: {
+      type: String,
+      default: null, // ⭐ EXACT SAME AS TRAVEL
+    },
 
     coverOptions: {
-      homeStructure: { type: Boolean, default: false },
-      householdItems: { type: Boolean, default: false },
-      homeLoanProtection: { type: Boolean, default: false },
-      insuranceForLoan: { type: Boolean, default: false },
-      jewelleryAndValuables: { type: Boolean, default: false },
+      homeStructure: Boolean,
+      householdItems: Boolean,
+      homeLoanProtection: Boolean,
+      insuranceForLoan: Boolean,
+      jewelleryAndValuables: Boolean,
     },
+
     propertyDetails: {
-      houseValue: { type: String, trim: true },
-      householdItemsValue: { type: String, trim: true },
-      cityName: { type: String, trim: true },
+      houseValue: String,
+      householdItemsValue: String,
+      cityName: String,
     },
   },
   { timestamps: true }

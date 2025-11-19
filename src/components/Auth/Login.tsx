@@ -6,9 +6,6 @@ import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 
-
-
-
 export default function Login() {
   const [userName, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -93,9 +90,8 @@ export default function Login() {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-
            
- <div className={styles.formInput} style={{ position: "relative" }}>
+            <div className={styles.formInput} style={{ position: "relative" }}>
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
@@ -119,8 +115,8 @@ export default function Login() {
               </span>
             </div>
           
-
-            <button
+          
+              <button
               className={styles.loginButton}
               disabled={loading}
               type="submit"

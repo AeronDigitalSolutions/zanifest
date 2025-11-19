@@ -1,6 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-// --- Member Interface ---
 export interface IMember {
   name:
     | "Self"
@@ -18,7 +17,6 @@ export interface IMember {
   age: number;
 }
 
-// --- Main Interface ---
 export interface IHealthInsurance extends Document {
   gender: "male" | "female";
   members: IMember[];
@@ -26,10 +24,10 @@ export interface IHealthInsurance extends Document {
   fullName: string;
   mobile: string;
   medicalHistory: string[];
+  email: string | null;           // <-- ⭐ Added
   createdAt: Date;
 }
 
-// ---------------- Member Schema ----------------
 const MemberSchema = new Schema<IMember>({
   name: {
     type: String,
@@ -52,49 +50,31 @@ const MemberSchema = new Schema<IMember>({
   age: { type: Number, min: 0, max: 120, required: true },
 });
 
-// ---------------- Main Schema ----------------
-const HealthInsuranceSchema = new Schema<IHealthInsurance>({
-  gender: {
-    type: String,
-    enum: ["male", "female"],
-    required: true,
-  },
-  members: {
-    type: [MemberSchema],
-    required: true,
-    validate: {
-      validator: (members: IMember[]) => {
-        const totalChildren = members.filter(
-          (m) => m.name === "Son" || m.name === "Daughter"
-        ).length;
-        return totalChildren <= 4;
+const HealthInsuranceSchema = new Schema<IHealthInsurance>(
+  {
+    gender: { type: String, enum: ["male", "female"], required: true },
+
+    members: {
+      type: [MemberSchema],
+      required: true,
+      validate: {
+        validator: (members: IMember[]) =>
+          members.filter((m) => m.name === "Son" || m.name === "Daughter").length <= 4,
+        message: "You can select up to 4 children.",
       },
-      message: "You can select up to 4 children (sons + daughters combined).",
     },
+
+    city: { type: String, required: true },
+    fullName: { type: String, required: true },
+    mobile: { type: String, required: true, match: /^[0-9]{10}$/ },
+    medicalHistory: { type: [String], default: [] },
+
+    email: { type: String, default: null },     // ⭐ Added (same as Travel)
+
+    createdAt: { type: Date, default: Date.now },
   },
-  city: { type: String, required: true, trim: true },
-  fullName: { type: String, required: true, trim: true, minlength: 2 },
-  mobile: {
-    type: String,
-    required: true,
-    match: /^[0-9]{10}$/,
-  },
-  medicalHistory: {
-    type: [String],
-    enum: [
-      "Diabetes",
-      "Blood Pressure",
-      "Heart disease",
-      "Any Surgery",
-      "Thyroid",
-      "Asthma",
-      "Other disease",
-      "None of these",
-    ],
-    default: [],
-  },
-  createdAt: { type: Date, default: Date.now },
-});
+  { timestamps: true }
+);
 
 export default mongoose.models.HealthInsurance ||
   mongoose.model<IHealthInsurance>("HealthInsurance", HealthInsuranceSchema);

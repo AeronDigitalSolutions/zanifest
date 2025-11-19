@@ -1,82 +1,186 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { LuUser } from "react-icons/lu";
 import { RiBarChartBoxLine } from "react-icons/ri";
 import { FiInfo } from "react-icons/fi";
 import styles from "@/styles/components/dashboard/DashboardKyc.module.css";
 import { useAuth } from "@/context/AuthContext";
 
-interface OtpResponse {
-  client_id?: string;
+interface OtpStartResponse {
+  status?: string;
+  message?: string;
+  ref_id?: string;
+  [key: string]: any;
+}
+
+interface OtpVerifyResponse {
+  status?: string;
+  message?: string;
+  name?: string;
+  dob?: string;
+  [key: string]: any;
+}
+
+interface PanResponse {
+  pan?: string;
+  name?: string;
   status?: string;
   message?: string;
   [key: string]: any;
 }
 
 const DashboardKyc: React.FC = () => {
-  const [aadhar, setAadhar] = useState<string>("");
-  const [otp, setOtp] = useState<string>("");
-  const [clientId, setClientId] = useState<string | null>(null);
-  const [showModal, setShowModal] = useState<boolean>(false);
+  /** ------------------ Aadhaar States -------------------- **/
+  const [aadhaar, setAadhaar] = useState("");
+  const [otp, setOtp] = useState("");
+  const [refId, setRefId] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [aadhaarLoading, setAadhaarLoading] = useState(false);
+  const [resendIn, setResendIn] = useState(0);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  /** ------------------ PAN States -------------------- **/
+  const [pan, setPan] = useState("");
+  const [panResult, setPanResult] = useState<PanResponse | null>(null);
+  const [panLoading, setPanLoading] = useState(false);
+
   const { user } = useAuth();
 
-  const handleAadharChange = (value: string) => {
+  /** ✅ Aadhaar Input Format 1234 5678 9101 */
+  const handleAadhaarChange = (value: string) => {
     const raw = value.replace(/\D/g, "").slice(0, 12);
     const formatted = raw.replace(/(.{4})/g, "$1 ").trim();
-    setAadhar(formatted);
+    setAadhaar(formatted);
   };
 
+  /** ✅ Aadhaar OTP Countdown */
+  useEffect(() => {
+    if (resendIn <= 0) return;
+    timerRef.current = setInterval(() => {
+      setResendIn((s) => (s > 0 ? s - 1 : 0));
+    }, 1000);
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [resendIn]);
+
+  /** ✅ SEND OTP */
   const handleProceed = async () => {
-    const cleanAadhaar = aadhar.replace(/\s/g, "");
+    const cleanAadhaar = aadhaar.replace(/\s/g, "");
+
     if (cleanAadhaar.length !== 12) {
-      alert("Please enter a valid 12-digit Aadhaar number.");
+      alert("❌ Please enter a valid 12-digit Aadhaar number.");
       return;
     }
 
+    setAadhaarLoading(true);
+
     try {
-      const res = await fetch("/api/sendAadhaarOtp", {
+      const res = await fetch("/api/aadhaar/otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ aadhaarNumber: cleanAadhaar }),
+        body: JSON.stringify({ aadhaar_number: cleanAadhaar }),
       });
 
-      const data: OtpResponse = await res.json();
-      console.log("OTP Sent Response:", data);
+      const data: OtpStartResponse = await res.json();
+      console.log("OTP Start Response:", data);
 
-      if (data?.client_id) {
-        setClientId(data.client_id);
+      if (data?.ref_id) {
+        setRefId(data.ref_id);
         setShowModal(true);
+        setResendIn(45);
       } else {
-        alert(data?.message || "Failed to send OTP. Try again.");
+        alert(data?.message || "Failed to send OTP.");
       }
-    } catch (err) {
-      console.error(err);
-      alert("Network error. Please try again.");
+    } catch {
+      alert("❌ Network error");
     }
+
+    setAadhaarLoading(false);
   };
 
+  /** ✅ VERIFY OTP */
   const handleOtpVerify = async () => {
+    if (!refId) return alert("Session expired. Try again.");
+
+    setAadhaarLoading(true);
+
     try {
-      const res = await fetch("/api/verifyAadhaarOtp", {
+      const res = await fetch("/api/aadhaar/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ client_id: clientId, otp }),
+        body: JSON.stringify({ ref_id: refId, otp }),
       });
 
-      const data: OtpResponse = await res.json();
+      const data: OtpVerifyResponse = await res.json();
       console.log("OTP Verify Response:", data);
 
-      if (data.status === "success" || data.status === "VALID") {
-        alert("Aadhaar verified successfully!");
+      if (data?.status === "VALID") {
+        alert("✅ Aadhaar verified!");
         setShowModal(false);
+
+        /** ✅ STORE AADHAAR IN BACKEND */
+        const saveRes = await fetch("/api/kyc/aadhaar-save", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",   // ✅ IMPORTANT – sends httpOnly cookie
+          body: JSON.stringify({
+            aadhaar_number: aadhaar.replace(/\s/g, ""),
+            name: data.name,
+            dob: data.dob,
+          }),
+        });
+
+        const saveData = await saveRes.json();
+        console.log("SAVE RES:", saveData);
+
+        if (!saveRes.ok) {
+          alert(saveData?.message || "❌ Failed to save Aadhaar");
+        } else {
+          alert("✅ Aadhaar saved to your account!");
+        }
       } else {
-        alert(data?.message || "Invalid OTP. Please try again.");
+        alert(data?.message || "❌ Invalid OTP");
       }
     } catch (err) {
       console.error(err);
-      alert("Network error. Please try again.");
+      alert("❌ Network error");
     }
+
+    setAadhaarLoading(false);
+  };
+
+  const handleResendOtp = () => handleProceed();
+
+  /** ✅ PAN Verification */
+  const handleVerifyPan = async () => {
+    if (!/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(pan)) {
+      return alert("❌ Enter valid PAN. Eg: ABCDE1234F");
+    }
+
+    setPanLoading(true);
+    setPanResult(null);
+
+    try {
+      const res = await fetch("/api/pan/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pan }),
+      });
+
+      const data: PanResponse = await res.json();
+      console.log("PAN Verify Response:", data);
+
+      setPanResult(data);
+    } catch {
+      alert("❌ Network error");
+    }
+
+    setPanLoading(false);
   };
 
   return (
@@ -85,63 +189,142 @@ const DashboardKyc: React.FC = () => {
         Hi, {user?.name || "User"} <LuUser />
       </div>
 
+      {/* ✅ Aadhaar Verification */}
       <div className={styles.inner}>
         <div>
           <div className={styles.head1}>
             <RiBarChartBoxLine /> Aadhaar Verification
           </div>
-          <h2 style={{ fontSize: "32px" }}>Enter Aadhaar Number</h2>
-          <p>
-            Please enter your 12-digit Aadhaar number to begin the verification process.
-          </p>
+          <h2 style={{ fontSize: 32 }}>Enter Aadhaar Number</h2>
+          <p>Enter your 12-digit Aadhaar to verify.</p>
         </div>
 
         <div className={styles.middle}>
           <input
             type="text"
-            placeholder="Aadhaar Number"
-            value={aadhar}
-            onChange={(e) => handleAadharChange(e.target.value)}
+            placeholder="XXXX XXXX XXXX"
+            value={aadhaar}
+            onChange={(e) => handleAadhaarChange(e.target.value)}
             className={styles.input}
             maxLength={14}
           />
+
           <div className={styles.info}>
             <FiInfo />
-            Your Aadhaar data is securely encrypted and protected
+            Your Aadhaar data is securely encrypted
           </div>
         </div>
 
         <div className={styles.bottom}>
-          <button className={styles.button} onClick={handleProceed}>
-            Proceed To Verification
+          <button
+            className={styles.button}
+            onClick={handleProceed}
+            disabled={aadhaarLoading}
+          >
+            {aadhaarLoading ? "Sending…" : "Proceed To Verification"}
           </button>
-          <p>By continuing, you agree to our Terms of Service and Privacy Policy.</p>
         </div>
       </div>
 
-      {/* OTP Modal */}
+      {/* ✅ OTP Modal */}
       {showModal && (
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
             <h3>Enter OTP</h3>
+
             <input
               type="text"
               value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              placeholder="Enter the OTP sent to your registered mobile"
+              onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+              maxLength={6}
+              placeholder="Enter OTP"
               className={styles.input}
             />
-            <div className={styles.modalButtons}>
-              <button onClick={handleOtpVerify} className={styles.button}>
-                Verify OTP
+
+            <p>
+              {resendIn > 0
+                ? `Resend in ${resendIn}s`
+                : "Didn't receive OTP?"}
+            </p>
+
+            {resendIn === 0 && (
+              <button onClick={handleResendOtp} className={styles.button}>
+                Resend OTP
               </button>
-              <button onClick={() => setShowModal(false)} className={styles.cancelBtn}>
+            )}
+
+            <div className={styles.modalButtons}>
+              <button
+                onClick={handleOtpVerify}
+                className={styles.button}
+                disabled={aadhaarLoading}
+              >
+                {aadhaarLoading ? "Verifying…" : "Verify OTP"}
+              </button>
+
+              <button
+                onClick={() => setShowModal(false)}
+                className={styles.cancelBtn}
+              >
                 Cancel
               </button>
             </div>
           </div>
         </div>
       )}
+
+      {/* ✅ PAN CARD VERIFICATION */}
+      <div className={styles.inner} style={{ marginTop: 40 }}>
+        <div>
+          <div className={styles.head1}>
+            <RiBarChartBoxLine /> PAN Card Verification
+          </div>
+          <h2 style={{ fontSize: 32 }}>Enter PAN Number</h2>
+          <p>Verify your PAN instantly.</p>
+        </div>
+
+        <div className={styles.middle}>
+          <input
+            type="text"
+            placeholder="ABCDE1234F"
+            className={styles.input}
+            value={pan.toUpperCase()}
+            onChange={(e) => setPan(e.target.value.toUpperCase())}
+            maxLength={10}
+          />
+
+          <div className={styles.info}>
+            <FiInfo /> Your PAN details are only used for validation
+          </div>
+        </div>
+
+        <div className={styles.bottom}>
+          <button
+            className={styles.button}
+            onClick={handleVerifyPan}
+            disabled={panLoading}
+          >
+            {panLoading ? "Verifying..." : "Verify PAN"}
+          </button>
+        </div>
+
+        {panResult && (
+          <div style={{ marginTop: 20 }}>
+            <h3>Verification Result</h3>
+            <pre style={{ background: "#eee", padding: 10 }}>
+              {JSON.stringify(panResult, null, 2)}
+            </pre>
+
+            {panResult.status === "VALID" ? (
+              <p style={{ color: "green" }}>
+                ✅ PAN Verified — Name: {panResult.name}
+              </p>
+            ) : (
+              <p style={{ color: "red" }}>❌ PAN Invalid</p>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

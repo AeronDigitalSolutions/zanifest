@@ -1,43 +1,110 @@
+/* Main Wrapper */
 .wrapper {
-  background: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  margin: 20px;
+  padding: 40px 20px;
+  font-family: "Poppins", sans-serif;
 }
 
+/* Title */
 .title {
-  font-size: 1.6rem;
-  margin-bottom: 15px;
-  color: #1f2937;
   text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 25px;
 }
 
-.loading,
-.noData {
-  text-align: center;
-  color: #666;
-  font-size: 1rem;
-  padding: 20px;
+/* Table wrapper for responsive scroll */
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
+/* Table */
 .table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 900px; /* ensures mobile scroll */
 }
 
-.table th {
-  background: orangered;
-  color: white;
-  padding: 10px;
-  text-align: left;
+.table thead tr {
+  background: #f5f7fa;
+  color: #333;
+  font-weight: 600;
 }
 
+.table th,
 .table td {
-  padding: 8px 10px;
-  border-bottom: 1px solid #ddd;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e6e6e6;
+  font-size: 13px;
+  white-space: nowrap;
 }
 
-.table tr:hover {
-  background-color: #f9fafb;
+.table tbody tr:hover {
+  background: #f8fbff;
+}
+
+/* No Data Text */
+.noData {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 16px;
+  color: #777;
+}
+
+.loading {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 25px;
+}
+
+.pageBtn {
+  padding: 10px 20px;
+  background: #d3dce6;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.pageBtn:hover {
+  background: #c4ccd6;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .title {
+    font-size: 22px;
+  }
+  .table th,
+  .table td {
+    padding: 12px 15px;
+  }
+}
+
+@media (max-width: 600px) {
+  .wrapper {
+    padding: 20px 10px;
+  }
+  .title {
+    font-size: 20px;
+  }
+  .pagination {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .pageBtn {
+    width: 120px;
+  }
 }

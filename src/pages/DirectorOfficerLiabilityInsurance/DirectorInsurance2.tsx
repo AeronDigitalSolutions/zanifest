@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image, { StaticImageData } from "next/image";
-import styles from "@/styles/pages/Director&OfficerLiabilityInsurance/DirectorInsurance2.module.css";
+import styles from "@/styles/pages/DirectorOfficerLiabilityInsurance/DirectorInsurance2.module.css";
 
 import tata from "@/assets/TATAAIGlogo.png";
 import orientalinsurance from "@/assets/OrintalInsurance.png";

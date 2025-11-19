@@ -8,9 +8,13 @@ import { FaCheckCircle, FaWhatsapp } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { useAuth } from "@/context/AuthContext";   // <-- Add this import
+
 
 
 const Homeinsurance: React.FC = () => {
+    const { user } = useAuth();           // <-- FIXED (Correct place)
+
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [whatsappUpdates, setWhatsappUpdates] = useState(false);
   const [fullName, setFullName] = useState("");
@@ -31,7 +35,11 @@ const handleSubmit = (e: React.FormEvent) => {
 
   const step1Data = {
     fullName,
-  phoneNumber: mobile.replace(/\s+/g, ""),
+    phoneNumber: mobile.replace(/\s+/g, ""),
+
+    // ⭐ SAME AS TRAVEL MODULE
+    email: user?.email || null,
+
     coverOptions: {
       homeStructure: selectedOptions.includes("Home Structure"),
       householdItems: selectedOptions.includes("Household Items"),
@@ -122,7 +130,7 @@ const handleSubmit = (e: React.FormEvent) => {
               className={styles.input}
               value={mobile}
               onChange={handleMobileChange}
-              maxLength={14} // +91 + 10 digits = 14 chars
+              maxLength={14} 
             />{" "}
             <FiPhone className={styles.inputIcon} />
             <span className={styles.noSpam}>We don’t spam</span>

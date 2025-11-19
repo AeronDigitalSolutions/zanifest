@@ -45,48 +45,42 @@ const Shop2 = () => {
   const handleSubmit = async () => {
     try {
       setLoading(true);
-      const step1Data = localStorage.getItem("shopDataStep1");
-      if (!step1Data) {
-        alert("Please fill step 1 details first.");
-        router.push("Shop1");
+
+      const step1 = localStorage.getItem("shopDataStep1");
+
+      if (!step1) {
+        alert("Please complete Step 1 first.");
+        router.push("/Shop1");
         return;
       }
 
-      const { shopType, pincode, phone } = JSON.parse(step1Data);
+      const step1Data = JSON.parse(step1);
 
-      // Match schema field names
-      const shopData = {
-        shopType,
-        pincode,
-        phone,
-        businessCategory: selectedBusiness
-          .toLowerCase()
-          .replace(/ /g, "_")
-          .replace(/\(.*?\)/g, ""), // matches schema keys
+      const finalData = {
+        ...step1Data,
+        businessCategory: selectedBusiness.toLowerCase().replace(/ /g, "_"),
         businessType: isOtherSelected ? customBusiness : undefined,
         ownership: ownerType.toLowerCase(),
       };
 
-      const response = await fetch("/api/shopinsurance", {
+      const res = await fetch("/api/shopinsurance", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(shopData),
+        body: JSON.stringify(finalData),
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Failed to save shop data");
+      const data = await res.json();
+
+      if (!data.success) {
+        alert("Save failed!");
+        return;
       }
 
-      const result = await response.json();
-      console.log("✅ Saved Shop:", result);
+      localStorage.removeItem("shopDataStep1");
 
-      localStorage.removeItem("shopDataStep1"); // clear storage
-      alert("Shop data saved successfully!");
-      router.push("Shop3");
-    } catch (error: any) {
-      console.error("❌ Error saving shop:", error);
-      alert("Error saving shop: " + error.message);
+      alert("Data Saved ✔");
+
+      router.push("/shop3");
     } finally {
       setLoading(false);
     }

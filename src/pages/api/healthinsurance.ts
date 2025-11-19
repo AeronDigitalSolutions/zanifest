@@ -1,67 +1,54 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import mongoose from "mongoose";
 import HealthInsurance from "@/models/HealthInsurance";
+import User from "@/models/User";
+import { verifyToken } from "@/utils/verifyToken";
 
 const MONGODB_URI = process.env.MONGODB_URI || "";
 
-// ✅ MongoDB connection helper
 async function connectDB() {
   if (mongoose.connection.readyState >= 1) return;
   await mongoose.connect(MONGODB_URI);
-  console.log("🟢 Connected to MongoDB");
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await connectDB();
 
-  const { method } = req;
+  let email = null;
 
   try {
-    switch (method) {
-      // --- CREATE ---
-      case "POST": {
-        const data = req.body;
-        if (!data) return res.status(400).json({ success: false, message: "Missing request body" });
+    const token = req.cookies?.userToken || null;
 
-        const record = await HealthInsurance.create(data);
-        return res.status(201).json({ success: true, data: record });
+    if (token) {
+      const decoded: any = await verifyToken(token);
+      if (decoded?.id) {
+        const user = await User.findById(decoded.id).select("email");
+        if (user) email = user.email;
       }
-
-      // --- READ (All records) ---
-      case "GET": {
-        const records = await HealthInsurance.find().sort({ createdAt: -1 });
-        return res.status(200).json({ success: true, data: records });
-      }
-
-      // --- UPDATE ---
-      case "PUT": {
-        const { id, ...updateData } = req.body;
-        if (!id) return res.status(400).json({ success: false, message: "ID is required for update" });
-
-        const updated = await HealthInsurance.findByIdAndUpdate(id, updateData, { new: true });
-        if (!updated) return res.status(404).json({ success: false, message: "Record not found" });
-
-        return res.status(200).json({ success: true, data: updated });
-      }
-
-      // --- DELETE ---
-      case "DELETE": {
-        const id = Array.isArray(req.query.id) ? req.query.id[0] : (req.query.id as string);
-        if (!id) return res.status(400).json({ success: false, message: "ID required for delete" });
-
-        const deleted = await HealthInsurance.findByIdAndDelete(id);
-        if (!deleted) return res.status(404).json({ success: false, message: "Record not found" });
-
-        return res.status(200).json({ success: true, message: "Record deleted successfully" });
-      }
-
-      // --- INVALID METHOD ---
-      default:
-        res.setHeader("Allow", ["GET", "POST", "PUT", "DELETE"]);
-        return res.status(405).json({ success: false, message: `Method ${method} not allowed` });
     }
-  } catch (err: any) {
-    console.error("❌ API Error:", err);
-    return res.status(500).json({ success: false, message: err.message || "Server error" });
+  } catch (err) {
+    console.log("Email fetch failed:", err);
   }
+
+  // ⭐ POST
+  if (req.method === "POST") {
+    try {
+      const record = await HealthInsurance.create({
+        ...req.body,
+        email, // logged-in email OR null
+      });
+
+      return res.status(201).json({ success: true, data: record });
+    } catch (error: any) {
+      return res.status(400).json({ success: false, message: error.message });
+    }
+  }
+
+  // ⭐ GET
+  if (req.method === "GET") {
+    const records = await HealthInsurance.find().sort({ createdAt: -1 });
+    return res.status(200).json({ success: true, data: records });
+  }
+
+  return res.status(405).json({ success: false, message: "Method Not Allowed" });
 }

@@ -85,47 +85,49 @@ const Homeinsurance2: React.FC = () => {
   };
 
   // Function to handle final submission
-  const handleSubmitData = async () => {
-    const step1Data = localStorage.getItem("homeInsuranceStep1");
+ const handleSubmitData = async () => {
+  const step1Data = localStorage.getItem("homeInsuranceStep1");
 
-    if (!step1Data) {
-      alert("Please fill the first step first!");
-      router.push("Homeinsurance");
-      return;
-    }
+  if (!step1Data) {
+    alert("Please fill the first step first!");
+    router.push("Homeinsurance");
+    return;
+  }
 
-    const step1Parsed = JSON.parse(step1Data);
+  const step1Parsed = JSON.parse(step1Data);
 
-    const payload = {
-      ...step1Parsed,
-      propertyDetails: {
-        houseValue,
-        householdItemsValue: householdValue,
-        cityName: city,
-      },
-    };
-
-    try {
-      const response = await fetch("/api/homeinsurance", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        alert(" Data saved successfully!");
-        localStorage.removeItem("homeInsuranceStep1");
-        router.push("Homeinsurance3");
-      } else {
-        alert(" Failed to save data: " + result.message);
-      }
-    } catch (err) {
-      console.error("Error:", err);
-      alert("Something went wrong");
-    }
+  const payload = {
+    ...step1Parsed,
+    propertyDetails: {
+      houseValue,
+      householdItemsValue: householdValue,
+      cityName: city,
+    },
   };
+
+  try {
+    const res = await fetch("/api/homeinsurance", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include", // ⭐ SAME AS TRAVEL
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("✅ Data saved successfully!");
+      localStorage.removeItem("homeInsuranceStep1");
+      router.push("Homeinsurance3");
+    } else {
+      alert("❌ Failed: " + (data.error || "Unknown error"));
+    }
+  } catch (err) {
+    console.error("ERROR:", err);
+    alert("Network error");
+  }
+};
+
 
   return (
     <div>

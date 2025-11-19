@@ -298,6 +298,8 @@ const handleSubmit = async (): Promise<boolean> => {
     const res = await fetch("/api/travelinsurance", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+        credentials: "include",  
+
       body: JSON.stringify(payload),
     });
 

@@ -24,7 +24,7 @@ const INSURANCELIST: Item[] = [
   { name: "Home Insurance", image: require("@/assets/home/car/9.png"), link: "./Home/Homeinsurance" },
   { name: "Office Package Policy", image: require("@/assets/office-building.png"), link: "./officepackagepolicy/officepackagepolicy" },
   { name: "Doctor Indemnity Insurance", image: require("@/assets/medical-team.png"), link: "./DoctorInd/DoctorInsurance" },
-  { name: "Director & Officer Liability Insurance", image: require("@/assets/workspace.png"), link: "Director&OfficerLiabilityInsurance/DirectorInsurance1" },
+  { name: "Director & Officer Liability Insurance", image: require("@/assets/workspace.png"), link: "DirectorOfficerLiabilityInsurance/DirectorInsurance1" },
 ];
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());

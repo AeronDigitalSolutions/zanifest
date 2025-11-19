@@ -107,25 +107,19 @@ const Health = () => {
   );
 
   // 🧠 Submit data to backend (robust)
-  const handleSubmit = async () => {
+ const handleSubmit = async () => {
     try {
-      // validation: ages for all members
+      // VALIDATIONS
       if (!members || members.length === 0) {
-        alert("No members selected. Please go back and select members.");
+        alert("No members selected. Please select members first.");
         router.push("/healthinsurance");
         return;
       }
 
+      // validate ages
       for (let i = 0; i < members.length; i++) {
-        const ageStr = ages[i];
-        if (!ageStr) {
-          alert(`Please select age for all members. Missing age for ${members[i].name}`);
-          setStep(1);
-          return;
-        }
-        const ageNum = Number(ageStr);
-        if (isNaN(ageNum)) {
-          alert(`Invalid age selected for ${members[i].name}`);
+        if (!ages[i]) {
+          alert(`Please select age for ${members[i].name}`);
           setStep(1);
           return;
         }
@@ -137,14 +131,14 @@ const Health = () => {
         return;
       }
 
-      if (!fullName || fullName.trim().length < 2) {
-        alert("Please enter a valid full name.");
+      if (!fullName.trim() || fullName.trim().length < 2) {
+        alert("Enter a valid full name.");
         setStep(3);
         return;
       }
 
-      if (!/^[0-9]\d{10}$/.test(mobile)) {
-        alert("Please enter a valid 10-digit mobile number starting with 6-9.");
+      if (!/^[6-9]\d{9}$/.test(mobile)) {
+        alert("Enter a valid 10-digit Indian mobile number.");
         setStep(3);
         return;
       }
@@ -152,57 +146,51 @@ const Health = () => {
       const payload = {
         gender,
         members: members.map((m, i) => {
-          const img = typeof m.image === "string" ? m.image : (m.image as any)?.src || "";
           return {
             name: m.name,
-            image: img,
+            image: typeof m.image === "string" ? m.image : m.image.src || "",
             age: Number(ages[i]),
           };
         }),
-        city: selectedCity || "",
+        city: selectedCity,
         fullName,
         mobile,
         medicalHistory: selectedDiseases,
+        // ❗ DO NOT send email – backend will auto detect user email from cookie
       };
 
-      console.debug("Submitting payload:", payload);
+      console.log("Submitting health payload:", payload);
 
       const res = await fetch("/api/healthinsurance", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",   // ⭐ REQUIRED LOGGED IN EMAIL CAPTURE
         body: JSON.stringify(payload),
       });
 
-      // read raw text first (robust if server returns non-json)
-      const raw = await res.text();
+      const text = await res.text();
       let data: any = null;
+
       try {
-        data = raw ? JSON.parse(raw) : null;
+        data = JSON.parse(text);
       } catch (err) {
-        console.warn("Response not JSON:", raw);
+        console.warn("Non JSON response:", text);
       }
 
       if (!res.ok) {
-        // server returned non-2xx
-        console.error("API returned non-OK:", res.status, raw);
-        const message = data?.message || raw || res.statusText;
-        alert("❌ Failed to save data: " + message);
+        alert("❌ Failed: " + (data?.message || text));
         return;
       }
 
-      // if server returned 2xx
-      if (data && data.success) {
+      if (data?.success) {
         alert("Health insurance data saved successfully!");
         router.push("./health6");
       } else {
-        // if data is absent but res.ok, show raw
-        const message = data?.message || raw || "Unknown response from server";
-        console.error("Save response but success flag false:", data, raw);
-        alert("❌ Failed to save data: " + message);
+        alert("⚠️ Something went wrong: " + (data?.message || text));
       }
-    } catch (error: any) {
-      console.error("Submit error:", error);
-      alert("Something went wrong while saving data. " + (error?.message || ""));
+    } catch (err: any) {
+      console.error(err);
+      alert("Error submitting data: " + err.message);
     }
   };
 

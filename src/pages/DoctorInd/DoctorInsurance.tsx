@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -7,16 +8,17 @@ import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import UserDetails from "@/components/ui/UserDetails";
 import manager from "@/assets/doctor/stethoscope.png";
+import axios from "axios";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import axios from "axios";
 
 const DoctorInsurance: React.FC = () => {
   const [name, setName] = useState("");
-  const [mobile, setMobile] = useState("+91 "); 
+  const [mobile, setMobile] = useState("+91 ");
   const [whatsapp, setWhatsapp] = useState(true);
   const [loading, setLoading] = useState(false);
-  const router = useRouter(); 
+
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,12 +31,11 @@ const DoctorInsurance: React.FC = () => {
       });
 
       if (res.data.success) {
-        const doctorId = res.data.data._id;
-        localStorage.setItem("doctorId", doctorId);
-        alert("data saved successfully");
+        localStorage.setItem("doctorId", res.data.data._id);
+        alert("Data saved successfully");
         router.push("DoctorInsurance2");
       } else {
-        alert("Failed to save data");
+        alert("Failed to save");
       }
     } catch (err) {
       console.error(err);
@@ -43,37 +44,30 @@ const DoctorInsurance: React.FC = () => {
       setLoading(false);
     }
   };
-  
+
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
-    const capitalized = input
+    const formatted = input
       .split(" ")
-      .map((word) =>
-        word ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() : ""
-      )
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
       .join(" ");
-    setName(capitalized);
+    setName(formatted);
   };
 
-    // ✅ Mobile handler (always +91 prefix, only digits, max 10 numbers)
   const handleMobileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const prefix = "+91 ";
     let input = e.target.value;
 
-    if (!input.startsWith(prefix)) {
-      input = prefix;
-    }
+    if (!input.startsWith(prefix)) input = prefix;
 
-       const digitsOnly = input.substring(prefix.length).replace(/\D/g, "");
-    const limitedDigits = digitsOnly.slice(0, 10);
-
-    setMobile(prefix + limitedDigits);
+    const digits = input.substring(4).replace(/\D/g, "").slice(0, 10);
+    setMobile(prefix + digits);
   };
 
- // AOS animation
   useEffect(() => {
-    AOS.init({ duration: 1000, once: true });
+    AOS.init({ duration: 900, once: true });
   }, []);
+  
   return (
     <>
       <UserDetails />

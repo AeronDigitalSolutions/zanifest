@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import styles from "@/styles/pages/Director&OfficerLiabilityInsurance/DirectorInsurance1.module.css";
+import styles from "@/styles/pages/DirectorOfficerLiabilityInsurance/DirectorInsurance1.module.css";
 import {
   FaCheck,
   FaChevronLeft,
@@ -94,20 +94,23 @@ const DirectorInsurance1: React.FC = () => {
         whatsappOptIn: whatsapp,
       };
 
-      const res = await fetch("/api/directorins", {
+  const res = await fetch("/api/directorins", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include", // <-- important: sends cookie
         body: JSON.stringify(payload),
       });
 
-      const data = await res.json();
 
-      if (data.success) {
-        alert("✅ Data submitted successfully!");
-        // ✅ Correct route navigation (App Router friendly)
-        router.push("/Director&OfficerLiabilityInsurance/DirectorInsurance2");
+
+
+     const json = await res.json();
+      if (res.ok && json.success) {
+        alert("Data submitted successfully!");
+        router.push("/DirectorOfficerLiabilityInsurance/DirectorInsurance2");
       } else {
-        alert("❌ Something went wrong! Please try again.");
+        console.error("submit error:", json);
+        alert("Something went wrong: " + (json.message || JSON.stringify(json)));
       }
     } catch (err) {
       console.error("Error submitting form:", err);

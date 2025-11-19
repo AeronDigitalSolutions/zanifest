@@ -1,22 +1,13 @@
 import mongoose, { Schema, Document, models } from "mongoose";
 
 export interface IShop extends Document {
-  // Step 1
   shopType: "rented" | "owned";
   pincode: string;
   phone: string;
-
-  // Step 2
-  businessCategory:
-    | "offices"
-    | "shops"
-    | "hospitals_and_clinics"
-    | "restaurants"
-    | "godown_storage"
-    | "other";
-  businessType?: string; // only if "other" is selected
-
+  businessCategory: string;
+  businessType?: string;
   ownership: "owned" | "tenant";
+  email: string | null; // ⭐ EXACT SAME FIELD AS TRAVEL
   createdAt: Date;
 }
 
@@ -25,46 +16,38 @@ const ShopSchema = new Schema<IShop>(
     shopType: {
       type: String,
       enum: ["rented", "owned"],
-      required: [true, "Please select shop type"],
+      required: true,
     },
 
     pincode: {
       type: String,
-      required: [true, "Pincode is required"],
-      match: [/^\d{6}$/, "Please enter a valid 6-digit pincode"],
+      required: true,
     },
 
     phone: {
       type: String,
-      required: [true, "Phone number is required"],
-      match: [/^\d{10}$/, "Please enter a valid 10-digit phone number"],
+      required: true,
     },
 
     businessCategory: {
       type: String,
-      enum: [
-        "offices",
-        "shops",
-        "hospitals_and_clinics",
-        "restaurants",
-        "godown_storage",
-        "other",
-      ],
-      required: [true, "Please select your business category"],
+      required: true,
     },
 
     businessType: {
       type: String,
-      trim: true,
-      required: function (this: IShop) {
-        return this.businessCategory === "other";
-      },
+      default: null,
     },
 
     ownership: {
       type: String,
       enum: ["owned", "tenant"],
-      required: [true, "Please select ownership type"],
+      required: true,
+    },
+
+    email: {
+      type: String,
+      default: null,
     },
 
     createdAt: {
@@ -72,10 +55,9 @@ const ShopSchema = new Schema<IShop>(
       default: Date.now,
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
+
 
 // Prevent model overwrite during hot-reload (Next.js fix)
 delete mongoose.models.Shop;

@@ -1,3 +1,4 @@
+// models/Director.ts
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface IDirector extends Document {
@@ -10,6 +11,7 @@ export interface IDirector extends Document {
   companyTurnover: string;
   limitOfLiability: string;
   whatsappOptIn: boolean;
+  email?: string | null;
 }
 
 const DirectorSchema = new Schema<IDirector>(
@@ -23,9 +25,9 @@ const DirectorSchema = new Schema<IDirector>(
     companyTurnover: { type: String, required: true },
     limitOfLiability: { type: String, required: true },
     whatsappOptIn: { type: Boolean, default: true },
+    email: { type: String, default: null },
   },
   { timestamps: true }
 );
 
-export default mongoose.models.Director ||
-  mongoose.model<IDirector>("Director", DirectorSchema);
+export default mongoose.models.Director || mongoose.model<IDirector>("Director", DirectorSchema);

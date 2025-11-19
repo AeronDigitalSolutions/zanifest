@@ -26,7 +26,7 @@ const newUser = new User({
   email,
   password: null,
   resetPasswordToken: token,
-  resetPasswordExpires: Date.now() + 24 * 60 * 60 * 1000 // 24 hours
+  resetPasswordExpires: Date.now() + 24 * 60 * 60 * 1000 
 });
 
 

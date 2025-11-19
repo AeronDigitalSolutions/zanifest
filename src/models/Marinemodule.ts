@@ -1,5 +1,4 @@
 import mongoose, { Schema, Document } from "mongoose";
-
 export interface MarineModuleRequest extends Document {
   phoneNumber: string;
   commodity?: string;
@@ -8,26 +7,34 @@ export interface MarineModuleRequest extends Document {
   companyName?: string;
   transportMode?: string;
   coverAmount?: string;
+  email: string | null;
   createdAt: Date;
 }
 
 const MarineModuleSchema = new Schema<MarineModuleRequest>(
   {
-    phoneNumber: {
+    phoneNumber: { type: String, required: true },
+
+    commodity: String,
+    coverType: String,
+    shipmentType: String,
+    companyName: String,
+    transportMode: String,
+    coverAmount: String,
+
+    // ⭐ SAME AS TRAVEL
+    email: {
       type: String,
-      required: [true, "Phone number is required"],
-      match: [/^(\+91)?[6-9]\d{9}$/, "Invalid Indian phone number format"],
+      default: null,
     },
-    commodity: { type: String },
-    coverType: { type: String },
-    shipmentType: { type: String },
-    companyName: { type: String },
-    transportMode: { type: String },
-    coverAmount: { type: String },
+
     createdAt: { type: Date, default: Date.now },
   },
-  { collection: "MarineModuleRequests" }
+  { timestamps: true }
 );
 
 export default mongoose.models.MarineModuleRequest ||
-  mongoose.model<MarineModuleRequest>("MarineModuleRequest", MarineModuleSchema);
+  mongoose.model<MarineModuleRequest>(
+    "MarineModuleRequest",
+    MarineModuleSchema
+  );

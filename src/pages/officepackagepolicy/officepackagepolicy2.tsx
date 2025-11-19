@@ -258,11 +258,13 @@ const Officepackagepolicy2: React.FC = () => {
         lossHistory: transportMode === "Yes",
       };
 
-      const res = await fetch("/api/officepackagepolicyinsurance", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+ const res = await fetch("/api/officepackagepolicyinsurance", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  credentials: "include",   
+  body: JSON.stringify(payload),
+});
+
 
       if (!res.ok) {
         // Attempt to read error body if available
