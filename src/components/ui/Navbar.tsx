@@ -1,23 +1,27 @@
 import React, { useState } from "react";
-
 import { useAuth } from "@/context/AuthContext";
-
 import styles from "@/styles/components/ui/Navbar.module.css";
 import { useRouter } from "next/router";
 import { FaSignInAlt } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoMdMenu } from "react-icons/io";
-import { FaPaperPlane } from "react-icons/fa";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 
-
-
-const DROPDOWNLIST = [
-  "Family Floater Health Insurance",
-  "Critical Illness Cover",
-  "Personal Accident Policy",
+const INSURANCE_PRODUCT_LIST = [
+  { name: "Family Health Insurance", link: "./health/healthinsurance" },
+  { name: "Marine Insurance", link: "./Marine/Marine1" },
+  { name: "Travel Insurance", link: "./Travel/Travel1" },
+  { name: "Car Insurance", link: "./carinsurance/carinsurance" },
+  { name: "2 wheeler Insurance", link: "./TwoWheeler/bikeinsurance" },
+  { name: "Shop Insurance", link: "./Shop/Shop1" },
+  { name: "Third Party Insurance", link: "./ThirdParty/Thirdparty1" },
+  { name: "Commercial Vehicle", link: "./CommercialVehicle/CommercialVehicle1" },
+  { name: "Home Insurance", link: "./Home/Homeinsurance" },
+  { name: "Office Package Policy", link: "./officepackagepolicy/officepackagepolicy" },
+  { name: "Doctor Indemnity Insurance", link: "./DoctorInd/DoctorInsurance" },
+  { name: "Director & Officer Liability Insurance", link: "./Director&OfficerLiabilityInsurance/DirectorInsurance1" },
 ];
 
 function Navbar() {
@@ -28,12 +32,8 @@ function Navbar() {
 
   return (
     <div className={styles.cont}>
-      <div
-        className={styles.logoCont}
-        onClick={() => {
-          router.push("/");
-        }}
-      >
+      {/* Logo */}
+      <div className={styles.logoCont} onClick={() => router.push("/")}>
         <h3 className={styles.logo}>
           <Image
             src={require("@/assets/logo.png")}
@@ -41,85 +41,34 @@ function Navbar() {
             className={styles.logoImage}
           />
         </h3>
-         {/* Username Display (Top right corner) */}
-      {isLoggedIn && (
-        <div className={styles.userName}>
-          👋 Hello, <strong>{user?.name}</strong>
-        </div>
-      )}
       </div>
 
-      <div
-        className={styles.openMenu}
-        onClick={() => {
-          setShowMobileMenu((prev) => !prev);
-        }}
-      >
+      {/* Mobile Menu Icon */}
+      <div className={styles.openMenu} onClick={() => setShowMobileMenu((prev) => !prev)}>
         {!showMobileMenu && <IoMdMenu />}
         {showMobileMenu && <IoCloseSharp />}
       </div>
+
+      {/* MOBILE MENU */}
       {showMobileMenu && (
         <div className={`${styles.mobileMenuList} ${styles.hideMenu}`}>
-          <div
-            className={styles.menuItem}
-            onClick={() => {
-              if (listIndex == 1) {
-                setListIndex(0);
-              } else {
-                setListIndex(1);
-              }
-            }}
-          >
-            <div className={`${styles.heading} ${styles.activeMenu}`}>
-              Health
-              <div className={styles.mobilearrow}>
-                <IoIosArrowDown />
-              </div>
-            </div>
+          {/* HOME */}
+          <div className={styles.menuItem} onClick={() => router.push("/")}>
+            <div className={`${styles.heading} ${styles.headingBlue}`}>Home</div>
             <div className={styles.totalLine}></div>
-            <AnimatePresence initial={false}>
-              {listIndex == 1 ? (
-                <motion.div
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3, ease: "linear" }}
-                  className={styles.dropDownMobile}
-                >
-                  {DROPDOWNLIST.map((item, index) => {
-                    return (
-                      <>
-                        <div key={index} className={styles.dropItemMobile}>
-                          {item}
-                          <div className={styles.totalLine}></div>
-                        </div>
-                      </>
-                    );
-                  })}
-                </motion.div>
-              ) : null}
-            </AnimatePresence>
           </div>
-          <div
-            className={styles.menuItem}
-            onClick={() => {
-              if (listIndex == 2) {
-                setListIndex(0);
-              } else {
-                setListIndex(2);
-              }
-            }}
-          >
+
+          {/* INSURANCE PRODUCT DROPDOWN */}
+          <div className={styles.menuItem} onClick={() => setListIndex(listIndex === 2 ? 0 : 2)}>
             <div className={`${styles.heading} ${styles.activeMenu}`}>
-              Motor
-              <div className={styles.mobilearrow}>
-                <IoIosArrowDown />
-              </div>
+              Insurance Product
+              <div className={styles.mobilearrow}><IoIosArrowDown /></div>
             </div>
 
             <div className={styles.totalLine}></div>
+
             <AnimatePresence initial={false}>
-              {listIndex == 2 && (
+              {listIndex === 2 && (
                 <motion.div
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -127,142 +76,91 @@ function Navbar() {
                   transition={{ duration: 0.3, ease: "linear" }}
                   className={styles.dropDownMobile}
                 >
-                  {DROPDOWNLIST.map((item, index) => {
-                    return (
-                      <>
-                        <div key={index} className={styles.dropItemMobile}>
-                          {item}
-                          <div className={styles.totalLine}></div>
-                        </div>
-                      </>
-                    );
-                  })}
+                  {INSURANCE_PRODUCT_LIST.map((item, index) => (
+                    <div key={index} className={styles.dropItemMobile} onClick={() => router.push(item.link)}>
+                      {item.name}
+                      <div className={styles.totalLine}></div>
+                    </div>
+                  ))}
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
-          <div
-            className={styles.menuItem}
-            onClick={() => {
-              if (listIndex == 3) {
-                setListIndex(0);
-              } else {
-                setListIndex(3);
-              }
-            }}
-          >
-            <div className={`${styles.heading} ${styles.activeMenu}`}>
-              Other
-              <div className={styles.mobilearrow}>
-                <IoIosArrowDown />
-              </div>
-            </div>
 
+          {/* ABOUT US */}
+          <div className={styles.menuItem} onClick={() => router.push("/about")}>
+            <div className={`${styles.heading} ${styles.headingBlue}`}>About Us</div>
             <div className={styles.totalLine}></div>
-            <AnimatePresence initial={false}>
-              {listIndex == 3 && (
-                <motion.div
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3, ease: "linear" }}
-                  className={styles.dropDownMobile}
-                >
-                  {DROPDOWNLIST.map((item, index) => {
-                    return (
-                      <div key={index} className={styles.dropItemMobile}>
-                        {item}
-                        <div className={styles.totalLine}></div>
-                      </div>
-                    );
-                  })}
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
+
+          {/* CONTACT US */}
+          <div className={styles.menuItem} onClick={() => router.push("/contact")}>
+            <div className={`${styles.heading} ${styles.headingBlue}`}>Contact Us</div>
+            <div className={styles.totalLine}></div>
+          </div>
+
+          {/* RAISE A CLAIM */}
           <div className={styles.menuItem}>
-            <div className={`${styles.heading} `}>Raise a Claim</div>
+            <div className={styles.heading}>Raise a Claim</div>
           </div>
+
+          {/* LOGIN / LOGOUT */}
           {!isLoggedIn && (
-            <div
-              className={styles.loginButton}
-              onClick={() => {
-                router.push("/login");
-              }}
-            >
+            <div className={styles.loginButton} onClick={() => router.push("/login")}>
               <p className={styles.loginText}>
                 Login/Register <FaSignInAlt className={styles.loginLogo} />
               </p>
             </div>
           )}
           {isLoggedIn && (
-            <div
-              className={styles.loginButton}
-              onClick={logout}
-            >
+            <div className={styles.loginButton} onClick={logout}>
               <p className={styles.loginText}>Logout</p>
             </div>
           )}
         </div>
       )}
+
+      {/* DESKTOP MENU */}
       <div className={styles.menuCont}>
-        <div className={styles.menuItem}>
-          <div className={`${styles.heading} ${styles.activeMenu}`}>
-            Health
-            <div className={styles.arrow}>
-              <IoIosArrowDown />
-            </div>
-          </div>
-          <div className={styles.dropDown}>
-            {DROPDOWNLIST.map((item, index) => {
-              return (
-                <div key={index} className={styles.dropItem}>
-                  {item}
-                </div>
-              );
-            })}
-          </div>
+
+        {/* HOME */}
+        <div className={styles.menuItem} onClick={() => router.push("/")}>
+          <div className={`${styles.heading} ${styles.headingBlue}`}>Home</div>
         </div>
+
+        {/* INSURANCE PRODUCT DROPDOWN */}
         <div className={styles.menuItem}>
           <div className={`${styles.heading} ${styles.activeMenu}`}>
-            Motor
-            <div className={styles.arrow}>
-              <IoIosArrowDown />
-            </div>
+            Insurance Product
+            <div className={styles.arrow}><IoIosArrowDown /></div>
           </div>
 
           <div className={styles.dropDown}>
-            {DROPDOWNLIST.map((item, index) => {
-              return (
-                <div key={index} className={styles.dropItem}>
-                  {item}
-                </div>
-              );
-            })}
+            {INSURANCE_PRODUCT_LIST.map((item, index) => (
+              <div key={index} className={styles.dropItem} onClick={() => router.push(item.link)}>
+                {item.name}
+              </div>
+            ))}
           </div>
         </div>
-        <div className={styles.menuItem}>
-          <div className={`${styles.heading} ${styles.activeMenu}`}>
-            Other
-            <div className={styles.arrow}>
-              <IoIosArrowDown />
-            </div>
-          </div>
 
-          <div className={styles.dropDown}>
-            {DROPDOWNLIST.map((item, index) => {
-              return (
-                <div key={index} className={styles.dropItem}>
-                  {item}
-                </div>
-              );
-            })}
-          </div>
+        {/* ABOUT US */}
+        <div className={styles.menuItem} onClick={() => router.push("/about")}>
+          <div className={`${styles.heading} ${styles.headingBlue}`}>About Us</div>
         </div>
+
+        {/* CONTACT US */}
+        <div className={styles.menuItem} onClick={() => router.push("/contact")}>
+          <div className={`${styles.heading} ${styles.headingBlue}`}>Contact Us</div>
+        </div>
+
+        {/* RAISE A CLAIM */}
         <div className={styles.menuItem}>
-          <div className={`${styles.heading} `}>Raise a Claim</div>
+          {/* <div className={styles.heading}>Raise a Claim</div> */}
         </div>
       </div>
+
+      {/* LOGIN DESKTOP */}
       <div className={styles.loginCont}>
         {!isLoggedIn && (
           <div className={styles.loginButton} onClick={() => router.push("/login")}>
