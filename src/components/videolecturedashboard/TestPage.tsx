@@ -1,7 +1,7 @@
 // src/components/VideoLectureDashboard/TestPage.tsx
 "use client";
 import React, { useState } from "react";
-import styles from "@/styles/components/videolecturedashboard/TestPage.module.css";
+import styles from "@/styles/components/videolecturedashboard/Testpage.module.css";
 import { useRouter } from "next/navigation";
 
 const QUESTIONS = [
