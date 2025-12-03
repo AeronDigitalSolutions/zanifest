@@ -17,10 +17,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   await connectDB();
 
   const token = req.cookies.agentToken;
+
+  // 🔥 OPTION 1 — SAFE CHECK
+  if (!token) {
+    return res.status(401).json({ success: false, message: "No token provided" });
+  }
+
   let agentId = "";
 
   try {
-    const decoded: any = await verifyToken(token);
+    const decoded: any = await verifyToken(token); // token is now always string
     agentId = decoded.id;
   } catch (err) {
     return res.status(401).json({ success: false, message: "Unauthorized" });
@@ -49,32 +55,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       assignedAt: t.assignedAt,
     }));
 
-
-
+    // ------------------- SHOP LEADS -------------------
     const shopLeads = await Shop.find({ assignedAgent: agentId }).sort({ assignedAt: -1 });
 
-const mappedShop = shopLeads.map(s => ({
-  id: s._id,
-  email: s.email,
-  phone: s.phone,
-  module: "Shop Insurance",
-  assignedAt: s.assignedAt
-}));
+    const mappedShop = shopLeads.map(s => ({
+      id: s._id,
+      email: s.email,
+      phone: s.phone,
+      module: "Shop Insurance",
+      assignedAt: s.assignedAt
+    }));
 
-const home = await HomeInsurance.find({ assignedAgent: agentId }).sort({ assignedAt: -1 });
+    // ------------------- HOME INSURANCE -------------------
+    const home = await HomeInsurance.find({ assignedAgent: agentId }).sort({ assignedAt: -1 });
 
-const mappedHome = home.map(h => ({
-  id: h._id,
-  email: h.email,
-  phone: h.phoneNumber,
-  module: "Home Insurance",
-  assignedAt: h.assignedAt
-}));
-
-
+    const mappedHome = home.map(h => ({
+      id: h._id,
+      email: h.email,
+      phone: h.phoneNumber,
+      module: "Home Insurance",
+      assignedAt: h.assignedAt
+    }));
 
     // ------------------- MERGE ALL -------------------
-    const allLeads = [...mappedMarine, ...mappedTravel, ...mappedShop,...mappedHome].sort(
+    const allLeads = [...mappedMarine, ...mappedTravel, ...mappedShop, ...mappedHome].sort(
       (a, b) => new Date(b.assignedAt).getTime() - new Date(a.assignedAt).getTime()
     );
 
