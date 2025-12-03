@@ -1,8 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import mongoose from "mongoose";
 import Marine from "@/models/Marinemodule";
-import User from "@/models/User";
-import { verifyToken } from "@/utils/verifyToken";
 
 const MONGODB_URI = process.env.MONGODB_URI || "";
 
@@ -14,30 +12,10 @@ async function connectDB() {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await connectDB();
 
-  let email: string | null = null;
-
-  // ⭐ SAME AS TRAVEL
-  const token = req.cookies?.userToken;
-  if (token) {
-    try {
-      const decoded: any = await verifyToken(token);
-      if (decoded?.id) {
-        const user = await User.findById(decoded.id).select("email");
-        if (user) email = user.email;
-      }
-    } catch (err) {
-      console.log("Token verification failed");
-    }
-  }
-
   try {
     switch (req.method) {
       case "POST": {
-        const record = await Marine.create({
-          ...req.body,
-          email, // ⭐ TRAVEL LOGIC
-        });
-
+        const record = await Marine.create(req.body);
         return res.status(201).json({ success: true, data: record });
       }
 
@@ -46,8 +24,36 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(200).json({ success: true, data: all });
       }
 
+     case "PUT": {
+  const { marineId, agentId, agentName } = req.body;
+
+  if (!marineId || !agentId) {
+    return res.status(400).json({
+      success: false,
+      message: "Missing marineId or agentId",
+    });
+  }
+
+  const updated = await Marine.findByIdAndUpdate(
+    marineId,
+    {
+      assignedAgent: agentId,
+      assignedAgentName: agentName,
+      assignedAt: new Date()
+    },
+    { new: true }
+  );
+
+  return res.status(200).json({
+    success: true,
+    message: "Agent assigned successfully",
+    data: updated
+  });
+}
+
+
       default:
-        return res.status(405).json({ success: false, message: "Method not allowed" });
+        return res.status(405).json({ success: false, message: "Not allowed" });
     }
   } catch (err: any) {
     return res.status(500).json({ success: false, error: err.message });

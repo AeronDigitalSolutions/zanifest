@@ -1,6 +1,5 @@
 // models/OfficePackagePolicy.ts
-
-import mongoose, { Schema, Document, Model } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
 export interface IOption {
   name: "Building" | "Content" | "Stock";
@@ -11,7 +10,7 @@ export interface IOption {
 export interface IOfficePackagePolicy extends Document {
   companyName: string;
   mobile: string;
-  email?: string | null;   // ⭐ ADDED
+  email?: string | null;
   options: IOption[];
   firstTimeBuying?: "Yes" | "No" | null;
   lossHistory?: "Yes" | "No" | null;
@@ -33,7 +32,7 @@ const OfficePackagePolicySchema = new Schema(
   {
     companyName: String,
     mobile: String,
-    email: { type: String, default: null }, // ⭐ ADDED
+    email: { type: String, default: null },
     options: [OptionSchema],
     pincode: String,
     firstTimeBuying: { type: String, enum: ["Yes", "No", null], default: null },

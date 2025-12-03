@@ -88,9 +88,7 @@ export default function BestServicesSection({
 
   const sectionRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
-useEffect(() => {
-            AOS.init({ duration: 1000, once: true }); 
-   },[]);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -101,7 +99,6 @@ useEffect(() => {
           }
         });
       },
-      { threshold: 0.2 } // 20% visible
     );
 
     if (sectionRef.current) {
@@ -112,11 +109,16 @@ useEffect(() => {
       observer.disconnect();
     };
   }, []);
+  useEffect(() => {
+            AOS.init({ duration: 1000, once: true }); 
+   },[]);
 
   return (
     <div ref={sectionRef} className={styles.cont}>
       {/* Heading */}
-      <div className={`${styles.head} ${visible ? styles.animateOnce : ""}`}>
+      <div className={`${styles.head} ${visible ? styles.animateOnce : ""}`}  data-aos="fade-up"
+          data-aos-duration="1000"
+          data-aos-easing="ease-in">
         <h1 className={styles.heading1} data-aos="fade-up">
           {parseHeading(heading).map((part, idx) => (
             <span

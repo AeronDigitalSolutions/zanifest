@@ -8,6 +8,8 @@ import { FaArrowRight } from "react-icons/fa6";
 import { FaEllipsisH } from "react-icons/fa";
 import SingleHtmlCarousal from "../ui/SingleIHtmlCarousal";
 import styles from "@/styles/components/home/AllInsuranceSection.module.css";
+import "aos/dist/aos.css";
+import AOS from "aos";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -78,17 +80,14 @@ function AllInsuranceSection({ previewHeading, previewServices }: AllInsuranceSe
   const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setAnimate(true);
-            observer.disconnect(); // stop observing once triggered
-          }
-        });
-      },
-      { threshold: 0.3 } // triggers when 30% of the section is visible
-    );
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setAnimate(true);
+          observer.disconnect();
+        }
+      });
+    });
 
     if (headingRef.current) {
       observer.observe(headingRef.current);
@@ -97,9 +96,22 @@ function AllInsuranceSection({ previewHeading, previewServices }: AllInsuranceSe
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true });
+  }, []);
+
+  // Animation based on index
+const animationMap = ["fade-right", "fade-up", "fade-left"];
+
   return (
     <div className={styles.cont}>
-      <div className={styles.head}>
+      <div
+        className={styles.head}
+ data-aos="fade-up"
+     data-aos-anchor-placement="center-bottom"
+             data-aos-duration="1000"
+        data-aos-easing="ease-in"
+      >
         <div
           ref={headingRef}
           className={`${styles.heading} ${animate ? styles.animateText : ""}`}
@@ -116,14 +128,23 @@ function AllInsuranceSection({ previewHeading, previewServices }: AllInsuranceSe
             )}
           </span>
         </div>
+
         <div className={styles.mobileEllipsis}>
           <FaEllipsisH style={{ color: "#fa621a", fontSize: "25px" }} />
         </div>
       </div>
 
+      {/* Desktop View */}
       <div className={styles.bottom}>
         {services.map((item: any, index: number) => (
-          <div className={styles.serviceItem} key={index}>
+          <div
+            className={styles.serviceItem}
+            key={index}
+            data-aos={animationMap[index] || "fade-up"}
+  data-aos-duration={animationMap[index] === "fade-up" ? "3000" : undefined}
+  data-aos-anchor-placement={animationMap[index] === "fade-up" ? "center-bottom" : undefined}
+
+          >
             <Image
               src={item.image}
               alt={item.name}
@@ -140,10 +161,15 @@ function AllInsuranceSection({ previewHeading, previewServices }: AllInsuranceSe
         ))}
       </div>
 
+      {/* Carousal View */}
       <div className={styles.bottomCarousal}>
         <SingleHtmlCarousal
           items={services.map((item: any, index: number) => (
-            <div className={styles.serviceItem} key={index}>
+            <div
+              className={styles.serviceItem}
+              key={index}
+              data-aos={animationMap[index] || "fade-up"}
+            >
               <Image
                 src={item.image}
                 alt={item.name}
@@ -160,7 +186,7 @@ function AllInsuranceSection({ previewHeading, previewServices }: AllInsuranceSe
           ))}
         />
       </div>
-    </div>
+    </div>  
   );
 }
 

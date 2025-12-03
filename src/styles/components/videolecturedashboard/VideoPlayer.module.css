@@ -1,0 +1,16 @@
+.videoWrap {
+  width: 100%;
+  max-width: 900px;
+}
+
+.video {
+  width: 100%;
+  border-radius: 8px;
+  background: black;
+}
+
+.hint {
+  margin-top: 8px;
+  font-size: 13px;
+  opacity: 0.7;
+}

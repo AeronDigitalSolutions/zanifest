@@ -23,30 +23,48 @@ interface HealthInsuranceRecord {
 const Healthinsurancelist = () => {
   const [records, setRecords] = useState<HealthInsuranceRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchRecords = async (isRefresh = false) => {
+    try {
+      if (!isRefresh) setLoading(true);
+      else setRefreshing(true);
+
+      const res = await fetch("/api/healthinsurance", { cache: "no-store" });
+      const data = await res.json();
+      if (data.success) setRecords(data.data);
+    } catch (error) {
+      console.error("Error fetching records:", error);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchRecords = async () => {
-      try {
-        const res = await fetch("/api/healthinsurance", { cache: "no-store" });
-        const data = await res.json();
-        if (data.success) setRecords(data.data);
-      } catch (error) {
-        console.error("Error fetching records:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchRecords();
   }, []);
+
+  const handleRefresh = () => {
+    fetchRecords(true);
+  };
 
   if (loading) return <p className={styles.loading}>Loading...</p>;
 
   return (
     <div className={styles.wrapper}>
-      <h1 className={styles.title}>Health Insurance Records</h1>
+
+      {/* ------- Header + Refresh Button ------- */}
+      <div className={styles.header}>
+        <h1 className={styles.title}>Health Insurance Records</h1>
+
+        <button className={styles.refreshBtn} onClick={handleRefresh}>
+          {refreshing ? "Refreshing..." : "↻ Refresh"}
+        </button>
+      </div>
 
       {records.length === 0 ? (
-        <p>No records found.</p>
+        <p className={styles.noData}>No records found.</p>
       ) : (
         <table className={styles.table}>
           <thead>

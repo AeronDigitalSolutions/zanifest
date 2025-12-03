@@ -3,7 +3,8 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface IHomeInsurance extends Document {
   fullName: string;
   phoneNumber: string;
-  email: string | null; 
+  email: string | null;
+
   coverOptions: {
     homeStructure: boolean;
     householdItems: boolean;
@@ -11,11 +12,18 @@ export interface IHomeInsurance extends Document {
     insuranceForLoan: boolean;
     jewelleryAndValuables: boolean;
   };
+
   propertyDetails: {
     houseValue: string;
     householdItemsValue?: string;
     cityName?: string;
   };
+
+  // ⭐ NEW FIELDS
+  assignedAgent?: string | null;
+  assignedTo?: string | null;
+  assignedAt?: Date | null;
+
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -31,10 +39,7 @@ const HomeInsuranceSchema: Schema = new Schema(
       set: (v: string) => v.replace(/\s+/g, ""),
     },
 
-    email: {
-      type: String,
-      default: null, // ⭐ EXACT SAME AS TRAVEL
-    },
+    email: { type: String, default: null },
 
     coverOptions: {
       homeStructure: Boolean,
@@ -49,6 +54,23 @@ const HomeInsuranceSchema: Schema = new Schema(
       householdItemsValue: String,
       cityName: String,
     },
+
+    // ⭐ ASSIGNMENT FIELDS
+    assignedAgent: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Agent",
+      default: null,
+    },
+
+    assignedTo: {
+      type: String,
+      default: null,
+    },
+
+    assignedAt: {
+      type: Date,
+      default: null,
+    }
   },
   { timestamps: true }
 );

@@ -67,12 +67,12 @@ export default function Login() {
           </div>
 
           <h1 className={styles.heading}>
-            Get more things done with login platform.
+            Login to continue
           </h1>
-          <p className={styles.headingp}>
+          {/* <p className={styles.headingp}>
             Access to the most powerful tool in the entire design and web
             industry.
-          </p>
+          </p> */}
 
           <form className={styles.loginForm} onSubmit={onSubmit}>
             <div className={styles.error}>

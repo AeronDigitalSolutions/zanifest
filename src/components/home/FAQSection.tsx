@@ -4,6 +4,8 @@ import useSWR from "swr";
 import { FaEllipsisH, FaPlus } from "react-icons/fa";
 import { TiMinus } from "react-icons/ti";
 import styles from "@/styles/components/home/FAQSection.module.css";
+import "aos/dist/aos.css";
+import AOS from "aos";
 
 type QA = {
   ques: string;
@@ -39,7 +41,7 @@ export default function FAQSection({ headingOverride, questionsOverride }: Props
           observer.disconnect();
         }
       },
-      { threshold: 0.3 }
+     
     );
 
     if (sectionRef.current) observer.observe(sectionRef.current);
@@ -71,9 +73,16 @@ export default function FAQSection({ headingOverride, questionsOverride }: Props
     return <>{parts}</>;
   };
 
+  useEffect(() => {
+              AOS.init({ duration: 1000, once: true }); 
+  },[]);
+
+
   return (
     <div ref={sectionRef} className={styles.cont}>
-      <div className={styles.head}>
+      <div className={styles.head} data-aos="fade-up"
+          data-aos-duration="1000"
+          data-aos-easing="ease-in">
         <div
           className={`${styles.heading} ${
             animateHeading ? styles.animateOnce : ""

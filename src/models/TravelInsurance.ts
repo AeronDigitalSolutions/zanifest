@@ -1,8 +1,6 @@
 import mongoose, { Schema, Document, models } from "mongoose";
 
-/* -------------------------------------------------------------------------- */
-/*                              🧍 Traveller Interface                         */
-/* -------------------------------------------------------------------------- */
+/* Traveller Interface */
 export interface ITraveller {
   travellerId: number;
   age: number;
@@ -16,60 +14,36 @@ export interface ITravelInsurance extends Document {
   travellers: number;
   travellersInfo: ITraveller[];
   medicalCondition: "Yes" | "No";
-  email: string | null;     
+  email: string | null;
+  phoneNumber?: string;
   createdAt: Date;
+
+  // ⭐ Assignment fields
+  assignedAgent?: string | null;
+  assignedTo?: string | null;
+  assignedAt?: Date | null;
 }
 
 const TravellerSchema = new Schema<ITraveller>(
   {
-    travellerId: {
-      type: Number,
-      required: true,
-      min: 1,
-      max: 10,
-    },
-    age: {
-      type: Number,
-      required: true,
-      min: 0,
-      max: 100,
-    },
-    hasMedicalCondition: {
-      type: Boolean,
-      default: false,
-    },
+    travellerId: { type: Number, required: true },
+    age: { type: Number, default: null },
+    hasMedicalCondition: { type: Boolean, default: false },
   },
   { _id: false }
 );
 
 const TravelInsuranceSchema = new Schema<ITravelInsurance>(
   {
-    countries: {
-      type: [String],
-      required: true,
-    },
+    countries: { type: [String], required: true },
 
-    startDate: {
-      type: String,
-      required: true,
-    },
+    startDate: { type: String, required: true },
 
-    endDate: {
-      type: String,
-      required: true,
-    },
+    endDate: { type: String, required: true },
 
-    travellers: {
-      type: Number,
-      required: true,
-      min: 1,
-      max: 10,
-    },
+    travellers: { type: Number, required: true },
 
-    travellersInfo: {
-      type: [TravellerSchema],
-      required: true,
-    },
+    travellersInfo: { type: [TravellerSchema], required: true },
 
     medicalCondition: {
       type: String,
@@ -77,25 +51,39 @@ const TravelInsuranceSchema = new Schema<ITravelInsurance>(
       default: "No",
     },
 
-    // ⭐ ADD EMAIL 
-    email: {
+    email: { type: String, default: null },
+
+    phoneNumber: { type: String, default: null },
+
+    createdAt: { type: Date, default: Date.now },
+
+    /* -------------------------------------------------------------------------- */
+    /*                       ⭐ Mandatory Assignment Fields                        */
+    /* -------------------------------------------------------------------------- */
+
+    assignedAgent: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Agent",
+      default: null,
+    },
+
+    assignedTo: {
       type: String,
       default: null,
     },
 
-    createdAt: {
+    assignedAt: {
       type: Date,
-      default: Date.now,
+      default: null,
     },
   },
-  {
-    timestamps: true,
-  }
-);
 
+  { timestamps: true }
+);
 
 const TravelInsurance =
   models.TravelInsurance ||
   mongoose.model<ITravelInsurance>("TravelInsurance", TravelInsuranceSchema);
 
 export default TravelInsurance;
+ 

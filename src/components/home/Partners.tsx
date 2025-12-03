@@ -4,6 +4,8 @@ import React, { useEffect, useState, useRef } from "react";
 import styles from "@/styles/components/home/Partners.module.css";
 import Image, { StaticImageData } from "next/image";
 import useSWR from "swr";
+import 'aos/dist/aos.css';
+import AOS from 'aos';
 
 import img1 from "@/assets/home/car/1.png";
 import img2 from "@/assets/home/car/2.png";
@@ -76,7 +78,6 @@ const Partners: React.FC<PartnersProps> = ({ liveHeading, liveImages }) => {
           }
         });
       },
-      { threshold: 0.3 } // trigger when 30% visible
     );
 
     if (sectionRef.current) observer.observe(sectionRef.current);
@@ -85,11 +86,14 @@ const Partners: React.FC<PartnersProps> = ({ liveHeading, liveImages }) => {
       if (sectionRef.current) observer.unobserve(sectionRef.current);
     };
   }, []);
+   useEffect(() => {
+              AOS.init({ duration: 1000, once: true }); 
+  },[]);
 
   return (
     <div ref={sectionRef} className={styles.cont}>
       {/* Heading */}
-      <div className={styles.head}>
+      <div className={styles.head} data-aos="fade-up" data-aos-duration="1000"  data-aos-easing="ease-in">
         <p className={`${styles.heading} ${animate ? styles.animate : ""}`}>
           {heading.split(" ").slice(0, -1).join(" ")}{" "}
           <span className={styles.orange}>{heading.split(" ").slice(-1)}</span>

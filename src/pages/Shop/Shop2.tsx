@@ -1,28 +1,34 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import AOS from "aos";
-import "aos/dist/aos.css";
-import shopIllustration from "@/assets/pageImages/fire_insurance.png";
-import digit from "@/assets/pageImages/digit.png";
-import reliance from "@/assets/pageImages/reliance.png";
-import chola from "@/assets/home/chola ms.png";
-import future from "@/assets/pageImages/insurance.png";
 import styles from "@/styles/pages/Shop/shop2.module.css";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import TravelPromptDialog from "@/components/Dialog/PromptDialog";
+import LoginDialog from "@/components/Dialog/LoginDialog";
+import RegisterDialog from "@/components/Dialog/RegisterDialog";
 
-const Shop2 = () => {
+const Shop2: React.FC = () => {
   const router = useRouter();
+  const { isLoggedIn, user } = useAuth();
+
   const [selectedBusiness, setSelectedBusiness] = useState("Offices");
   const [customBusiness, setCustomBusiness] = useState("");
   const [isOtherSelected, setIsOtherSelected] = useState(false);
-  const [ownerType, setOwnerType] = useState("Owned");
+  const [ownerType, setOwnerType] = useState("owned");
   const [loading, setLoading] = useState(false);
 
+  const [showPromptDialog, setShowPromptDialog] = useState(false);
+  const [showLoginDialog, setShowLoginDialog] = useState(false);
+  const [showRegisterDialog, setShowRegisterDialog] = useState(false);
+
+  const [tempRecordId, setTempRecordId] = useState<string | null>(null);
+
   useEffect(() => {
-    AOS.init({ duration: 1000, once: true });
+    AOS.init({ duration: 800, once: true });
   }, []);
 
   const handleBusinessClick = (option: string) => {
@@ -41,97 +47,140 @@ const Shop2 = () => {
     setSelectedBusiness(value || "Other");
   };
 
-  // ✅ Submit Data to Backend
-  const handleSubmit = async () => {
+  const buildFinalPayload = () => {
+    const s1 = localStorage.getItem("shopDataStep1");
+    if (!s1) return null;
+    const step1 = JSON.parse(s1);
+
+    return {
+      ...step1,
+      businessCategory: selectedBusiness,
+      businessType: isOtherSelected ? customBusiness || null : undefined,
+      ownership: ownerType,
+      email: null as string | null,
+    };
+  };
+
+  const saveFinalData = async (emailValue: string) => {
+    const payload: any = buildFinalPayload();
+    if (!payload) return null;
+
+    payload.email = emailValue ?? null;
+
     try {
-      setLoading(true);
-
-      const step1 = localStorage.getItem("shopDataStep1");
-
-      if (!step1) {
-        alert("Please complete Step 1 first.");
-        router.push("/Shop1");
-        return;
-      }
-
-      const step1Data = JSON.parse(step1);
-
-      const finalData = {
-        ...step1Data,
-        businessCategory: selectedBusiness.toLowerCase().replace(/ /g, "_"),
-        businessType: isOtherSelected ? customBusiness : undefined,
-        ownership: ownerType.toLowerCase(),
-      };
-
       const res = await fetch("/api/shopinsurance", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(finalData),
+        credentials: "include",
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
-
-      if (!data.success) {
-        alert("Save failed!");
-        return;
-      }
-
-      localStorage.removeItem("shopDataStep1");
-
-      alert("Data Saved ✔");
-
-      router.push("/shop3");
-    } finally {
-      setLoading(false);
+      return res.ok ? data.data : null;
+    } catch {
+      alert("Network error");
+      return null;
     }
+  };
+
+  const handleSubmit = async () => {
+    const payload = buildFinalPayload();
+    if (!payload) {
+      alert("Please complete step 1 first.");
+      router.push("/Shop/Shop1");
+      return;
+    }
+
+    if (isLoggedIn && user?.email) {
+      setLoading(true);
+      const saved = await saveFinalData(user.email);
+      setLoading(false);
+
+      if (saved) {
+        localStorage.removeItem("shopDataStep1");
+        router.push("/Shop/Shop3");
+      }
+      return;
+    }
+
+    setShowPromptDialog(true);
+  };
+
+  const handlePromptCancel = async () => {
+    setShowPromptDialog(false);
+    setLoading(true);
+    const saved = await saveFinalData("unregistered_user");
+    setLoading(false);
+
+    if (saved && saved._id) {
+      setTempRecordId(saved._id);
+      localStorage.setItem("shopRecordId", saved._id);
+    }
+
+    localStorage.removeItem("shopDataStep1");
+    router.push("/Shop/Shop3");
+  };
+
+  const handlePromptLogin = () => {
+    setShowPromptDialog(false);
+    setShowLoginDialog(true);
+  };
+
+  const handlePromptRegister = () => {
+    setShowPromptDialog(false);
+    setShowRegisterDialog(true);
+  };
+
+  const handleLoginSuccess = async (email: string) => {
+    setShowLoginDialog(false);
+
+    // ⭐⭐⭐ IMPORTANT — Email Update Logic
+    if (tempRecordId) {
+      await fetch("/api/updateEmail", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: tempRecordId,
+          email,
+          module: "shop",
+        }),
+      });
+    }
+
+    setLoading(true);
+    const saved = await saveFinalData(email);
+    setLoading(false);
+
+    if (saved) {
+      localStorage.removeItem("shopDataStep1");
+      router.push("/Shop/Shop3");
+    }
+  };
+
+  const handleRegisterSuccess = () => {
+    setShowRegisterDialog(false);
+    setTimeout(() => setShowLoginDialog(true), 150);
   };
 
   return (
     <>
       <Navbar />
+
       <div className={styles.wrapper}>
-        {/* LEFT SECTION */}
         <div className={styles.left}>
           <h4 className={styles.subHeading}>Shop Insurance</h4>
           <h2 className={styles.heading}>
-            Get <span className={styles.highlight}>₹50 Lakh</span> cover starting
-            at just <span className={styles.price}>₹3,400/year*</span>
+            Get <span className={styles.highlight}>₹50 Lakh</span> cover starting at just
+            <span className={styles.price}>₹3,400/year*</span>
           </h2>
 
           <div className={styles.features}>
             <span>🔥 Fire & Natural Disaster</span>
             <span>🔒 Theft within 7 days of Peril Occurrence</span>
           </div>
-
-          <div className={styles.middle}>
-            <Image
-              src={shopIllustration}
-              alt="Shop Fire Insurance Illustration"
-              className={styles.illustration}
-            />
-
-            <div className={styles.partnersBox}>
-              <p className={styles.partnerHeading}>10+ insurance partners</p>
-              <div className={styles.partnersGrid}>
-                <div className={styles.partner}>
-                  <Image src={digit} alt="Digit" />
-                </div>
-                <div className={styles.partner}>
-                  <Image src={reliance} alt="Reliance" />
-                </div>
-                <div className={styles.partner}>
-                  <Image src={chola} alt="Chola MS" />
-                </div>
-                <div className={styles.partner}>
-                  <Image src={future} alt="Future Generali" />
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
-        {/* RIGHT SECTION */}
-        <div className={styles.right} data-aos="fade-left">
+        <div className={styles.right}>
           <div className={styles.card}>
             <h3 className={styles.cardHeading}>About your business</h3>
 
@@ -174,19 +223,20 @@ const Shop2 = () => {
             <div className={styles.ownerTenant}>
               <div
                 className={`${styles.option} ${
-                  ownerType === "Owned" ? styles.active : ""
+                  ownerType === "owned" ? styles.active : ""
                 }`}
-                onClick={() => setOwnerType("Owned")}
+                onClick={() => setOwnerType("owned")}
               >
                 <span>🏠</span>
                 <p>Owned</p>
                 <small>The person who owns the property</small>
               </div>
+
               <div
                 className={`${styles.option} ${
-                  ownerType === "Tenant" ? styles.active : ""
+                  ownerType === "tenant" ? styles.active : ""
                 }`}
-                onClick={() => setOwnerType("Tenant")}
+                onClick={() => setOwnerType("tenant")}
               >
                 <span>🔑</span>
                 <p>Tenant</p>
@@ -194,17 +244,34 @@ const Shop2 = () => {
               </div>
             </div>
 
-            <button
-              className={styles.continueBtn}
-              onClick={handleSubmit}
-              disabled={loading}
-            >
+            <button className={styles.continueBtn} onClick={handleSubmit} disabled={loading}>
               {loading ? "Saving..." : "Continue →"}
             </button>
           </div>
         </div>
       </div>
+
       <Footer />
+
+      {/* DIALOGS */}
+      <TravelPromptDialog
+        open={showPromptDialog}
+        onCancel={handlePromptCancel}
+        onLogin={handlePromptLogin}
+        onRegister={handlePromptRegister}
+      />
+
+      <LoginDialog
+        open={showLoginDialog}
+        onClose={() => setShowLoginDialog(false)}
+        onSuccess={handleLoginSuccess}
+      />
+
+      <RegisterDialog
+        open={showRegisterDialog}
+        onClose={() => setShowRegisterDialog(false)}
+        onSuccess={handleRegisterSuccess}
+      />
     </>
   );
 };

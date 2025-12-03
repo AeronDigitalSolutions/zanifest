@@ -90,6 +90,22 @@ const AgentSidebar: React.FC<AgentSidebarProps> = ({
             </li>
           </ul>
         </div>
+         <div>
+          <p className={styles.sectionTitle}>Lead Section</p>
+          <ul className={styles.menu}>
+            <li
+              className={styles.menuItem}
+  onClick={() => setActiveSection("leadsection")}
+              role="button"
+              tabIndex={0}
+            >
+              <div className={styles.iconLabel}>
+                <span className={styles.icon}><FiLock /></span>
+                <span className={styles.label}>Lead</span>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
      <div className={styles.editprofile}>
   <button

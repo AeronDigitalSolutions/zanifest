@@ -1,11 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 
-/**
- * This API route verifies the user's JWT token from cookies
- * and returns their user info so the frontend (AuthContext)
- * can keep them logged in after page refresh.
- */
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     // 1️⃣ Get JWT token from cookies

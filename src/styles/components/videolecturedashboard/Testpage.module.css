@@ -1,0 +1,21 @@
+.testWrap { width: 100%; display: flex; flex-direction: column; align-items: center; }
+.header { font-size: 18px; margin-bottom: 12px; }
+.card { width: 720px; max-width: 95%; background: #071826; padding: 18px; border-radius: 10px; border: 1px solid #123240; }
+.qHead { font-size: 14px; opacity: 0.9; }
+.question { margin: 12px 0; font-size: 16px; }
+.choices { display: flex; flex-direction: column; gap: 8px; }
+.choice { display: flex; gap: 8px; align-items: center; }
+.navRow { margin-top: 16px; display: flex; justify-content: space-between; }
+.navBtn { padding: 8px 12px; border-radius: 8px; background: transparent; border: 1px solid #234; }
+.submitBtn { padding: 8px 12px; border-radius: 8px; background: #0ea5a3; border: none; }
+.resultWrap { width: 100%; display: flex; justify-content: center; margin-top: 12px; }
+.resultCard { background: #071826; border: 1px solid #123240; padding: 20px; border-radius: 10px; text-align: center; }
+.score { font-size: 28px; font-weight: 700; margin: 8px 0; }
+.status { font-weight: 600; margin-bottom: 12px; }
+.actions { display: flex; gap: 10px; justify-content: center; }
+.linkBtn { padding: 8px 12px; border-radius: 8px; background: #0ea5a3; color: #042028; text-decoration: none; border: none; cursor: pointer; }
+.greyBtn { padding: 8px 12px; border-radius: 8px; background: transparent; border: 1px solid #234; color: white; cursor: pointer; }
+@media (max-width: 600px) {
+  .card { padding: 12px; }
+  .navRow { flex-direction: column; gap: 8px; }
+}

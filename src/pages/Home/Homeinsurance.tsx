@@ -8,38 +8,42 @@ import { FaCheckCircle, FaWhatsapp } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { useAuth } from "@/context/AuthContext";   // <-- Add this import
+import { useAuth } from "@/context/AuthContext";
 
-
+// dialogs
+import TravelPromptDialog from "@/components/Dialog/PromptDialog";
+import LoginDialog from "@/components/Dialog/LoginDialog";
+import RegisterDialog from "@/components/Dialog/RegisterDialog";
 
 const Homeinsurance: React.FC = () => {
-    const { user } = useAuth();           // <-- FIXED (Correct place)
+  const router = useRouter();
+  const { isLoggedIn, user } = useAuth();
 
+  // FORM FIELDS
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [whatsappUpdates, setWhatsappUpdates] = useState(false);
   const [fullName, setFullName] = useState("");
   const [mobile, setMobile] = useState("+91 ");
-  const router = useRouter();
 
-  const handleOptionChange = (option: string) => {
-    setSelectedOptions((prev) =>
-      prev.includes(option)
-        ? prev.filter((item) => item !== option)
-        : [...prev, option]
-    );
-  };
+  // Dialog states (Step-1 never opens dialog but keep states for Step-2 use)
+  const [showPromptDialog, setShowPromptDialog] = useState(false);
+  const [showLoginDialog, setShowLoginDialog] = useState(false);
+  const [showRegisterDialog, setShowRegisterDialog] = useState(false);
 
- // ✅ Just navigate to /homeinsurance2 and save step 1 data
-const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
+  // Unregistered temp ID
+  const [tempRecordId, setTempRecordId] = useState<string | null>(null);
 
-  const step1Data = {
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true });
+  }, []);
+
+  /* -----------------------------------------------
+        Build Payload (Step-1)
+  ----------------------------------------------- */
+  const buildPayload = () => ({
     fullName,
     phoneNumber: mobile.replace(/\s+/g, ""),
-
-    // ⭐ SAME AS TRAVEL MODULE
-    email: user?.email || null,
-
+    email: null as string | null,
     coverOptions: {
       homeStructure: selectedOptions.includes("Home Structure"),
       householdItems: selectedOptions.includes("Household Items"),
@@ -47,71 +51,133 @@ const handleSubmit = (e: React.FormEvent) => {
       insuranceForLoan: selectedOptions.includes("Insurance For Loan"),
       jewelleryAndValuables: selectedOptions.includes("Jewellery & Valuables"),
     },
+  });
+
+  /* -----------------------------------------------
+        Save Temp Record
+  ----------------------------------------------- */
+  const savePayload = async (emailValue: string) => {
+    const payload = buildPayload();
+    payload.email = emailValue;
+
+    try {
+      const res = await fetch("/api/homeinsurance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      return res.ok ? data.data : null;
+    } catch {
+      alert("Network error");
+      return null;
+    }
   };
 
-  localStorage.setItem("homeInsuranceStep1", JSON.stringify(step1Data));
-  router.push("Homeinsurance2");
-};
+  /* -----------------------------------------------
+        MAIN SUBMIT → Step-1
+        (NO POPUP – direct save)
+  ----------------------------------------------- */
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
+    if (!fullName.trim()) {
+      alert("Please enter full name.");
+      return;
+    }
 
-  // ✅ Full Name handler (capitalize each word)
+    if (mobile.replace(/\D/g, "").length !== 12) {
+      alert("Please enter valid 10-digit mobile number.");
+      return;
+    }
+
+    // CASE 1 → logged in user
+    if (isLoggedIn && user?.email) {
+      const saved = await savePayload(user.email);
+
+      if (saved) {
+        localStorage.setItem("homeRecordId", saved._id);
+        localStorage.setItem("homeStep1", JSON.stringify(buildPayload()));
+        router.push("Homeinsurance2");
+        return;
+      }
+    }
+
+    // CASE 2 → unregistered user → save quietly
+    const saved = await savePayload("unregistered_user");
+
+    if (saved) {
+      setTempRecordId(saved._id);
+      localStorage.setItem("homeRecordId", saved._id);
+      localStorage.setItem("homeStep1", JSON.stringify(buildPayload()));
+    }
+
+    router.push("Homeinsurance2");
+  };
+
+  /* -----------------------------------------------
+        Input Handlers
+  ----------------------------------------------- */
   const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let input = e.target.value.replace(/[^a-zA-Z\s]/g, ""); 
+    let input = e.target.value.replace(/[^a-zA-Z\s]/g, "");
     input = input
       .split(" ")
-      .filter(Boolean) // extra spaces hatao
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .filter(Boolean)
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
       .join(" ");
     setFullName(input);
   };
 
-  // ✅ Mobile handler
   const handleMobileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const prefix = "+91 ";
     let input = e.target.value;
+    if (!input.startsWith(prefix)) input = prefix;
 
-    if (!input.startsWith(prefix)) {
-      input = prefix;
-    }
-
-    const digitsOnly = input.substring(prefix.length).replace(/\D/g, "");
-    const limitedDigits = digitsOnly.slice(0, 10);
-
-    setMobile(prefix + limitedDigits);
+    const digits = input.substring(prefix.length).replace(/\D/g, "");
+    setMobile(prefix + digits.slice(0, 10));
   };
-   // AOS animation
-    useEffect(() => {
-      AOS.init({ duration: 1000, once: true });
-    }, []);
 
+  const handleOptionChange = (option: string) => {
+    setSelectedOptions((prev) =>
+      prev.includes(option)
+        ? prev.filter((i) => i !== option)
+        : [...prev, option]
+    );
+  };
+
+  /* -----------------------------------------------
+        UI
+  ----------------------------------------------- */
   return (
-    <div>
+    <>
       <Navbar />
+
       <div className={styles.container}>
         <h3 className={styles.subTitle}>
           Elite protection for your house & valuables from theft & damage!
         </h3>
+
         <h1 className={styles.title}>
           Compare & Save <span>upto 25%*</span>
         </h1>
 
         <div className={styles.badges}>
           <span className={styles.badge}>
-            <FaCheckCircle className={styles.badgeIcon} />
-            Bank Approved
+            <FaCheckCircle className={styles.badgeIcon} /> Bank Approved
           </span>
           <span className={styles.badge}>
-            <FaCheckCircle className={styles.badgeIcon} />
-            Discounted Plans
+            <FaCheckCircle className={styles.badgeIcon} /> Discounted Plans
           </span>
           <span className={styles.badge}>
-            <FaCheckCircle className={styles.badgeIcon} />
-            Free Addons
+            <FaCheckCircle className={styles.badgeIcon} /> Free Addons
           </span>
         </div>
 
-        {/* ✅ form with navigation */}
+        {/* ---- FORM ---- */}
         <form className={styles.form} onSubmit={handleSubmit} data-aos="fade-right">
+
           <div className={styles.inputGroup}>
             <input
               type="text"
@@ -119,7 +185,7 @@ const handleSubmit = (e: React.FormEvent) => {
               className={styles.input}
               value={fullName}
               onChange={handleFullNameChange}
-            />{" "}
+            />
             <FiUser className={styles.inputIcon} />
           </div>
 
@@ -130,16 +196,16 @@ const handleSubmit = (e: React.FormEvent) => {
               className={styles.input}
               value={mobile}
               onChange={handleMobileChange}
-              maxLength={14} 
-            />{" "}
+              maxLength={14}
+            />
             <FiPhone className={styles.inputIcon} />
-            <span className={styles.noSpam}>We don’t spam</span>
           </div>
 
           <div className={styles.coverSection}>
             <p className={styles.coverTitle}>
               What do you want to cover? <span>(Optional)</span>
             </p>
+
             <div className={styles.options}>
               {[
                 "Home Structure",
@@ -160,7 +226,6 @@ const handleSubmit = (e: React.FormEvent) => {
             </div>
           </div>
 
-          {/* ✅ Navigate to /homeinsurance2 */}
           <button type="submit" className={styles.submitBtn}>
             View Free Quotes
           </button>
@@ -168,6 +233,7 @@ const handleSubmit = (e: React.FormEvent) => {
           <div className={styles.whatsapp}>
             <FaWhatsapp className={styles.icon} />
             <span className={styles.label}>Get Updates on WhatsApp</span>
+
             <label className={styles.switch}>
               <input
                 type="checkbox"
@@ -184,8 +250,16 @@ const handleSubmit = (e: React.FormEvent) => {
           </p>
         </form>
       </div>
+
+      {/* dialogs kept for Step-2 use */}
+      <TravelPromptDialog open={false} onCancel={() => {}} onLogin={() => {}} onRegister={() => {}} />
+
+      <LoginDialog open={showLoginDialog} onClose={() => setShowLoginDialog(false)} onSuccess={() => {}} />
+
+      <RegisterDialog open={showRegisterDialog} onClose={() => setShowRegisterDialog(false)} onSuccess={() => {}} />
+
       <Footer />
-    </div>
+    </>
   );
 };
 

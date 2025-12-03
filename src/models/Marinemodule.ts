@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
+
 export interface MarineModuleRequest extends Document {
   phoneNumber: string;
   commodity?: string;
@@ -8,6 +9,11 @@ export interface MarineModuleRequest extends Document {
   transportMode?: string;
   coverAmount?: string;
   email: string | null;
+
+  assignedAgent?: string | null;
+  assignedAgentName?: string | null;
+  assignedAt?: Date | null;
+
   createdAt: Date;
 }
 
@@ -22,19 +28,16 @@ const MarineModuleSchema = new Schema<MarineModuleRequest>(
     transportMode: String,
     coverAmount: String,
 
-    // ⭐ SAME AS TRAVEL
-    email: {
-      type: String,
-      default: null,
-    },
+    email: { type: String, default: null },
 
-    createdAt: { type: Date, default: Date.now },
+    assignedAgent: { type: String, default: null },
+    assignedAgentName: { type: String, default: null },
+    assignedAt: { type: Date, default: null },
+
+    createdAt: { type: Date, default: Date.now }
   },
   { timestamps: true }
 );
 
 export default mongoose.models.MarineModuleRequest ||
-  mongoose.model<MarineModuleRequest>(
-    "MarineModuleRequest",
-    MarineModuleSchema
-  );
+  mongoose.model<MarineModuleRequest>("MarineModuleRequest", MarineModuleSchema);

@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import styles from "@/styles/pages/DirectorOfficerLiabilityInsurance/DirectorInsurance1.module.css";
@@ -15,8 +16,10 @@ import orientalinsurance from "@/assets/OrintalInsurance.png";
 import sbi from "@/assets/sbi.png";
 import hdfc from "@/assets/unitedindia.png";
 import director from "@/assets/Director.webp";
+
 import Footer from "@/components/ui/Footer";
 import Navbar from "@/components/ui/Navbar";
+
 import "aos/dist/aos.css";
 import AOS from "aos";
 import { useRouter } from "next/navigation";
@@ -26,7 +29,7 @@ const DirectorInsurance1: React.FC = () => {
   const [step, setStep] = useState(1);
   const router = useRouter();
 
-  // 🔹 Form Fields
+  // Form fields
   const [mobileNumber, setMobileNumber] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [industryCategory, setIndustry] = useState("");
@@ -43,8 +46,10 @@ const DirectorInsurance1: React.FC = () => {
   const nextStep = () => setStep((s) => Math.min(3, s + 1));
   const prevStep = () => setStep((s) => Math.max(1, s - 1));
 
-  // 🔹 Validation + Submit Handler
-  const handleSubmit = async () => {
+  // --------------------------
+  // FINAL SUBMIT (after Step 3)
+  // --------------------------
+  const handleSubmit = () => {
     if (mobileNumber.length !== 10) {
       alert("⚠️ Please enter a valid 10-digit mobile number.");
       setStep(1);
@@ -81,8 +86,12 @@ const DirectorInsurance1: React.FC = () => {
       return;
     }
 
-    try {
-      const payload = {
+    // --------------------------
+    // Save step 1 data into sessionStorage
+    // --------------------------
+    sessionStorage.setItem(
+      "director_step1",
+      JSON.stringify({
         mobileNumber,
         companyName,
         industryCategory,
@@ -92,41 +101,23 @@ const DirectorInsurance1: React.FC = () => {
         companyTurnover,
         limitOfLiability,
         whatsappOptIn: whatsapp,
-      };
+      })
+    );
 
-  const res = await fetch("/api/directorins", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include", // <-- important: sends cookie
-        body: JSON.stringify(payload),
-      });
-
-
-
-
-     const json = await res.json();
-      if (res.ok && json.success) {
-        alert("Data submitted successfully!");
-        router.push("/DirectorOfficerLiabilityInsurance/DirectorInsurance2");
-      } else {
-        console.error("submit error:", json);
-        alert("Something went wrong: " + (json.message || JSON.stringify(json)));
-      }
-    } catch (err) {
-      console.error("Error submitting form:", err);
-      alert("🚫 Failed to connect to the server.");
-    }
+    router.push("/DirectorOfficerLiabilityInsurance/DirectorInsurance2");
   };
 
   return (
     <>
       <Navbar />
+
       <div className={styles.wrapper}>
         {/* ---------------- Left Section ---------------- */}
         <div className={styles.left}>
           <h4 className={styles.title}>Office Package Policy</h4>
           <h1 className={styles.mainHeading}>
-            Get <span>₹50 Lakh</span> cover for just<span>₹4,000/year</span>+
+            Get <span>₹50 Lakh</span> cover for just
+            <span>₹4,000/year</span>+
           </h1>
 
           <div className={styles.features}>
@@ -140,7 +131,7 @@ const DirectorInsurance1: React.FC = () => {
             </span>
           </div>
 
-          {/* ---------- Insurance Partners ---------- */}
+          {/* Insurance Partners */}
           <div className={styles.imagePartnerRow}>
             <div className={styles.imageWrap}>
               <Image
@@ -156,34 +147,10 @@ const DirectorInsurance1: React.FC = () => {
             <div className={styles.partners}>
               <h3>10+ insurance partners</h3>
               <div className={styles.partnerRow}>
-                <Image
-                  src={hdfc}
-                  alt="HDFC Ergo"
-                  width={60}
-                  height={40}
-                  className={styles.partnerLogo}
-                />
-                <Image
-                  src={orientalinsurance}
-                  alt="Oriental Insurance"
-                  width={60}
-                  height={40}
-                  className={styles.partnerLogo}
-                />
-                <Image
-                  src={tata}
-                  alt="Tata AIG"
-                  width={60}
-                  height={40}
-                  className={styles.partnerLogo}
-                />
-                <Image
-                  src={sbi}
-                  alt="SBI General"
-                  width={60}
-                  height={40}
-                  className={styles.partnerLogo}
-                />
+                <Image src={hdfc} alt="HDFC Ergo" width={60} height={40} className={styles.partnerLogo} />
+                <Image src={orientalinsurance} alt="Oriental Insurance" width={60} height={40} className={styles.partnerLogo} />
+                <Image src={tata} alt="Tata AIG" width={60} height={40} className={styles.partnerLogo} />
+                <Image src={sbi} alt="SBI General" width={60} height={40} className={styles.partnerLogo} />
               </div>
             </div>
           </div>
@@ -191,7 +158,7 @@ const DirectorInsurance1: React.FC = () => {
 
         {/* ---------------- Right Section ---------------- */}
         <div className={styles.right} data-aos="fade-left">
-          {/* ---------- Step 1 ---------- */}
+          {/* ---------- STEP 1 ---------- */}
           {step === 1 && (
             <div className={styles.card}>
               <h2>
@@ -215,15 +182,18 @@ const DirectorInsurance1: React.FC = () => {
                   <FaCheck className={styles.iconCheck} />
                 )}
               </div>
+
               <span className={styles.note}>
                 <FaShieldAlt /> We don’t spam
               </span>
+
               <button
                 className={styles.primaryBtn}
-                onClick={() => {
-                  if (mobileNumber.length === 10) nextStep();
-                  else alert("Please enter a valid 10-digit mobile number.");
-                }}
+                onClick={() =>
+                  mobileNumber.length === 10
+                    ? nextStep()
+                    : alert("Please enter a valid 10-digit mobile number.")
+                }
               >
                 View quotes →
               </button>
@@ -251,32 +221,22 @@ const DirectorInsurance1: React.FC = () => {
               </div>
 
               <p className={styles.disclaimer}>
-                By clicking on{" "}
-                <span className={styles.bold}>"View quotes"</span>, you agree to
-                our{" "}
-                <a href="#" className={styles.link}>
-                  Privacy Policy
-                </a>
-                ,
-                <a href="#" className={styles.link}>
-                  {" "}
-                  Terms of Use
-                </a>{" "}
-                &
-                <a href="#" className={styles.link}>
-                  {" "}
-                  +Disclaimer
-                </a>
+                By clicking on <span className={styles.bold}>"View quotes"</span>,
+                you agree to our{" "}
+                <a href="#" className={styles.link}>Privacy Policy</a>,
+                <a href="#" className={styles.link}> Terms of Use</a> &
+                <a href="#" className={styles.link}> Disclaimer</a>
               </p>
             </div>
           )}
 
-          {/* ---------- Step 2 ---------- */}
+          {/* ---------- STEP 2 ---------- */}
           {step === 2 && (
-            <div className={styles.card} data-aos="fade-left">
+            <div className={styles.card}>
               <button className={styles.backBtn} onClick={prevStep}>
                 <FaChevronLeft /> Back
               </button>
+
               <h2>
                 About your business <span className={styles.step}>Step 2/3</span>
               </h2>
@@ -298,9 +258,7 @@ const DirectorInsurance1: React.FC = () => {
               >
                 <option value="">Select industry</option>
                 <option>Banking Finance and Insurance (BFSI)</option>
-                <option>
-                  Computers, IT Services, Technology and Telecommunication
-                </option>
+                <option>Computers, IT Services, Technology and Telecommunication</option>
                 <option>Construction & real estate</option>
                 <option>Manufacturing</option>
                 <option>Medical & pharmaceuticals</option>
@@ -337,12 +295,13 @@ const DirectorInsurance1: React.FC = () => {
             </div>
           )}
 
-          {/* ---------- Step 3 ---------- */}
+          {/* ---------- STEP 3 ---------- */}
           {step === 3 && (
-            <div className={styles.card} data-aos="fade-left">
+            <div className={styles.card}>
               <button className={styles.backBtn} onClick={prevStep}>
                 <FaChevronLeft /> Back
               </button>
+
               <h2>
                 About your business <span className={styles.step}>Step 3/3</span>
               </h2>
@@ -398,6 +357,7 @@ const DirectorInsurance1: React.FC = () => {
           )}
         </div>
       </div>
+
       <Footer />
     </>
   );

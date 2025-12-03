@@ -6,6 +6,7 @@ import { BsFacebook } from "react-icons/bs";
 import styles from "@/styles/components/ui/Footer.module.css";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import Link from "next/link";
 
 const LIST = [
   {
@@ -81,7 +82,7 @@ function Footer() {
           );
         })}
       </div>
-        {/* <div className={styles.bottomItem}>
+      {/* <div className={styles.bottomItem}>
           © 2025 Zanifest, All Rights Reserved.
         </div>
        
@@ -89,12 +90,17 @@ function Footer() {
           <div className={styles.bottomItem}>Privacy Policy</div>
           <div className={styles.bottomItem}>Terms & Conditions</div>
         </span> */}
-      <div className={styles.footerBottomWrapper}>
+     <div className={styles.footerBottomWrapper}>
   <div className={styles.bottomItem}>© 2025 Zanifest, All Rights Reserved.</div>
 
   <span className={styles.bottomLinks}>
-    <div className={styles.bottomItem}>Privacy Policy</div><span className={styles.break}>|</span>
-    <div className={styles.bottomItem}>Terms & Conditions</div>
+    <Link href="/Refundpolicy" className={styles.bottomItem}>Refund Policy</Link>
+    <span className={styles.break}>|</span>
+
+    <Link href="/Privacypolicy" className={styles.bottomItem}>Privacy Policy</Link>
+    <span className={styles.break}>|</span>
+
+    <Link href="/Termscondition" className={styles.bottomItem}>Terms & Conditions</Link>
   </span>
 </div>
 

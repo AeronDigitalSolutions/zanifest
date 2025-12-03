@@ -11,12 +11,12 @@ function UserDetails() {
       <div className={styles.detailsSection}>
         <div className={styles.detailItem}>
           <FaPhoneAlt />
-          <h4 className={styles.detailsText}>+91 8593959395</h4>
+          <h4 className={styles.detailsText}>+91 8146777455</h4>
         </div>
         <div className={styles.line}></div>
         <div className={styles.detailItem}>
           <MdEmail />
-          <h4 className={styles.detailsText}>abc@gmail.com</h4>
+          <h4 className={styles.detailsText}>contact@zanifestinsurance.com</h4>
         </div>
         {/* <button onClick={() => signOut()}>
           Logout

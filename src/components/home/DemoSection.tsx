@@ -5,6 +5,8 @@ import styles from "@/styles/components/home/DemoSection.module.css";
 import { FaEllipsisH } from "react-icons/fa";
 import useSWR from "swr";
 import axios from "axios";
+import "aos/dist/aos.css";
+import AOS from "aos";
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
@@ -67,7 +69,6 @@ function DemoSection() {
           observer.disconnect();
         }
       },
-      { threshold: 0.3 }
     );
 
     if (sectionRef.current) observer.observe(sectionRef.current);
@@ -82,9 +83,15 @@ function DemoSection() {
     "Zanifest is your trusted partner in insurance — providing transparent comparisons, affordable policies, and dedicated support.";
   const items = data?.items || DEMOLIST;
 
+  useEffect(() => {
+              AOS.init({ duration: 1000, once: true }); 
+  },[]);
+
   return (
     <div ref={sectionRef} className={styles.cont}>
-      <div className={styles.head}>
+      <div className={styles.head}  data-aos="fade-up"
+          data-aos-duration="1000"
+          data-aos-easing="ease-in">
         <div
           className={`${styles.heading} ${
             animateHeading ? styles.animateOnce : ""
@@ -107,8 +114,8 @@ function DemoSection() {
           <FaEllipsisH style={{ color: "#fa621a", fontSize: "25px" }} />
         </div>
 
-        <div className={styles.subHeading}>{subheading}</div>
       </div>
+        <div className={styles.subHeading}>{subheading}</div>
 
       <div className={styles.list}>
         {items.map((item: any, index: number) => (

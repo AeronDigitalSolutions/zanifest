@@ -47,23 +47,32 @@
 .formDiv {
   display: grid;
   place-items: center;
-  justify-content: space-around;
   gap: 1rem;
   padding: 4rem 4rem;
   border-radius: 1rem;
-  /* box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px; */
   background-color: white;
   z-index: 2;
-  width: 80%;
+  width: 35vw;            /* card width */
 }
 
 .loginForm {
   display: grid;
-  place-items: center;
-  grid-template-columns: 100%;
-  gap: 1rem;
+  grid-template-columns: 1fr;   /* ⬅ Make 1 proper centered column */
+  justify-items: center;        /* ⬅ Center everything */
+  gap: 1.2rem;
   width: 100%;
 }
+
+.formInput {
+  width: 100%;
+}
+
+.input {
+  width: 100%;      /* full width inside card */
+  padding: 1rem;
+  border-radius: 10px;
+}
+
 
 /* .logo {
 } */
@@ -259,5 +268,51 @@
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+/* MEDIUM PHONES (max-width: 480px) */
+@media screen and (max-width: 480px) {
+  .formDiv {
+    width: 90vw;
+    padding: 1.8rem;
+  }
+
+  .heading {
+    font-size: 1.4rem;
+  }
+
+  .input {
+    padding: 0.8rem;
+  }
+
+  .loginButton {
+    width: 100%;
+    padding: 12px;
+  }
+}
+
+/* SMALL PHONES (max-width: 360px) */
+@media screen and (max-width: 360px) {
+  .formDiv {
+    width: 95vw;
+    padding: 1.5rem;
+  }
+
+  .heading {
+    font-size: 1.2rem;
+  }
+
+  .logoImage {
+    width: 130px;
+  }
+
+  .input {
+    padding: 0.7rem;
+    font-size: 0.9rem;
+  }
+
+  .loginButton {
+    padding: 10px;
+    font-size: 1rem;
   }
 }

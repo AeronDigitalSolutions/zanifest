@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { FaEllipsisH } from "react-icons/fa";
 import useSWR from "swr";
 import styles from "@/styles/components/home/CarInsuranceSection.module.css";
+import "aos/dist/aos.css";
+import AOS from "aos";
 
 type Item = {
   name: string;
@@ -78,7 +80,6 @@ export default function CarInsuraceSection({
           observer.disconnect();
         }
       },
-      { threshold: 0.3 }
     );
 
     if (sectionRef.current) observer.observe(sectionRef.current);
@@ -86,9 +87,16 @@ export default function CarInsuraceSection({
     return () => observer.disconnect();
   }, []);
 
+  
+    useEffect(() => {
+                AOS.init({ duration: 1000, once: true }); 
+    },[]);
+
   return (
     <div ref={sectionRef} className={`${styles.cont} ${animate ? styles.animateOnce : ""}`}>
-      <div className={styles.head}>
+      <div className={styles.head}  data-aos="fade-up"
+          data-aos-duration="1000"
+          data-aos-easing="ease-in">
         <div className={styles.heading}>
           {parseHeading(heading).map((part, idx) => (
             <span key={idx} style={{ color: part.isTag ? "orangered" : "black" }}>

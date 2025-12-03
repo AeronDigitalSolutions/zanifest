@@ -119,14 +119,14 @@ const FeedBackSection: React.FC<FeedBackSectionProps> = ({
   // Render
   return (
     <div ref={sectionRef} className={styles.cont}>
-      <div className={styles.head}>
+      <div className={styles.head}  data-aos="fade-up"
+          data-aos-duration="1000"
+          data-aos-easing="ease-in">
         <div
           className={`${styles.heading} ${
             animateheading ? styles.animateOnce : ""
           }`}
-          data-aos="fade-up"
-          data-aos-duration="2000"
-          data-aos-easing="ease-in"
+         
         >
           {renderHeading(heading)}
         </div>

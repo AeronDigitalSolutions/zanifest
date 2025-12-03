@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "@/styles/pages/agent.module.css";
 import axios from "axios";
-import Agent from "@/models/Agent";
+import Agent from "@/models/Agent"
 import AgentHeader from "@/components/agentpage/agentheader";
 import AgentSidebar from "@/components/agentpage/agentsidebar";
 import AgentContent from "@/components/agentpage/agentcontent";
@@ -11,6 +11,8 @@ import ResetPassword from "@/components/districtmanagerdashboard/resetpassword";
 import CreateUser from "@/components/agentpage/createuser";
 import CreateAgent from "@/components/superadminsidebar/createagent";
 import AgentSale from "@/components/agentpage/agentsale";
+import LeadSection from "@/components/agentpage/leadsection";
+
 
 const AgentDashboard = () => {
   const router = useRouter();
@@ -83,8 +85,10 @@ const AgentDashboard = () => {
 
           {activeSection === "resetpassword" && <ResetPassword />}
           {activeSection === "createuser" && <CreateUser />}
+{activeSection === "leadsection" && <LeadSection />}
+
           {activeSection === "profileEdit" && (
-            <CreateAgent mode="edit" initialData={agent} />
+            <CreateAgent />
           )}
           {activeSection === "addsale" && <AgentSale />}
         </main>

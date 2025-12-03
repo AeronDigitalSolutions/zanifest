@@ -183,20 +183,5 @@
   }
 }
 
-/* --------------------- FADE-IN/OUT ANIMATION --------------------- */
-/* Fade in once and stay visible */
-.animateOnce {
-  animation: fadeInStay 1.5s ease-in-out forwards;
-}
 
-@keyframes fadeInStay {
-  0% {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 

@@ -7,59 +7,48 @@ export interface IShop extends Document {
   businessCategory: string;
   businessType?: string;
   ownership: "owned" | "tenant";
-  email: string | null; // ⭐ EXACT SAME FIELD AS TRAVEL
+  email: string | null;
   createdAt: Date;
+
+  // ⭐ Assignment fields
+  assignedAgent?: string | null;
+  assignedTo?: string | null;
+  assignedAt?: Date | null;
 }
 
 const ShopSchema = new Schema<IShop>(
   {
-    shopType: {
-      type: String,
-      enum: ["rented", "owned"],
-      required: true,
+    shopType: { type: String, enum: ["rented", "owned"], required: true },
+    pincode: { type: String, required: true },
+    phone: { type: String, required: true },
+    businessCategory: { type: String, required: true },
+    businessType: { type: String, default: null },
+    ownership: { type: String, enum: ["owned", "tenant"], required: true },
+
+    email: { type: String, default: null },
+
+    createdAt: { type: Date, default: Date.now },
+
+    // ⭐ Add assignment fields
+    assignedAgent: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Agent",
+      default: null,
     },
 
-    pincode: {
-      type: String,
-      required: true,
-    },
-
-    phone: {
-      type: String,
-      required: true,
-    },
-
-    businessCategory: {
-      type: String,
-      required: true,
-    },
-
-    businessType: {
+    assignedTo: {
       type: String,
       default: null,
     },
 
-    ownership: {
-      type: String,
-      enum: ["owned", "tenant"],
-      required: true,
-    },
-
-    email: {
-      type: String,
-      default: null,
-    },
-
-    createdAt: {
+    assignedAt: {
       type: Date,
-      default: Date.now,
+      default: null,
     },
   },
   { timestamps: true }
 );
 
-
-// Prevent model overwrite during hot-reload (Next.js fix)
 delete mongoose.models.Shop;
 
 const Shop = models.Shop || mongoose.model<IShop>("Shop", ShopSchema);

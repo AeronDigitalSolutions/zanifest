@@ -18,7 +18,7 @@ export default function AdminLogin() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true); // ✅ show loader
+    setLoading(true); 
     setError(false);
 
     try {
@@ -82,11 +82,8 @@ export default function AdminLogin() {
             />
           </div>
 
-          <h1 className={styles.heading}>Admin Login</h1>
-          <p className={styles.headingp}>
-            Access to the most powerful tool in the entire design and web
-            industry.
-          </p>
+          <h1 className={styles.heading}>Admin Login to continue</h1>
+         
 
           <form className={styles.loginForm} onSubmit={handleSubmit}>
             <div className={styles.error}>

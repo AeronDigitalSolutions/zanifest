@@ -1,136 +1,91 @@
-import mongoose from "mongoose";
+// models/Agent.ts
+import mongoose, { Schema, Document, models } from "mongoose";
 
-const agentSchema = new mongoose.Schema({
- 
-  firstName: {
-    type: String,
-    required: true,
-  },
-  lastName: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  password:{
-    type: String,
-    required: true,
-  },
-  phone: {
-    type: String,
-    required: true,
-  },
-  agentCode: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  city: {
-    type: String,
-    required: true,
-  },
-  district: {
-    type: String,
-    required: true,
-  },
-  state: {
-    type: String,
-    required: true,
-  },
-  pinCode: {
-    type: String,
-    required: true,
-  },
-  panNumber: {
-    type: String,
-    required: true,
-  },
-  panAttachment: {
-    type: String, // path or filename for uploaded PAN
-  },
-  adhaarNumber: {
-    type: String,
-    required: true,
-  },
-  adhaarAttachment: {
-    type: String,
-  },
+export interface IAgent extends Document {
+  loginId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  phone: string;
+  agentCode: string;
+  city: string;
+  district: string;
+  state: string;
+  pinCode: string;
+  panNumber?: string;
+  panAttachment?: string; 
+  adhaarNumber?: string;
+  adhaarAttachment?: string; 
+  nomineeName?: string;
+  nomineeRelation?: string;
+  nomineePanNumber?: string;
+  nomineeAadharNumber?: string;
+  nomineePanAttachment?: string;
+  nomineeAadhaarAttachment?: string;
+  accountHolderName?: string;
+  bankName?: string;
+  accountNumber?: string;
+  ifscCode?: string;
+  branchLocation?: string;
+  cancelledChequeAttachment?: string;
+  assignedTo?: string;
+  status?: "pending" | "approved" | "rejected";
+  accountStatus?: "active" | "inactive";
+}
 
-  // Nominee Details
-  
-    nomineeName: String,
-    nomineeRelation: String,
-    nomineePanNumber: String,
-    nomineeAadharNumber: String,
-    nomineePanAttachment: String,
-    nomineeAadhaarAttachment: String,
-  
+const agentSchema = new Schema<IAgent>(
+  {
+    loginId: { type: String, required: true, unique: true },
 
-  // Bank Details
-  
-    accountHolderName: String,
-    bankName: String,
-    accountNumber: String,
-    ifscCode: String,
-    branchLocation: String,
-    cancelledChequeAttachment: String,
-    attachments: [
-      {
-        filename: String,
-        data: Buffer,
-        url: String, // ✅ Add this to store the accessible path
-        mimetype: String,
-      }
-    ],
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    email: { type: String, required: true },
+    password: { type: String, required: true },
+    phone: { type: String, required: true },
 
-  assignedTo: {
-    type: String, // or String, depending on your Manager schema
-    ref: "Manager",
-    required: true,
+    agentCode: { type: String, required: true, unique: true },
+
+    city: { type: String, required: true },
+    district: { type: String, required: true },
+    state: { type: String, required: true },
+    pinCode: { type: String, required: true },
+
+    panNumber: { type: String },
+    panAttachment: { type: String },
+
+    adhaarNumber: { type: String },
+    adhaarAttachment: { type: String },
+
+    nomineeName: { type: String },
+    nomineeRelation: { type: String },
+    nomineePanNumber: { type: String },
+    nomineeAadharNumber: { type: String },
+    nomineePanAttachment: { type: String },
+    nomineeAadhaarAttachment: { type: String },
+
+    accountHolderName: { type: String },
+    bankName: { type: String },
+    accountNumber: { type: String },
+    ifscCode: { type: String },
+    branchLocation: { type: String },
+    cancelledChequeAttachment: { type: String },
+
+    assignedTo: { type: String },
+
+    status: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending",
+    },
+
+    accountStatus: {
+      type: String,
+      enum: ["active", "inactive"],
+      default: "active",
+    },
   },
-
-  accountStatus :{type: String, enum: ['active', 'inactive'], default: 'active'}
-});
+  { timestamps: true }
+);
 
 export default mongoose.models.Agent || mongoose.model("Agent", agentSchema);
-
-
-
-// import mongoose from "mongoose";
-
-// const agentSchema = new mongoose.Schema({
-//   name: {
-//     type: String,
-//     required: true,
-//   },
-//   email: {
-//     type: String,
-//     required: true,
-//     unique: true,
-//   },
-//   district: {
-//     type: String,
-//     required: true,
-//   },
-//   city: {
-//     type: String,
-//     required: true,
-//   },
-//   state: {
-//     type: String,
-//     required: true,
-//   },
-//   password: {
-//     type: String,
-//     required: true,
-//   },
-//   assignedTo: {
-//     type: String, // Assuming you're using custom integer IDs for managers
-//     required: true,
-//   },
-// });
-
-// export default mongoose.models.Agent || mongoose.model("Agent", agentSchema);

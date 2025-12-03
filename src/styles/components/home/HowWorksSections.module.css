@@ -253,3 +253,12 @@
     transform: translateY(0);
   }
 }
+
+.serviceItem{
+  transition: transform 0.25s ease;
+  cursor: pointer;
+}
+
+.serviceItem:hover {
+  transform: scale(1.05);
+}

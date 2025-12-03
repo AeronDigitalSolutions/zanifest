@@ -52,7 +52,7 @@ export default function HowWorksSections() {
     <div ref={sectionRef} className={styles.cont}>
       {/* Main Heading */}
       <div className={styles.head}>
-        <div  data-aos="fade-up" data-aos-duration="2000"  data-aos-easing="ease-in"
+        <div  data-aos="fade-up" data-aos-duration="1000"  data-aos-easing="ease-in"
           className={`${styles.heading} ${
             animateheading ? styles.animateOnce : ""
           }`}
@@ -85,7 +85,7 @@ export default function HowWorksSections() {
 
       {/* Services Heading */}
       <div className={styles.servciesCont}>
-        <div  data-aos="fade-up" data-aos-duration="2000"  data-aos-easing="ease-in-sine"
+        <div  data-aos="fade-up" data-aos-duration="1000"  data-aos-easing="ease-in-sine"
           className={`${styles.heading} ${
             animateheading ? styles.animateOnce : ""
           }`}

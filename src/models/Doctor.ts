@@ -14,13 +14,11 @@ const DoctorSchema: Schema = new Schema<IDoctor>(
   {
     name: { type: String, required: true, trim: true },
 
-    // This is optional, input from form
+
  email: {
       type: String,
       default: null,
     },
-    // ⭐ This tracks actual logged-in user
-
     mobile: { type: String, required: true },
     whatsapp: { type: Boolean, default: true },
     specialization: { type: String, default: null },

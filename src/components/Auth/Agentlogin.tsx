@@ -47,7 +47,7 @@ export default function Agentlogin() {
       localStorage.setItem("agentName", data.agent.name);
 
     setError(false);
-    router.push("/agentpage");
+    // router.push("/agentpage");
   } 
 
   catch (err) {
@@ -91,11 +91,8 @@ export default function Agentlogin() {
               />
             </div>
 
-            <h1 className={styles.heading}>Agent Login</h1>
-            <p className={styles.headingp}>
-              Access to the most powerful tool in the entire design and web
-              industry.
-            </p>
+            <h1 className={styles.heading}>Agent Login to continue</h1>
+            
 
             <form className={styles.loginForm} onSubmit={onSubmit}>
               <div className={styles.error}>
@@ -143,6 +140,15 @@ export default function Agentlogin() {
               >
                 Login
               </button>
+               <p className={styles.signupLink}>
+              Don't have an account?{" "}
+              <span
+                className={styles.signupText}
+                onClick={() => router.push("/agentsignup")}
+              >
+                Sign Up
+              </span>
+            </p>
             </form>
           </div>
         </div>

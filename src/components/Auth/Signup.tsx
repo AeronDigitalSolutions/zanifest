@@ -48,10 +48,8 @@ export default function SignUp() {
             <Image src={logo} alt="logo" className={styles.logoImage} />
           </div>
 
-          <h1 className={styles.heading}>Join the login Platform</h1>
-          <p className={styles.headingp}>
-            Create your account to unlock the full potential of our tools.
-          </p>
+          <h1 className={styles.heading}>Signup to continue</h1>
+         
 
           <form onSubmit={handleSubmit} className={styles.loginForm}>
             {error && (

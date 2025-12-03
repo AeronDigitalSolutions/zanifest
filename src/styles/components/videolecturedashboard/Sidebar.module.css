@@ -1,0 +1,54 @@
+.sidebar {
+  width: 220px;
+  background: #071021;
+  padding: 16px;
+  border-right: 1px solid #122233;
+}
+
+.title {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  color: inherit;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  border: none;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.active {
+  background: rgba(14, 165, 163, 0.15);
+}
+
+.status {
+  opacity: 0.8;
+}
+
+@media (max-width: 800px) {
+  .sidebar {
+    width: 100%;
+    display: flex;
+    overflow-x: auto;
+  }
+  .list {
+    flex-direction: row;
+  }
+}

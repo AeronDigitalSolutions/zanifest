@@ -90,11 +90,8 @@ export default function Managerlogin() {
               />
             </div>
 
-            <h1 className={styles.heading}>Manager Login</h1>
-            <p className={styles.headingp}>
-              Access to the most powerful tool in the entire design and web
-              industry.
-            </p>
+            <h1 className={styles.heading}>Manager Login to continue</h1>
+           
 
             <form className={styles.loginForm} onSubmit={handleSubmit}>
               <div className={styles.error}>

@@ -16,45 +16,64 @@ interface CarouselProps {
 
 export default function Carousel({ items }: CarouselProps) {
   const [currentItems, setCurrentItems] = useState<CarouselItem[]>([]);
-  const [isSliding, setIsSliding] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
 
   const CARD_WIDTH = 380; // Width of one card + gap
+  const intervalRef = useRef<NodeJS.Timeout | null>(null); // <-- New
 
+  // Setup items
   useEffect(() => {
-    const initial = [...items, ...items.slice(0, 3)]; // Add 3 more for looping
+    const initial = [...items, ...items.slice(0, 3)];
     setCurrentItems(initial);
   }, [items]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
+  // Auto-slide start
+  const startSlider = () => {
+    stopSlider(); // Avoid duplicate intervals
+    intervalRef.current = setInterval(() => {
       slideNext();
     }, 3000);
-    return () => clearInterval(interval);
+  };
+
+  // Auto-slide stop
+  const stopSlider = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  };
+
+  // Start auto slide on mount
+  useEffect(() => {
+    startSlider();
+    return () => stopSlider();
   }, [currentItems]);
 
+  // Sliding Logic
   const slideNext = () => {
     if (!trackRef.current) return;
 
-    setIsSliding(true);
     const track = trackRef.current;
     track.style.transition = "transform 0.5s ease-in-out";
     track.style.transform = `translateX(-${CARD_WIDTH}px)`;
 
     setTimeout(() => {
-      setIsSliding(false);
       track.style.transition = "none";
       track.style.transform = "translateX(0)";
 
       setCurrentItems((prev) => {
         const [first, ...rest] = prev;
-        return [...rest, first]; // Rotate cards
+        return [...rest, first];
       });
     }, 500);
   };
 
   return (
-    <div className={styles.carouselWrapper}>
+    <div
+      className={styles.carouselWrapper}
+      onMouseEnter={stopSlider}   // ⛔ Pause On Hover
+      onMouseLeave={startSlider}  // ▶ Resume On Leave
+    >
       <div className={styles.carouselWindow}>
         <div className={styles.track} ref={trackRef}>
           {currentItems.map((item, index) => (

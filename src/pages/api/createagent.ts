@@ -1,65 +1,58 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import dbConnect from '@/lib/dbConnect';
-import Agent from '@/models/Agent';
+// pages/api/createagent.ts
+import { NextApiRequest, NextApiResponse } from "next";
+import dbConnect from "@/lib/dbConnect";
+import Agent from "@/models/Agent";
+import AgentLogin from "@/models/AgentLogin";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  await dbConnect();
-
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' });
-  }
+  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
   try {
-      const { attachments, ...formFields } = req.body; // parsed JSON
-    if (!attachments) {
-      return res.status(400).json({ error: 'No attachments provided' });
+    await dbConnect();
+    const data = req.body;
+
+    const required = [
+      "firstName",
+      "lastName",
+      "email",
+      "password",
+      "phone",
+      "agentCode",
+      "city",
+      "district",
+      "state",
+      "pinCode",
+      "loginId",
+    ];
+
+    for (const r of required) {
+      if (!data[r]) {
+        return res.status(400).json({ error: `Missing: ${r}` });
+      }
+    }
+
+    // ensure loginId exists in AgentLogin
+    const loginRecord = await AgentLogin.findOne({ loginId: data.loginId });
+    if (!loginRecord) {
+      return res.status(400).json({ error: "Invalid loginId" });
+    }
+
+    // ensure unique agentCode & email
+    const existingAgent = await Agent.findOne({ $or: [{ agentCode: data.agentCode }, { email: data.email }] });
+    if (existingAgent) {
+      return res.status(400).json({ error: "Agent code or email already exists" });
     }
 
     const agent = new Agent({
-      ...formFields,
-      ...attachments
+      ...data,
+      status: "pending",
     });
 
     await agent.save();
-    return res.status(201).json({ message: 'Agent created', agent });
-  } catch (error: any) {
-    console.error('Error creating agent:', error);
-    return res.status(400).json({ error: error.message || 'Failed to create agent' });
+
+    return res.status(201).json({ message: "Agent created", agent });
+  } catch (err: any) {
+    console.error("Create Agent Error:", err);
+    return res.status(500).json({ error: err.message });
   }
 }
-
-
-
-
-
-
-// import dbConnect from "@/lib/dbConnect";
-// import Agent from "@/models/Agent";
-
-// export default async function handler(req: { method: string; body: any; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { message?: string; agent?: any; error?: any; }): void; new(): any; }; }; }) {
-//   await dbConnect();
-
-//   if (req.method === "POST") {
-//     try {
-//       const agent = new Agent(req.body);
-//       console.log("Creating agent with data:", agent);
-//       await agent.save();
-//       return res.status(201).json({ message: "Agent created", agent });
-//     } 
-    
-//     catch (error) {
-//       if (error instanceof Error) {
-//          console.log('error creating agent - error instanceof Error');
-//         console.error("Error creating agent:", error.message);
-//         return res.status(400).json({ error: error.message });
-       
-//       } 
-//       else {
-//          console.log('unknown error creating agent');
-//         return res.status(400).json({ error: "An unknown error occurred" });
-//       }
-//     }
-//   } else {
-//     res.status(405).json({ message: "Method not allowed" });
-//   }
-// }

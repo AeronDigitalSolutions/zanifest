@@ -8,25 +8,39 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { useAuth } from "@/context/AuthContext";
+
+// dialogs
+import TravelPromptDialog from "@/components/Dialog/PromptDialog";
+import LoginDialog from "@/components/Dialog/LoginDialog";
+import RegisterDialog from "@/components/Dialog/RegisterDialog";
 
 const Homeinsurance2: React.FC = () => {
+  const router = useRouter();
+  const { isLoggedIn, user } = useAuth();
+
+  // fields
   const [houseValue, setHouseValue] = useState("");
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
   const [householdValue, setHouseholdValue] = useState("");
   const [city, setCity] = useState("");
-  const router = useRouter();
 
-  // Initialize AOS animations
+  // dialogs
+  const [showPromptDialog, setShowPromptDialog] = useState(false);
+  const [showLoginDialog, setShowLoginDialog] = useState(false);
+  const [showRegisterDialog, setShowRegisterDialog] = useState(false);
+
+  const [tempRecordId, setTempRecordId] = useState<string | null>(null);
+
+  /* ---------------- LOAD RECORD ID FIX ---------------- */
   useEffect(() => {
     AOS.init({ duration: 1000, once: true });
+
+    const savedId = localStorage.getItem("homeRecordId");
+    if (savedId) setTempRecordId(savedId);
   }, []);
 
-  // Convert number to Indian comma format
-  const formatIndianNumber = (num: number) => {
-    return num.toLocaleString("en-IN");
-  };
-
-  // Preset options mapping
+  /* ---------------- Format Helpers ---------------- */
   const presetOptions: Record<string, number> = {
     "₹1 Cr": 10000000,
     "₹75 L": 7500000,
@@ -43,105 +57,156 @@ const Homeinsurance2: React.FC = () => {
 
   const [houseTextValue, setHouseTextValue] = useState("");
 
-  // Handle preset selection
   const handleSelectValue = (value: string) => {
     const num = presetOptions[value];
     setSelectedValue(value);
-    setHouseValue(formatIndianNumber(num));
+    setHouseValue(num.toLocaleString("en-IN"));
     setHouseTextValue(wordsMap[value]);
   };
 
-  // Handle manual input (clear selected preset)
   const handleManualInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let val = e.target.value.replace(/[^\d]/g, ""); // only digits
-    if (val) {
-      const formatted = Number(val).toLocaleString("en-IN");
-      setHouseValue(formatted);
-    } else {
-      setHouseValue("");
-    }
-    if (selectedValue) setSelectedValue(null); // deselect preset
+    let val = e.target.value.replace(/[^\d]/g, "");
+    if (val) setHouseValue(Number(val).toLocaleString("en-IN"));
+    else setHouseValue("");
+
+    setSelectedValue(null);
     setHouseTextValue("");
   };
 
-  // Handle household input and validate
   const handleHouseholdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let val = e.target.value.replace(/[^\d]/g, "");
-    if (!val) {
-      setHouseholdValue("");
-      return;
-    }
+    if (!val) return setHouseholdValue("");
 
     const householdNum = parseInt(val);
     const houseNum = parseInt(houseValue.replace(/,/g, "")) || 0;
 
     if (householdNum > houseNum) {
-      alert("Household value cannot be greater than the current market value!");
+      alert("Household cannot be greater than house value!");
       return;
     }
 
-    const formatted = Number(val).toLocaleString("en-IN");
-    setHouseholdValue(formatted);
+    setHouseholdValue(Number(val).toLocaleString("en-IN"));
   };
 
-  // Function to handle final submission
- const handleSubmitData = async () => {
-  const step1Data = localStorage.getItem("homeInsuranceStep1");
+  /* ---------------- Build Final Payload ---------------- */
+  const buildFinalPayload = () => {
+    const step1Data = localStorage.getItem("homeStep1");
+    if (!step1Data) return null;
 
-  if (!step1Data) {
-    alert("Please fill the first step first!");
-    router.push("Homeinsurance");
-    return;
-  }
+    const parsed = JSON.parse(step1Data);
 
-  const step1Parsed = JSON.parse(step1Data);
-
-  const payload = {
-    ...step1Parsed,
-    propertyDetails: {
-      houseValue,
-      householdItemsValue: householdValue,
-      cityName: city,
-    },
+    return {
+      ...parsed,
+      propertyDetails: {
+        houseValue,
+        householdItemsValue: householdValue,
+        cityName: city,
+      },
+    };
   };
 
-  try {
-    const res = await fetch("/api/homeinsurance", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include", // ⭐ SAME AS TRAVEL
-      body: JSON.stringify(payload),
-    });
+  /* ---------------- Save Final Record ---------------- */
+  const saveFinalData = async (emailValue: string) => {
+    const payload: any = buildFinalPayload();
+    if (!payload) return null;
 
-    const data = await res.json();
+    payload.email = emailValue ?? null;
 
-    if (res.ok) {
-      alert("✅ Data saved successfully!");
-      localStorage.removeItem("homeInsuranceStep1");
-      router.push("Homeinsurance3");
-    } else {
-      alert("❌ Failed: " + (data.error || "Unknown error"));
+    try {
+      const res = await fetch("/api/homeinsurance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      return res.ok ? data.data : null;
+    } catch {
+      alert("Network Error");
+      return null;
     }
-  } catch (err) {
-    console.error("ERROR:", err);
-    alert("Network error");
-  }
-};
+  };
 
+  /* ---------------- SUBMIT → Step-2 ---------------- */
+  const handleSubmitData = async () => {
+    if (!houseValue || !householdValue)
+      return alert("Please fill all required fields.");
+
+    // logged-in user → save and continue
+    if (isLoggedIn && user?.email) {
+      const saved = await saveFinalData(user.email);
+
+      if (saved) {
+        localStorage.removeItem("homeStep1");
+        router.push("Homeinsurance3");
+      }
+      return;
+    }
+
+    // user not logged in → show popup (only here)
+    setShowPromptDialog(true);
+  };
+
+  /* ---------------- CANCEL → Save unregistered ---------------- */
+  const handlePromptCancel = async () => {
+    setShowPromptDialog(false);
+
+    const saved = await saveFinalData("unregistered_user");
+    if (saved && saved._id) setTempRecordId(saved._id);
+
+    localStorage.removeItem("homeStep1");
+    router.push("Homeinsurance3");
+  };
+
+  /* ---------------- LOGIN / REGISTER ---------------- */
+  const handlePromptLogin = () => {
+    setShowPromptDialog(false);
+    setShowLoginDialog(true);
+  };
+
+  const handlePromptRegister = () => {
+    setShowPromptDialog(false);
+    setShowRegisterDialog(true);
+  };
+
+  /* ---------------- LOGIN SUCCESS → Update Email ---------------- */
+  const handleLoginSuccess = async (email: string) => {
+    setShowLoginDialog(false);
+
+    if (tempRecordId) {
+      await fetch("/api/updateEmail", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: tempRecordId,
+          email,
+          module: "home",
+        }),
+      });
+    }
+
+    localStorage.removeItem("homeStep1");
+    router.push("Homeinsurance3");
+  };
+
+  const handleRegisterSuccess = () => {
+    setShowRegisterDialog(false);
+    setTimeout(() => setShowLoginDialog(true), 150);
+  };
 
   return (
     <div>
       <Navbar />
-      <div className={styles.container} data-aos="fade-left">
-        <h2 className={styles.heading}>
-          Please help us with your property details
-        </h2>
 
-        {/* House Value Input */}
+      <div className={styles.container}>
+        <h2 className={styles.heading}>Please help us with your property details</h2>
+
+        {/* House Value */}
         <div className={styles.inputGroup}>
           <input
             type="text"
-            placeholder="Enter current market value of your house (₹)"
+            placeholder="Current house value (₹)"
             value={houseValue}
             onChange={handleManualInput}
             className={styles.input}
@@ -149,13 +214,10 @@ const Homeinsurance2: React.FC = () => {
           <FiInfo className={styles.icon} />
         </div>
 
-        {/* Display text like “One Crore Only” */}
-        {houseTextValue && (
-          <p className={styles.helperText}>{houseTextValue}</p>
-        )}
+        {houseTextValue && <p className={styles.helperText}>{houseTextValue}</p>}
 
-        {/* Most Chosen Values */}
         <p className={styles.subLabel}>Most chosen house values</p>
+
         <div className={styles.valueButtons}>
           {Object.keys(presetOptions).map((val) => (
             <button
@@ -174,7 +236,7 @@ const Homeinsurance2: React.FC = () => {
         <div className={styles.inputGroup}>
           <input
             type="text"
-            placeholder="Value of household items (Rs.)"
+            placeholder="Household items value (₹)"
             value={householdValue}
             onChange={handleHouseholdChange}
             className={styles.input}
@@ -182,7 +244,7 @@ const Homeinsurance2: React.FC = () => {
           <FiInfo className={styles.icon} />
         </div>
 
-        {/* City Input */}
+        {/* City */}
         <input
           type="text"
           placeholder="City name (Optional)"
@@ -191,32 +253,38 @@ const Homeinsurance2: React.FC = () => {
           className={styles.input}
         />
 
-        {/* Navigation Buttons */}
+        {/* Buttons */}
         <div className={styles.buttonGroup}>
-          <button
-            className={styles.prevBtn}
-            onClick={() => router.push("Homeinsurance")}
-          >
-            <MdKeyboardArrowLeft />
-            Previous
+          <button className={styles.prevBtn} onClick={() => router.push("Homeinsurance")}>
+            <MdKeyboardArrowLeft /> Previous
           </button>
 
           <button className={styles.nextBtn} onClick={handleSubmitData}>
             View Discounted Plans
           </button>
         </div>
-
-        {/* OR Divider */}
-        <div className={styles.divider}>
-          <span>OR</span>
-        </div>
-
-        {/* Bottom Section */}
-        <div className={styles.bottomText}>
-          <span>Need insurance for entire housing society? </span>
-          <a href="#">Click here</a>
-        </div>
       </div>
+
+      {/* dialogs */}
+      <TravelPromptDialog
+        open={showPromptDialog}
+        onCancel={handlePromptCancel}
+        onLogin={handlePromptLogin}
+        onRegister={handlePromptRegister}
+      />
+
+      <LoginDialog
+        open={showLoginDialog}
+        onClose={() => setShowLoginDialog(false)}
+        onSuccess={handleLoginSuccess}
+      />
+
+      <RegisterDialog
+        open={showRegisterDialog}
+        onClose={() => setShowRegisterDialog(false)}
+        onSuccess={handleRegisterSuccess}
+      />
+
       <Footer />
     </div>
   );
