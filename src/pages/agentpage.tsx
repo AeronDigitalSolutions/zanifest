@@ -1,6 +1,6 @@
-"use client";
+
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import styles from "@/styles/pages/agent.module.css";
 import axios from "axios";
 import Agent from "@/models/Agent"

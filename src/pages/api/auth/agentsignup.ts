@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "@/lib/dbConnect";
 import AgentLogin from "@/models/AgentLogin";
 import crypto from "crypto";
+import { act } from "react";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST")
@@ -27,6 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const newUser = new AgentLogin({
       name: userName, // FULL NAME
+      accountStatus:"active",
       email,
       password,
       loginId,

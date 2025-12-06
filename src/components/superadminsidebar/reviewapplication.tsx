@@ -2,21 +2,23 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import styles from "@/styles/components/superadminsidebar/createagent.module.css";
+import styles from "@/styles/components/superadminsidebar/reviewApplications.module.css";
 
 interface AgentData {
   _id: string;
   firstName: string;
   lastName: string;
   email: string;
-  agentCode: string;
+  agentCode?: string;
   phone?: string;
   city?: string;
   district?: string;
   state?: string;
   pinCode?: string;
   panNumber?: string;
+  panAttachment?: string;     // filename only
   adhaarNumber?: string;
+  adhaarAttachment?: string;  // filename only
   nomineeName?: string;
   nomineeRelation?: string;
   nomineeAadharNumber?: string;
@@ -30,18 +32,32 @@ interface AgentData {
   status?: string;
 }
 
+type VerificationState = "pending" | "approved" | "rejected";
+
 export default function ReviewApplications() {
   const [applications, setApplications] = useState<AgentData[]>([]);
   const [selected, setSelected] = useState<AgentData | null>(null);
   const [managerList, setManagerList] = useState<any[]>([]);
   const [assignManager, setAssignManager] = useState("");
-
-  // IRDAI check state
   const [irdaiVerified, setIrdaiVerified] = useState(false);
 
+  // local verification states for currently selected agent
+  const [panStatus, setPanStatus] = useState<VerificationState>("pending");
+  const [aadhaarStatus, setAadhaarStatus] = useState<VerificationState>("pending");
+  const [remark, setRemark] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // base URL for file preview — change via NEXT_PUBLIC_UPLOAD_BASE_URL if needed
+  const FILE_BASE =
+    (process.env.NEXT_PUBLIC_UPLOAD_BASE_URL as string) || "/uploads";
+
   const load = async () => {
-    const res = await axios.get("/api/admin/getPendingAgents");
-    setApplications(res.data);
+    try {
+      const res = await axios.get("/api/admin/getPendingAgents");
+      setApplications(res.data || []);
+    } catch (err) {
+      console.error("Failed to load pending agents", err);
+    }
   };
 
   useEffect(() => {
@@ -49,73 +65,134 @@ export default function ReviewApplications() {
   }, []);
 
   const openReview = async (agent: AgentData) => {
-    const res = await axios.get(`/api/admin/getAgentById?id=${agent._id}`);
-    setSelected(res.data);
+    try {
+      setLoading(true);
+      const res = await axios.get(`/api/admin/getAgentById?id=${agent._id}`);
+      setSelected(res.data);
 
-    const res2 = await axios.get("/api/managers/agentDistrictDropdown");
-    setManagerList(res2.data.managers);
+      const res2 = await axios.get("/api/managers/agentDistrictDropdown");
+      setManagerList(res2.data.managers || []);
 
-    setIrdaiVerified(false); // reset when new modal opens
+      // reset verification state for modal
+      setPanStatus(res.data?.panNumber ? "pending" : "pending");
+      setAadhaarStatus(res.data?.adhaarNumber ? "pending" : "pending");
+      setRemark("");
+      setAssignManager(res.data?.assignedTo || "");
+      setIrdaiVerified(false);
+    } catch (err) {
+      console.error("openReview error", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  // When user approves/rejects overall application (final action)
   const handleReview = async (action: "accept" | "reject") => {
-    if (!irdaiVerified) {
-      alert("Please verify PAN on IRDAI before approval.");
+    // require both verifications completed
+    if (panStatus === "pending" || aadhaarStatus === "pending") {
+      alert("Please complete PAN and Aadhaar verification before final review.");
+      return;
+    }
+
+    // if any rejected, remark required
+    if ((panStatus === "rejected" || aadhaarStatus === "rejected") && !remark.trim()) {
+      alert("Please add a remark explaining rejection.");
       return;
     }
 
     if (!selected) return;
 
+    // if accepting, ensure a manager is assigned
     if (action === "accept" && !assignManager) {
-      alert("Please assign a District Manager!");
+      alert("Please assign a District Manager before approving.");
       return;
     }
 
-    await axios.post("/api/admin/reviewAgent", {
-      agentId: selected._id,
-      action,
-      assignManager,
-    });
+    try {
+      setLoading(true);
+      await axios.post("/api/admin/reviewAgent", {
+        agentId: selected._id,
+        action,
+        assignManager,
+        verification: {
+          panStatus,
+          aadhaarStatus,
+        },
+        remark: remark.trim(),
+      });
 
-    alert(`Application ${action === "accept" ? "Approved" : "Rejected"}!`);
-    setSelected(null);
-    setAssignManager("");
-    load();
+      alert(`Application ${action === "accept" ? "Approved" : "Rejected"}!`);
+      setSelected(null);
+      setAssignManager("");
+      setRemark("");
+      load();
+    } catch (err) {
+      console.error("handleReview error", err);
+      alert("Something went wrong while submitting review.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // IRDAI verification button click
+  // IRDAI link open (keeps same behavior) — marks IRDAI step done
   const handleIrdaiClick = () => {
-    window.open(
-      "https://agencyportal.irdai.gov.in/PublicAccess/LookUpPAN.aspx",
-      "_blank"
-    );
+    window.open("https://agencyportal.irdai.gov.in/PublicAccess/LookUpPAN.aspx", "_blank");
     setIrdaiVerified(true);
   };
 
+  // Helpers to get full preview URL when DB stores filename only
+  const getFileUrl = (filename?: string | null) => {
+    if (!filename) return null;
+    // if filename already contains http(s), return as-is
+    if (filename.startsWith("http://") || filename.startsWith("https://")) return filename;
+    // else combine with base path
+    return `${FILE_BASE.replace(/\/$/, "")}/${filename.replace(/^\//, "")}`;
+  };
+
+  // Approve/reject handlers for pan & aadhaar
+  const setPanApproved = () => setPanStatus("approved");
+  const setPanRejected = () => setPanStatus("rejected");
+  const setAadhaarApproved = () => setAadhaarStatus("approved");
+  const setAadhaarRejected = () => setAadhaarStatus("rejected");
+
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Review Applications</h2>
+    <div className={styles.pageWrapper}>
+      <h2 className={styles.title}>Review Applications</h2>
 
       {applications.length === 0 ? (
         <p>No pending applications</p>
       ) : (
-        <table style={{ width: "100%", marginTop: 20 }}>
+        <table className={styles.table}>
           <thead>
             <tr>
+              <th>S.No</th>
               <th>Name</th>
               <th>Email</th>
-              <th>Agent Code</th>
               <th>Review</th>
             </tr>
           </thead>
+
           <tbody>
-            {applications.map((a) => (
-              <tr key={a._id}>
+            {applications.map((a, index) => (
+              <tr
+                key={a._id}
+                className={styles.tableRow}
+                onClick={() => openReview(a)}
+              >
+                <td>{index + 1}</td>
                 <td>{a.firstName} {a.lastName}</td>
                 <td>{a.email}</td>
-                <td>{a.agentCode}</td>
+
                 <td>
-                  <button onClick={() => openReview(a)}>Review</button>
+                  <button
+                    className={styles.reviewBtn}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openReview(a);
+                    }}
+                  >
+                    Review
+                  </button>
                 </td>
               </tr>
             ))}
@@ -123,253 +200,249 @@ export default function ReviewApplications() {
         </table>
       )}
 
-      {/* ---------------- MODAL ---------------- */}
+      {/* ---------- Modal ---------- */}
       {selected && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            background: "rgba(0,0,0,0.4)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "flex-start",
-            paddingTop: "40px",
-            zIndex: 999,
-            overflowY: "auto",
-          }}
-        >
-          <div className={styles.container} style={{ width: "90%", maxWidth: "900px" }}>
-            <h2 className={styles.heading}>Review Agent Application</h2>
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalBox} role="dialog" aria-modal="true">
+            <h2 className={styles.modalTitle}>
+              Review Agent Application
+            </h2>
 
-            <form className={styles.form}>
-
-              {/* ------------------ ROW 1 ------------------ */}
-              <div className={styles.row}>
-                <div className={styles.formGroup}>
-                  <label>Agent Code</label>
-                  <input className={styles.input} readOnly value={selected.agentCode} />
-                </div>
-
-                <div className={styles.formGroup}>
+            <div className={styles.modalContent}>
+              {/* top grid */}
+              <div className={styles.grid}>
+                <div className={styles.field}>
                   <label>First Name</label>
-                  <input className={styles.input} readOnly value={selected.firstName} />
+                  <input readOnly value={selected.firstName || ""} />
                 </div>
 
-                <div className={styles.formGroup}>
+                <div className={styles.field}>
                   <label>Last Name</label>
-                  <input className={styles.input} readOnly value={selected.lastName} />
+                  <input readOnly value={selected.lastName || ""} />
                 </div>
-              </div>
 
-              {/* ------------------ ROW 2 ------------------ */}
-              <div className={styles.row}>
-                <div className={styles.formGroup}>
+                <div className={styles.field}>
                   <label>Email</label>
-                  <input className={styles.input} readOnly value={selected.email} />
+                  <input readOnly value={selected.email || ""} />
                 </div>
 
-                <div className={styles.formGroup}>
+                <div className={styles.field}>
                   <label>Phone</label>
-                  <input className={styles.input} readOnly value={selected.phone} />
-                </div>
-              </div>
-
-              <h3>Address Details</h3>
-
-              {/* ------------------ ADDRESS ------------------ */}
-              <div className={styles.row}>
-                <div className={styles.formGroup}>
-                  <label>Pin Code</label>
-                  <input className={styles.input} readOnly value={selected.pinCode} />
+                  <input readOnly value={selected.phone || ""} />
                 </div>
 
-                <div className={styles.formGroup}>
+                <div className={styles.field}>
                   <label>City</label>
-                  <input className={styles.input} readOnly value={selected.city} />
+                  <input readOnly value={selected.city || ""} />
                 </div>
 
-                <div className={styles.formGroup}>
+                <div className={styles.field}>
                   <label>District</label>
-                  <input className={styles.input} readOnly value={selected.district} />
+                  <input readOnly value={selected.district || ""} />
                 </div>
-              </div>
 
-              <div className={styles.row}>
-                <div className={styles.formGroup}>
+                <div className={styles.field}>
                   <label>State</label>
-                  <input className={styles.input} readOnly value={selected.state} />
+                  <input readOnly value={selected.state || ""} />
                 </div>
 
-                <div className={styles.formGroup}>
+                <div className={styles.field}>
                   <label>PAN Number</label>
-                  <input className={styles.input} readOnly value={selected.panNumber} />
+                  <input readOnly value={selected.panNumber || ""} />
                 </div>
 
-                <div className={styles.formGroup}>
+                <div className={styles.field}>
                   <label>Aadhaar Number</label>
-                  <input className={styles.input} readOnly value={selected.adhaarNumber} />
+                  <input readOnly value={selected.adhaarNumber || ""} />
                 </div>
               </div>
 
-              <h3>Nominee Details</h3>
+              {/* Documents + verification */}
+              <div className={styles.docsRow}>
+                <div className={styles.docCard}>
+                  <div className={styles.docHeader}>
+                    <strong>PAN Card</strong>
+                    <span className={styles.smallNote}>Preview & verify</span>
+                  </div>
 
-              <div className={styles.row}>
-                <div className={styles.formGroup}>
-                  <label>Nominee Name</label>
-                  <input className={styles.input} readOnly value={selected.nomineeName} />
+                  <div className={styles.docPreviewWrap}>
+                    {selected.panAttachment ? (
+                      <img
+                        className={styles.docPreview}
+                        src={getFileUrl(selected.panAttachment) || ""}
+                        alt="PAN"
+                        onClick={() => {
+                          const url = getFileUrl(selected.panAttachment);
+                          if (url) window.open(url, "_blank");
+                        }}
+                      />
+                    ) : (
+                      <div className={styles.noPreview}>No PAN uploaded</div>
+                    )}
+                  </div>
+
+                  <div className={styles.verifyRow}>
+                    <button
+                      className={`${styles.verifyAction} ${
+                        panStatus === "approved" ? styles.approved : ""
+                      }`}
+                      onClick={() => setPanApproved()}
+                      disabled={panStatus === "approved"}
+                    >
+                      Approve PAN
+                    </button>
+
+                    <button
+                      className={`${styles.verifyAction} ${styles.reject}`}
+                      onClick={() => setPanRejected()}
+                      disabled={panStatus === "rejected"}
+                    >
+                      Reject PAN
+                    </button>
+
+                    <div className={styles.statusPill}>
+                      {panStatus === "pending" && "Pending"}
+                      {panStatus === "approved" && "Approved"}
+                      {panStatus === "rejected" && "Rejected"}
+                    </div>
+                  </div>
                 </div>
 
-                <div className={styles.formGroup}>
-                  <label>Nominee Relation</label>
-                  <input className={styles.input} readOnly value={selected.nomineeRelation} />
+                <div className={styles.docCard}>
+                  <div className={styles.docHeader}>
+                    <strong>Aadhaar Card</strong>
+                    <span className={styles.smallNote}>Preview & verify</span>
+                  </div>
+
+                  <div className={styles.docPreviewWrap}>
+                    {selected.adhaarAttachment ? (
+                      <img
+                        className={styles.docPreview}
+                        src={getFileUrl(selected.adhaarAttachment) || ""}
+                        alt="Aadhaar"
+                        onClick={() => {
+                          const url = getFileUrl(selected.adhaarAttachment);
+                          if (url) window.open(url, "_blank");
+                        }}
+                      />
+                    ) : (
+                      <div className={styles.noPreview}>No Aadhaar uploaded</div>
+                    )}
+                  </div>
+
+                  <div className={styles.verifyRow}>
+                    <button
+                      className={`${styles.verifyAction} ${
+                        aadhaarStatus === "approved" ? styles.approved : ""
+                      }`}
+                      onClick={() => setAadhaarApproved()}
+                      disabled={aadhaarStatus === "approved"}
+                    >
+                      Approve Aadhaar
+                    </button>
+
+                    <button
+                      className={`${styles.verifyAction} ${styles.reject}`}
+                      onClick={() => setAadhaarRejected()}
+                      disabled={aadhaarStatus === "rejected"}
+                    >
+                      Reject Aadhaar
+                    </button>
+
+                    <div className={styles.statusPill}>
+                      {aadhaarStatus === "pending" && "Pending"}
+                      {aadhaarStatus === "approved" && "Approved"}
+                      {aadhaarStatus === "rejected" && "Rejected"}
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div className={styles.row}>
+              {/* Assign manager */}
+              <div className={styles.formRow}>
                 <div className={styles.formGroup}>
-                  <label>Nominee PAN</label>
-                  <input className={styles.input} readOnly value={selected.nomineePanNumber} />
+                  <label>Assign District Manager</label>
+                  <select
+                    className={styles.select}
+                    disabled={!irdaiVerified}
+                    value={assignManager}
+                    onChange={(e) => setAssignManager(e.target.value)}
+                  >
+                    <option value="">Select</option>
+                    {managerList.map((m) => (
+                      <option key={m.managerId} value={m.managerId}>
+                        {m.name} ({m.managerId})
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label>Nominee Aadhaar</label>
-                  <input className={styles.input} readOnly value={selected.nomineeAadharNumber} />
-                </div>
-              </div>
-
-              <h3>Bank Details</h3>
-
-              <div className={styles.row}>
-                <div className={styles.formGroup}>
-                  <label>Account Holder Name</label>
-                  <input className={styles.input} readOnly value={selected.accountHolderName} />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label>Bank Name</label>
-                  <input className={styles.input} readOnly value={selected.bankName} />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label>Account Number</label>
-                  <input className={styles.input} readOnly value={selected.accountNumber} />
-                </div>
-              </div>
-
-              <div className={styles.row}>
-                <div className={styles.formGroup}>
-                  <label>IFSC Code</label>
-                  <input className={styles.input} readOnly value={selected.ifscCode} />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label>Branch Location</label>
-                  <input className={styles.input} readOnly value={selected.branchLocation} />
+                  <label>IRDAI Verification</label>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <button
+                      className={styles.irdaiBtn}
+                      onClick={handleIrdaiClick}
+                      type="button"
+                    >
+                      Open IRDAI 
+                    </button>
+                    <div className={styles.irdaiStatus}>
+                      {irdaiVerified ? "Done" : "Not Verified"}
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* ASSIGN MANAGER */}
-              <div className={styles.formGroup}>
-                <label>Assign District Manager</label>
-                <select
-                  className={styles.input}
-                  value={assignManager}
-                  disabled={!irdaiVerified}
-                  onChange={(e) => setAssignManager(e.target.value)}
+              {/* Remark (required if any reject) */}
+              <div className={styles.remarkWrap}>
+                <label>Remark { (panStatus === "rejected" || aadhaarStatus === "rejected") ? <span style={{color:"red"}}>*</span> : null }</label>
+                <textarea
+                  className={styles.remarkField}
+                  placeholder="Type reason for rejection or any notes."
+                  value={remark}
+                  onChange={(e) => setRemark(e.target.value)}
+                />
+              </div>
+
+              {/* Actions */}
+              <div className={styles.actions}>
+                <button
+                  className={styles.finalRejectBtn}
+                  onClick={() => handleReview("reject")}
+                  disabled={
+                    loading ||
+                    panStatus === "pending" ||
+                    aadhaarStatus === "pending" ||
+                    ( (panStatus === "rejected" || aadhaarStatus === "rejected") && !remark.trim() )
+                  }
                 >
-                  <option value="">Select</option>
-                  {managerList.map((m) => (
-                    <option key={m.managerId} value={m.managerId}>
-                      {m.name} ({m.managerId})
-                    </option>
-                  ))}
-                </select>
+                  {loading ? "Processing..." : "Reject Application"}
+                </button>
+
+                <button
+                  className={styles.finalAcceptBtn}
+                  onClick={() => handleReview("accept")}
+                  disabled={
+                    loading ||
+                    panStatus === "pending" ||
+                    aadhaarStatus === "pending" ||
+                    !irdaiVerified ||
+                    !assignManager ||
+                    ( (panStatus === "rejected" || aadhaarStatus === "rejected") && !remark.trim() )
+                  }
+                >
+                  {loading ? "Processing..." : "Approve Application"}
+                </button>
+
+                <button
+                  className={styles.closeBtn}
+                  onClick={() => setSelected(null)}
+                >
+                  Close
+                </button>
               </div>
-
-            {/* ------------------ ACTION BUTTONS (BOTTOM) ------------------ */}
-<div
-  style={{
-    marginTop: "25px",
-    display: "flex",
-    gap: "10px",
-    justifyContent: "center",
-  }}
->
-
-  {/* IRDAI Verify Button */}
-  <button
-    type="button"
-    onClick={handleIrdaiClick}
-    style={{
-      background: "#2563eb",
-      color: "white",
-      padding: "10px 20px",
-      borderRadius: 6,
-      border: "none",
-      cursor: "pointer",
-      fontWeight: 600,
-    }}
-  >
-    Verify PAN on IRDAI
-  </button>
-
-  {/* Reject */}
-  <button
-    type="button"
-    disabled={!irdaiVerified}
-    onClick={() => handleReview("reject")}
-    style={{
-      background: !irdaiVerified ? "gray" : "red",
-      color: "white",
-      padding: "10px 20px",
-      borderRadius: 6,
-      border: "none",
-      cursor: !irdaiVerified ? "not-allowed" : "pointer",
-      opacity: !irdaiVerified ? 0.6 : 1,
-    }}
-  >
-    Reject
-  </button>
-
-  {/* Accept */}
-  <button
-    type="button"
-    disabled={!irdaiVerified}
-    onClick={() => handleReview("accept")}
-    style={{
-      background: !irdaiVerified ? "gray" : "green",
-      color: "white",
-      padding: "10px 20px",
-      borderRadius: 6,
-      border: "none",
-      cursor: !irdaiVerified ? "not-allowed" : "pointer",
-      opacity: !irdaiVerified ? 0.6 : 1,
-    }}
-  >
-    Accept
-  </button>
-
-  {/* Close */}
-  <button
-    type="button"
-    onClick={() => setSelected(null)}
-    style={{
-      border: "1px solid gray",
-      padding: "10px 20px",
-      borderRadius: 6,
-      cursor: "pointer",
-      width: "100px",
-    }}
-  >
-    Close
-  </button>
-</div>
-
-
-            </form>
+            </div>
           </div>
         </div>
       )}

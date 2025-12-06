@@ -1,4 +1,3 @@
-// src/components/VideoLectureDashboard/VideoLectureDashboard.tsx
 "use client";
 import React, { useState } from "react";
 import Sidebar from "@/components/videolecturedashboard/sidebar";
@@ -7,27 +6,47 @@ import styles from "@/styles/components/videolecturedashboard/VideoLectureDashbo
 import TestPage from "./TestPage";
 
 const VIDEO_LIST = [
-  { id: 1, title: "Video Lecture 1", src: "@/assets/video/videoplayback.mp4"},
-  { id: 2, title: "Video Lecture 2", src: "@/assets/video/videoplayback.mp4"},
-  { id: 3, title: "Video Lecture 3",src: "@/assets/video/videoplayback.mp4"},
+  { id: 1, title: "Video Lecture 1", src: "/video/videolecture1.mp4" },
+  { id: 2, title: "Video Lecture 2", src: "/video/videolecture1.mp4" },
+  { id: 3, title: "Video Lecture 3", src: "/video/videolecture3.mp4" },
 ];
 
 export default function VideoLectureDashboard() {
-  const [current, setCurrent] = useState<number>(1);
-  const [completed, setCompleted] = useState<Record<number, boolean>>({
-    1: false, 2: false, 3: false
+  const [current, setCurrent] = useState(1);
+  const [completed, setCompleted] = useState({
+    1: false,
+    2: false,
+    3: false,
   });
+
   const [showTest, setShowTest] = useState(false);
 
+  // NO AUTOPLAY EVER
   function handleVideoEnd(id: number) {
-    setCompleted(prev => ({ ...prev, [id]: true }));
-    if (id < 3) setCurrent(id + 1);
+    setCompleted((prev) => ({ ...prev, [id]: true }));
+
+    // Move to next video, but DO NOT autoplay
+    if (id < VIDEO_LIST.length) {
+      setCurrent(id + 1);
+    }
   }
 
   function handleSidebarClick(id: number) {
     if (id === 1) return setCurrent(1);
-    if (completed[id - 1]) setCurrent(id);
+    if (completed[id - 1 as keyof typeof completed]) setCurrent(id);
   }
+
+  function goPrev() {
+    setCurrent((p) => Math.max(1, p - 1));
+  }
+
+  function goNext() {
+    if (current < VIDEO_LIST.length && completed[current as keyof typeof completed]) {
+      setCurrent((p) => p + 1);
+    }
+  }
+
+  const currentVideo = VIDEO_LIST.find((v) => v.id === current)!;
 
   return (
     <div className={styles.container}>
@@ -41,20 +60,18 @@ export default function VideoLectureDashboard() {
       <main className={styles.main}>
         {!showTest ? (
           <>
-            <h2 className={styles.heading}>
-              {VIDEO_LIST.find(v => v.id === current)?.title}
-            </h2>
+            <h2 className={styles.heading}>{currentVideo.title}</h2>
 
             <VideoPlayer
-              key={current}
-              src={VIDEO_LIST.find(v => v.id === current)!.src}
+              key={current}       // 🔥 Forces full reload of video element
+              src={currentVideo.src}
               onEnded={() => handleVideoEnd(current)}
             />
 
             <div className={styles.controlsRow}>
               <button
                 className={styles.prevNext}
-                onClick={() => setCurrent(p => Math.max(1, p - 1))}
+                onClick={goPrev}
                 disabled={current === 1}
               >
                 Previous
@@ -70,8 +87,8 @@ export default function VideoLectureDashboard() {
 
               <button
                 className={styles.prevNext}
-                onClick={() => setCurrent(p => Math.min(3, p + 1))}
-                disabled={current === 3 || !completed[current]}
+                onClick={goNext}
+                disabled={!completed[current as keyof typeof completed] || current === VIDEO_LIST.length}
               >
                 Next
               </button>

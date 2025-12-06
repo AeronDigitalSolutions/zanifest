@@ -1,70 +1,66 @@
+
 import { useState } from "react";
-import { useRouter } from "next/router";
-import { FaSpinner } from "react-icons/fa"; // ✅ Spinner icon
+import { useRouter } from "next/navigation";   // ✅ Correct router for App Router
+import { FaSpinner } from "react-icons/fa";
 import styles from "@/styles/components/Auth/Login.module.css";
 import Image from "next/image";
+import { body } from "framer-motion/client";
 
 export default function Agentlogin() {
-  const [userName, setUserName] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: { preventDefault: () => void; }) {
     event.preventDefault();
-    setLoading(true); // ✅ show loader overlay
+    setLoading(true);
 
     try {
       const res = await fetch("/api/agent/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: userName, password }),
-      });
 
-    //  const data = await res.json();
+        // ❗ CHANGE THIS FIELD IF YOUR BACKEND EXPECTS loginId
+        body: JSON.stringify({
+          email: userName,
+          password,
+        }),
+      });
+      console.log("agent body:", body); 
+
+      const data = await res.json(); // ✅ Only once
 
       if (!res.ok) {
-        alert("Login failed. Please check your credentials.");
         setError(true);
-        setLoading(false);
+        alert(data.message || "Login failed. Please check your credentials.");
         return;
       }
 
-      const data = await res.json();
-      console.log("Login successful:", data);
-    if (!res.ok) {
-      alert(data.message||"Login failed. Please check your credentials.");
-      setError(true);
-      setLoading(false);
-      return;
-    }
-    console.log("Login successful:", data);
-
+      // Save token & agent info in localStorage
       localStorage.setItem("agentToken", data.token);
-      localStorage.setItem("agentName", data.agent.name);
+      localStorage.setItem("agentName", data.agent?.name || "");
 
-    setError(false);
-    // router.push("/agentpage");
-  } 
+      setError(false);
 
-  catch (err) {
-    console.error("Login failed:", err);
-    setError(true);
-  } 
-  
-  finally {
-    setLoading(false);
+      // ✅ Redirect after successful login
+      console.log("redirecting to agent page");
+      router.push("/agentpage");
+      console.log("successfully redirected to agent page");
+    } catch (err) {
+      console.log("error in try block");
+      console.error("Login failed:", err);
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
   }
-}
-
-
 
   return (
     <>
-      {/* ✅ Full-page overlay loader */}
       {loading && (
         <div className={styles.loaderOverlay}>
           <FaSpinner className={styles.loaderIcon} />
@@ -91,8 +87,10 @@ export default function Agentlogin() {
               />
             </div>
 
-            <h1 className={styles.heading}>Agent Login to continue</h1>
-            
+            <h1 className={styles.heading}>Agent Login</h1>
+            <p className={styles.headingp}>
+              Access to the most powerful tool in the entire design and web industry.
+            </p>
 
             <form className={styles.loginForm} onSubmit={onSubmit}>
               <div className={styles.error}>
@@ -140,15 +138,6 @@ export default function Agentlogin() {
               >
                 Login
               </button>
-               <p className={styles.signupLink}>
-              Don't have an account?{" "}
-              <span
-                className={styles.signupText}
-                onClick={() => router.push("/agentsignup")}
-              >
-                Sign Up
-              </span>
-            </p>
             </form>
           </div>
         </div>

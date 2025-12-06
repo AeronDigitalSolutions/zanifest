@@ -1,45 +1,38 @@
-// models/OfficePackagePolicy.ts
 import mongoose, { Schema, Document } from "mongoose";
-
-export interface IOption {
-  name: "Building" | "Content" | "Stock";
-  checked: boolean;
-  amount?: number;
-}
 
 export interface IOfficePackagePolicy extends Document {
   companyName: string;
+  email: string | null;
   mobile: string;
-  email?: string | null;
-  options: IOption[];
-  firstTimeBuying?: "Yes" | "No" | null;
-  lossHistory?: "Yes" | "No" | null;
   pincode?: string;
+  firstTimeBuying?: string;
+  lossHistory?: string;
+
+  assignedAgent?: string | null;
+  assignedTo?: string | null;
+  assignedAt?: Date | null;
+
   createdAt: Date;
-  updatedAt: Date;
 }
 
-const OptionSchema = new Schema(
+const OfficeSchema = new Schema<IOfficePackagePolicy>(
   {
-    name: { type: String, required: true },
-    checked: { type: Boolean, required: true },
-    amount: { type: Number },
-  },
-  { _id: false }
-);
-
-const OfficePackagePolicySchema = new Schema(
-  {
-    companyName: String,
-    mobile: String,
+    companyName: { type: String, required: true },
     email: { type: String, default: null },
-    options: [OptionSchema],
-    pincode: String,
-    firstTimeBuying: { type: String, enum: ["Yes", "No", null], default: null },
-    lossHistory: { type: String, enum: ["Yes", "No", null], default: null },
+    mobile: { type: String, required: true },
+    pincode: { type: String },
+    firstTimeBuying: { type: String, default: null },
+    lossHistory: { type: String, default: null },
+
+    // ⭐ NEW FIELDS (same as Travel, Shop, Home, Doctor)
+    assignedAgent: { type: String, default: null },
+    assignedTo: { type: String, default: null },
+    assignedAt: { type: Date, default: null },
+
+    createdAt: { type: Date, default: Date.now },
   },
   { timestamps: true }
 );
 
 export default mongoose.models.OfficePackagePolicy ||
-  mongoose.model("OfficePackagePolicy", OfficePackagePolicySchema);
+  mongoose.model<IOfficePackagePolicy>("OfficePackagePolicy", OfficeSchema);

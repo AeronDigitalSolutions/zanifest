@@ -6,6 +6,8 @@ import TravelInsurance from "@/models/TravelInsurance";
 import Shop from "@/models/Shop";
 import HomeInsurance from "@/models/Homeinsurance";
 import { verifyToken } from "@/utils/verifyToken";
+import HealthInsurance from "@/models/HealthInsurance";
+
 
 const MONGODB_URI = process.env.MONGODB_URI || "";
 
@@ -50,6 +52,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       doc = await Shop.findById(id).lean();
     } else if (mod.includes("home")) {
       doc = await HomeInsurance.findById(id).lean();
+    } else if (mod.includes("health")) {
+        doc = await HealthInsurance.findById(id);
     } else {
       return res.status(400).json({ success: false, message: "Unsupported module" });
     }
