@@ -53,10 +53,12 @@
     "slick-carousel": "^1.8.1",
     "streamsearch": "^1.1.0",
     "swr": "^2.3.6",
+    "unpdf": "^1.4.0",
     "zod": "^4.1.12"
   },
   "devDependencies": {
     "@types/aos": "^3.0.7",
+    "@types/formidable": "^3.4.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/mongoose-sequence": "^3.0.11",
     "@types/multer": "^2.0.0",

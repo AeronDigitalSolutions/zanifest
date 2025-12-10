@@ -24,7 +24,7 @@ export async function middleware(req: NextRequest) {
   console.log("Token received in middleware:", token);
   console.log("Requested path:", pathname);
 
-  // If no token, redirect by route type
+  // If NO TOKEN → redirect by route type
   if (!token) {
     if (pathname.startsWith('/superadmin') || pathname.startsWith('/admindashboard')) {
       return NextResponse.redirect(new URL('/adminlogin', req.url));
@@ -38,13 +38,14 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL('/managerlogin', req.url));
     }
 
-    if (pathname.startsWith('/agentpage')) {
+    if (pathname.startsWith('/agentpage') || pathname.startsWith('/videolecture')) {
       return NextResponse.redirect(new URL('/agentlogin', req.url));
     }
 
-    return NextResponse.redirect(new URL('/', req.url)); // FINAL fallback
+    return NextResponse.redirect(new URL('/', req.url)); // fallback
   }
 
+  // VERIFY TOKEN
   const decoded = await verifyToken(token);
 
   console.log("Decoded token:", decoded);
@@ -55,12 +56,15 @@ export async function middleware(req: NextRequest) {
 
   const role = decoded.role as string;
   const status = decoded.accountStatus as string;
-console.log(`Role: ${role}, Status: ${status}`);
-  // Status check
+
+  console.log(`Role: ${role}, Status: ${status}`);
+
+  // ACCOUNT STATUS CHECK
   if (status !== "active") {
     console.log(`Blocked due to inactive: ${role}`);
 
-    if (role === "agent") return NextResponse.redirect(new URL('/agentlogin', req.url));
+    if (role === "agent")
+      return NextResponse.redirect(new URL('/agentlogin', req.url));
 
     if (['national', 'state', 'district'].includes(role))
       return NextResponse.redirect(new URL('/managerlogin', req.url));
@@ -68,22 +72,50 @@ console.log(`Role: ${role}, Status: ${status}`);
     return NextResponse.redirect(new URL('/adminlogin', req.url));
   }
 
-  // ROLE-BASED PERMISSION
-  if (role === "superadmin" && pathname.startsWith('/superadmin')) return NextResponse.next();
 
-  if (role === "admin" && pathname.startsWith('/admindashboard')) return NextResponse.next();
+  // Read training test cookie
+  const testPassed = req.cookies.get("agentTestPassed")?.value === "true";
 
-  if (role === "national" && pathname.startsWith('/nationalmanagerdashboard')) return NextResponse.next();
+  console.log("Agent Test Passed (cookie):", testPassed);
 
-  if (role === "state" && pathname.startsWith('/statemanagerdashboard')) return NextResponse.next();
+  if (role === "agent") {
+    // Agent has NOT passed the test → force training page
+    if (!testPassed) {
+      if (!pathname.startsWith("/videolecture")) {
+        return NextResponse.redirect(new URL("/videolecture", req.url));
+      }
+      return NextResponse.next();
+    }
 
-  if (role === "district" && pathname.startsWith('/districtmanagerdashboard')) return NextResponse.next();
+    // Agent already passed test → prevent training page access
+    if (testPassed && pathname.startsWith("/videolecture")) {
+      return NextResponse.redirect(new URL("/agentpage", req.url));
+    }
 
-  if (role === "agent" && pathname.startsWith('/agentpage')) return NextResponse.next();
+    // Agent allowed access
+    if (pathname.startsWith("/agentpage")) {
+      return NextResponse.next();
+    }
+  }
+
+  if (role === "superadmin" && pathname.startsWith('/superadmin'))
+    return NextResponse.next();
+
+  if (role === "admin" && pathname.startsWith('/admindashboard'))
+    return NextResponse.next();
+
+  if (role === "national" && pathname.startsWith('/nationalmanagerdashboard'))
+    return NextResponse.next();
+
+  if (role === "state" && pathname.startsWith('/statemanagerdashboard'))
+    return NextResponse.next();
+
+  if (role === "district" && pathname.startsWith('/districtmanagerdashboard'))
+    return NextResponse.next();
 
   console.log("Unauthorized access:", role);
 
-  return NextResponse.redirect(new URL('/', req.url)); // FIXED FINAL FALLBACK
+  return NextResponse.redirect(new URL('/', req.url));
 }
 
 export const config = {
@@ -94,7 +126,8 @@ export const config = {
     '/statemanagerdashboard/:path*',
     '/districtmanagerdashboard/:path*',
     '/agentpage',
-        '/agentpage/:path*',   // matches /agentpage/... sub-routes
-
-  ]
+    '/agentpage/:path*',
+    '/videolecture',
+    '/videolecture/:path*',
+  ],
 };

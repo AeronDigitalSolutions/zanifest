@@ -47,7 +47,7 @@ console.log("Password valid");
         email: agent.email,
         fullName: `${agent.firstName} ${agent.lastName}`,
         role: "agent",
-        accountStatus: agent.accountStatus, // middleware requires this!
+        accountStatus: agent.accountStatus, 
       },
       process.env.JWT_SECRET!,
       { expiresIn: "1d" }

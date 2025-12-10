@@ -12,6 +12,7 @@ import CreateUser from "@/components/agentpage/createuser";
 import CreateAgent from "@/components/superadminsidebar/createagent";
 import AgentSale from "@/components/agentpage/agentsale";
 import LeadSection from "@/components/agentpage/leadsection";
+import ListOfPolicy from "@/pages/listofpolicy";
 
 
 const AgentDashboard = () => {
@@ -86,6 +87,8 @@ const AgentDashboard = () => {
           {activeSection === "resetpassword" && <ResetPassword />}
           {activeSection === "createuser" && <CreateUser />}
 {activeSection === "leadsection" && <LeadSection />}
+  {activeSection === "listofpolicy" && <ListOfPolicy />}
+
 
           {activeSection === "profileEdit" && (
             <CreateAgent />

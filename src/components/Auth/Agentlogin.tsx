@@ -1,6 +1,6 @@
-
+"use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";   // ✅ Correct router for App Router
+import { useRouter } from "next/navigation";
 import { FaSpinner } from "react-icons/fa";
 import styles from "@/styles/components/Auth/Login.module.css";
 import Image from "next/image";
@@ -15,7 +15,7 @@ export default function Agentlogin() {
 
   const router = useRouter();
 
-  async function onSubmit(event: { preventDefault: () => void; }) {
+  async function onSubmit(event: { preventDefault: () => void }) {
     event.preventDefault();
     setLoading(true);
 
@@ -24,15 +24,15 @@ export default function Agentlogin() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
 
-        // ❗ CHANGE THIS FIELD IF YOUR BACKEND EXPECTS loginId
         body: JSON.stringify({
           email: userName,
           password,
         }),
       });
-      console.log("agent body:", body); 
 
-      const data = await res.json(); // ✅ Only once
+      console.log("agent body:", body);
+
+      const data = await res.json();
 
       if (!res.ok) {
         setError(true);
@@ -40,18 +40,32 @@ export default function Agentlogin() {
         return;
       }
 
-      // Save token & agent info in localStorage
+      console.log("Login Success:", data);
+
+      // Save token & agent info
       localStorage.setItem("agentToken", data.token);
       localStorage.setItem("agentName", data.agent?.name || "");
 
       setError(false);
 
-      // ✅ Redirect after successful login
-      console.log("redirecting to agent page");
-      router.push("/agentpage");
-      console.log("successfully redirected to agent page");
+      // Check test status
+      const testPassed =
+        localStorage.getItem("agentTestPassed") === "true" ||
+        document.cookie.includes("agentTestPassed=true");
+
+      console.log("Test Passed?", testPassed);
+
+      // Redirect based on training status
+      if (testPassed) {
+        router.push("/agentpage");
+      } else {
+        router.push("/videolectures");
+      }
+
+      console.log("Redirect executed successfully");
+      return;
     } catch (err) {
-      console.log("error in try block");
+      console.log("Error in login try block");
       console.error("Login failed:", err);
       setError(true);
     } finally {
@@ -69,6 +83,7 @@ export default function Agentlogin() {
       )}
 
       <div className={styles.cont}>
+        {/* LEFT IMAGE SECTION */}
         <div className={styles.left}>
           <Image
             src={require("@/assets/loginbanner.png")}
@@ -77,8 +92,10 @@ export default function Agentlogin() {
           />
         </div>
 
+        {/* LOGIN FORM */}
         <div className={styles.loginCont}>
           <div className={styles.formDiv}>
+            {/* LOGO */}
             <div className={styles.logo}>
               <Image
                 src={require("@/assets/logo.png")}
@@ -89,7 +106,7 @@ export default function Agentlogin() {
 
             <h1 className={styles.heading}>Agent Login</h1>
             <p className={styles.headingp}>
-              Access to the most powerful tool in the entire design and web industry.
+              Access to the most powerful tool in the insurance industry.
             </p>
 
             <form className={styles.loginForm} onSubmit={onSubmit}>
@@ -97,11 +114,10 @@ export default function Agentlogin() {
                 {error && <h4>Invalid Credentials</h4>}
               </div>
 
+              {/* EMAIL INPUT */}
               <div className={styles.formInput}>
                 <input
                   type="text"
-                  name="uname"
-                  id="uname"
                   placeholder="E-mail Address"
                   required
                   className={styles.input}
@@ -109,11 +125,10 @@ export default function Agentlogin() {
                 />
               </div>
 
+              {/* PASSWORD INPUT */}
               <div className={styles.formInput}>
                 <input
                   type={showPassword ? "text" : "password"}
-                  name="pass"
-                  id="pass"
                   placeholder="Password"
                   required
                   className={styles.input}
@@ -121,6 +136,7 @@ export default function Agentlogin() {
                 />
               </div>
 
+              {/* SHOW PASSWORD */}
               <div className={styles.showPasswordDiv}>
                 <input
                   type="checkbox"
@@ -131,11 +147,8 @@ export default function Agentlogin() {
                 <label htmlFor="showP">Show Password</label>
               </div>
 
-              <button
-                className={styles.loginButton}
-                disabled={loading}
-                type="submit"
-              >
+              {/* LOGIN BUTTON */}
+              <button className={styles.loginButton} disabled={loading} type="submit">
                 Login
               </button>
             </form>

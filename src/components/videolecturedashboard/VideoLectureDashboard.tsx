@@ -1,9 +1,9 @@
 "use client";
-import React, { useState } from "react";
-import Sidebar from "@/components/videolecturedashboard/sidebar";
-import VideoPlayer from "@/components/videolecturedashboard/VideoPlayer";
-import styles from "@/styles/components/videolecturedashboard/VideoLectureDashboard.module.css";
+import React, { useEffect, useState } from "react";
+import Sidebar from "./sidebar";
+import VideoPlayer from "./VideoPlayer";
 import TestPage from "./TestPage";
+import styles from "@/styles/components/videolecturedashboard/VideoLectureDashboard.module.css";
 
 const VIDEO_LIST = [
   { id: 1, title: "Video Lecture 1", src: "/video/videolecture1.mp4" },
@@ -13,49 +13,46 @@ const VIDEO_LIST = [
 
 export default function VideoLectureDashboard() {
   const [current, setCurrent] = useState(1);
-  const [completed, setCompleted] = useState({
-    1: false,
-    2: false,
-    3: false,
-  });
-
+  const [completed, setCompleted] = useState<Record<number, boolean>>({});
   const [showTest, setShowTest] = useState(false);
 
-  // NO AUTOPLAY EVER
-  function handleVideoEnd(id: number) {
-    setCompleted((prev) => ({ ...prev, [id]: true }));
+  // Load all saved progress
+  useEffect(() => {
+    const savedVideo = Number(localStorage.getItem("training_currentVideo") || 1);
+    const savedCompleted = JSON.parse(localStorage.getItem("training_completed") || "{}");
 
-    // Move to next video, but DO NOT autoplay
+    setCurrent(savedVideo);
+    setCompleted(savedCompleted);
+  }, []);
+
+  // Save current video when changed
+  useEffect(() => {
+    localStorage.setItem("training_currentVideo", String(current));
+  }, [current]);
+
+  function handleVideoEnd(id: number) {
+    const newCompleted = { ...completed, [id]: true };
+    setCompleted(newCompleted);
+
+    localStorage.setItem("training_completed", JSON.stringify(newCompleted));
+
     if (id < VIDEO_LIST.length) {
-      setCurrent(id + 1);
+      setTimeout(() => setCurrent(id + 1), 500);
     }
   }
 
   function handleSidebarClick(id: number) {
-    if (id === 1) return setCurrent(1);
-    if (completed[id - 1 as keyof typeof completed]) setCurrent(id);
-  }
-
-  function goPrev() {
-    setCurrent((p) => Math.max(1, p - 1));
-  }
-
-  function goNext() {
-    if (current < VIDEO_LIST.length && completed[current as keyof typeof completed]) {
-      setCurrent((p) => p + 1);
+    if (id === 1 || completed[id - 1]) {
+      setCurrent(id);
     }
   }
 
-  const currentVideo = VIDEO_LIST.find((v) => v.id === current)!;
+  const allCompleted = Object.keys(completed).length === VIDEO_LIST.length;
+  const currentVideo = VIDEO_LIST.find(v => v.id === current)!;
 
   return (
     <div className={styles.container}>
-      <Sidebar
-        videos={VIDEO_LIST}
-        current={current}
-        completed={completed}
-        onSelect={handleSidebarClick}
-      />
+      <Sidebar videos={VIDEO_LIST} current={current} completed={completed} onSelect={handleSidebarClick} />
 
       <main className={styles.main}>
         {!showTest ? (
@@ -63,34 +60,19 @@ export default function VideoLectureDashboard() {
             <h2 className={styles.heading}>{currentVideo.title}</h2>
 
             <VideoPlayer
-              key={current}       // 🔥 Forces full reload of video element
+              key={current}
               src={currentVideo.src}
+              videoId={current}
               onEnded={() => handleVideoEnd(current)}
             />
 
             <div className={styles.controlsRow}>
               <button
-                className={styles.prevNext}
-                onClick={goPrev}
-                disabled={current === 1}
-              >
-                Previous
-              </button>
-
-              <button
                 className={styles.startTest}
+                disabled={!allCompleted}
                 onClick={() => setShowTest(true)}
-                disabled={!(completed[1] && completed[2] && completed[3])}
               >
                 Start Test
-              </button>
-
-              <button
-                className={styles.prevNext}
-                onClick={goNext}
-                disabled={!completed[current as keyof typeof completed] || current === VIDEO_LIST.length}
-              >
-                Next
               </button>
             </div>
           </>

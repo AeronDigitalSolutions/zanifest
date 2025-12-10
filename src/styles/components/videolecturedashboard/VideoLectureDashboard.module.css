@@ -1,55 +1,127 @@
+/* MAIN LAYOUT */
 .container {
   display: flex;
   min-height: 100vh;
-  background: #0f1724;
-  color: #e6eef8;
-  gap: 16px;
+  background: #ffffff;
+  color: #1b1b1b;
 }
 
+/* SIDEBAR */
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  background: #ffffff;
+  border-right: 1px solid #e4e4e4;
+  padding: 20px 18px;
+  position: sticky;
+  top: 0;
+}
+
+/* TITLE */
+.menuTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: #6c757d;
+  margin: 18px 0 10px;
+}
+
+/* ITEM */
+.sidebarItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  color: #333;
+  transition: 0.2s ease;
+  margin: 10px;
+}
+
+
+.activeItem {
+  background:  #3c7da6;
+  color: white;
+  font-weight: 600;
+}
+
+/* PROGRESS BAR */
+.progressContainer {
+  width: 100%;
+  background: #e4e4e4;
+  height: 8px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background:  #3c7da6;
+  width: 0%;
+  transition: width 0.4s ease;
+}
+
+/* MAIN CONTENT */
 .main {
   flex: 1;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding: 25px;
+  text-align: center;
 }
 
+/* HEADINGS */
 .heading {
-  margin: 8px 0 16px 0;
-  font-size: 20px;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 16px;
 }
 
+/* BUTTON ROW */
 .controlsRow {
-  margin-top: 16px;
+  margin-top: 22px;
   display: flex;
-  gap: 12px;
-  align-items: center;
+  gap: 14px;
+  justify-content: center;
 }
 
-.prevNext {
-  padding: 10px 14px;
+.orangeBtn {
+  background: #f28c28;
+  color: white;
+  padding: 10px 18px;
   border-radius: 8px;
-  border: 1px solid #2b3440;
-  background: transparent;
-  color: inherit;
+  font-weight: 600;
+  border: none;
   cursor: pointer;
 }
-.prevNext:disabled {
-  opacity: 0.5;
+
+.orangeBtn:disabled {
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
 .startTest {
-  padding: 12px 18px;
+  background: orangered;
+  color: white;
+  padding: 12px 20px;
   border-radius: 8px;
-  background: #0ea5a3;
-  border: none;
-  color: #042028;
-  font-weight: 600;
+  font-weight: 700;
+  cursor: pointer;
 }
 
+/* RESPONSIVE */
 @media (max-width: 800px) {
   .container {
     flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    display: flex;
+    overflow-x: scroll;
+    gap: 12px;
+  }
+  .sidebarItem {
+    padding: 10px 14px;
+    white-space: nowrap;
   }
 }
