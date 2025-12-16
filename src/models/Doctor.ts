@@ -1,35 +1,38 @@
-import mongoose, { Document, Model, Schema } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
-export interface IDoctor extends Document {
+export interface IDoctorInsurance extends Document {
   name: string;
-  email: string | null;    
+  email: string | null;
   mobile: string;
   whatsapp: boolean;
   specialization?: string;
-  firstTime?: "yes" | "no" | null;
-  facility?: "yes" | "no" | null;
+  firstTime?: string | null;
+  facility?: string | null;
+  createdAt: Date;
+
+  assignedAgent?: string | null;
+  assignedTo?: string | null;
+  assignedAt?: Date | null;
 }
 
-const DoctorSchema: Schema = new Schema<IDoctor>(
+const DoctorSchema = new Schema<IDoctorInsurance>(
   {
-    name: { type: String, required: true, trim: true },
-
-
- email: {
-      type: String,
-      default: null,
-    },
+    name: { type: String, required: true },
+    email: { type: String, default: null },
     mobile: { type: String, required: true },
-    whatsapp: { type: Boolean, default: true },
+    whatsapp: { type: Boolean, default: false },
     specialization: { type: String, default: null },
-    firstTime: { type: String, enum: ["yes", "no"], default: null },
-    facility: { type: String, enum: ["yes", "no"], default: null },
+    firstTime: { type: String, default: null },
+    facility: { type: String, default: null },
+
+    assignedAgent: { type: String, default: null },
+    assignedTo: { type: String, default: null },
+    assignedAt: { type: Date, default: null },
+
+    createdAt: { type: Date, default: Date.now },
   },
   { timestamps: true }
 );
 
-export const Doctor =
-  (mongoose.models.Doctor as Model<IDoctor>) ||
-  mongoose.model<IDoctor>("Doctor", DoctorSchema);
-
-export default Doctor;
+export default mongoose.models.DoctorInsurance ||
+  mongoose.model<IDoctorInsurance>("DoctorInsurance", DoctorSchema);

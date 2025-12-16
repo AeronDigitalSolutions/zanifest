@@ -119,6 +119,21 @@ const Partners: React.FC<PartnersProps> = ({ liveHeading, liveImages }) => {
             </div>
           ))}
         </div>
+        {/* ---------- MOBILE CATEGORY TABS ---------- */}
+<div className={styles.mobileTabs}>
+  {CATEGORYLIST.map((item, index) => (
+    <button
+      key={index}
+      className={`${styles.mobileTab} ${
+        selectedCategory.name === item.name ? styles.active : ""
+      }`}
+      onClick={() => setSelectedCategory(item)}
+    >
+      {item.name.split(" ")[0]}
+    </button>
+  ))}
+</div>
+
 
         {/* Right Dynamic Partners */}
         <div className={styles.partList}>

@@ -5,6 +5,7 @@ export interface IAgentLogin extends Document {
   email: string;
   password: string;
   loginId: string;
+  accountStatus: string;
 }
 
 const AgentLoginSchema = new Schema<IAgentLogin>(
@@ -13,6 +14,7 @@ const AgentLoginSchema = new Schema<IAgentLogin>(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     loginId: { type: String, required: true, unique: true },
+    accountStatus: { type: String, required: true },
   },
   { timestamps: true }
 );

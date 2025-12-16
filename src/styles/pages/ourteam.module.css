@@ -116,3 +116,36 @@ height: 40vh;
     font-size: 36px;
   }
 }
+@media (max-width: 768px) {
+  .originSection {
+    padding: 40px 5%;
+  }
+
+  .content {
+    max-width: 100%;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    justify-content: center;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .subtitle::after {
+    width: 24px;
+    margin-left: 8px;
+  }
+
+  .title {
+    font-size: 28px;     /* 👈 important */
+    line-height: 1.25;
+    margin-bottom: 16px;
+    word-break: break-word;
+  }
+
+  .description {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+}

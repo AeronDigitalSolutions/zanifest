@@ -1,148 +1,133 @@
-// middleware.ts
 import { NextRequest, NextResponse } from 'next/server';
-// import { verify } from 'jsonwebtoken';
-import {verifyToken} from '@/utils/verifyToken'
-
-const JWT_SECRET = process.env.JWT_SECRET!;
+import { verifyToken } from '@/utils/verifyToken';
 
 export async function middleware(req: NextRequest) {
-  const token = req.cookies.get('adminToken')?.value 
-  || req.cookies.get('managerToken')?.value 
-  || req.cookies.get('agentToken')?.value;
-
-  console.log("token recieved in middleware:", token);
-  // console.log("All cookies:", req.cookies.getAll());
-
-  // console.log("Token from cookies:", token);
-
-  // console.log("MIDDLEWAREEE");
-
   const url = req.nextUrl;
-  console.log("Request URL:", url.pathname);
+  const pathname = url.pathname;
 
-  // No token: redirect based on path
-  if (token=== undefined || token === null || token === '') {
-    console.log("No token found, redirecting...");
-    if (url.pathname.startsWith('/superadmin') || url.pathname.startsWith('/admindashboard')) {
-      return NextResponse.redirect(new URL('/adminlogin', req.url));
-    } 
-    
-    else if (
-      url.pathname.startsWith('/nationalmanagerdashboard') ||
-      url.pathname.startsWith('/statemanagerdashboard') ||
-      url.pathname.startsWith('/districtmanagerdashboard')
-    ) 
-    {
-      return NextResponse.redirect(new URL('/managerlogin', req.url));
-    } 
-    else if (url.pathname.startsWith('/agentpage')) {
-      return NextResponse.redirect(new URL('/agentlogin', req.url));
-    } 
-    else {
-      return NextResponse.redirect(new URL('/', req.url)); // fallback
-    }
+  // 🚫 Do NOT protect login pages
+  if (
+    pathname.startsWith('/agentlogin') ||
+    pathname.startsWith('/adminlogin') ||
+    pathname.startsWith('/managerlogin')
+  ) {
+    return NextResponse.next();
   }
 
-  try {
-    console.log("Raw token from cookies:", token);
+  // Read cookies per role
+  const adminToken = req.cookies.get('adminToken')?.value || null;
+  const managerToken = req.cookies.get('managerToken')?.value || null;
+  const agentToken = req.cookies.get('agentToken')?.value || null;
 
-  const decoded = await verifyToken(token ?? "") as { role?: string; accountStatus?:string; } | null;
-  console.log("Decoded token:", decoded);
+  const token = adminToken || managerToken || agentToken;
 
-  if (!decoded || !decoded.role) {
-    console.log("Invalid token or role not found");
-    return NextResponse.redirect(new URL('/', req.url));
-  }
-
-  const role = decoded.role;
-  console.log("Decoded role:", role);
-  const pathname = req.nextUrl.pathname;
+  console.log("Token received in middleware:", token);
   console.log("Requested path:", pathname);
 
-  console.log("Decoded role:", role, "Requested path:", pathname);
-
-    // ✅ Add status check for managers only
-    if (['national', 'state', 'district'].includes(role)) {
-      if (decoded.accountStatus !== 'active') {
-        console.log(`Manager with role=${role} blocked due to inactive status`);
-        return NextResponse.redirect(new URL('/managerlogin', req.url));
-      }
-    }
-
-     if (decoded.role === "agent") {
-      if (decoded.accountStatus !== "active") {
-        console.log(`agent with role=${role} blocked due to inactive status`);
-        return NextResponse.redirect(new URL('/agentlogin', req.url));
-      }
-    }
-
-    if (decoded.role === "admin") {
-      if (decoded.accountStatus !== "active") {
-        console.log(`agent with role=${role} blocked due to inactive status`);
-        return NextResponse.redirect(new URL('/adminlogin', req.url));
-      }
-    }
-
-  // Role-based access logic
-  if (role === "superadmin" && pathname.startsWith("/superadmin")) {
-    return NextResponse.next();
-  } else if (role === "admin" && pathname.startsWith("/admindashboard")) {
-    return NextResponse.next();
-  }  else if (role === "state" && pathname.startsWith("/statemanagerdashboard")) {
-  return NextResponse.next();
-  } else if (role === "district" && pathname.startsWith("/districtmanagerdashboard")) {
-    return NextResponse.next();
-  } else if (role === "national" && pathname.startsWith("/nationalmanagerdashboard")) {
-    return NextResponse.next();
-  } else if (role === "agent" && pathname.startsWith("/agentpage")) {
-    return NextResponse.next();
-  } else {
-    console.log("Unauthorized access attempt by:", role);
-    return NextResponse.redirect(new URL('/', req.url));
-  }
-} 
-// catch (error) {
-//   console.error("Token verification failed:", error);
-//     return NextResponse.redirect(new URL('/', req.url));
-// }
-
-
-  // try {
-  //   console.log("Verifying token...");
-  //   verifyToken(token);
-  //   console.log("Token is valid according to middleware");
-
-  //   return NextResponse.next();
-  // } 
-  
-  catch (err) {
-    console.log("Token verification failed:");
-    // Invalid token: redirect based on path
-    if (url.pathname.startsWith('/superadmin') || url.pathname.startsWith('/admindashboard')) {
+  // If NO TOKEN → redirect by route type
+  if (!token) {
+    if (pathname.startsWith('/superadmin') || pathname.startsWith('/admindashboard')) {
       return NextResponse.redirect(new URL('/adminlogin', req.url));
-    } else if (
-      url.pathname.startsWith('/nationalmanagerdashboard') ||
-      url.pathname.startsWith('/statemanagerdashboard') ||
-      url.pathname.startsWith('/districtmanagerdashboard')
+    }
+
+    if (
+      pathname.startsWith('/nationalmanagerdashboard') ||
+      pathname.startsWith('/statemanagerdashboard') ||
+      pathname.startsWith('/districtmanagerdashboard')
     ) {
       return NextResponse.redirect(new URL('/managerlogin', req.url));
-    } else if (url.pathname.startsWith('/agentpage')) {
+    }
+
+    if (pathname.startsWith('/agentpage') || pathname.startsWith('/videolecture')) {
       return NextResponse.redirect(new URL('/agentlogin', req.url));
-    } else {
-      return NextResponse.redirect(new URL('/', req.url));
+    }
+
+    return NextResponse.redirect(new URL('/', req.url)); // fallback
+  }
+
+  // VERIFY TOKEN
+  const decoded = await verifyToken(token);
+
+  console.log("Decoded token:", decoded);
+
+  if (!decoded || typeof decoded === 'string' || !decoded.role) {
+    return NextResponse.redirect(new URL('/', req.url));
+  }
+
+  const role = decoded.role as string;
+  const status = decoded.accountStatus as string;
+
+  console.log(`Role: ${role}, Status: ${status}`);
+
+  // ACCOUNT STATUS CHECK
+  if (status !== "active") {
+    console.log(`Blocked due to inactive: ${role}`);
+
+    if (role === "agent")
+      return NextResponse.redirect(new URL('/agentlogin', req.url));
+
+    if (['national', 'state', 'district'].includes(role))
+      return NextResponse.redirect(new URL('/managerlogin', req.url));
+
+    return NextResponse.redirect(new URL('/adminlogin', req.url));
+  }
+
+
+  // Read training test cookie
+  const testPassed = req.cookies.get("agentTestPassed")?.value === "true";
+
+  console.log("Agent Test Passed (cookie):", testPassed);
+
+  if (role === "agent") {
+    // Agent has NOT passed the test → force training page
+    if (!testPassed) {
+      if (!pathname.startsWith("/videolecture")) {
+        return NextResponse.redirect(new URL("/videolecture", req.url));
+      }
+      return NextResponse.next();
+    }
+
+    // Agent already passed test → prevent training page access
+    if (testPassed && pathname.startsWith("/videolecture")) {
+      return NextResponse.redirect(new URL("/agentpage", req.url));
+    }
+
+    // Agent allowed access
+    if (pathname.startsWith("/agentpage")) {
+      return NextResponse.next();
     }
   }
+
+  if (role === "superadmin" && pathname.startsWith('/superadmin'))
+    return NextResponse.next();
+
+  if (role === "admin" && pathname.startsWith('/admindashboard'))
+    return NextResponse.next();
+
+  if (role === "national" && pathname.startsWith('/nationalmanagerdashboard'))
+    return NextResponse.next();
+
+  if (role === "state" && pathname.startsWith('/statemanagerdashboard'))
+    return NextResponse.next();
+
+  if (role === "district" && pathname.startsWith('/districtmanagerdashboard'))
+    return NextResponse.next();
+
+  console.log("Unauthorized access:", role);
+
+  return NextResponse.redirect(new URL('/', req.url));
 }
 
 export const config = {
   matcher: [
-     '/admindashboard',
-    '/superadmin',
-    '/nationalmanagerdashboard',
-    '/statemanagerdashboard',
-    '/districtmanagerdashboard',
+    '/superadmin/:path*',
+    '/admindashboard/:path*',
+    '/nationalmanagerdashboard/:path*',
+    '/statemanagerdashboard/:path*',
+    '/districtmanagerdashboard/:path*',
     '/agentpage',
-    // add others
-  ]
+    '/agentpage/:path*',
+    '/videolecture',
+    '/videolecture/:path*',
+  ],
 };
-

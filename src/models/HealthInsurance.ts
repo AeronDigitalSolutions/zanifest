@@ -24,7 +24,13 @@ export interface IHealthInsurance extends Document {
   fullName: string;
   mobile: string;
   medicalHistory: string[];
-  email: string | null;           // <-- ⭐ Added
+  email: string | null;
+
+  // ⭐ Assignment fields
+  assignedAgent: string | null;
+  assignedTo: string | null;
+  assignedAt: Date | null;
+
   createdAt: Date;
 }
 
@@ -69,7 +75,12 @@ const HealthInsuranceSchema = new Schema<IHealthInsurance>(
     mobile: { type: String, required: true, match: /^[0-9]{10}$/ },
     medicalHistory: { type: [String], default: [] },
 
-    email: { type: String, default: null },     // ⭐ Added (same as Travel)
+    email: { type: String, default: null },
+
+    // ⭐ MUST BE INSIDE THE SCHEMA LIKE THIS
+    assignedAgent: { type: String, default: null },
+    assignedTo: { type: String, default: null },
+    assignedAt: { type: Date, default: null },
 
     createdAt: { type: Date, default: Date.now },
   },

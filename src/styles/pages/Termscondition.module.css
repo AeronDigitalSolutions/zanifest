@@ -138,3 +138,24 @@
     font-size: 1.1rem;
   }
 }
+@media screen and (max-width: 768px) {
+  .header {
+    margin: 30px;          /* remove 200px gap */
+    padding: 16px 16px;   /* balanced padding */
+  }
+
+  .headerInner {
+    max-width: 100%;
+  }
+
+  .title {
+    font-size: 1.4rem;
+    line-height: 1.3;
+    word-break: break-word;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+}

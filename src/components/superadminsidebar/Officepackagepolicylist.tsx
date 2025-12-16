@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import styles from "@/styles/components/superadminsidebar/officepackagepolicy.module.css";
+import axios from "axios";
 
 interface OfficeRecord {
   _id: string;
@@ -12,51 +13,74 @@ interface OfficeRecord {
   firstTimeBuying?: string;
   lossHistory?: string;
   createdAt: string;
+
+  assignedAgent?: string | null;
+  assignedTo?: string | null;
+  assignedAt?: string | null;
+
+  [key: string]: any;
+}
+
+interface Agent {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
 }
 
 export default function Officepackagepolicylist() {
   const [records, setRecords] = useState<OfficeRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const fetchRecords = async (isRefresh = false) => {
-    try {
-      if (!isRefresh) setLoading(true);
-      else setRefreshing(true);
+  const [selectedRecord, setSelectedRecord] = useState<OfficeRecord | null>(null);
+  const [agents, setAgents] = useState<Agent[]>([]);
+  const [selectedAgent, setSelectedAgent] = useState("");
 
-      const res = await fetch("/api/officepackagepolicyinsurance", {
-        cache: "no-store",
-      });
+  const fetchRecords = async () => {
+    setLoading(true);
+    const res = await axios.get("/api/officepackagepolicyinsurance");
+    setRecords(res.data.data);
+    setLoading(false);
+  };
 
-      const json = await res.json();
-      if (!json.success) throw new Error("Failed to fetch records");
-
-      setRecords(json.data || []);
-    } catch (err: any) {
-      setError(err.message || "Something went wrong");
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
+  const fetchAgents = async () => {
+    const res = await axios.get("/api/getallagents");
+    setAgents(res.data);
   };
 
   useEffect(() => {
     fetchRecords();
   }, []);
 
-  const handleRefresh = () => fetchRecords(true);
+  useEffect(() => {
+    if (selectedRecord) fetchAgents();
+  }, [selectedRecord]);
+
+  const handleAssign = async () => {
+    if (!selectedAgent) return alert("Select an agent!");
+
+    await axios.post("/api/officepackagepolicyinsurance?assign=true", {
+      policyId: selectedRecord?._id,
+      agentId: selectedAgent,
+    });
+
+    alert("Lead assigned successfully!");
+
+    setSelectedRecord(null);
+    setSelectedAgent("");
+
+    fetchRecords();
+  };
 
   if (loading) return <p className={styles.loading}>Loading...</p>;
-  if (error) return <p className={styles.error}>{error}</p>;
 
   return (
     <div className={styles.wrapper}>
-      {/* PAGE HEADING + REFRESH */}
       <div className={styles.header}>
         <h1 className={styles.title}>Office Package Policy List</h1>
 
-        <button className={styles.refreshBtn} onClick={handleRefresh}>
+        <button className={styles.refreshBtn} onClick={() => fetchRecords()}>
           {refreshing ? "Refreshing..." : "↻ Refresh"}
         </button>
       </div>
@@ -67,13 +91,13 @@ export default function Officepackagepolicylist() {
           <thead>
             <tr>
               <th>S.No</th>
-              <th>User Email</th>
-              <th>Company Name</th>
-              <th>Pincode</th>
+              <th>Email</th>
+              <th>Company</th>
               <th>Mobile</th>
-              <th>First Time Buying</th>
-              <th>Loss History</th>
+              <th>Pincode</th>
+              <th>Assigned To</th>
               <th>Created At</th>
+              <th>Show</th>
             </tr>
           </thead>
 
@@ -81,20 +105,18 @@ export default function Officepackagepolicylist() {
             {records.map((r, i) => (
               <tr key={r._id}>
                 <td>{i + 1}</td>
-                <td>{r.email || "Unregistered User"}</td>
+                <td>{r.email || "-"}</td>
                 <td>{r.companyName}</td>
-                <td>{r.pincode || "-"}</td>
                 <td>{r.mobile}</td>
-                <td>{r.firstTimeBuying}</td>
-                <td>{r.lossHistory}</td>
+                <td>{r.pincode || "-"}</td>
+                <td>{r.assignedTo || "Not Assigned"}</td>
+
+                <td>{new Date(r.createdAt).toLocaleString()}</td>
+
                 <td>
-                  {new Date(r.createdAt).toLocaleString("en-GB", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+                  <button className={styles.showBtn} onClick={() => setSelectedRecord(r)}>
+                    Show Data
+                  </button>
                 </td>
               </tr>
             ))}
@@ -102,12 +124,48 @@ export default function Officepackagepolicylist() {
         </table>
       </div>
 
-      {/* PAGINATION */}
-      <div className={styles.pagination}>
-        <button className={styles.pageBtn}>Previous</button>
-        <span>Page 1 of 1</span>
-        <button className={styles.pageBtn}>Next</button>
-      </div>
+      {/* MODAL */}
+      {selectedRecord && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <h3>Office Package Policy Details</h3>
+
+            <div className={styles.modalContent}>
+              {Object.entries(selectedRecord).map(([k, v]) => (
+                <p key={k}>
+                  <strong>{k}:</strong> {JSON.stringify(v)}
+                </p>
+              ))}
+            </div>
+
+            {/* ASSIGN AGENT */}
+            <div className={styles.assignBox}>
+              <label>Assign To Agent:</label>
+
+              <select
+                className={styles.agentDropdown}
+                value={selectedAgent}
+                onChange={(e) => setSelectedAgent(e.target.value)}
+              >
+                <option value="">Select Agent</option>
+                {agents.map((a) => (
+                  <option key={a._id} value={a._id}>
+                    {a.firstName} {a.lastName} ({a.email})
+                  </option>
+                ))}
+              </select>
+
+              <button className={styles.assignBtn} onClick={handleAssign}>
+                Assign Lead
+              </button>
+            </div>
+
+            <button className={styles.closeBtn} onClick={() => setSelectedRecord(null)}>
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

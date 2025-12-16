@@ -103,7 +103,20 @@ const AgentSidebar: React.FC<AgentSidebarProps> = ({
                 <span className={styles.icon}><FiLock /></span>
                 <span className={styles.label}>Lead</span>
               </div>
+              
             </li>
+     
+
+              
+                   <li
+              className={styles.menuItem}
+  onClick={() => setActiveSection("listofpolicy")}
+              role="button"
+              tabIndex={0}
+            ></li>
+            <li onClick={() => setActiveSection("listofpolicy")}>
+  List of Policy
+</li>
           </ul>
         </div>
       </div>

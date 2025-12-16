@@ -1,70 +1,80 @@
+"use client";
 import { useState } from "react";
-import { useRouter } from "next/router";
-import { FaSpinner } from "react-icons/fa"; // ✅ Spinner icon
+import { useRouter } from "next/navigation";
+import { FaSpinner } from "react-icons/fa";
 import styles from "@/styles/components/Auth/Login.module.css";
 import Image from "next/image";
+import { body } from "framer-motion/client";
 
 export default function Agentlogin() {
-  const [userName, setUserName] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: { preventDefault: () => void }) {
     event.preventDefault();
-    setLoading(true); // ✅ show loader overlay
+    setLoading(true);
 
     try {
       const res = await fetch("/api/agent/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: userName, password }),
+
+        body: JSON.stringify({
+          email: userName,
+          password,
+        }),
       });
 
-    //  const data = await res.json();
+      console.log("agent body:", body);
+
+      const data = await res.json();
 
       if (!res.ok) {
-        alert("Login failed. Please check your credentials.");
         setError(true);
-        setLoading(false);
+        alert(data.message || "Login failed. Please check your credentials.");
         return;
       }
 
-      const data = await res.json();
-      console.log("Login successful:", data);
-    if (!res.ok) {
-      alert(data.message||"Login failed. Please check your credentials.");
-      setError(true);
-      setLoading(false);
-      return;
-    }
-    console.log("Login successful:", data);
+      console.log("Login Success:", data);
 
+      // Save token & agent info
       localStorage.setItem("agentToken", data.token);
-      localStorage.setItem("agentName", data.agent.name);
+      localStorage.setItem("agentName", data.agent?.name || "");
 
-    setError(false);
-    // router.push("/agentpage");
-  } 
+      setError(false);
 
-  catch (err) {
-    console.error("Login failed:", err);
-    setError(true);
-  } 
-  
-  finally {
-    setLoading(false);
+      // Check test status
+      const testPassed =
+        localStorage.getItem("agentTestPassed") === "true" ||
+        document.cookie.includes("agentTestPassed=true");
+
+      console.log("Test Passed?", testPassed);
+
+      // Redirect based on training status
+      if (testPassed) {
+        router.push("/agentpage");
+      } else {
+        router.push("/videolectures");
+      }
+
+      console.log("Redirect executed successfully");
+      return;
+    } catch (err) {
+      console.log("Error in login try block");
+      console.error("Login failed:", err);
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
   }
-}
-
-
 
   return (
     <>
-      {/* ✅ Full-page overlay loader */}
       {loading && (
         <div className={styles.loaderOverlay}>
           <FaSpinner className={styles.loaderIcon} />
@@ -73,6 +83,7 @@ export default function Agentlogin() {
       )}
 
       <div className={styles.cont}>
+        {/* LEFT IMAGE SECTION */}
         <div className={styles.left}>
           <Image
             src={require("@/assets/loginbanner.png")}
@@ -81,8 +92,10 @@ export default function Agentlogin() {
           />
         </div>
 
+        {/* LOGIN FORM */}
         <div className={styles.loginCont}>
           <div className={styles.formDiv}>
+            {/* LOGO */}
             <div className={styles.logo}>
               <Image
                 src={require("@/assets/logo.png")}
@@ -91,19 +104,20 @@ export default function Agentlogin() {
               />
             </div>
 
-            <h1 className={styles.heading}>Agent Login to continue</h1>
-            
+            <h1 className={styles.heading}>Agent Login</h1>
+            <p className={styles.headingp}>
+              Access to the most powerful tool in the insurance industry.
+            </p>
 
             <form className={styles.loginForm} onSubmit={onSubmit}>
               <div className={styles.error}>
                 {error && <h4>Invalid Credentials</h4>}
               </div>
 
+              {/* EMAIL INPUT */}
               <div className={styles.formInput}>
                 <input
                   type="text"
-                  name="uname"
-                  id="uname"
                   placeholder="E-mail Address"
                   required
                   className={styles.input}
@@ -111,11 +125,10 @@ export default function Agentlogin() {
                 />
               </div>
 
+              {/* PASSWORD INPUT */}
               <div className={styles.formInput}>
                 <input
                   type={showPassword ? "text" : "password"}
-                  name="pass"
-                  id="pass"
                   placeholder="Password"
                   required
                   className={styles.input}
@@ -123,6 +136,7 @@ export default function Agentlogin() {
                 />
               </div>
 
+              {/* SHOW PASSWORD */}
               <div className={styles.showPasswordDiv}>
                 <input
                   type="checkbox"
@@ -133,22 +147,10 @@ export default function Agentlogin() {
                 <label htmlFor="showP">Show Password</label>
               </div>
 
-              <button
-                className={styles.loginButton}
-                disabled={loading}
-                type="submit"
-              >
+              {/* LOGIN BUTTON */}
+              <button className={styles.loginButton} disabled={loading} type="submit">
                 Login
               </button>
-               <p className={styles.signupLink}>
-              Don't have an account?{" "}
-              <span
-                className={styles.signupText}
-                onClick={() => router.push("/agentsignup")}
-              >
-                Sign Up
-              </span>
-            </p>
             </form>
           </div>
         </div>

@@ -1,79 +1,78 @@
-// src/components/VideoLectureDashboard/VideoLectureDashboard.tsx
 "use client";
-import React, { useState } from "react";
-import Sidebar from "@/components/videolecturedashboard/sidebar";
-import VideoPlayer from "@/components/videolecturedashboard/VideoPlayer";
-import styles from "@/styles/components/videolecturedashboard/VideoLectureDashboard.module.css";
+import React, { useEffect, useState } from "react";
+import Sidebar from "./sidebar";
+import VideoPlayer from "./VideoPlayer";
 import TestPage from "./TestPage";
+import styles from "@/styles/components/videolecturedashboard/VideoLectureDashboard.module.css";
 
 const VIDEO_LIST = [
-  { id: 1, title: "Video Lecture 1", src: "@/assets/video/videoplayback.mp4"},
-  { id: 2, title: "Video Lecture 2", src: "@/assets/video/videoplayback.mp4"},
-  { id: 3, title: "Video Lecture 3",src: "@/assets/video/videoplayback.mp4"},
+  { id: 1, title: "Video Lecture 1", src: "/video/videolecture1.mp4" },
+  { id: 2, title: "Video Lecture 2", src: "/video/videolecture1.mp4" },
+  { id: 3, title: "Video Lecture 3", src: "/video/videolecture3.mp4" },
 ];
 
 export default function VideoLectureDashboard() {
-  const [current, setCurrent] = useState<number>(1);
-  const [completed, setCompleted] = useState<Record<number, boolean>>({
-    1: false, 2: false, 3: false
-  });
+  const [current, setCurrent] = useState(1);
+  const [completed, setCompleted] = useState<Record<number, boolean>>({});
   const [showTest, setShowTest] = useState(false);
 
+  // Load all saved progress
+  useEffect(() => {
+    const savedVideo = Number(localStorage.getItem("training_currentVideo") || 1);
+    const savedCompleted = JSON.parse(localStorage.getItem("training_completed") || "{}");
+
+    setCurrent(savedVideo);
+    setCompleted(savedCompleted);
+  }, []);
+
+  // Save current video when changed
+  useEffect(() => {
+    localStorage.setItem("training_currentVideo", String(current));
+  }, [current]);
+
   function handleVideoEnd(id: number) {
-    setCompleted(prev => ({ ...prev, [id]: true }));
-    if (id < 3) setCurrent(id + 1);
+    const newCompleted = { ...completed, [id]: true };
+    setCompleted(newCompleted);
+
+    localStorage.setItem("training_completed", JSON.stringify(newCompleted));
+
+    if (id < VIDEO_LIST.length) {
+      setTimeout(() => setCurrent(id + 1), 500);
+    }
   }
 
   function handleSidebarClick(id: number) {
-    if (id === 1) return setCurrent(1);
-    if (completed[id - 1]) setCurrent(id);
+    if (id === 1 || completed[id - 1]) {
+      setCurrent(id);
+    }
   }
+
+  const allCompleted = Object.keys(completed).length === VIDEO_LIST.length;
+  const currentVideo = VIDEO_LIST.find(v => v.id === current)!;
 
   return (
     <div className={styles.container}>
-      <Sidebar
-        videos={VIDEO_LIST}
-        current={current}
-        completed={completed}
-        onSelect={handleSidebarClick}
-      />
+      <Sidebar videos={VIDEO_LIST} current={current} completed={completed} onSelect={handleSidebarClick} />
 
       <main className={styles.main}>
         {!showTest ? (
           <>
-            <h2 className={styles.heading}>
-              {VIDEO_LIST.find(v => v.id === current)?.title}
-            </h2>
+            <h2 className={styles.heading}>{currentVideo.title}</h2>
 
             <VideoPlayer
               key={current}
-              src={VIDEO_LIST.find(v => v.id === current)!.src}
+              src={currentVideo.src}
+              videoId={current}
               onEnded={() => handleVideoEnd(current)}
             />
 
             <div className={styles.controlsRow}>
               <button
-                className={styles.prevNext}
-                onClick={() => setCurrent(p => Math.max(1, p - 1))}
-                disabled={current === 1}
-              >
-                Previous
-              </button>
-
-              <button
                 className={styles.startTest}
+                disabled={!allCompleted}
                 onClick={() => setShowTest(true)}
-                disabled={!(completed[1] && completed[2] && completed[3])}
               >
                 Start Test
-              </button>
-
-              <button
-                className={styles.prevNext}
-                onClick={() => setCurrent(p => Math.min(3, p + 1))}
-                disabled={current === 3 || !completed[current]}
-              >
-                Next
               </button>
             </div>
           </>

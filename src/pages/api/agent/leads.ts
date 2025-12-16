@@ -2,9 +2,10 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import mongoose from "mongoose";
 import Marine from "@/models/Marinemodule";
 import TravelInsurance from "@/models/TravelInsurance";
-import { verifyToken } from "@/utils/verifyToken";
 import Shop from "@/models/Shop";
 import HomeInsurance from "@/models/Homeinsurance";
+import OfficePackagePolicy from "@/models/OfficePackagePolicy";
+import { verifyToken } from "@/utils/verifyToken";
 
 const MONGODB_URI = process.env.MONGODB_URI!;
 
@@ -33,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    // ------------------- MARINE LEADS -------------------
+    /* ------------------- MARINE LEADS ------------------- */
     const marineLeads = await Marine.find({ assignedAgent: agentId }).sort({ assignedAt: -1 });
 
     const mappedMarine = marineLeads.map((m) => ({
@@ -44,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       assignedAt: m.assignedAt,
     }));
 
-    // ------------------- TRAVEL LEADS -------------------
+    /* ------------------- TRAVEL LEADS ------------------- */
     const travelLeads = await TravelInsurance.find({ assignedAgent: agentId }).sort({ assignedAt: -1 });
 
     const mappedTravel = travelLeads.map((t) => ({
@@ -55,31 +56,52 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       assignedAt: t.assignedAt,
     }));
 
-    // ------------------- SHOP LEADS -------------------
+    /* ------------------- SHOP LEADS ------------------- */
     const shopLeads = await Shop.find({ assignedAgent: agentId }).sort({ assignedAt: -1 });
 
-    const mappedShop = shopLeads.map(s => ({
+    const mappedShop = shopLeads.map((s) => ({
       id: s._id,
       email: s.email,
       phone: s.phone,
       module: "Shop Insurance",
-      assignedAt: s.assignedAt
+      assignedAt: s.assignedAt,
     }));
 
-    // ------------------- HOME INSURANCE -------------------
-    const home = await HomeInsurance.find({ assignedAgent: agentId }).sort({ assignedAt: -1 });
+    /* ------------------- HOME INSURANCE LEADS ------------------- */
+    const homeLeads = await HomeInsurance.find({ assignedAgent: agentId }).sort({ assignedAt: -1 });
 
-    const mappedHome = home.map(h => ({
+    const mappedHome = homeLeads.map((h) => ({
       id: h._id,
       email: h.email,
       phone: h.phoneNumber,
       module: "Home Insurance",
-      assignedAt: h.assignedAt
+      assignedAt: h.assignedAt,
     }));
 
-    // ------------------- MERGE ALL -------------------
-    const allLeads = [...mappedMarine, ...mappedTravel, ...mappedShop, ...mappedHome].sort(
-      (a, b) => new Date(b.assignedAt).getTime() - new Date(a.assignedAt).getTime()
+    /* ------------------- OFFICE PACKAGE POLICY LEADS ------------------- */
+    const officeLeads = await OfficePackagePolicy.find({
+      assignedAgent: agentId,
+    }).sort({ assignedAt: -1 });
+
+    const mappedOffice = officeLeads.map((o) => ({
+      id: o._id,
+      email: o.email,
+      phone: o.mobile,
+      module: "Office Package Policy",
+      assignedAt: o.assignedAt,
+    }));
+
+    /* ------------------- MERGE ALL LEADS ------------------- */
+    const allLeads = [
+      ...mappedMarine,
+      ...mappedTravel,
+      ...mappedShop,
+      ...mappedHome,
+      ...mappedOffice, // ⭐ NEW
+    ].sort(
+      (a, b) =>
+        new Date(b.assignedAt).getTime() -
+        new Date(a.assignedAt).getTime()
     );
 
     return res.status(200).json({ success: true, data: allLeads });

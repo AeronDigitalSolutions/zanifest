@@ -100,3 +100,84 @@
   font-size: 18px;
   padding: 2rem;
 }
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999; /* ensure it appears above everything */
+}
+
+.modal {
+  background: #fff;
+  width: 90%;
+  max-width: 600px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 20px;
+  border-radius: 12px;
+  animation: popup 0.2s ease-in-out;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+
+@keyframes popup {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modalContent {
+  margin-top: 15px;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.showBtn {
+  background: #007aff;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.assignBox {
+  margin-top: 20px;
+  background: #eef4ff;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.agentDropdown {
+  width: 100%;
+  padding: 8px;
+  margin-top: 6px;
+  border-radius: 6px;
+}
+
+.assignBtn {
+  margin-top: 10px;
+  width: 100%;
+  background: #28a745;
+  padding: 10px;
+  color: white;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.closeBtn {
+  margin-top: 15px;
+  width: 100%;
+  background: #ff4444;
+  padding: 10px;
+  color: white;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}

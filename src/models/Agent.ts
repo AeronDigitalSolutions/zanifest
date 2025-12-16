@@ -1,5 +1,4 @@
-// models/Agent.ts
-import mongoose, { Schema, Document, models } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
 export interface IAgent extends Document {
   loginId: string;
@@ -8,48 +7,52 @@ export interface IAgent extends Document {
   email: string;
   password: string;
   phone: string;
-  agentCode: string;
+
   city: string;
   district: string;
   state: string;
   pinCode: string;
+
   panNumber?: string;
-  panAttachment?: string; 
+  panAttachment?: string;
+
   adhaarNumber?: string;
-  adhaarAttachment?: string; 
+  adhaarAttachment?: string;
+
   nomineeName?: string;
   nomineeRelation?: string;
   nomineePanNumber?: string;
   nomineeAadharNumber?: string;
   nomineePanAttachment?: string;
   nomineeAadhaarAttachment?: string;
+
   accountHolderName?: string;
   bankName?: string;
   accountNumber?: string;
   ifscCode?: string;
   branchLocation?: string;
   cancelledChequeAttachment?: string;
+
   assignedTo?: string;
+
   status?: "pending" | "approved" | "rejected";
   accountStatus?: "active" | "inactive";
 }
 
 const agentSchema = new Schema<IAgent>(
   {
-    loginId: { type: String, required: true, unique: true },
+    loginId: { type: String, required: true },
 
     firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    email: { type: String, required: true },
-    password: { type: String, required: true },
-    phone: { type: String, required: true },
+    lastName:  { type: String, required: true },
+    email:     { type: String, required: true },
+    password:  { type: String, required: true },
+    phone:     { type: String, required: true },
 
-    agentCode: { type: String, required: true, unique: true },
-
-    city: { type: String, required: true },
+    city:     { type: String, required: true },
     district: { type: String, required: true },
-    state: { type: String, required: true },
-    pinCode: { type: String, required: true },
+    state:    { type: String, required: true },
+    pinCode:  { type: String, required: true },
 
     panNumber: { type: String },
     panAttachment: { type: String },

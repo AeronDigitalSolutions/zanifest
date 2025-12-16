@@ -77,3 +77,19 @@ justify-content: right;
     font-size: 14px;
   }
 }
+/* ===== Desktop default ===== */
+.cont {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  width: 100%;
+  background-color: black;
+  height: 3rem;
+  align-items: center;
+}
+
+/* ===== Mobile: hide complete UserDetails ===== */
+@media screen and (max-width: 768px) {
+  .cont {
+    display: none;
+  }
+}

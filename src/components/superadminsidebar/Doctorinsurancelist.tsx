@@ -11,70 +11,70 @@ interface DoctorData {
   mobile: string;
   whatsapp: boolean;
   specialization?: string;
-  firstTime?: "yes" | "no" | null;
-  facility?: "yes" | "no" | null;
+  firstTime?: string | null;
+  facility?: string | null;
   createdAt: string;
+
+  assignedTo?: string | null;
+  assignedAt?: string | null;
+  assignedAgent?: string | null;
+
+  [key: string]: any;
 }
 
-const Doctorinsurancelist: React.FC = () => {
+interface Agent {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+const Doctorinsurancelist = () => {
   const [doctors, setDoctors] = useState<DoctorData[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState(true);
+  const [selectedRecord, setSelectedRecord] = useState<DoctorData | null>(null);
 
-  const fetchDoctors = async (isRefresh = false) => {
-    try {
-      if (!isRefresh) setLoading(true);
-      else setRefreshing(true);
+  const [agents, setAgents] = useState<Agent[]>([]);
+  const [selectedAgent, setSelectedAgent] = useState("");
 
-      const res = await axios.get("/api/doctorinsurance");
+  const fetchDoctors = async () => {
+    const res = await axios.get("/api/doctorinsurance");
+    setDoctors(res.data.data);
+    setLoading(false);
+  };
 
-      if (res.data.success) {
-        setDoctors(res.data.data);
-      } else {
-        setError("Failed to fetch doctor data.");
-      }
-    } catch (err) {
-      console.error(err);
-      setError("Error fetching doctor insurance data.");
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
+  const fetchAgents = async () => {
+    const res = await axios.get("/api/getallagents");
+    setAgents(res.data);
   };
 
   useEffect(() => {
     fetchDoctors();
   }, []);
 
-  const handleRefresh = () => {
-    fetchDoctors(true);
+  useEffect(() => {
+    if (selectedRecord) fetchAgents();
+  }, [selectedRecord]);
+
+  const handleAssign = async () => {
+    await axios.post("/api/doctorinsurance?assign=true", {
+      policyId: selectedRecord?._id,
+      agentId: selectedAgent,
+    });
+
+    alert("Lead Assigned!");
+
+    setSelectedRecord(null);
+    setSelectedAgent("");
+    fetchDoctors();
   };
 
   if (loading) return <p className={styles.loading}>Loading...</p>;
-  if (error) return <p className={styles.error}>{error}</p>;
-  if (!loading && doctors.length === 0)
-    return (
-      <div className={styles.wrapper}>
-        <div className={styles.header}>
-          <h2 className={styles.title}>Doctor Insurance List</h2>
-          <button className={styles.refreshBtn} onClick={handleRefresh}>
-            {refreshing ? "Refreshing..." : "↻ Refresh"}
-          </button>
-        </div>
-        <p className={styles.noData}>No doctor insurance records found.</p>
-      </div>
-    );
 
   return (
     <div className={styles.wrapper}>
-      {/* --- Header + Refresh Button --- */}
       <div className={styles.header}>
-        <h2 className={styles.title}>Doctor Insurance List</h2>
-
-        <button className={styles.refreshBtn} onClick={handleRefresh}>
-          {refreshing ? "Refreshing..." : "↻ Refresh"}
-        </button>
+        <h2>Doctor Insurance List</h2>
       </div>
 
       <div className={styles.tableWrapper}>
@@ -83,13 +83,11 @@ const Doctorinsurancelist: React.FC = () => {
             <tr>
               <th>S.No</th>
               <th>Name</th>
-              <th>User Email</th>
+              <th>Email</th>
               <th>Mobile</th>
-              <th>WhatsApp</th>
-              <th>Specialization</th>
-              <th>First Time Buyer</th>
-              <th>Facility Owner</th>
+              <th>Assigned To</th>
               <th>Created At</th>
+              <th>Show</th>
             </tr>
           </thead>
 
@@ -98,25 +96,63 @@ const Doctorinsurancelist: React.FC = () => {
               <tr key={doc._id}>
                 <td>{index + 1}</td>
                 <td>{doc.name}</td>
-                <td>{doc.email || "Unregistered User"}</td>
+                <td>{doc.email || "Unregistered"}</td>
                 <td>{doc.mobile}</td>
-                <td>{doc.whatsapp ? "Yes" : "No"}</td>
-                <td>{doc.specialization || "-"}</td>
-                <td>{doc.firstTime || "-"}</td>
-                <td>{doc.facility || "-"}</td>
+                <td>{doc.assignedTo || "Not Assigned"}</td>
                 <td>{new Date(doc.createdAt).toLocaleString()}</td>
+                <td>
+                  <button className={styles.showBtn} onClick={() => setSelectedRecord(doc)}>
+                    Show Data
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      {/* Pagination Static */}
-      <div className={styles.pagination}>
-        <button className={styles.pageBtn}>Previous</button>
-        <span>Page 1 of 1</span>
-        <button className={styles.pageBtn}>Next</button>
-      </div>
+      {/* MODAL */}
+      {selectedRecord && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <h3>Doctor Insurance Details</h3>
+
+            <div className={styles.modalContent}>
+              {Object.entries(selectedRecord).map(([k, v]) => (
+                <p key={k}>
+                  <strong>{k}: </strong>
+                  {typeof v === "object" ? JSON.stringify(v) : v?.toString()}
+                </p>
+              ))}
+            </div>
+
+            {/* Assign */}
+            <div className={styles.assignBox}>
+              <label>Assign to Agent:</label>
+              <select
+                className={styles.agentDropdown}
+                value={selectedAgent}
+                onChange={(e) => setSelectedAgent(e.target.value)}
+              >
+                <option value="">Select Agent</option>
+                {agents.map((a) => (
+                  <option key={a._id} value={a._id}>
+                    {a.firstName} {a.lastName} ({a.email})
+                  </option>
+                ))}
+              </select>
+
+              <button className={styles.assignBtn} onClick={handleAssign}>
+                Assign
+              </button>
+            </div>
+
+            <button className={styles.closeBtn} onClick={() => setSelectedRecord(null)}>
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
