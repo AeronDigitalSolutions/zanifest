@@ -36,6 +36,10 @@ const DEMOLIST = [
     color: "#faf6e2",
   },
 ];
+const limitText = (text: string, limit = 90) => {
+  if (!text) return "";
+  return text.length > limit ? text.slice(0, limit).trim() + "…" : text;
+};
 
 const parseHeading = (text: string) => {
   const regex = /<([^>]+)>/g;
@@ -145,8 +149,9 @@ function DemoSection() {
             </div>
             <div className={styles.content}>
               <p className={styles.name}>{item.name}</p>
-              <p className={styles.desc}>{item.desc}</p>
-            </div>
+<p className={styles.desc}>
+  {limitText(item.desc, 90)}
+</p>            </div>
           </div>
         ))}
       </div>

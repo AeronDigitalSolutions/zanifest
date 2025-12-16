@@ -322,7 +322,7 @@
   .serviceItem {
     min-width: 293px;
     max-width: 300px;
-    margin: 0px 18px;
+    margin: 0px 0px;
     flex-shrink: 0;
     background-color: white;
     padding: 14px;
@@ -361,5 +361,11 @@
   object-fit: cover;
 }
 
-
+@media screen and (max-width: 480px) {
+  .serviceItem {
+    min-width: 94vw;
+    max-width: 94vw;
+    padding: 14px;
+  }
+}
 

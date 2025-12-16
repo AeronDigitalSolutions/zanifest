@@ -129,7 +129,7 @@
 
 @media screen and (max-width: 768px) {
   .heading {
-    font-size: 25px;
+    font-size: 21px;
   }
   .desc {
     justify-content: justify;
@@ -173,5 +173,29 @@
   }
   .head::after {
     width: 65%;
+  }
+}
+@media screen and (max-width: 768px) {
+  .serviceItem:hover .arrow,
+  .serviceItem:hover .name,
+  .serviceItem:hover .desc {
+    transform: none;   /* 👈 cut issue fix */
+  }
+  .serviceItem {
+    padding: 0px 16px 0px;  /* 👈 bottom space */
+    box-sizing: border-box;
+    height: auto;             /* 👈 allow content grow */
+  }
+  .bottomCarousal {
+    overflow: visible !important;
+  }
+
+  .cont {
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+  .desc {
+    line-height: 1.4;
+    word-break: break-word;
   }
 }
