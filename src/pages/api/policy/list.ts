@@ -12,14 +12,12 @@ export default async function handler(
 
   try {
     await connectDB();
-
     const policies = await Policy.find({ verified: true })
       .sort({ createdAt: -1 })
       .lean();
 
     res.status(200).json({ success: true, data: policies });
-  } catch (err) {
-    console.error(err);
+  } catch {
     res.status(500).json({ success: false });
   }
 }

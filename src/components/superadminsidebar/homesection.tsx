@@ -64,7 +64,9 @@ const HomeSection = () => {
   }, [refreshKey]);
 
   const handleSubmit = async () => {
-    if (!title || !preview) return alert("Please fill all fields");
+if (!title || (!preview && !editId)) {
+  return alert("Please fill all fields");
+}
 
     if (!editId && images.length >= 10) {
       return alert("❌ You can only upload up to 10 images");
@@ -155,16 +157,18 @@ const HomeSection = () => {
               />
               <p className={styles.cardTitle}>{img.title}</p>
               <div className={styles.cardActions}>
-                <button
-                  onClick={() => {
-                    setEditId(img._id);
-                    setTitle(img.title);
-                    setPreview(img.imageUrl);
-                  }}
-                  className={styles.btnEdit}
-                >
-                  Edit
-                </button>
+              {/* <button
+  onClick={() => {
+    setEditId(img._id);
+    setTitle(img.title);
+    setPreview(img.imageUrl); // important
+    setFile(null);            // reset file input
+  }}
+  className={styles.btnEdit}
+>
+  Edit
+</button> */}
+
                 <button
                   onClick={() => handleDelete(img._id)}
                   className={styles.btnDelete}

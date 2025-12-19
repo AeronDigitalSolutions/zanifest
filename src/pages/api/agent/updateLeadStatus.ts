@@ -11,6 +11,10 @@ async function connectDB() {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== "PUT") {
+    return res.status(405).json({ success: false });
+  }
+
   await connectDB();
 
   const token = req.cookies.agentToken;
@@ -19,14 +23,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     await verifyToken(token);
 
-    const { id } = req.query;
-    const lead = await Lead.findById(id);
+    const { leadId, status, remark } = req.body;
 
-    if (!lead) {
-      return res.status(404).json({ success: false, message: "Lead not found" });
-    }
+    await Lead.findByIdAndUpdate(leadId, { status, remark });
 
-    return res.status(200).json({ success: true, data: lead });
+    return res.status(200).json({ success: true });
   } catch (err: any) {
     return res.status(500).json({ success: false, message: err.message });
   }

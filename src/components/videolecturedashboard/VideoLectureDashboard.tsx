@@ -16,16 +16,27 @@ export default function VideoLectureDashboard() {
   const [completed, setCompleted] = useState<Record<number, boolean>>({});
   const [showTest, setShowTest] = useState(false);
 
-  // Load all saved progress
   useEffect(() => {
-    const savedVideo = Number(localStorage.getItem("training_currentVideo") || 1);
-    const savedCompleted = JSON.parse(localStorage.getItem("training_completed") || "{}");
+    // ✅ If already passed → skip training
+    if (localStorage.getItem("agentTestPassed") === "true") {
+      window.location.href = "/agentpage";
+      return;
+    }
+
+    const savedVideo = Number(
+      localStorage.getItem("training_currentVideo") || 1
+    );
+    const savedCompleted = JSON.parse(
+      localStorage.getItem("training_completed") || "{}"
+    );
+    const testStarted =
+      localStorage.getItem("training_testStarted") === "true";
 
     setCurrent(savedVideo);
     setCompleted(savedCompleted);
+    setShowTest(testStarted);
   }, []);
 
-  // Save current video when changed
   useEffect(() => {
     localStorage.setItem("training_currentVideo", String(current));
   }, [current]);
@@ -33,11 +44,13 @@ export default function VideoLectureDashboard() {
   function handleVideoEnd(id: number) {
     const newCompleted = { ...completed, [id]: true };
     setCompleted(newCompleted);
-
-    localStorage.setItem("training_completed", JSON.stringify(newCompleted));
+    localStorage.setItem(
+      "training_completed",
+      JSON.stringify(newCompleted)
+    );
 
     if (id < VIDEO_LIST.length) {
-      setTimeout(() => setCurrent(id + 1), 500);
+      setCurrent(id + 1);
     }
   }
 
@@ -47,12 +60,19 @@ export default function VideoLectureDashboard() {
     }
   }
 
-  const allCompleted = Object.keys(completed).length === VIDEO_LIST.length;
-  const currentVideo = VIDEO_LIST.find(v => v.id === current)!;
+  const allCompleted =
+    Object.keys(completed).length === VIDEO_LIST.length;
+
+  const currentVideo = VIDEO_LIST.find((v) => v.id === current)!;
 
   return (
     <div className={styles.container}>
-      <Sidebar videos={VIDEO_LIST} current={current} completed={completed} onSelect={handleSidebarClick} />
+      <Sidebar
+        videos={VIDEO_LIST}
+        current={current}
+        completed={completed}
+        onSelect={handleSidebarClick}
+      />
 
       <main className={styles.main}>
         {!showTest ? (
@@ -66,18 +86,25 @@ export default function VideoLectureDashboard() {
               onEnded={() => handleVideoEnd(current)}
             />
 
-            <div className={styles.controlsRow}>
+            {allCompleted && (
               <button
                 className={styles.startTest}
-                disabled={!allCompleted}
-                onClick={() => setShowTest(true)}
+                onClick={() => {
+                  localStorage.setItem("training_testStarted", "true");
+                  setShowTest(true);
+                }}
               >
                 Start Test
               </button>
-            </div>
+            )}
           </>
         ) : (
-          <TestPage onClose={() => setShowTest(false)} />
+          <TestPage
+            onClose={() => {
+              localStorage.removeItem("training_testStarted");
+              setShowTest(false);
+            }}
+          />
         )}
       </main>
     </div>

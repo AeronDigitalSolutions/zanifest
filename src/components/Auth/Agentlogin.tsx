@@ -23,7 +23,6 @@ export default function Agentlogin() {
       const res = await fetch("/api/agent/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-
         body: JSON.stringify({
           email: userName,
           password,
@@ -42,30 +41,26 @@ export default function Agentlogin() {
 
       console.log("Login Success:", data);
 
-      // Save token & agent info
+      // ✅ Save agent auth data
       localStorage.setItem("agentToken", data.token);
       localStorage.setItem("agentName", data.agent?.name || "");
 
       setError(false);
 
-      // Check test status
+      // ✅ UPDATED TRAINING LOGIC
       const testPassed =
-        localStorage.getItem("agentTestPassed") === "true" ||
-        document.cookie.includes("agentTestPassed=true");
+        localStorage.getItem("agentTestPassed") === "true";
 
-      console.log("Test Passed?", testPassed);
-
-      // Redirect based on training status
       if (testPassed) {
+        // already passed → skip training
         router.push("/agentpage");
       } else {
+        // not passed → go to training (resume handled there)
         router.push("/videolectures");
       }
 
       console.log("Redirect executed successfully");
-      return;
     } catch (err) {
-      console.log("Error in login try block");
       console.error("Login failed:", err);
       setError(true);
     } finally {
@@ -148,7 +143,11 @@ export default function Agentlogin() {
               </div>
 
               {/* LOGIN BUTTON */}
-              <button className={styles.loginButton} disabled={loading} type="submit">
+              <button
+                className={styles.loginButton}
+                disabled={loading}
+                type="submit"
+              >
                 Login
               </button>
             </form>

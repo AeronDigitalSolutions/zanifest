@@ -2,10 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "@/lib/dbConnect";
 import Policy from "@/models/Policy";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
     return res.status(405).json({ success: false });
   }
@@ -13,11 +10,11 @@ export default async function handler(
   try {
     await connectDB();
 
-    const policies = await Policy.find({ verified: true })
+    const policy = await Policy.findOne({ verified: true })
       .sort({ createdAt: -1 })
       .lean();
 
-    res.status(200).json({ success: true, data: policies });
+    res.json({ success: true, policy });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false });

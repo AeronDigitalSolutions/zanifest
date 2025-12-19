@@ -1,21 +1,23 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import styles from "@/styles/components/superadminsidebar/marineinsurancelist.module.css";
 
 interface MarineRecord {
   _id: string;
   phoneNumber: string;
+  email?: string | null;
   commodity?: string;
   coverType?: string;
   shipmentType?: string;
   companyName?: string;
   transportMode?: string;
   coverAmount?: string;
-  email?: string | null;
-  assignedAgent?: string | null;
   assignedAgentName?: string | null;
+  assignedAgent?: string | null;
   createdAt: string;
+  [key: string]: any;
 }
 
 interface Agent {
@@ -24,141 +26,105 @@ interface Agent {
   lastName?: string;
   email?: string;
   name?: string;
-  agentCode?: string;
 }
 
-const MarineInsuranceList: React.FC = () => {
+const MarineInsuranceList = () => {
   const [data, setData] = useState<MarineRecord[]>([]);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const [selected, setSelected] = useState<MarineRecord | null>(null);
   const [agents, setAgents] = useState<Agent[]>([]);
-  const [assignedAgent, setAssignedAgent] = useState<string>("");
+  const [assignedAgent, setAssignedAgent] = useState("");
 
-  // ---------------- FETCH MARINE DATA ----------------
-  const fetchData = async (isRefresh = false) => {
-    try {
-      if (!isRefresh) setLoading(true);
-      else setRefreshing(true);
-
-      const res = await fetch("/api/p", { cache: "no-store" });
-      if (!res.ok) throw new Error("Failed to fetch marine data");
-
-      const json = await res.json();
-      setData(json.data || []);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
+  // ---------- FETCH MARINE DATA ----------
+  const fetchData = async () => {
+    setLoading(true);
+    const res = await axios.get("/api/p");
+    setData(res.data.data || []);
+    setLoading(false);
   };
 
-  // ---------------- FETCH AGENTS LIST ----------------
+  // ---------- FETCH AGENTS ----------
   const fetchAgents = async () => {
-    try {
-      const res = await fetch("/api/getallagents", { cache: "no-store" });
-      if (!res.ok) throw new Error("Failed to fetch agent list");
-
-      const json = await res.json();
-      setAgents(json || []);
-    } catch (err) {
-      console.error("Agent Fetch Error:", err);
-    }
+    const res = await axios.get("/api/getallagents");
+    setAgents(res.data || []);
   };
 
   useEffect(() => {
     fetchData();
-    fetchAgents();
   }, []);
 
-  const handleRefresh = () => fetchData(true);
+  useEffect(() => {
+    if (selected) fetchAgents();
+  }, [selected]);
 
-  // ---- Format Name ----
-  const getAgentDisplayName = (agent: Agent) => {
-    if (agent.firstName || agent.lastName) {
-      return `${agent.firstName ?? ""} ${agent.lastName ?? ""}`.trim();
-    }
-    return agent.name ?? "Unnamed Agent";
+  const getAgentName = (a?: Agent) => {
+    if (!a) return "";
+    if (a.firstName || a.lastName) return `${a.firstName ?? ""} ${a.lastName ?? ""}`.trim();
+    return a.name ?? "";
   };
 
-  // ---------------- ASSIGN AGENT TO RECORD ----------------
+  // ---------- ASSIGN AGENT ----------
   const assignAgentHandler = async () => {
-  if (!assignedAgent || !selected) {
-    alert("Please select an agent.");
-    return;
-  }
+    if (!assignedAgent || !selected) return alert("Please select an agent");
 
-  const selectedAgentData = agents.find((a) => a._id === assignedAgent);
-  const agentName = getAgentDisplayName(selectedAgentData!);
+    const agent = agents.find((a) => a._id === assignedAgent);
+    const agentName = getAgentName(agent);
 
-  const res = await fetch("/api/p", {
-    method: "PUT",                          
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
+    const res = await axios.put("/api/p", {
       marineId: selected._id,
       agentId: assignedAgent,
-      agentName: agentName
-    }),
-  });
+      agentName,
+    });
 
-  const data = await res.json();
-
-  if (data.success) {
-    alert("Agent assigned successfully!");
-    fetchData(); 
-    setSelected(null);
-    setAssignedAgent("");
-  } else {
-    alert("Failed to assign agent");
-  }
-};
-
+    if (res.data.success) {
+      alert("Agent assigned successfully!");
+      setSelected(null);
+      setAssignedAgent("");
+      fetchData();
+    } else {
+      alert("Failed to assign agent");
+    }
+  };
 
   if (loading) return <p className={styles.loading}>Loading...</p>;
-  if (error) return <p className={styles.error}>{error}</p>;
 
   return (
     <div className={styles.miContainer}>
-      {/* HEADER */}
       <div className={styles.miHeader}>
         <h2 className={styles.miTitle}>Marine Insurance List</h2>
-        <button className={styles.miRefreshBtn} onClick={handleRefresh}>
-          {refreshing ? "Refreshing..." : "↻ Refresh"}
-        </button>
       </div>
 
-      {/* TABLE */}
       <div className={styles.miTableWrapper}>
         <table className={styles.miTable}>
           <thead>
             <tr>
               <th>S.No</th>
-              <th>Email / User</th>
+              <th>Email</th>
               <th>Phone</th>
               <th>Assigned To</th>
-              <th>Created At</th>
-              <th>Show Data</th>
+              <th>Show</th>
             </tr>
           </thead>
 
           <tbody>
             {data.map((item, idx) => (
-              <tr key={item._id}>
+              <tr
+                key={item._id}
+                onClick={() => setSelected(item)}   // ✅ ROW CLICK
+              >
                 <td>{idx + 1}</td>
-                <td>{item.email || "Unregistered User"}</td>
+                <td>{item.email || "Unregistered"}</td>
                 <td>{item.phoneNumber}</td>
-
-                {/* NEW COLUMN */}
                 <td>{item.assignedAgentName || "Not Assigned"}</td>
 
-                <td>{new Date(item.createdAt).toLocaleString()}</td>
                 <td>
                   <button
                     className={styles.showBtn}
-                    onClick={() => setSelected(item)}
+                    onClick={(e) => {
+                      e.stopPropagation();          // ✅ IMPORTANT
+                      setSelected(item);
+                    }}
                   >
                     Show Data
                   </button>
@@ -169,51 +135,44 @@ const MarineInsuranceList: React.FC = () => {
         </table>
       </div>
 
-      {/* ----------- MODAL ----------- */}
+      {/* ---------- MODAL ---------- */}
       {selected && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalBox}>
             <h3 className={styles.modalTitle}>Marine Insurance Details</h3>
 
             <div className={styles.modalContent}>
-              <p><strong>Email:</strong> {selected.email || "Unregistered User"}</p>
-              <p><strong>Phone:</strong> {selected.phoneNumber}</p>
-              <p><strong>Commodity:</strong> {selected.commodity || "-"}</p>
-              <p><strong>Cover Type:</strong> {selected.coverType || "-"}</p>
-              <p><strong>Shipment Type:</strong> {selected.shipmentType || "-"}</p>
-              <p><strong>Company Name:</strong> {selected.companyName || "-"}</p>
-              <p><strong>Transport Mode:</strong> {selected.transportMode || "-"}</p>
-              <p><strong>Cover Amount:</strong> {selected.coverAmount || "-"}</p>
-              <p><strong>Created At:</strong> {new Date(selected.createdAt).toLocaleString()}</p>
+  {Object.entries(selected).map(([k, v]) => (
+    <p key={k} className={styles.para}>
+      <span className={styles.label}>{k}</span>
+      <span className={styles.value}>
+        {typeof v === "object" ? JSON.stringify(v) : v?.toString()}
+      </span>
+    </p>
+  ))}
+</div>
 
-              <p><strong>Assigned To:</strong> {selected.assignedAgentName || "Not Assigned"}</p>
-            </div>
 
-            {/* Agent Select */}
             <div className={styles.agentSelectBox}>
               <label>Select Agent</label>
-
               <select
                 className={styles.agentDropdown}
                 value={assignedAgent}
                 onChange={(e) => setAssignedAgent(e.target.value)}
               >
                 <option value="">-- Select Agent --</option>
-
-                {agents.map((agent) => (
-                  <option key={agent._id} value={agent._id}>
-                    {getAgentDisplayName(agent)} ({agent.email})
+                {agents.map((a) => (
+                  <option key={a._id} value={a._id}>
+                    {getAgentName(a)} ({a.email})
                   </option>
                 ))}
               </select>
             </div>
 
-            {/* Modal Buttons */}
             <div className={styles.modalFooter}>
               <button className={styles.assignBtn} onClick={assignAgentHandler}>
                 Assign To Agent
               </button>
-
               <button className={styles.closeBtn} onClick={() => setSelected(null)}>
                 Close
               </button>

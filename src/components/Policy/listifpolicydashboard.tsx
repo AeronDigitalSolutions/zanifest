@@ -1,38 +1,49 @@
 "use client";
-
-import React, { useState } from "react";
-import PdfUpload from "@/components/Policy/pdfupload";
-import ExtractedText from "@/components/Policy/ExtractedText";
+import React, { useEffect, useState } from "react";
+import PdfUpload, { Summary } from "@/components/Policy/pdfupload";
+import PolicyTable from "@/components/Policy/PolicyTable";
 import styles from "@/styles/pages/listofpolicy.module.css";
 
-const ListOfPolicy: React.FC = () => {
-  const [uploadedText, setUploadedText] = useState("");
+const ListOfPolicy = () => {
+  const [preview, setPreview] = useState<Summary | null>(null);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [saved, setSaved] = useState<Summary[]>([]);
+  const [uploadedText, setUploadedText] = useState(""); // ✅ ADD THIS
+
+  const fetchPolicies = async () => {
+    const res = await fetch("/api/policy/list");
+    const json = await res.json();
+    if (json.success) setSaved(json.data);
+  };
+
+  useEffect(() => {
+    fetchPolicies();
+    window.addEventListener("policy-updated", fetchPolicies);
+    return () =>
+      window.removeEventListener("policy-updated", fetchPolicies);
+  }, []);
 
   return (
     <div className={styles.pageContainer}>
-      {/* LEFT: upload + extracted text */}
-      <div className={styles.leftSide}>
-        <PdfUpload
-          setUploadedText={setUploadedText}
-          setPdfUrl={setPdfUrl}
-        />
+      <div className={styles.topBar}>
+        <h2>Policy Scanner</h2>
 
-        {uploadedText && <ExtractedText text={uploadedText} />}
+        <PdfUpload
+          setSummary={setPreview}
+          setPdfUrl={setPdfUrl}
+          setUploadedText={setUploadedText} // ✅ PASS IT
+        />
       </div>
 
-      {/* RIGHT: exact PDF preview */}
-     <div className={styles.rightSide}>
-  {pdfUrl ? (
-    <iframe
-      src={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0`}
-      className={styles.pdfViewer}
-    ></iframe>
-  ) : (
-    <p className={styles.noPreview}>Upload a PDF to preview</p>
-  )}
-</div>
+      {/* CURRENT UPLOAD */}
+      {preview && pdfUrl && (
+        <PolicyTable policies={[preview]} pdfUrl={pdfUrl} />
+      )}
 
+      {/* VERIFIED POLICIES */}
+      {saved.length > 0 && (
+        <PolicyTable policies={saved} pdfUrl="" />
+      )}
     </div>
   );
 };

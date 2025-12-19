@@ -32,20 +32,20 @@ interface Agent {
 const Doctorinsurancelist = () => {
   const [doctors, setDoctors] = useState<DoctorData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedRecord, setSelectedRecord] = useState<DoctorData | null>(null);
 
+  const [selectedRecord, setSelectedRecord] = useState<DoctorData | null>(null);
   const [agents, setAgents] = useState<Agent[]>([]);
   const [selectedAgent, setSelectedAgent] = useState("");
 
   const fetchDoctors = async () => {
     const res = await axios.get("/api/doctorinsurance");
-    setDoctors(res.data.data);
+    setDoctors(res.data.data || []);
     setLoading(false);
   };
 
   const fetchAgents = async () => {
     const res = await axios.get("/api/getallagents");
-    setAgents(res.data);
+    setAgents(res.data || []);
   };
 
   useEffect(() => {
@@ -57,6 +57,11 @@ const Doctorinsurancelist = () => {
   }, [selectedRecord]);
 
   const handleAssign = async () => {
+    if (!selectedAgent) {
+      alert("Please select an agent");
+      return;
+    }
+
     await axios.post("/api/doctorinsurance?assign=true", {
       policyId: selectedRecord?._id,
       agentId: selectedAgent,
@@ -73,10 +78,12 @@ const Doctorinsurancelist = () => {
 
   return (
     <div className={styles.wrapper}>
+      {/* HEADER */}
       <div className={styles.header}>
         <h2>Doctor Insurance List</h2>
       </div>
 
+      {/* TABLE */}
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead>
@@ -93,15 +100,25 @@ const Doctorinsurancelist = () => {
 
           <tbody>
             {doctors.map((doc, index) => (
-              <tr key={doc._id}>
+              <tr
+                key={doc._id}
+                onClick={() => setSelectedRecord(doc)} // ✅ ROW CLICK
+              >
                 <td>{index + 1}</td>
                 <td>{doc.name}</td>
                 <td>{doc.email || "Unregistered"}</td>
                 <td>{doc.mobile}</td>
                 <td>{doc.assignedTo || "Not Assigned"}</td>
                 <td>{new Date(doc.createdAt).toLocaleString()}</td>
+
                 <td>
-                  <button className={styles.showBtn} onClick={() => setSelectedRecord(doc)}>
+                  <button
+                    className={styles.showBtn}
+                    onClick={(e) => {
+                      e.stopPropagation(); // ✅ prevent double trigger
+                      setSelectedRecord(doc);
+                    }}
+                  >
                     Show Data
                   </button>
                 </td>
@@ -126,9 +143,10 @@ const Doctorinsurancelist = () => {
               ))}
             </div>
 
-            {/* Assign */}
+            {/* ASSIGN */}
             <div className={styles.assignBox}>
               <label>Assign to Agent:</label>
+
               <select
                 className={styles.agentDropdown}
                 value={selectedAgent}
@@ -147,7 +165,10 @@ const Doctorinsurancelist = () => {
               </button>
             </div>
 
-            <button className={styles.closeBtn} onClick={() => setSelectedRecord(null)}>
+            <button
+              className={styles.closeBtn}
+              onClick={() => setSelectedRecord(null)}
+            >
               Close
             </button>
           </div>

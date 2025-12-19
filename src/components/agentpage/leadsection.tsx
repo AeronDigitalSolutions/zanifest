@@ -8,6 +8,7 @@ interface Lead {
   phone?: string;
   module: string;
   assignedAt?: string;
+  status?: string;
 }
 
 type FullDoc = { [key: string]: any };
@@ -22,26 +23,29 @@ export default function LeadSection() {
   const [modalLoading, setModalLoading] = useState(false);
   const [modalError, setModalError] = useState<string | null>(null);
 
+  // status + remark
+  const [status, setStatus] = useState("Cold");
+  const [remark, setRemark] = useState("");
+  const [currentLeadId, setCurrentLeadId] = useState<string | null>(null);
+
   useEffect(() => {
-    setLoading(true);
-    fetch(`/api/agent/leads`)
-      .then((r) => r.json())
-      .then((json) => {
-        if (json.success) setLeads(json.data || []);
-      })
-      .catch((err) => console.error("Lead error:", err))
-      .finally(() => setLoading(false));
+    fetchLeads();
   }, []);
 
-  if (loading) return <div className={styles.loading}>Loading leads...</div>;
-  if (leads.length === 0) return <div className={styles.empty}>No leads assigned yet.</div>;
+  const fetchLeads = async () => {
+    setLoading(true);
+    const res = await fetch(`/api/agent/leads`);
+    const json = await res.json();
+    if (json.success) setLeads(json.data || []);
+    setLoading(false);
+  };
 
-  // fetch full doc for a lead (module + id)
   const openLeadDetails = async (moduleName: string, id: string) => {
     setModalError(null);
     setModalLoading(true);
     setShowModal(true);
     setFullDoc(null);
+    setCurrentLeadId(id);
 
     try {
       const params = new URLSearchParams({ module: moduleName, id });
@@ -52,6 +56,8 @@ export default function LeadSection() {
         setModalError(json.message || "Failed to fetch lead details");
       } else {
         setFullDoc(json.data || null);
+        setStatus(json.data?.status || "Cold");
+        setRemark(json.data?.remark || "");
       }
     } catch (err: any) {
       setModalError(err.message || "Failed to fetch lead details");
@@ -59,6 +65,32 @@ export default function LeadSection() {
       setModalLoading(false);
     }
   };
+
+  const saveStatusRemark = async () => {
+    if (!currentLeadId) return;
+
+    const res = await fetch("/api/agent/updateLeadStatus", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        leadId: currentLeadId,
+        status,
+        remark,
+      }),
+    });
+
+    const json = await res.json();
+    if (json.success) {
+      alert("Lead updated successfully");
+      setShowModal(false);
+      fetchLeads();
+    } else {
+      alert(json.message || "Failed to update lead");
+    }
+  };
+
+  if (loading) return <div className={styles.loading}>Loading leads...</div>;
+  if (leads.length === 0) return <div className={styles.empty}>No leads assigned yet.</div>;
 
   return (
     <div className={styles.container}>
@@ -71,6 +103,7 @@ export default function LeadSection() {
               <th>Email</th>
               <th>Phone</th>
               <th>Module</th>
+              <th>Status</th>
               <th>Assigned At</th>
               <th>Show Data</th>
             </tr>
@@ -82,6 +115,7 @@ export default function LeadSection() {
                 <td>{l.email || "-"}</td>
                 <td>{l.phone || "-"}</td>
                 <td>{l.module}</td>
+                <td>{l.status || "Cold"}</td>
                 <td>{l.assignedAt ? new Date(l.assignedAt).toLocaleString() : "-"}</td>
                 <td>
                   <button
@@ -97,18 +131,10 @@ export default function LeadSection() {
         </table>
       </div>
 
-      {/* Modal */}
+      {/* MODAL */}
       {showModal && (
         <div className={styles.modalOverlay} onClick={() => setShowModal(false)}>
-          <div
-            className={styles.modal}
-            onClick={(e) => {
-              // prevent closing when clicking inside modal
-              e.stopPropagation();
-            }}
-            role="dialog"
-            aria-modal="true"
-          >
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
             <div className={styles.modalHeader}>
               <h3>Lead Details</h3>
               <button className={styles.closeBtn} onClick={() => setShowModal(false)}>
@@ -117,21 +143,49 @@ export default function LeadSection() {
             </div>
 
             {modalLoading && <div className={styles.modalLoading}>Loading details...</div>}
-
-            {modalError && <div className={styles.modalError}>❌ {modalError}</div>}
+            {modalError && <div className={styles.modalError}>{modalError}</div>}
 
             {!modalLoading && !modalError && fullDoc && (
-              <div className={styles.modalContent}>
-                {/* Render nested objects nicely */}
-                {Object.entries(fullDoc).map(([key, value]) => (
-                  <div key={key} className={styles.recordRow}>
-                    <div className={styles.recordKey}>{key}</div>
-                    <div className={styles.recordValue}>
-                      {renderValue(value)}
+              <>
+                <div className={styles.modalContent}>
+                  {Object.entries(fullDoc).map(([key, value]) => (
+                    <div key={key} className={styles.field}>
+                      <label className={styles.label}>{key}</label>
+                      <div className={styles.valueBox}>{renderValue(value)}</div>
                     </div>
+                  ))}
+                </div>
+
+                <div className={styles.modalFooter}>
+                  <div className={styles.statusBox}>
+                    <label>Status</label>
+                    <select value={status} onChange={(e) => setStatus(e.target.value)}>
+                      <option value="Cold">Cold</option>
+                      <option value="Hot">Hot</option>
+                      <option value="Closed">Closed</option>
+                      <option value="interested">Interested</option>
+                      <option value="not interested">Not Interested</option>
+                    </select>
+
+                    <label>Remark</label>
+                    <textarea
+                      rows={3}
+                      value={remark}
+                      onChange={(e) => setRemark(e.target.value)}
+                      placeholder="Enter remark"
+                    />
                   </div>
-                ))}
-              </div>
+
+                  <div className={styles.footerBtns}>
+                    <button className={styles.saveBtn} onClick={saveStatusRemark}>
+                      Save
+                    </button>
+                    <button className={styles.closeBtn} onClick={() => setShowModal(false)}>
+                      Close
+                    </button>
+                  </div>
+                </div>
+              </>
             )}
           </div>
         </div>
@@ -140,26 +194,8 @@ export default function LeadSection() {
   );
 }
 
-// Helper to render value with nesting & arrays
 function renderValue(value: any): React.ReactNode {
-  if (value === null || value === undefined) return <span style={{ color: "#666" }}>-</span>;
-
-  if (Array.isArray(value)) {
-    if (value.length === 0) return <span style={{ color: "#666" }}>[]</span>;
-    return (
-      <ul style={{ paddingLeft: 18, margin: 0 }}>
-        {value.map((v, i) => (
-          <li key={i} style={{ marginBottom: 6 }}>
-            {typeof v === "object" ? <pre style={{ whiteSpace: "pre-wrap" }}>{JSON.stringify(v, null, 2)}</pre> : String(v)}
-          </li>
-        ))}
-      </ul>
-    );
-  }
-
-  if (typeof value === "object") {
-    return <pre style={{ whiteSpace: "pre-wrap" }}>{JSON.stringify(value, null, 2)}</pre>;
-  }
-
-  return <span>{String(value)}</span>;
+  if (value === null || value === undefined) return "-";
+  if (typeof value === "object") return <pre>{JSON.stringify(value, null, 2)}</pre>;
+  return String(value);
 }

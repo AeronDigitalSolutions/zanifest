@@ -199,6 +199,18 @@ function ResultDialog({
   onRetry: () => void;
 }) {
   const pass = score >= 6;
+// inside ResultDialog (PASS CASE ONLY)
+
+if (pass) {
+  localStorage.setItem("agentTestPassed", "true");
+
+  // ✅ cleanup training data
+  localStorage.removeItem("training_currentVideo");
+  localStorage.removeItem("training_completed");
+  localStorage.removeItem("training_testStarted");
+
+  window.location.href = "/agentpage";
+}
 
   return (
     <div className={styles.resultWrap}>

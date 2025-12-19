@@ -19,7 +19,7 @@ interface Agent {
   email: string;
 }
 
-const Homeinsurancelist: React.FC = () => {
+const Homeinsurancelist = () => {
   const [records, setRecords] = useState<HomeRecord[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -47,7 +47,7 @@ const Homeinsurancelist: React.FC = () => {
   }, [selectedRecord]);
 
   const assignLead = async () => {
-    if (!selectedAgent) return alert("Please select an agent");
+    if (!selectedAgent) return alert("Select agent");
 
     await axios.post("/api/homeinsurance?assign=true", {
       recordId: selectedRecord?._id,
@@ -55,13 +55,12 @@ const Homeinsurancelist: React.FC = () => {
     });
 
     alert("Lead Assigned!");
-
     setSelectedRecord(null);
     setSelectedAgent("");
     fetchRecords();
   };
 
-  if (loading) return <p className={styles.loading}>Loading…</p>;
+  if (loading) return <p className={styles.loading}>Loading...</p>;
 
   return (
     <div className={styles.wrapper}>
@@ -74,23 +73,29 @@ const Homeinsurancelist: React.FC = () => {
               <th>S.No</th>
               <th>Email</th>
               <th>Phone</th>
-              <th>Assigned To</th>
-              <th>Created At</th>
+              <th>Assigned</th>
+              <th>Created</th>
               <th>Show</th>
             </tr>
           </thead>
 
           <tbody>
-            {records.map((item, index) => (
-              <tr key={item._id}>
-                <td>{index + 1}</td>
+            {records.map((item, i) => (
+              <tr key={item._id} onClick={() => setSelectedRecord(item)}>
+                <td>{i + 1}</td>
                 <td>{item.email || "-"}</td>
                 <td>{item.phoneNumber}</td>
                 <td>{item.assignedTo || "Not Assigned"}</td>
                 <td>{new Date(item.createdAt).toLocaleString()}</td>
 
                 <td>
-                  <button className={styles.showBtn} onClick={() => setSelectedRecord(item)}>
+                  <button
+                    className={styles.showBtn}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedRecord(item);
+                    }}
+                  >
                     Show Data
                   </button>
                 </td>
@@ -105,22 +110,22 @@ const Homeinsurancelist: React.FC = () => {
           <div className={styles.modal}>
             <h3>Home Insurance Details</h3>
 
-            {Object.entries(selectedRecord).map(([key, val]) => (
-              <p key={key}>
-                <strong>{key}:</strong> {val?.toString()}
+            {Object.entries(selectedRecord).map(([k, v]) => (
+              <p key={k}>
+                <strong>{k}:</strong> {v?.toString()}
               </p>
             ))}
 
-            <label>Assign To Agent</label>
+            <label>Assign Agent</label>
             <select
               className={styles.agentDropdown}
               value={selectedAgent}
               onChange={(e) => setSelectedAgent(e.target.value)}
             >
               <option value="">Select Agent</option>
-              {agents.map((agent) => (
-                <option key={agent._id} value={agent._id}>
-                  {agent.email}
+              {agents.map((a) => (
+                <option key={a._id} value={a._id}>
+                  {a.email}
                 </option>
               ))}
             </select>

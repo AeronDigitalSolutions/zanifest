@@ -1,41 +1,42 @@
-/* Main Wrapper */
+/* ========================= */
+/* PAGE WRAPPER */
+/* ========================= */
 .wrapper {
-  padding: 40px 20px;
-  font-family: "Poppins", sans-serif;
+  padding: 20px;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  background: #f8fafc;
   min-height: 100vh;
 }
 
+/* ========================= */
+/* HEADER */
+/* ========================= */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
 .title {
-  text-align: center;
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 25px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
 }
 
-/* Loading / Error / No Data */
-.loading,
-.noData {
-  text-align: center;
-  font-size: 18px;
-  color: #777;
-}
-
-.error {
-  text-align: center;
-  color: red;
-  font-size: 18px;
-}
-
-/* Table Wrapper */
+/* ========================= */
+/* TABLE WRAPPER */
+/* ========================= */
 .tableWrapper {
-  width: 100%;
-  overflow-x: auto;
   background: white;
   border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  overflow-x: auto;
 }
 
-/* Table */
+/* ========================= */
+/* TABLE */
+/* ========================= */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -43,115 +44,174 @@
 }
 
 .table thead tr {
-  background: #f5f7fa;
-  color: #333;
-  font-weight: 600;
+  background: #f8fafb;
 }
 
-.table th,
-.table td {
-  padding: 16px 20px;
-  border-bottom: 1px solid #e6e6e6;
-  white-space: nowrap;
+.table th {
+  padding: 14px 18px;
   font-size: 13px;
+  font-weight: 700;
+  color: #374151;
   text-align: left;
 }
 
-.table tbody tr:hover {
-  background: #f8fbff;
-}
-
-/* Pagination */
-.pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  margin-top: 25px;
-}
-
-.pageBtn {
-  padding: 10px 20px;
-  background: #d3dce6;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
+.table td {
+  padding: 14px 18px;
   font-size: 14px;
+  color: #374151;
+  border-top: 1px solid #eef2f6;
+  white-space: nowrap;
 }
 
-.pageBtn:hover {
-  background: #c4ccd6;
+/* ========================= */
+/* ROW HOVER (REVIEW STYLE) */
+/* ========================= */
+.table tbody tr {
+  position: relative;
+  cursor: pointer;
+  transition: background 0.15s ease;
 }
 
-/* Mobile Responsive */
-@media (max-width: 600px) {
-  .wrapper {
-    padding: 20px 10px;
-  }
-
-  .title {
-    font-size: 20px;
-  }
-
-  .pagination {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .pageBtn {
-    width: 120px;
-  }
-}
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.table tbody tr:hover {
+  background: #fff7f3;
 }
 
-.refreshBtn {
-  background:orange;
+/* ========================= */
+/* SHOW DATA BUTTON */
+/* ========================= */
+.showBtn {
+  background: orangered;
   color: white;
   padding: 8px 14px;
   border-radius: 6px;
   border: none;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 14px;
-  transition: 0.3s ease;
 }
 
-.refreshBtn:hover {
-  background: orangered;
+.showBtn:hover {
+  background: #d53b01;
 }
+
+/* ========================= */
+/* LOADING / NO DATA */
+/* ========================= */
+.loading,
+.noData {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  color: #6b7280;
+  padding: 40px;
+}
+
+/* ========================= */
+/* MODAL */
+/* ========================= */
 .modalOverlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
+  inset: 0;
+  background: rgba(10, 10, 10, 0.45);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: 1200;
 }
 
 .modal {
   background: white;
-  padding: 20px;
-  width: 500px;
-  max-height: 80vh;
-  overflow-y: auto;
+  width: 100%;
+  max-width: 520px;
   border-radius: 10px;
-  box-shadow: 0px 0px 15px rgba(0,0,0,0.3);
+  padding: 22px;
+  box-shadow: 0 12px 30px rgba(2, 6, 23, 0.15);
+  animation: popup 0.2s ease;
 }
 
-.closeBtn {
+@keyframes popup {
+  from {
+    transform: translateY(-6px) scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.modal h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: orangered;
+  margin-bottom: 12px;
+}
+
+.modal p {
+  font-size: 14px;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+/* ========================= */
+/* ASSIGN AGENT */
+/* ========================= */
+.agentDropdown {
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #e6e9ee;
+  font-size: 14px;
+}
+
+.assignBtn {
   margin-top: 10px;
-  padding: 8px 14px;
-  background: #ff3b3b;
+  background: #10b981;
   color: white;
+  padding: 10px;
+  border-radius: 8px;
   border: none;
-  border-radius: 5px;
+  font-weight: 700;
   cursor: pointer;
+}
+
+.assignBtn:hover {
+  background: #059669;
+}
+
+/* ========================= */
+/* CLOSE BUTTON */
+/* ========================= */
+.closeBtn {
+  margin-top: 14px;
+  background: #ef4444;
+  color: white;
+  padding: 9px 14px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.closeBtn:hover {
+  background: #dc2626;
+}
+
+/* ========================= */
+/* RESPONSIVE */
+/* ========================= */
+@media (max-width: 768px) {
+  .title {
+    font-size: 22px;
+  }
+
+  .table th,
+  .table td {
+    padding: 12px 14px;
+  }
+
+  .modal {
+    padding: 16px;
+  }
 }
