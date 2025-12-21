@@ -307,3 +307,15 @@
     margin-top: 5px;
   }
 }
+/* ===== DESKTOP ONLY: Increase left icon size ===== */
+@media screen and (min-width: 769px) {
+  .catItem img {
+    width: 64px !important;
+    height: 64px !important;
+    object-fit: contain;
+  }
+
+  .catName {
+    font-size: 22px; /* optional – keeps proportion clean */
+  }
+}

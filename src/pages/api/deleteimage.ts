@@ -6,8 +6,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== "PUT") {
-    res.setHeader("Allow", ["PUT"]);
+  if (req.method !== "DELETE") {
+    res.setHeader("Allow", ["DELETE"]);
     return res
       .status(405)
       .json({ success: false, message: `Method ${req.method} Not Allowed` });
@@ -17,36 +17,29 @@ export default async function handler(
     await connectDB();
 
     const { id } = req.query;
-    const { title, imageUrl } = req.body;
 
     if (!id || typeof id !== "string") {
-      return res.status(400).json({
-        success: false,
-        error: "Image ID is required",
-      });
+      return res
+        .status(400)
+        .json({ success: false, error: "Image ID is required" });
     }
 
-    const updatedImage = await Image.findByIdAndUpdate(
-      id,
-      { title, imageUrl },
-      { new: true }
-    );
+    const deletedImage = await Image.findByIdAndDelete(id);
 
-    if (!updatedImage) {
-      return res.status(404).json({
-        success: false,
-        error: "Image not found",
-      });
+    if (!deletedImage) {
+      return res
+        .status(404)
+        .json({ success: false, error: "Image not found" });
     }
 
     return res.status(200).json({
       success: true,
-      image: updatedImage,
+      message: "Image deleted successfully",
     });
   } catch (error: any) {
     return res.status(500).json({
       success: false,
-      error: error.message,
+      error: error.message || "Server error",
     });
   }
 }

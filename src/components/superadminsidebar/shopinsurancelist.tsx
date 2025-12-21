@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import styles from "@/styles/components/superadminsidebar/shopinsurancelist.module.css";
 import axios from "axios";
+import styles from "@/styles/components/superadminsidebar/shopinsurancelist.module.css";
 
-// ⭐ Define Shop Type
 interface ShopRecord {
   _id: string;
   email: string | null;
@@ -14,7 +13,6 @@ interface ShopRecord {
   [key: string]: any;
 }
 
-// ⭐ Define Agent Type
 interface AgentRecord {
   _id: string;
   email: string;
@@ -59,23 +57,17 @@ const ShopInsuranceList = () => {
     });
 
     alert("Lead Assigned!");
-
-    // Close modal and refresh data
     setSelectedShop(null);
     setSelectedAgent("");
     fetchShopData();
   };
 
+  if (loading) return <p className={styles.loading}>Loading...</p>;
 
   return (
     <div className={styles.wrapper}>
-      
-      {/* ===== Header ===== */}
-      <div className={styles.header}>
-        <h2 className={styles.title}>Shop Insurance List</h2>
-      </div>
+      <h2 className={styles.title}>Shop Insurance List</h2>
 
-      {/* ===== Table ===== */}
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead>
@@ -83,25 +75,31 @@ const ShopInsuranceList = () => {
               <th>S.No</th>
               <th>Email</th>
               <th>Phone</th>
-              <th>Assigned To</th>
-              <th>Created At</th>
-              <th>Show Data</th>
+              <th>Assigned</th>
+              <th>Created</th>
+              <th>Show</th>
             </tr>
           </thead>
 
           <tbody>
             {shopData.map((shop, index) => (
-              <tr key={shop._id}>
+              <tr
+                key={shop._id}
+                className={styles.rowClickable}
+                onClick={() => setSelectedShop(shop)}
+              >
                 <td>{index + 1}</td>
                 <td>{shop.email || "-"}</td>
-                <td>{shop.phone || "-"}</td>
+                <td>{shop.phone}</td>
                 <td>{shop.assignedTo || "Not Assigned"}</td>
                 <td>{new Date(shop.createdAt).toLocaleString()}</td>
-
                 <td>
                   <button
                     className={styles.showBtn}
-                    onClick={() => setSelectedShop(shop)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedShop(shop);
+                    }}
                   >
                     Show Data
                   </button>
@@ -112,45 +110,58 @@ const ShopInsuranceList = () => {
         </table>
       </div>
 
-      {/* ===== MODAL ===== */}
+      {/* MODAL */}
       {selectedShop && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modal}>
+        <div className={styles.modalOverlay} onClick={() => setSelectedShop(null)}>
+          <div
+            className={styles.modal}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.modalHeader}>
+              <h3>Shop Insurance Details</h3>
+            </div>
 
-            <h3>Shop Insurance Details</h3>
-
-            {Object.entries(selectedShop).map(([k, v]) => (
-              <p key={k}>
-                <strong>{k}:</strong> {v?.toString()}
-              </p>
-            ))}
-
-            {/* ▼ Assign Agent Dropdown ▼ */}
-            <label><strong>Assign To Agent</strong></label>
-            <select
-              className={styles.agentDropdown}
-              value={selectedAgent}
-              onChange={(e) => setSelectedAgent(e.target.value)}
-            >
-              <option value="">Select Agent</option>
-              {agents.map((agent) => (
-                <option key={agent._id} value={agent._id}>
-                  {agent.email}
-                </option>
+            <div className={styles.modalContent}>
+              {Object.entries(selectedShop).map(([k, v]) => (
+                <div key={k} className={styles.field}>
+                  <label className={styles.label}>{k}</label>
+                  <div className={styles.valueBox}>{v?.toString()}</div>
+                </div>
               ))}
-            </select>
+            </div>
 
-            <button className={styles.assignBtn} onClick={handleAssign}>
-              Assign Lead
-            </button>
+            <div className={styles.modalFooter}>
+              <div className={styles.assignBox}>
+                <label>Assign Agent</label>
+                <select
+                  className={styles.agentDropdown}
+                  value={selectedAgent}
+                  onChange={(e) => setSelectedAgent(e.target.value)}
+                >
+                  <option value="">Select Agent</option>
+                  {agents.map((agent) => (
+                    <option key={agent._id} value={agent._id}>
+                      {agent.firstName} {agent.lastName} ({agent.email})
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            <button className={styles.closeBtn} onClick={() => setSelectedShop(null)}>
-              Close
-            </button>
+              <div className={styles.footerBtns}>
+                <button className={styles.assignBtn} onClick={handleAssign}>
+                  Assign
+                </button>
+                <button
+                  className={styles.closeBtn}
+                  onClick={() => setSelectedShop(null)}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
-
     </div>
   );
 };

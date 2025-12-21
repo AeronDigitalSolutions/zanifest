@@ -90,35 +90,37 @@ const AgentSidebar: React.FC<AgentSidebarProps> = ({
             </li>
           </ul>
         </div>
-         <div>
-          <p className={styles.sectionTitle}>Lead Section</p>
-          <ul className={styles.menu}>
-            <li
-              className={styles.menuItem}
-  onClick={() => setActiveSection("leadsection")}
-              role="button"
-              tabIndex={0}
-            >
-              <div className={styles.iconLabel}>
-                <span className={styles.icon}><FiLock /></span>
-                <span className={styles.label}>Lead</span>
-              </div>
-              
-            </li>
-     
+       {/* Lead Section */}
+<div>
+  <p className={styles.sectionTitle}>Lead Section</p>
+  <ul className={styles.menu}>
+    <li
+      className={styles.menuItem}
+      onClick={() => handleClick("leadsection")}
+      role="button"
+      tabIndex={0}
+    >
+      <div className={styles.iconLabel}>
+        <span className={styles.icon}><FiLock /></span>
+        <span className={styles.label}>Lead</span>
+      </div>
+    </li>
 
-              
-                   <li
-              className={styles.menuItem}
-  onClick={() => setActiveSection("listofpolicy")}
-              role="button"
-              tabIndex={0}
-            ></li>
-            <li onClick={() => setActiveSection("listofpolicy")}>
-  List of Policy
-</li>
-          </ul>
-        </div>
+    {/* ✅ FIXED LIST OF POLICY */}
+    <li
+      className={styles.menuItem}
+      onClick={() => handleClick("listofpolicy")}
+      role="button"
+      tabIndex={0}
+    >
+      <div className={styles.iconLabel}>
+        <span className={styles.icon}><FiLock /></span>
+        <span className={styles.label}>List of Policy</span>
+      </div>
+    </li>
+  </ul>
+</div>
+
       </div>
      <div className={styles.editprofile}>
   <button

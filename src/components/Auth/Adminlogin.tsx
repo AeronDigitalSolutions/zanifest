@@ -50,7 +50,7 @@ export default function AdminLogin() {
       console.error("Login error:", error);
       toast.error("Something went wrong");
     } finally {
-      setLoading(false); // ✅ hide loader
+      setLoading(false); 
     }
   };
 

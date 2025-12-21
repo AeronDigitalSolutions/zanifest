@@ -1,40 +1,21 @@
-// /models/Policy.ts
-import mongoose, { Document, Model, Schema } from "mongoose";
+import mongoose, { Schema, models } from "mongoose";
 
-export interface IField {
-  label?: string;
-  value: string;
-}
-
-export interface IPolicy extends Document {
-  fields: IField[];
-  status: "Hot" | "Cold" | "Converted" | "Dead";
-  date: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const FieldSchema = new Schema<IField>({
-  label: { type: String },
-  value: { type: String, required: true },
-});
-
-const PolicySchema = new Schema<IPolicy>(
+const PolicySchema = new Schema(
   {
-    fields: [FieldSchema],
-    status: {
-      type: String,
-      enum: ["Hot", "Cold", "Converted", "Dead"],
-      default: "Hot",
+    insuredName: String,
+    policyNo: String,
+    companyName: String,
+    amount: String,
+    expiryDate: String,
+
+    verified: { type: Boolean, default: false },
+
+    uploadedAt: {
+      type: Date,
+      default: Date.now,
     },
-    date: { type: String },
   },
   { timestamps: true }
 );
 
-// Avoid recompilation in dev
-const Policy: Model<IPolicy> =
-  (mongoose.models.Policy as Model<IPolicy>) ||
-  mongoose.model<IPolicy>("Policy", PolicySchema);
-
-export default Policy;
+export default models.Policy || mongoose.model("Policy", PolicySchema);

@@ -5,6 +5,7 @@ import TravelInsurance from "@/models/TravelInsurance";
 import Shop from "@/models/Shop";
 import HomeInsurance from "@/models/Homeinsurance";
 import OfficePackagePolicy from "@/models/OfficePackagePolicy";
+import Lead from "@/models/lead";
 import { verifyToken } from "@/utils/verifyToken";
 
 const MONGODB_URI = process.env.MONGODB_URI!;
@@ -18,94 +19,50 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   await connectDB();
 
   const token = req.cookies.agentToken;
-
-  // 🔥 OPTION 1 — SAFE CHECK
   if (!token) {
-    return res.status(401).json({ success: false, message: "No token provided" });
-  }
-
-  let agentId = "";
-
-  try {
-    const decoded: any = await verifyToken(token); // token is now always string
-    agentId = decoded.id;
-  } catch (err) {
-    return res.status(401).json({ success: false, message: "Unauthorized" });
+    return res.status(401).json({ success: false });
   }
 
   try {
-    /* ------------------- MARINE LEADS ------------------- */
-    const marineLeads = await Marine.find({ assignedAgent: agentId }).sort({ assignedAt: -1 });
+    const decoded: any = await verifyToken(token);
+    const agentId = decoded.id;
 
-    const mappedMarine = marineLeads.map((m) => ({
-      id: m._id,
-      email: m.email,
-      phone: m.phoneNumber,
-      module: "Marine",
-      assignedAt: m.assignedAt,
-    }));
+    const sources = [
+      ...(await Marine.find({ assignedAgent: agentId })),
+      ...(await TravelInsurance.find({ assignedAgent: agentId })),
+      ...(await Shop.find({ assignedAgent: agentId })),
+      ...(await HomeInsurance.find({ assignedAgent: agentId })),
+      ...(await OfficePackagePolicy.find({ assignedAgent: agentId })),
+    ];
 
-    /* ------------------- TRAVEL LEADS ------------------- */
-    const travelLeads = await TravelInsurance.find({ assignedAgent: agentId }).sort({ assignedAt: -1 });
+    const leads = await Promise.all(
+      sources.map(async (item: any) => {
+        const module = item.module || item.constructor.modelName;
 
-    const mappedTravel = travelLeads.map((t) => ({
-      id: t._id,
-      email: t.email,
-      phone: t.phoneNumber,
-      module: "Travel",
-      assignedAt: t.assignedAt,
-    }));
+        let lead = await Lead.findOne({ module, email: item.email });
 
-    /* ------------------- SHOP LEADS ------------------- */
-    const shopLeads = await Shop.find({ assignedAgent: agentId }).sort({ assignedAt: -1 });
+        if (!lead) {
+          lead = await Lead.create({
+            email: item.email,
+            phone: item.phone || item.phoneNumber || item.mobile,
+            module,
+            assignedAt: item.assignedAt,
+          });
+        }
 
-    const mappedShop = shopLeads.map((s) => ({
-      id: s._id,
-      email: s.email,
-      phone: s.phone,
-      module: "Shop Insurance",
-      assignedAt: s.assignedAt,
-    }));
-
-    /* ------------------- HOME INSURANCE LEADS ------------------- */
-    const homeLeads = await HomeInsurance.find({ assignedAgent: agentId }).sort({ assignedAt: -1 });
-
-    const mappedHome = homeLeads.map((h) => ({
-      id: h._id,
-      email: h.email,
-      phone: h.phoneNumber,
-      module: "Home Insurance",
-      assignedAt: h.assignedAt,
-    }));
-
-    /* ------------------- OFFICE PACKAGE POLICY LEADS ------------------- */
-    const officeLeads = await OfficePackagePolicy.find({
-      assignedAgent: agentId,
-    }).sort({ assignedAt: -1 });
-
-    const mappedOffice = officeLeads.map((o) => ({
-      id: o._id,
-      email: o.email,
-      phone: o.mobile,
-      module: "Office Package Policy",
-      assignedAt: o.assignedAt,
-    }));
-
-    /* ------------------- MERGE ALL LEADS ------------------- */
-    const allLeads = [
-      ...mappedMarine,
-      ...mappedTravel,
-      ...mappedShop,
-      ...mappedHome,
-      ...mappedOffice, // ⭐ NEW
-    ].sort(
-      (a, b) =>
-        new Date(b.assignedAt).getTime() -
-        new Date(a.assignedAt).getTime()
+        return {
+          id: lead._id,
+          email: lead.email,
+          phone: lead.phone,
+          module: lead.module,
+          assignedAt: lead.assignedAt,
+          status: lead.status,
+          remark: lead.remark,
+        };
+      })
     );
 
-    return res.status(200).json({ success: true, data: allLeads });
-
+    return res.status(200).json({ success: true, data: leads });
   } catch (err: any) {
     return res.status(500).json({ success: false, message: err.message });
   }
