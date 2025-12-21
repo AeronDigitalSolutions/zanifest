@@ -109,25 +109,33 @@ export default function LeadSection() {
             </tr>
           </thead>
 
-          <tbody>
-            {leads.map((l) => (
-              <tr key={l.id}>
-                <td>{l.email || "-"}</td>
-                <td>{l.phone || "-"}</td>
-                <td>{l.module}</td>
-                <td>{l.status || "Cold"}</td>
-                <td>{l.assignedAt ? new Date(l.assignedAt).toLocaleString() : "-"}</td>
-                <td>
-                  <button
-                    className={styles.showBtn}
-                    onClick={() => openLeadDetails(l.module, l.id)}
-                  >
-                    Show Data
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+         <tbody>
+  {leads.map((l) => (
+    <tr
+      key={l.id}
+      className={styles.rowClickable}
+      onClick={() => openLeadDetails(l.module, l.id)}
+    >
+      <td>{l.email || "-"}</td>
+      <td>{l.phone || "-"}</td>
+      <td>{l.module}</td>
+      <td>{l.status || "Cold"}</td>
+      <td>{l.assignedAt ? new Date(l.assignedAt).toLocaleString() : "-"}</td>
+      <td>
+        <button
+          className={styles.showBtn}
+          onClick={(e) => {
+            e.stopPropagation(); // ✅ row click se double trigger nahi hoga
+            openLeadDetails(l.module, l.id);
+          }}
+        >
+          Show Data
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
         </table>
       </div>
 
@@ -137,9 +145,7 @@ export default function LeadSection() {
           <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
             <div className={styles.modalHeader}>
               <h3>Lead Details</h3>
-              <button className={styles.closeBtn} onClick={() => setShowModal(false)}>
-                Close
-              </button>
+              
             </div>
 
             {modalLoading && <div className={styles.modalLoading}>Loading details...</div>}

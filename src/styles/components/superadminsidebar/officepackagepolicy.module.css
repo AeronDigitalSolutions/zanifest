@@ -1,281 +1,199 @@
-/* ========================= */
-/* WRAPPER */
-/* ========================= */
 .wrapper {
-  width: 100%;
   padding: 20px;
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
   background: #f8fafc;
   min-height: 100vh;
 }
 
-/* ========================= */
-/* HEADER */
-/* ========================= */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
 .title {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 700;
-  color: #111827;
+  text-align: center;
+  margin-bottom: 18px;
 }
 
-/* ========================= */
-/* REFRESH BUTTON */
-/* ========================= */
-.refreshBtn {
-  background: orangered;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.2s ease;
-}
-
-.refreshBtn:hover {
-  background: #d53b01;
-}
-
-/* ========================= */
-/* TABLE WRAPPER */
-/* ========================= */
+/* TABLE */
 .tableWrapper {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 10px 28px rgba(2, 6, 23, 0.08);
   overflow-x: auto;
 }
 
-/* ========================= */
-/* TABLE */
-/* ========================= */
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
-  min-width: 900px;
-}
-
-.table thead tr {
-  background: #f8fafb;
 }
 
 .table th {
-  text-align: left;
-  padding: 14px 18px;
+  background: #f1f5f9;
+  padding: 16px;
+  font-size: 14px;
   font-weight: 700;
-  font-size: 13px;
-  color: #374151;
-  border-bottom: 1px solid #e5e7eb;
+  color: #475569;
+  text-align: left;
 }
 
 .table td {
-  padding: 14px 18px;
-  border-top: 1px solid #eef2f6;
-  color: #374151;
-  font-size: 14px;
-  white-space: nowrap;
+  padding: 16px;
+  font-size: 15px;
+  color: #1f2937;
+  border-top: 1px solid #e5e7eb;
 }
 
-/* ========================= */
-/* ROW HOVER – REVIEW STYLE */
-/* ========================= */
-.table tbody tr {
+.rowClickable {
   cursor: pointer;
-  transition: background 0.15s ease;
 }
 
-.table tbody tr:hover {
-  background: #fff7f3;
+.rowClickable:hover {
+  background: #fff7ed;
 }
 
-/* ========================= */
-/* SHOW DATA BUTTON */
-/* ========================= */
 .showBtn {
-  background: orangered;
+  background: #f7601a;
   color: white;
   padding: 8px 14px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.showBtn:hover {
-  background: #d53b01;
-}
-
-/* ========================= */
-/* PAGINATION */
-/* ========================= */
-.pagination {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-}
-
-.pageBtn {
-  padding: 10px 22px;
-  background: #e5e7eb;
-  border: none;
   border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  color: #374151;
+  border: none;
   font-weight: 600;
+  cursor: pointer;
 }
 
-.pageBtn:hover {
-  background: #d1d5db;
-}
-
-/* ========================= */
-/* LOADING / ERROR */
-/* ========================= */
-.loading,
-.error,
-.noData {
+/* LOADING */
+.loading {
   text-align: center;
-  font-size: 18px;
   padding: 40px;
-  color: #6b7280;
+  font-size: 18px;
 }
 
-/* ========================= */
-/* MODAL OVERLAY */
-/* ========================= */
+/* MODAL */
 .modalOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(10, 10, 10, 0.45);
+  background: rgba(15, 23, 42, 0.45);
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 1200;
+  justify-content: center;
 }
 
-/* ========================= */
-/* MODAL */
-/* ========================= */
 .modal {
-  background: #fff;
   width: 100%;
-  max-width: 600px;
-  max-height: 85vh;
-  overflow-y: auto;
-  padding: 22px;
-  border-radius: 12px;
-  box-shadow: 0 12px 30px rgba(2, 6, 23, 0.15);
-  animation: popup 0.2s ease;
+  max-width: 900px;
+  background: #f1f5f9;
+  border-radius: 18px;
+  overflow: hidden;
 }
 
-@keyframes popup {
-  from {
-    transform: translateY(-6px) scale(0.98);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
+.modalHeader {
+  padding: 20px 28px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e5e7eb;
 }
 
-/* ========================= */
-/* MODAL CONTENT */
-/* ========================= */
+.modalHeader h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
 .modalContent {
-  margin-top: 12px;
-  padding: 12px;
-  background: #f9fafb;
-  border-radius: 8px;
+  padding: 26px 28px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+  max-height: 55vh;
+  overflow-y: auto;
 }
 
-.modalContent p {
-  font-size: 14px;
-  color: #374151;
-  margin-bottom: 6px;
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-/* ========================= */
-/* ASSIGN BOX */
-/* ========================= */
-.assignBox {
-  margin-top: 16px;
-  background: #eef4ff;
+.label {
+  font-weight: 700;
+  color: #334155;
+}
+
+.valueBox {
+  background: #ffffff;
   padding: 14px;
-  border-radius: 8px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  font-size: 14px;
+  word-break: break-word;
+}
+
+/* FOOTER */
+.modalFooter {
+  padding: 22px 28px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.assignBox {
+  width: 60%;
 }
 
 .agentDropdown {
   width: 100%;
-  padding: 10px;
-  margin-top: 6px;
-  border-radius: 8px;
-  border: 1px solid #e6e9ee;
-  font-size: 14px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
 }
 
-/* ========================= */
-/* ACTION BUTTONS */
-/* ========================= */
+.footerBtns {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
 .assignBtn {
-  margin-top: 10px;
-  width: 100%;
-  background: #10b981;
-  padding: 10px;
+  background: #22c55e;
   color: white;
-  border-radius: 8px;
+  padding: 12px 28px;
+  border-radius: 12px;
   border: none;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
-}
-
-.assignBtn:hover {
-  background: #059669;
 }
 
 .closeBtn {
-  margin-top: 14px;
-  width: 100%;
   background: #ef4444;
-  padding: 10px;
   color: white;
-  border-radius: 8px;
+  padding: 12px 28px;
+  border-radius: 12px;
   border: none;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
 }
 
-.closeBtn:hover {
-  background: #dc2626;
-}
-
-/* ========================= */
-/* RESPONSIVE */
-/* ========================= */
+/* MOBILE */
 @media (max-width: 768px) {
-  .title {
-    font-size: 22px;
+  .modalContent {
+    grid-template-columns: 1fr;
   }
 
-  .table th,
-  .table td {
-    padding: 12px 14px;
+  .modalFooter {
+    flex-direction: column;
   }
 
-  .modal {
-    padding: 16px;
+  .assignBox {
+    width: 100%;
+  }
+}
+@media (max-width: 480px) {
+  .modalContent {
+    grid-template-columns: 1fr;
+  }
+
+  .modalFooter {
+    flex-direction: column;
+  }
+
+  .assignBox {
+    width: 100%;
   }
 }

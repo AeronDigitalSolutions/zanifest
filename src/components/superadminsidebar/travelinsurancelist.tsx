@@ -4,82 +4,53 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "@/styles/components/superadminsidebar/travelinsurancelist.module.css";
 
-const TravelInsuranceList = () => {
-  const [travelPolicies, setTravelPolicies] = useState<any[]>([]);
+export default function TravelInsuranceList() {
+  const [policies, setPolicies] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
 
-  const [selectedPolicy, setSelectedPolicy] = useState<any | null>(null);
-
+  const [selected, setSelected] = useState<any | null>(null);
   const [agents, setAgents] = useState<any[]>([]);
   const [selectedAgent, setSelectedAgent] = useState("");
 
-  /* ---------------- FETCH POLICIES ---------------- */
-  const fetchTravelPolicies = async () => {
-    try {
-      if (!refreshing) setLoading(true);
-      const res = await axios.get("/api/travelinsurance");
-      if (res.data?.success) {
-        setTravelPolicies(res.data.data || []);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
+  const fetchPolicies = async () => {
+    setLoading(true);
+    const res = await axios.get("/api/travelinsurance");
+    if (res.data?.success) setPolicies(res.data.data || []);
+    setLoading(false);
   };
 
-  /* ---------------- FETCH AGENTS ---------------- */
   const fetchAgents = async () => {
     const res = await axios.get("/api/getallagents");
     setAgents(res.data || []);
   };
 
   useEffect(() => {
-    fetchTravelPolicies();
+    fetchPolicies();
   }, []);
 
   useEffect(() => {
-    if (selectedPolicy) fetchAgents();
-  }, [selectedPolicy]);
+    if (selected) fetchAgents();
+  }, [selected]);
 
-  /* ---------------- ASSIGN LEAD ---------------- */
-  const handleAssignLead = async () => {
-    if (!selectedAgent) {
-      alert("Please select an agent");
-      return;
-    }
+  const assignLead = async () => {
+    if (!selectedAgent) return alert("Select an agent");
 
     await axios.post("/api/travelinsurance?assign=true", {
-      policyId: selectedPolicy?._id,
+      policyId: selected._id,
       agentId: selectedAgent,
     });
 
-    alert("Lead assigned successfully!");
-    setSelectedPolicy(null);
+    alert("Lead assigned successfully");
+    setSelected(null);
     setSelectedAgent("");
-    fetchTravelPolicies();
+    fetchPolicies();
   };
 
   if (loading) return <p className={styles.loading}>Loading...</p>;
 
   return (
     <div className={styles.wrapper}>
-      {/* HEADER */}
-      <div className={styles.header}>
-        <h2 className={styles.title}>Travel Insurance List</h2>
-
-        <button
-          className={styles.refreshBtn}
-          onClick={() => {
-            setRefreshing(true);
-            fetchTravelPolicies();
-          }}
-        >
-          {refreshing ? "Refreshing..." : "↻ Refresh"}
-        </button>
-      </div>
+      <h2 className={styles.title}>Travel Insurance List</h2>
 
       {/* TABLE */}
       <div className={styles.tableWrapper}>
@@ -95,27 +66,21 @@ const TravelInsuranceList = () => {
           </thead>
 
           <tbody>
-            {travelPolicies.map((policy, index) => (
-              <tr
-                key={policy._id}
-                onClick={() => setSelectedPolicy(policy)}   // ✅ ROW CLICK
-              >
-                <td>{index + 1}</td>
-                <td>{policy.email || "-"}</td>
-                <td>{policy.phoneNumber || "-"}</td>
-                <td>{policy.assignedTo || "Not Assigned"}</td>
-
-              
-
+            {policies.map((p, i) => (
+              <tr key={p._id} onClick={() => setSelected(p)}>
+                <td>{i + 1}</td>
+                <td>{p.email || "-"}</td>
+                <td>{p.phoneNumber || "-"}</td>
+                <td>{p.assignedTo || "Not Assigned"}</td>
                 <td>
                   <button
                     className={styles.showBtn}
                     onClick={(e) => {
-                      e.stopPropagation();     // ✅ IMPORTANT
-                      setSelectedPolicy(policy);
+                      e.stopPropagation();
+                      setSelected(p);
                     }}
                   >
-                    Show Data
+                    Show
                   </button>
                 </td>
               </tr>
@@ -125,65 +90,66 @@ const TravelInsuranceList = () => {
       </div>
 
       {/* MODAL */}
-      {selectedPolicy && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modal}>
-            <h3>Travel Insurance Details</h3>
+      {selected && (
+        <div
+          className={styles.modalOverlay}
+          onClick={() => setSelected(null)}
+        >
+          <div
+            className={styles.modal}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* HEADER */}
+            <div className={styles.modalHeader}>
+              <h3>Travel Insurance Details</h3>
+            </div>
 
-           <div className={styles.modalContent}>
-  {Object.entries(selectedPolicy).map(([key, value]) => (
-    <div key={key} className={styles.field}>
-      <label className={styles.label}>{key}</label>
-      <div className={styles.valueBox}>
-        {typeof value === "object"
-          ? JSON.stringify(value)
-          : value?.toString() || "-"}
-      </div>
-    </div>
-  ))}
-</div>
-
+            {/* CONTENT */}
+            <div className={styles.modalContent}>
+              {Object.entries(selected).map(([key, value]) => (
+                <div key={key} className={styles.field}>
+                  <label className={styles.label}>{key}</label>
+                  <div className={styles.valueBox}>
+                    {typeof value === "object"
+                      ? JSON.stringify(value)
+                      : value?.toString() || "-"}
+                  </div>
+                </div>
+              ))}
+            </div>
 
             {/* ASSIGN */}
             <div className={styles.assignBox}>
-              <label><strong>Assign To Agent</strong></label>
-
+              <label className={styles.label}>Assign Agent</label>
               <select
                 className={styles.agentDropdown}
                 value={selectedAgent}
                 onChange={(e) => setSelectedAgent(e.target.value)}
               >
                 <option value="">Select Agent</option>
-                {agents.map((agent) => (
-                  <option key={agent._id} value={agent._id}>
-                    {agent.firstName} {agent.lastName} ({agent.email})
+                {agents.map((a) => (
+                  <option key={a._id} value={a._id}>
+                    {a.firstName} {a.lastName} ({a.email})
                   </option>
                 ))}
               </select>
-
-              <div className={styles.modalFooter}>
-        <button
-          className={styles.assignBtn}
-          onClick={handleAssignLead}
-        >
-          Assign To Agent
-        </button>
-
-        <button
-          className={styles.closeBtn}
-          onClick={() => setSelectedPolicy(null)}
-        >
-          Close
-        </button>
-      </div>
             </div>
 
-          
+            {/* FOOTER */}
+            <div className={styles.modalFooter}>
+              <button className={styles.assignBtn} onClick={assignLead}>
+                Assign
+              </button>
+              <button
+                className={styles.closeBtn}
+                onClick={() => setSelected(null)}
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
     </div>
   );
-};
-
-export default TravelInsuranceList;
+}

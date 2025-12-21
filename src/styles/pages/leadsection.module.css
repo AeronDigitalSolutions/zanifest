@@ -46,7 +46,7 @@
 }
 
 .showBtn {
-  background: #2563eb;
+  background: #f7601a;
   color: #ffffff;
   padding: 8px 16px;
   border-radius: 8px;
@@ -112,6 +112,7 @@
   overflow-y: auto;
 }
 
+/* FIELD */
 .field {
   display: flex;
   flex-direction: column;
@@ -137,52 +138,74 @@
   word-break: break-word;
 }
 
-/* FOOTER */
-.modalFooter {
-  padding: 26px 32px;
-  background: #f8fafc;
-  border-top: 1px solid #e5e7eb;
+/* 🔥 STATUS + REMARK INSIDE SCROLL CONTAINER */
+.statusBox {
+  grid-column: span 2;        /* full width inside modalContent */
   display: flex;
-  justify-content: space-between;
-  gap: 24px;
+  gap: 20px;
 }
 
-.statusBox {
-  width: 60%;
+/* LABEL SAME STYLE */
+.statusBox label {
+  font-size: 16px;
+  font-weight: 700;
+  color: #334155;
+}
+
+/* STATUS FIELD */
+.statusField,
+.remarkField {
+  width: 50%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
-.statusBox select,
-.statusBox textarea {
-  padding: 14px 16px;
+.statusBox select {
+  padding: 10px 14px;        /* ✅ reduced height */
   border-radius: 12px;
   border: 1px solid #e5e7eb;
   font-size: 15px;
+  background: #ffffff;
+  height: 44px;              /* ✅ controlled height */
 }
 
-.footerBtns {
+/* REMARK FIELD */
+.statusBox textarea {
+  padding: 10px 14px;        /* ✅ reduced height */
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  font-size: 15px;
+  background: #ffffff;
+  resize: none;
+  height: 44px;              /* ✅ same as select */
+}
+
+/* FOOTER */
+.modalFooter {
+  padding: 22px 32px;
+  border-top: 1px solid #e5e7eb;
   display: flex;
-  gap: 14px;
-  align-items: flex-end;
+  gap: 30%;
+  background: #f8fafc;
 }
 
 .saveBtn {
   background: #22c55e;
   color: white;
-  padding: 14px 34px;
+  padding: 12px 30px;
   border-radius: 14px;
   border: none;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
+  margin-right: 10px;
 }
 
 .closeBtn {
   background: #ef4444;
   color: white;
-  padding: 14px 34px;
+  padding: 12px 30px;
   border-radius: 14px;
   border: none;
   font-size: 16px;
@@ -197,16 +220,43 @@
     padding: 20px;
   }
 
+  .statusBox {
+    flex-direction: column;
+    grid-column: span 1;
+  }
+
+  .statusField,
+  .remarkField {
+    width: 100%;
+  }
+
   .modalFooter {
     flex-direction: column;
   }
 
-  .statusBox {
-    width: 100%;
-  }
-
   .saveBtn,
   .closeBtn {
+    width: 100%;
+  }
+}
+/* CLICKABLE ROW */
+.rowClickable {
+  cursor: pointer;
+}
+
+.rowClickable:hover {
+  background: #fff7ed;
+}
+@media (max-width: 480px) {
+  .modalContent {
+    grid-template-columns: 1fr;
+  }
+
+  .modalFooter {
+    flex-direction: column;
+  }
+
+  .assignBox {
     width: 100%;
   }
 }

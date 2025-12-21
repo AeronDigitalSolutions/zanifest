@@ -4,19 +4,11 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "@/styles/components/superadminsidebar/healthinsurancelist.module.css";
 
-interface Member {
-  name: string;
-  age: number;
-}
-
 interface HealthRecord {
   _id: string;
   fullName: string;
   email?: string | null;
   mobile: string;
-  gender: string;
-  city: string;
-  members: Member[];
   assignedTo?: string | null;
   createdAt: string;
   [key: string]: any;
@@ -37,7 +29,6 @@ const HealthInsuranceList = () => {
   const [agents, setAgents] = useState<Agent[]>([]);
   const [selectedAgent, setSelectedAgent] = useState("");
 
-  // ---------- FETCH RECORDS ----------
   const fetchRecords = async () => {
     setLoading(true);
     const res = await axios.get("/api/healthinsurance");
@@ -45,7 +36,6 @@ const HealthInsuranceList = () => {
     setLoading(false);
   };
 
-  // ---------- FETCH AGENTS ----------
   const fetchAgents = async () => {
     const res = await axios.get("/api/getallagents");
     setAgents(res.data || []);
@@ -59,7 +49,6 @@ const HealthInsuranceList = () => {
     if (selectedRecord) fetchAgents();
   }, [selectedRecord]);
 
-  // ---------- ASSIGN LEAD ----------
   const handleAssign = async () => {
     if (!selectedAgent) return alert("Please select an agent");
 
@@ -85,13 +74,9 @@ const HealthInsuranceList = () => {
           <thead>
             <tr>
               <th>S.No</th>
-              <th>Full Name</th>
               <th>Email</th>
-              <th>Mobile</th>
-              <th>Gender</th>
-              <th>City</th>
-              <th>Assigned</th>
-              <th>Created</th>
+              <th>Phone</th>
+              <th>Assigned To</th>
               <th>Show</th>
             </tr>
           </thead>
@@ -100,22 +85,18 @@ const HealthInsuranceList = () => {
             {records.map((r, index) => (
               <tr
                 key={r._id}
-                onClick={() => setSelectedRecord(r)}   // ✅ ROW CLICK
+                className={styles.rowClickable}
+                onClick={() => setSelectedRecord(r)}
               >
                 <td>{index + 1}</td>
-                <td>{r.fullName}</td>
                 <td>{r.email || "Unregistered"}</td>
                 <td>{r.mobile}</td>
-                <td>{r.gender}</td>
-                <td>{r.city}</td>
                 <td>{r.assignedTo || "Not Assigned"}</td>
-                <td>{new Date(r.createdAt).toLocaleString()}</td>
-
                 <td>
                   <button
                     className={styles.showBtn}
                     onClick={(e) => {
-                      e.stopPropagation();            // ✅ IMPORTANT
+                      e.stopPropagation();
                       setSelectedRecord(r);
                     }}
                   >
@@ -128,49 +109,64 @@ const HealthInsuranceList = () => {
         </table>
       </div>
 
-      {/* ---------- MODAL ---------- */}
+      {/* MODAL */}
       {selectedRecord && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modal}>
-            <h3>Health Insurance Details</h3>
+        <div
+          className={styles.modalOverlay}
+          onClick={() => setSelectedRecord(null)}
+        >
+          <div
+            className={styles.modal}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.modalHeader}>
+              <h3>Health Insurance Details</h3>
+            </div>
 
             <div className={styles.modalContent}>
               {Object.entries(selectedRecord).map(([key, value]) => (
-                <p key={key}>
-                  <strong>{key}:</strong>{" "}
-                  {Array.isArray(value)
-                    ? JSON.stringify(value)
-                    : typeof value === "object"
-                    ? JSON.stringify(value)
-                    : value?.toString()}
-                </p>
+                <div key={key} className={styles.field}>
+                  <label className={styles.label}>{key}</label>
+                  <div className={styles.valueBox}>
+                    {Array.isArray(value)
+                      ? JSON.stringify(value)
+                      : typeof value === "object"
+                      ? JSON.stringify(value)
+                      : value?.toString()}
+                  </div>
+                </div>
               ))}
             </div>
 
-            <label>Assign Agent</label>
-            <select
-              className={styles.agentDropdown}
-              value={selectedAgent}
-              onChange={(e) => setSelectedAgent(e.target.value)}
-            >
-              <option value="">Select Agent</option>
-              {agents.map((a) => (
-                <option key={a._id} value={a._id}>
-                  {a.firstName} {a.lastName} ({a.email})
-                </option>
-              ))}
-            </select>
+            <div className={styles.modalFooter}>
+              <div className={styles.assignBox}>
+                <label className={styles.label}>Assign Agent</label>
+                <select
+                  className={styles.agentDropdown}
+                  value={selectedAgent}
+                  onChange={(e) => setSelectedAgent(e.target.value)}
+                >
+                  <option value="">Select Agent</option>
+                  {agents.map((a) => (
+                    <option key={a._id} value={a._id}>
+                      {a.firstName} {a.lastName} ({a.email})
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            <button className={styles.assignBtn} onClick={handleAssign}>
-              Assign Lead
-            </button>
-
-            <button
-              className={styles.closeBtn}
-              onClick={() => setSelectedRecord(null)}
-            >
-              Close
-            </button>
+              <div className={styles.footerBtns}>
+                <button className={styles.assignBtn} onClick={handleAssign}>
+                  Assign
+                </button>
+                <button
+                  className={styles.closeBtn}
+                  onClick={() => setSelectedRecord(null)}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

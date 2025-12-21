@@ -136,50 +136,67 @@ const MarineInsuranceList = () => {
       </div>
 
       {/* ---------- MODAL ---------- */}
-      {selected && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalBox}>
-            <h3 className={styles.modalTitle}>Marine Insurance Details</h3>
+    {selected && (
+  <div
+    className={styles.modalOverlay}
+    onClick={() => setSelected(null)}
+  >
+    <div
+      className={styles.modalBox}
+      onClick={(e) => e.stopPropagation()}
+    >
+      {/* HEADER */}
+      <div className={styles.modalHeader}>
+        <h3>Marine Insurance Details</h3>
+      </div>
 
-            <div className={styles.modalContent}>
-  {Object.entries(selected).map(([k, v]) => (
-    <p key={k} className={styles.para}>
-      <span className={styles.label}>{k}</span>
-      <span className={styles.value}>
-        {typeof v === "object" ? JSON.stringify(v) : v?.toString()}
-      </span>
-    </p>
-  ))}
-</div>
-
-
-            <div className={styles.agentSelectBox}>
-              <label>Select Agent</label>
-              <select
-                className={styles.agentDropdown}
-                value={assignedAgent}
-                onChange={(e) => setAssignedAgent(e.target.value)}
-              >
-                <option value="">-- Select Agent --</option>
-                {agents.map((a) => (
-                  <option key={a._id} value={a._id}>
-                    {getAgentName(a)} ({a.email})
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className={styles.modalFooter}>
-              <button className={styles.assignBtn} onClick={assignAgentHandler}>
-                Assign To Agent
-              </button>
-              <button className={styles.closeBtn} onClick={() => setSelected(null)}>
-                Close
-              </button>
+      {/* CONTENT */}
+      <div className={styles.modalContent}>
+        {Object.entries(selected).map(([key, value]) => (
+          <div key={key} className={styles.field}>
+            <label className={styles.label}>{key}</label>
+            <div className={styles.valueBox}>
+              {typeof value === "object"
+                ? JSON.stringify(value)
+                : value?.toString()}
             </div>
           </div>
-        </div>
-      )}
+        ))}
+      </div>
+
+      {/* ASSIGN AGENT */}
+      <div className={styles.assignBox}>
+        <label className={styles.label}>Assign Agent</label>
+        <select
+          className={styles.agentDropdown}
+          value={assignedAgent}
+          onChange={(e) => setAssignedAgent(e.target.value)}
+        >
+          <option value="">Select Agent</option>
+          {agents.map((a) => (
+            <option key={a._id} value={a._id}>
+              {getAgentName(a)} ({a.email})
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* FOOTER */}
+      <div className={styles.modalFooter}>
+        <button className={styles.assignBtn} onClick={assignAgentHandler}>
+          Assign
+        </button>
+        <button
+          className={styles.closeBtn}
+          onClick={() => setSelected(null)}
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
