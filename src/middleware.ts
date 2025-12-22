@@ -38,7 +38,7 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL('/managerlogin', req.url));
     }
 
-    if (pathname.startsWith('/agentpage') || pathname.startsWith('/videolecture')) {
+    if (pathname.startsWith('/agentpage') || pathname.startsWith('/videolectures')) {
       return NextResponse.redirect(new URL('/agentlogin', req.url));
     }
 
@@ -81,14 +81,14 @@ export async function middleware(req: NextRequest) {
   if (role === "agent") {
     // Agent has NOT passed the test → force training page
     if (!testPassed) {
-      if (!pathname.startsWith("/videolecture")) {
-        return NextResponse.redirect(new URL("/videolecture", req.url));
+      if (!pathname.startsWith("/videolectures")) {
+        return NextResponse.redirect(new URL("/videolectures", req.url));
       }
       return NextResponse.next();
     }
 
     // Agent already passed test → prevent training page access
-    if (testPassed && pathname.startsWith("/videolecture")) {
+    if (testPassed && pathname.startsWith("/videolectures")) {
       return NextResponse.redirect(new URL("/agentpage", req.url));
     }
 
@@ -127,7 +127,7 @@ export const config = {
     '/districtmanagerdashboard/:path*',
     '/agentpage',
     '/agentpage/:path*',
-    '/videolecture',
-    '/videolecture/:path*',
+    '/videolectures',
+    '/videolectures/:path*',
   ],
 };

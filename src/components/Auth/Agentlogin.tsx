@@ -42,22 +42,24 @@ export default function Agentlogin() {
       console.log("Login Success:", data);
 
       // ✅ Save agent auth data
-      localStorage.setItem("agentToken", data.token);
-      localStorage.setItem("agentName", data.agent?.name || "");
+      // localStorage.setItem("agentToken", data.token);
+      // localStorage.setItem("agentName", data.agent?.name || "");
 
-      setError(false);
+      // setError(false);
 
-      // ✅ UPDATED TRAINING LOGIC
-      const testPassed =
-        localStorage.getItem("agentTestPassed") === "true";
+     // AFTER LOGIN SUCCESS
+document.cookie = `agentToken=${data.token}; path=/; max-age=86400`; // ✅ COOKIE
 
-      if (testPassed) {
-        // already passed → skip training
-        router.push("/agentpage");
-      } else {
-        // not passed → go to training (resume handled there)
-        router.push("/videolectures");
-      }
+localStorage.setItem("agentName", data.agent?.name || "");
+
+const testPassed = localStorage.getItem("agentTestPassed") === "true";
+
+if (testPassed) {
+  router.push("/agentpage");
+} else {
+  router.push("/videolectures");
+}
+
 
       console.log("Redirect executed successfully");
     } catch (err) {
