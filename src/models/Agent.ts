@@ -145,6 +145,7 @@ export interface IAgent extends Document {
 
   // Assignment
   assignedTo: string;
+  trainingCompleted?: boolean;
 
   // Sales tracking
   lifetimeSales: number;
@@ -169,7 +170,7 @@ const agentSchema = new Schema<IAgent>(
   {
     // Auth / Identity
     loginId: { type: String, required: true },
-    agentCode: { type: String, required: true, unique: true },
+agentCode: { type: String, unique: true, sparse: true },
 
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
@@ -215,12 +216,14 @@ const agentSchema = new Schema<IAgent>(
       },
     ],
 
-    // Assignment
+    //Assignment
     assignedTo: {
       type: String,
       ref: "Manager",
-      required: true,
+      // required: true,
+      default: null,
     },
+    trainingCompleted: { type: Boolean, default: false },
 
     // Sales tracking
     lifetimeSales: { type: Number, default: 0 },

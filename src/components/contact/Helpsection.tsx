@@ -106,7 +106,7 @@ const HelpSection = () => {
           <p className={styles.helpline}>1800-208-8787</p>
           <p className={styles.time}>10 AM to 7 PM</p>
           <p>NRI helpline for buying a new policy</p>
-          <p className={styles.nri}>+91-124-6656507</p>
+          <p className={styles.nri}>+91-8146777455</p>
         </div>
 
         <div className={`${styles.card} ${styles.cyanCard}`}>
@@ -114,14 +114,14 @@ const HelpSection = () => {
           <p className={styles.helpline}>1800-258-5970</p>
           <p className={styles.time}>10 AM to 7 PM (use registered number)</p>
           <p>NRI helpline for existing policy</p>
-          <p className={styles.nri}>+91-124-6166696</p>
+          <p className={styles.nri}>+91-8146777455</p>
         </div>
 
         <div className={`${styles.card} ${styles.yellowCard}`}>
           <p className={styles.cardTitle}>Helpline for claim</p>
           <p className={styles.helpline}>1800-258-5881</p>
           <p>NRI helpline for claim</p>
-          <p className={styles.nri}>+91-124-6166633</p>
+          <p className={styles.nri}>+91-8146777455</p>
         </div>
       </div>
     </div>

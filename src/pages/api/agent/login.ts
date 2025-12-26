@@ -40,6 +40,8 @@ console.log("Agent status:", agent.status);
       return res.status(401).json({ message: "Invalid email or password" });
     }
 console.log("Password valid");
+
+
     // ⭐ Token must include role + accountStatus (middleware requirement)
     const token = jwt.sign(
       {
@@ -48,6 +50,7 @@ console.log("Password valid");
         fullName: `${agent.firstName} ${agent.lastName}`,
         role: "agent",
         accountStatus: agent.accountStatus, 
+            trainingCompleted: agent.trainingCompleted,
       },
       process.env.JWT_SECRET!,
       { expiresIn: "1d" }

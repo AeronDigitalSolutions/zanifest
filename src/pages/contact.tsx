@@ -3,6 +3,7 @@ import AccountCard from '@/components/contact/Accountcard';
 import Contactmain from '@/components/contact/Contactmain';
 import Contactuscard from '@/components/contact/Contactuscard';
 import HelpSection from '@/components/contact/Helpsection';
+import FAQSection from '@/components/home/FAQSection';
 import Footer from '@/components/ui/Footer';
 import Navbar from '@/components/ui/Navbar';
 import React from 'react';
@@ -18,6 +19,7 @@ const contact = () => {
         <Contactmain/>
     </div>
     <HelpSection/>
+    <FAQSection/>
     <Footer/>
       
         

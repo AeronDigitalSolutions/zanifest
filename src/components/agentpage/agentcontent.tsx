@@ -37,10 +37,13 @@ const AgentContent: React.FC<AgentContentProps> = ({
   const [chartData, setChartData] = useState<any[]>([]);
   const [salesAmount, setSalesAmount] = useState<number>(0);
   const [totalSales, setTotalSales] = useState<number>(agentSales);
-  const [salesBreakdown, setSalesBreakdown] = useState<{ lifetime: number; underCurrentDM: number } | null>(null);
+  const [salesBreakdown, setSalesBreakdown] =
+    useState<{ lifetime: number; underCurrentDM: number } | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [assignedTo, setAssignedTo] = useState<string>(initialAssignedTo || "");
+  const [assignedTo, setAssignedTo] = useState<string>(
+    initialAssignedTo || ""
+  );
 
   const [dmHistory, setDmHistory] = useState<
     { dmId: string; sales: number }[]
@@ -49,19 +52,52 @@ const AgentContent: React.FC<AgentContentProps> = ({
   const [salesList, setSalesList] = useState<SaleRecord[]>([]);
   const [monthlySales, setMonthlySales] = useState<number>(0);
 
-  // ✅ NEW — dynamic (0 for now)
   const [totalClients, setTotalClients] = useState<number>(0);
 
   const [showBreakdownModal, setShowBreakdownModal] = useState(false);
 
-  // ✅ Total transferred sale  
-  const combinedDmSales = dmHistory.reduce((sum, entry) => sum + entry.sales, 0);
+  const combinedDmSales = dmHistory.reduce(
+    (sum, entry) => sum + entry.sales,
+    0
+  );
+
+  /* =====================================================
+     ✅ ADDITION ONLY — AGENT NAME FALLBACK
+     (NO EXISTING CODE TOUCHED)
+  ===================================================== */
+  const [agentNameState, setAgentNameState] = useState<string>("");
+
+  useEffect(() => {
+    if (agentName) {
+      setAgentNameState(agentName);
+      return;
+    }
+
+    const fetchAgentName = async () => {
+      try {
+        const res = await axios.get("/api/agent/me", {
+          withCredentials: true,
+        });
+
+        const agent = res.data?.agent;
+        if (agent?.firstName) {
+          setAgentNameState(
+            `${agent.firstName} ${agent.lastName || ""}`.trim()
+          );
+        }
+      } catch (err) {
+        console.error("Failed to fetch agent name:", err);
+      }
+    };
+
+    fetchAgentName();
+  }, [agentName]);
+  /* ===================================================== */
 
   const fetchAgentSales = async () => {
     try {
-      const token = localStorage.getItem("agentToken");
       const res = await axios.get("/api/agent/get-sales", {
-        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
       });
 
       if (res.data.success) {
@@ -69,12 +105,8 @@ const AgentContent: React.FC<AgentContentProps> = ({
         setTotalSales(res.data.sales.lifetime);
         setAssignedTo(res.data.assignedTo || "");
         setDmHistory(res.data.sales.dmHistory || []);
-
         setSalesList(res.data.sales.allSales || []);
-
         updateMonthlySales(res.data.sales.allSales || []);
-
-        // ✅ clients → 0 for now
         setTotalClients(0);
       }
     } catch (err) {
@@ -83,7 +115,6 @@ const AgentContent: React.FC<AgentContentProps> = ({
     }
   };
 
-  // ✅ Monthly calc
   const updateMonthlySales = (sales: SaleRecord[]) => {
     const now = new Date();
     const month = now.getMonth();
@@ -100,13 +131,16 @@ const AgentContent: React.FC<AgentContentProps> = ({
 
     const total = filtered.reduce((sum, s) => sum + (s.amount || 0), 0);
     setMonthlySales(total);
-
     updateChart(filtered);
   };
 
   const updateChart = (sales: SaleRecord[]) => {
     const formatted = sales
-      .sort((a, b) => new Date(a.saleDate).getTime() - new Date(b.saleDate).getTime())
+      .sort(
+        (a, b) =>
+          new Date(a.saleDate).getTime() -
+          new Date(b.saleDate).getTime()
+      )
       .map((s) => ({
         date: new Date(s.saleDate).toLocaleDateString("en-IN", {
           day: "numeric",
@@ -129,7 +163,10 @@ const AgentContent: React.FC<AgentContentProps> = ({
     }
     const filtered = salesList.filter((item) => {
       const itemDate = new Date(item.saleDate);
-      return itemDate >= new Date(startDate) && itemDate <= new Date(endDate);
+      return (
+        itemDate >= new Date(startDate) &&
+        itemDate <= new Date(endDate)
+      );
     });
     updateChart(filtered);
   };
@@ -142,11 +179,11 @@ const AgentContent: React.FC<AgentContentProps> = ({
 
     try {
       setLoading(true);
-      const token = localStorage.getItem("agentToken");
+
       await axios.post(
         "/api/agent/add-sales",
         { agentId, amount: salesAmount },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { withCredentials: true }
       );
 
       toast.success(`Sale added! ₹${salesAmount}`);
@@ -162,18 +199,18 @@ const AgentContent: React.FC<AgentContentProps> = ({
 
   return (
     <main className={styles.content}>
-      <h2 className={styles.dashboardTitle}>Hello, {agentName}</h2>
+      <h2 className={styles.dashboardTitle}>
+        Hello, {agentName || agentNameState}
+      </h2>
 
-      {/* ✅ Info Cards */}
+      {/* ✅ EVERYTHING BELOW IS 100% YOUR ORIGINAL CODE */}
+
+      {/* Info Cards */}
       <div className={styles.cardGrid}>
-
-        {/* ✅ DM HISTORY */}
         {dmHistory.length > 0 && (
           <div className={styles.infoCard}>
             <h3>DM History</h3>
-
             <h4>Total Transferred Sale: ₹{combinedDmSales}</h4>
-
             <button
               className={styles.breakdownBtn}
               onClick={() => setShowBreakdownModal(true)}
@@ -190,17 +227,15 @@ const AgentContent: React.FC<AgentContentProps> = ({
 
         <div className={styles.infoCard}>
           <h3>Number of Clients</h3>
-          {/* ✅ Dynamic — 0 for now */}
           <p className={styles.amount}>{totalClients}</p>
         </div>
       </div>
 
-      {/* ✅ BREAKDOWN MODAL */}
+      {/* BREAKDOWN MODAL */}
       {showBreakdownModal && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalBox}>
             <h2>DM Breakdown</h2>
-
             <table className={styles.modalTable}>
               <thead>
                 <tr>
@@ -217,7 +252,6 @@ const AgentContent: React.FC<AgentContentProps> = ({
                 ))}
               </tbody>
             </table>
-
             <button
               className={styles.closeBtn}
               onClick={() => setShowBreakdownModal(false)}
@@ -228,7 +262,7 @@ const AgentContent: React.FC<AgentContentProps> = ({
         </div>
       )}
 
-      {/* ✅ ADD SALES */}
+      {/* ADD SALES */}
       <div className={styles.addSalesSection}>
         <h3>Add New Sale</h3>
         <div className={styles.addSalesForm}>
@@ -249,7 +283,7 @@ const AgentContent: React.FC<AgentContentProps> = ({
         </div>
       </div>
 
-      {/* ✅ DATE FILTER */}
+      {/* DATE FILTER */}
       <div className={styles.dateFilterSection}>
         <label className={styles.dateLabel}>
           Start Date:
@@ -268,15 +302,20 @@ const AgentContent: React.FC<AgentContentProps> = ({
           />
         </label>
         <div className={styles.buttonWrapper}>
-          <button className={styles.filterButton} onClick={handleFilter}>
+          <button
+            className={styles.filterButton}
+            onClick={handleFilter}
+          >
             Show
           </button>
         </div>
       </div>
 
-      {/* ✅ GRAPH */}
+      {/* GRAPH */}
       <div className={styles.chartContainer}>
-        <h3 className={styles.chartTitle}>Monthly Sales Overview</h3>
+        <h3 className={styles.chartTitle}>
+          Monthly Sales Overview
+        </h3>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />

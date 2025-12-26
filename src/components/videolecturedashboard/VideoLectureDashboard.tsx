@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Sidebar from "./sidebar";
 import VideoPlayer from "./VideoPlayer";
 import TestPage from "./TestPage";
@@ -15,55 +16,65 @@ export default function VideoLectureDashboard() {
   const [current, setCurrent] = useState(1);
   const [completed, setCompleted] = useState<Record<number, boolean>>({});
   const [showTest, setShowTest] = useState(false);
+  const [checking, setChecking] = useState(true);
+
+  const searchParams = useSearchParams();
+  const forceTest = searchParams.get("mode") === "test";
 
   useEffect(() => {
-    // ✅ If already passed → skip training
-    if (localStorage.getItem("agentTestPassed") === "true") {
-      window.location.href = "/agentpage";
-      return;
-    }
+    fetch("/api/agent/me", { credentials: "include" })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.agent?.trainingCompleted) {
+          window.location.replace("/agentpage");
+          return;
+        }
 
-    const savedVideo = Number(
-      localStorage.getItem("training_currentVideo") || 1
-    );
-    const savedCompleted = JSON.parse(
-      localStorage.getItem("training_completed") || "{}"
-    );
-    const testStarted =
-      localStorage.getItem("training_testStarted") === "true";
+        const savedVideo = Number(
+          localStorage.getItem("training_currentVideo") || 1
+        );
+        const savedCompleted = JSON.parse(
+          localStorage.getItem("training_completed") || "{}"
+        );
 
-    setCurrent(savedVideo);
-    setCompleted(savedCompleted);
-    setShowTest(testStarted);
-  }, []);
+        setCurrent(savedVideo);
+        setCompleted(savedCompleted);
+
+        if (
+          forceTest ||
+          Object.keys(savedCompleted).length === VIDEO_LIST.length
+        ) {
+          setShowTest(true);
+        }
+
+        setChecking(false);
+      })
+      .catch(() => setChecking(false));
+  }, [forceTest]);
 
   useEffect(() => {
     localStorage.setItem("training_currentVideo", String(current));
   }, [current]);
 
   function handleVideoEnd(id: number) {
-    const newCompleted = { ...completed, [id]: true };
-    setCompleted(newCompleted);
+    const updated = { ...completed, [id]: true };
+    setCompleted(updated);
+
     localStorage.setItem(
       "training_completed",
-      JSON.stringify(newCompleted)
+      JSON.stringify(updated)
     );
 
     if (id < VIDEO_LIST.length) {
       setCurrent(id + 1);
     }
-  }
 
-  function handleSidebarClick(id: number) {
-    if (id === 1 || completed[id - 1]) {
-      setCurrent(id);
+    if (id === VIDEO_LIST.length) {
+      setShowTest(true);
     }
   }
 
-  const allCompleted =
-    Object.keys(completed).length === VIDEO_LIST.length;
-
-  const currentVideo = VIDEO_LIST.find((v) => v.id === current)!;
+  if (checking) return null;
 
   return (
     <div className={styles.container}>
@@ -71,40 +82,25 @@ export default function VideoLectureDashboard() {
         videos={VIDEO_LIST}
         current={current}
         completed={completed}
-        onSelect={handleSidebarClick}
+        onSelect={setCurrent}
       />
 
       <main className={styles.main}>
         {!showTest ? (
           <>
-            <h2 className={styles.heading}>{currentVideo.title}</h2>
+            <h2 className={styles.heading}>
+              {VIDEO_LIST[current - 1].title}
+            </h2>
 
             <VideoPlayer
               key={current}
-              src={currentVideo.src}
+              src={VIDEO_LIST[current - 1].src}
               videoId={current}
               onEnded={() => handleVideoEnd(current)}
             />
-
-            {allCompleted && (
-              <button
-                className={styles.startTest}
-                onClick={() => {
-                  localStorage.setItem("training_testStarted", "true");
-                  setShowTest(true);
-                }}
-              >
-                Start Test
-              </button>
-            )}
           </>
         ) : (
-          <TestPage
-            onClose={() => {
-              localStorage.removeItem("training_testStarted");
-              setShowTest(false);
-            }}
-          />
+          <TestPage onClose={() => setShowTest(false)} />
         )}
       </main>
     </div>

@@ -1,133 +1,138 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { verifyToken } from '@/utils/verifyToken';
+import { NextRequest, NextResponse } from "next/server";
+import { verifyToken } from "@/utils/verifyToken";
 
 export async function middleware(req: NextRequest) {
-  const url = req.nextUrl;
-  const pathname = url.pathname;
+  const { pathname } = req.nextUrl;
 
-  // 🚫 Do NOT protect login pages
+  /* ===============================
+     1️⃣ PUBLIC ROUTES
+  =============================== */
   if (
-    pathname.startsWith('/agentlogin') ||
-    pathname.startsWith('/adminlogin') ||
-    pathname.startsWith('/managerlogin')
+    pathname.startsWith("/agentlogin") ||
+    pathname.startsWith("/adminlogin") ||
+    pathname.startsWith("/managerlogin")
   ) {
     return NextResponse.next();
   }
 
-  // Read cookies per role
-  const adminToken = req.cookies.get('adminToken')?.value || null;
-  const managerToken = req.cookies.get('managerToken')?.value || null;
-  const agentToken = req.cookies.get('agentToken')?.value || null;
+  /* ===============================
+     2️⃣ READ TOKEN
+  =============================== */
+  const token =
+    req.cookies.get("adminToken")?.value ||
+    req.cookies.get("managerToken")?.value ||
+    req.cookies.get("agentToken")?.value;
 
-  const token = adminToken || managerToken || agentToken;
-
-  console.log("Token received in middleware:", token);
-  console.log("Requested path:", pathname);
-
-  // If NO TOKEN → redirect by route type
   if (!token) {
-    if (pathname.startsWith('/superadmin') || pathname.startsWith('/admindashboard')) {
-      return NextResponse.redirect(new URL('/adminlogin', req.url));
+    if (
+      pathname.startsWith("/agentpage") ||
+      pathname.startsWith("/videolectures")
+    ) {
+      return NextResponse.redirect(new URL("/agentlogin", req.url));
+    }
+
+    if (pathname.startsWith("/admindashboard")) {
+      return NextResponse.redirect(new URL("/adminlogin", req.url));
     }
 
     if (
-      pathname.startsWith('/nationalmanagerdashboard') ||
-      pathname.startsWith('/statemanagerdashboard') ||
-      pathname.startsWith('/districtmanagerdashboard')
+      pathname.startsWith("/nationalmanagerdashboard") ||
+      pathname.startsWith("/statemanagerdashboard") ||
+      pathname.startsWith("/districtmanagerdashboard")
     ) {
-      return NextResponse.redirect(new URL('/managerlogin', req.url));
+      return NextResponse.redirect(new URL("/managerlogin", req.url));
     }
 
-    if (pathname.startsWith('/agentpage') || pathname.startsWith('/videolectures')) {
-      return NextResponse.redirect(new URL('/agentlogin', req.url));
-    }
-
-    return NextResponse.redirect(new URL('/', req.url)); // fallback
+    return NextResponse.redirect(new URL("/", req.url));
   }
 
-  // VERIFY TOKEN
-  const decoded = await verifyToken(token);
+  /* ===============================
+     3️⃣ VERIFY TOKEN
+  =============================== */
+  const decoded: any = await verifyToken(token);
 
-  console.log("Decoded token:", decoded);
-
-  if (!decoded || typeof decoded === 'string' || !decoded.role) {
-    return NextResponse.redirect(new URL('/', req.url));
+  if (!decoded || !decoded.role) {
+    return NextResponse.redirect(new URL("/", req.url));
   }
 
-  const role = decoded.role as string;
-  const status = decoded.accountStatus as string;
+  const role = decoded.role;
+  const status = decoded.accountStatus;
+  const trainingCompleted = decoded.trainingCompleted === true;
 
-  console.log(`Role: ${role}, Status: ${status}`);
-
-  // ACCOUNT STATUS CHECK
+  /* ===============================
+     4️⃣ ACCOUNT STATUS CHECK
+  =============================== */
   if (status !== "active") {
-    console.log(`Blocked due to inactive: ${role}`);
+    if (role === "agent") {
+      return NextResponse.redirect(new URL("/agentlogin", req.url));
+    }
 
-    if (role === "agent")
-      return NextResponse.redirect(new URL('/agentlogin', req.url));
+    if (["national", "state", "district"].includes(role)) {
+      return NextResponse.redirect(new URL("/managerlogin", req.url));
+    }
 
-    if (['national', 'state', 'district'].includes(role))
-      return NextResponse.redirect(new URL('/managerlogin', req.url));
-
-    return NextResponse.redirect(new URL('/adminlogin', req.url));
+    return NextResponse.redirect(new URL("/adminlogin", req.url));
   }
 
-
-  // Read training test cookie
-  const testPassed = req.cookies.get("agentTestPassed")?.value === "true";
-
-  console.log("Agent Test Passed (cookie):", testPassed);
-
+  /* ===============================
+     5️⃣ AGENT TRAINING LOGIC (FINAL)
+  =============================== */
   if (role === "agent") {
-    // Agent has NOT passed the test → force training page
-    if (!testPassed) {
+    // ✅ TRAINING COMPLETED → ONLY AGENT PAGE
+    if (trainingCompleted) {
+      if (pathname.startsWith("/videolectures")) {
+        return NextResponse.redirect(new URL("/agentpage", req.url));
+      }
+      return NextResponse.next();
+    }
+
+    // ❌ TRAINING NOT COMPLETED → ONLY VIDEOLECTURES
+    if (!trainingCompleted) {
       if (!pathname.startsWith("/videolectures")) {
         return NextResponse.redirect(new URL("/videolectures", req.url));
       }
       return NextResponse.next();
     }
-
-    // Agent already passed test → prevent training page access
-    if (testPassed && pathname.startsWith("/videolectures")) {
-      return NextResponse.redirect(new URL("/agentpage", req.url));
-    }
-
-    // Agent allowed access
-    if (pathname.startsWith("/agentpage")) {
-      return NextResponse.next();
-    }
   }
 
-  if (role === "superadmin" && pathname.startsWith('/superadmin'))
+  /* ===============================
+     6️⃣ OTHER ROLES
+  =============================== */
+  if (role === "superadmin" && pathname.startsWith("/superadmin"))
     return NextResponse.next();
 
-  if (role === "admin" && pathname.startsWith('/admindashboard'))
+  if (role === "admin" && pathname.startsWith("/admindashboard"))
     return NextResponse.next();
 
-  if (role === "national" && pathname.startsWith('/nationalmanagerdashboard'))
+  if (role === "national" && pathname.startsWith("/nationalmanagerdashboard"))
     return NextResponse.next();
 
-  if (role === "state" && pathname.startsWith('/statemanagerdashboard'))
+  if (role === "state" && pathname.startsWith("/statemanagerdashboard"))
     return NextResponse.next();
 
-  if (role === "district" && pathname.startsWith('/districtmanagerdashboard'))
+  if (role === "district" && pathname.startsWith("/districtmanagerdashboard"))
     return NextResponse.next();
 
-  console.log("Unauthorized access:", role);
-
-  return NextResponse.redirect(new URL('/', req.url));
+  return NextResponse.redirect(new URL("/", req.url));
 }
 
+/* ===============================
+   7️⃣ MATCHER (FULL & CORRECT)
+=============================== */
 export const config = {
   matcher: [
-    '/superadmin/:path*',
-    '/admindashboard/:path*',
-    '/nationalmanagerdashboard/:path*',
-    '/statemanagerdashboard/:path*',
-    '/districtmanagerdashboard/:path*',
-    '/agentpage',
-    '/agentpage/:path*',
-    '/videolectures',
-    '/videolectures/:path*',
+    "/superadmin/:path*",
+
+    "/admindashboard/:path*",
+
+    "/nationalmanagerdashboard/:path*",
+    "/statemanagerdashboard/:path*",
+    "/districtmanagerdashboard/:path*",
+
+    "/agentpage",
+    "/agentpage/:path*",
+
+    "/videolectures",
+    "/videolectures/:path*",
   ],
 };
