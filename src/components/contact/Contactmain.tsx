@@ -2,6 +2,7 @@ import React from 'react';
 import styles from '@/styles/contact/contactmain.module.css'; // ✅ Import your CSS module
 import AccountCard from './Accountcard';
 import Contactuscard from './Contactuscard';
+import FAQSection from '../home/FAQSection';
 
 const Contactmain = () => {
   return (
@@ -28,6 +29,7 @@ const Contactmain = () => {
       
       </div>
     </div>
+      
   );
 };
 

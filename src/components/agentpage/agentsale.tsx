@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import styles from "@/styles/pages/agentsale.module.css"; // ✅ import CSS module
+import styles from "@/styles/pages/agentsale.module.css";
 
 interface Agent {
   _id: string;
@@ -11,105 +11,63 @@ interface Agent {
   lastName: string;
   email: string;
   sales: number;
-  assignedTo?: {
-    name: string;
-  };
+  assignedTo?: { name: string };
 }
 
 export default function AgentDashboard() {
   const [agent, setAgent] = useState<Agent | null>(null);
-  const [amount, setAmount] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [amount, setAmount] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-  // ✅ Fetch agent details on load
   useEffect(() => {
-    const fetchAgent = async () => {
-      try {
-        const token = localStorage.getItem("agentToken");
-        const res = await axios.get("/api/agent/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setAgent(res.data.agent);
-      } catch (err) {
-        console.error(err);
-        toast.error("Failed to load agent info");
-      }
-    };
-    fetchAgent();
+    axios
+      .get("/api/agent/me", { withCredentials: true }) // ✅ COOKIE
+      .then((res) => setAgent(res.data.agent))
+      .catch(() => toast.error("Failed to load agent"));
   }, []);
 
-  // ✅ Add new sale
   const handleAddSale = async () => {
-    if (!agent || amount <= 0) {
-      toast.error("Enter a valid sale amount");
-      return;
-    }
+    if (!agent || amount <= 0) return toast.error("Invalid amount");
 
     try {
       setLoading(true);
-      const token = localStorage.getItem("agentToken");
+
       const res = await axios.post(
         "/api/agent/add-sales",
         { agentId: agent._id, amount },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { withCredentials: true } // ✅ COOKIE
       );
 
       setAgent((prev) =>
-        prev ? { ...prev, sales: res.data.newSales } : prev
+        prev ? { ...prev, sales: res.data.newSales.lifetime } : prev
       );
 
-      toast.success(`Sale added! Total: ₹${res.data.newSales}`);
+      toast.success("Sale added");
       setAmount(0);
-    } catch (err) {
-      console.error(err);
+    } catch {
       toast.error("Failed to add sale");
     } finally {
       setLoading(false);
     }
   };
 
-  if (!agent) {
-    return <div className={styles.loading}>Loading agent details...</div>;
-  }
+  if (!agent) return <div>Loading...</div>;
 
   return (
     <div className={styles.container}>
-      <div className={styles.card}>
-        <h1 className={styles.heading}>Agent Dashboard</h1>
+      <h1>Agent Dashboard</h1>
+      <p>Total Sales: ₹{agent.sales}</p>
 
-        <div className={styles.details}>
-          <p>
-            <strong>Name:</strong> {agent.firstName} {agent.lastName}
-          </p>
-          <p>
-            <strong>Email:</strong> {agent.email}
-          </p>
-          <p>
-            <strong>District Manager:</strong>{" "}
-            {agent.assignedTo?.name || "Not Assigned"}
-          </p>
-          <p className={styles.sales}>
-            <strong>Total Sales:</strong> ₹{agent.sales ?? 0}
-          </p>
-        </div>
+      <input
+        type="number"
+        value={amount}
+        onChange={(e) => setAmount(Number(e.target.value))}
+      />
 
-        <div className={styles.salesInputSection}>
-          <input
-            type="number"
-            value={amount}
-            onChange={(e) => setAmount(Number(e.target.value))}
-            placeholder="Enter sale amount"
-            className={styles.input}
-          />
-          <button
-            onClick={handleAddSale}
-            disabled={loading}
-            className={`${styles.button} ${loading ? styles.disabled : ""}`}
-          >
-            {loading ? "Adding Sale..." : "Add Sale"}
-          </button>
-        </div>
-      </div>
+      <button onClick={handleAddSale} disabled={loading}>
+        {loading ? "Adding..." : "Add Sale"}
+      </button>
     </div>
   );
 }
+  

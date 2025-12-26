@@ -1,149 +1,129 @@
-
 .hero {
   position: relative;
   width: 100%;
-  height: 71vh;
-  color: white;
-  overflow: hidden;
+  height: min(80vh, 760px);
   display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Image */
+.heroImage {
+  object-fit: cover;
+  object-position: center;
+  z-index: -2;
+}
+
+/* Overlay */
+.overlay {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  padding: 120px 10%;
+  background: linear-gradient(
+    rgba(0, 0, 0, 0.65),
+    rgba(0, 0, 0, 0.65)
+  );
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
 }
 
-.bgImage {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-}
-
-.overlay {
-  background-color: rgba(0, 0, 0, 0.6);
-  /* padding: 120px; */
-  width: 100%;
-  height: 71vh;
-
-  z-index: 1;
-}
-
+/* Headings */
 .overlay h1 {
-  font-size: 2.5rem;
-  font-weight: bold;
-    margin-top: 4rem;
-
+  font-size: clamp(1.6rem, 2.5vw, 2.8rem);
+  font-weight: 700;
+  margin-bottom: 10px;
 }
 
-.overlay h2 {
-  font-size: 12rem;
-  font-weight: bold;
-  margin: 12px 0;
+.number {
+  font-size: clamp(4rem, 12vw, 10rem);
+  font-family: "Montserrat", sans-serif;
+  color: transparent;
+  -webkit-text-stroke: 2px #ffffff;
+  margin-bottom: 25px;
 }
 
+/* Buttons */
 .buttons {
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 15px;
+  gap: 16px;
   margin: 25px 0;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .buttons button {
-  padding: 12px 22px;
-  border: none;
-  border-radius: 30px;
-  background-color: white;
-  color: black;
-  font-weight: 500;
+  padding: 12px 26px;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background: #ffffff;
+  color: #000000;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .buttons button:hover {
-  background-color: #005bb5;
-  color: white;
+  background: #0f766e;
+  color: #ffffff;
 }
 
 .active {
-  background-color: #007aff;
-  color: white;
+  background: #0f766e;
+  color: #ffffff;
 }
 
+/* Paragraph */
 .overlay p {
-  max-width: 800px;
-  margin: 0 auto;
-  font-size: 1.5rem;
+  max-width: 820px;
+  font-size: clamp(0.95rem, 1.2vw, 1.2rem);
+  line-height: 1.7;
 }
 
-/* Responsive Design */
+/* ===================== */
+/* ===== RESPONSIVE ==== */
+/* ===================== */
+
 @media (max-width: 1024px) {
   .overlay {
-    padding: 80px;
-  }
-
-  .overlay h1 {
-    font-size: 1.8rem;
-  }
-
-  .overlay h2 {
-    font-size: 4rem;
-  }
-
-  .overlay p {
-    font-size: 1rem;
+    padding: 90px 6%;
   }
 }
 
 @media (max-width: 768px) {
+  .hero {
+    height: auto;
+    min-height: 90vh;
+  }
+
   .overlay {
-    padding: 50px 30px;
-  }
-
-  .overlay h1 {
-    font-size: 1.6rem;
-  }
-
-  .overlay h2 {
-    font-size: 3rem;
-  }
-
-  .overlay p {
-    font-size: 0.95rem;
+    padding: 80px 6%;
   }
 
   .buttons {
     flex-direction: column;
-    align-items: center;
   }
 
   .buttons button {
     width: 100%;
-    max-width: 250px;
+    max-width: 280px;
   }
 }
 
 @media (max-width: 480px) {
   .overlay {
-    padding: 40px 20px;
-  }
-
-  .overlay h1 {
-    font-size: 1.4rem;
-  }
-
-  .overlay h2 {
-    font-size: 2.5rem;
+    padding: 70px 5%;
   }
 
   .overlay p {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
+ 
 }
-.number {
-  font-family: 'Montserrat', sans-serif;
-  /* font-weight: 700; */
-  /* font-size: 400px; */
-  color: transparent;
-  -webkit-text-stroke: 2px white; /* adjust stroke width and color */
-}
-
-

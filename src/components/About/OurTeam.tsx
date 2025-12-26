@@ -1,80 +1,103 @@
-"use client";
 import React from "react";
 import Image from "next/image";
-import styles from "@/styles/pages/team.module.css";
+import styles from "@/styles/pages/aboutcompany.module.css"; // ✅ SAME CSS
 
-// Static image imports
-import img2 from "@/assets/pageImages/CEO1.webp";
-import img3 from "@/assets/pageImages/CEO2[1].webp";
+import teamImg from "@/assets/pageImages/team.jpg";
+import agentimg from "@/assets/pageImages/agent.jpg";
 
-const teamMembers = [
-  {
-    name: "Yashish Dahiya",
-    title: "Co-Founder & Group CEO",
-    image: img2,
-  },
-  {
-    name: "Alok Bansal",
-    title: "Co-Founder & Executive Vice Chairman",
-    image: img2,
-  },
-  {
-    name: "Sarbvir Singh",
-    title: "President & CEO - Zanifest",
-    image: img3,
-  },
-];
-
-const OurTeam = () => {
+const AboutDirector = () => {
   return (
-    <section className={styles.teamSection}>
-      <div className={styles.container}>
-        <h2 className={styles.sectionTitle}>
-          Meet the team
-          <span className={styles.titleUnderline}></span>
-        </h2>
-        <p className={styles.description}>
-          Our leadership brings together an energetic group of people with a
-          wealth of experience and commitment towards helping people make better
-          financial decisions.
-        </p>
+    <>
+      {/* ===== Section 1 ===== */}
+      <section className={styles.originSection}>
+        {/* IMAGE */}
+        <div className={styles.imagesContainer}>
+          <div className={styles.decorativeShape} />
 
-        <div className={styles.cardGrid}>
-          {teamMembers.map((member, index) => (
-            <div key={index} className={styles.card}>
-              <Image
-                src={member.image}
-                alt={member.name}
-                className={styles.cardImage}
-                width={200}
-                height={200}
-                objectFit="cover"
-              />
-              <h3 className={styles.cardName}>{member.name}</h3>
-              <p className={styles.cardTitle}>{member.title}</p>
-            </div>
-          ))}
+          <Image
+            src={teamImg}
+            alt="Founder Leadership"
+            fill
+            priority
+            className={styles.mainImage}
+          />
+
+          <div className={styles.smallImageWrapper}>
+            <Image
+              src={agentimg}
+              alt="Corporate Experience"
+              fill
+              priority
+              className={styles.smallImage}
+            />
+          </div>
         </div>
-        
-        <div className={styles.cardGrid}>
-          {teamMembers.map((member, index) => (
-            <div key={index} className={styles.card}>
-              <Image
-                src={member.image}
-                alt={member.name}
-                className={styles.cardImage}
-                width={200}
-                height={200}
-                objectFit="cover"
-              />
-              <h3 className={styles.cardName}>{member.name}</h3>
-              <p className={styles.cardTitle}>{member.title}</p>
-            </div>
-          ))}
+
+        {/* CONTENT */}
+        <div className={styles.content}>
+          <p className={styles.subtitle}>About the Founder</p>
+          <h2 className={styles.title}>Mandeep Rathee</h2>
+          <p className={styles.description}>
+            I am Mandeep Rathee, Founder and CEO of Zanifest Insurance Broker
+            Pvt. Limited. I have worked with leading corporates for almost
+            two decades, starting my journey as a Management Trainee at
+            Red Bull Energy Drink in 2005.
+            <br /><br />
+            Over the years, my professional journey took me through reputed
+            organizations such as Bharti AXA, HDFC ERGO, and finally ICICI
+            Lombard General Insurance, where I spent nearly 18 years in the
+            general insurance space.
+          </p>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* ===== Section 2 ===== */}
+      <section className={styles.originSection}>
+        {/* IMAGE */}
+        <div className={styles.imagesContainer}>
+          <div className={styles.decorativeShape} />
+
+          <Image
+            src={teamImg}
+            alt="Insurance Leadership"
+            fill
+            priority
+            className={styles.mainImage}
+          />
+
+          <div className={styles.smallImageWrapper}>
+            <Image
+              src={agentimg}
+              alt="Strategic Vision"
+              fill
+              priority
+              className={styles.smallImage}
+            />
+          </div>
+        </div>
+
+        {/* CONTENT */}
+        <div className={styles.content}>
+          <p className={styles.subtitle}>Professional Journey</p>
+          <h2 className={styles.title}>Experience & Vision</h2>
+          <p className={styles.description}>
+            In my last assignment, I worked as Deputy Vice President at
+            ICICI Lombard, managing the Health Insurance business for the
+            Rest of North India.
+            <br /><br />
+            Over the last two decades, I have handled diverse roles —
+            from sampling, trade deals, and distribution management to
+            understanding insurance at its core.
+            <br /><br />
+            Witnessing the insurance industry so closely made me realize
+            that I could genuinely help people choose the right insurance
+            plans for their businesses and loved ones — leading to the
+            foundation of Zanifest.
+          </p>
+        </div>
+      </section>
+    </>
   );
 };
 
-export default OurTeam;
+export default AboutDirector;

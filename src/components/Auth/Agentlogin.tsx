@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { FaSpinner } from "react-icons/fa";
 import styles from "@/styles/components/Auth/Login.module.css";
 import Image from "next/image";
-import { body } from "framer-motion/client";
 
 export default function Agentlogin() {
   const [userName, setUserName] = useState("");
@@ -19,6 +18,12 @@ export default function Agentlogin() {
     event.preventDefault();
     setLoading(true);
 
+    function getCookie(name: string) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop()?.split(";").shift();
+    }
+
     try {
       const res = await fetch("/api/agent/login", {
         method: "POST",
@@ -29,39 +34,39 @@ export default function Agentlogin() {
         }),
       });
 
-      console.log("agent body:", body);
-
       const data = await res.json();
 
       if (!res.ok) {
         setError(true);
-        alert(data.message || "Login failed. Please check your credentials.");
+        alert(data.message || "Login failed");
         return;
       }
 
-      console.log("Login Success:", data);
+      // ✅ AUTH COOKIE
+      document.cookie = `agentToken=${data.token}; path=/; max-age=86400`;
+      localStorage.setItem("agentName", data.agent?.name || "");
 
-      // ✅ Save agent auth data
-      // localStorage.setItem("agentToken", data.token);
-      // localStorage.setItem("agentName", data.agent?.name || "");
+      // 🔥 NEW: CHECK TRAINING STATUS FROM BACKEND
+      const meRes = await fetch("/api/agent/me", {
+        credentials: "include",
+      });
+      const meData = await meRes.json();
 
-      // setError(false);
+      if (meData?.agent?.trainingCompleted) {
+        router.replace("/agentpage");
+        return;
+      }
 
-     // AFTER LOGIN SUCCESS
-document.cookie = `agentToken=${data.token}; path=/; max-age=86400`; // ✅ COOKIE
+      // 🔥 LOCAL TRAINING CHECK
+      const completed = JSON.parse(
+        localStorage.getItem("training_completed") || "{}"
+      );
 
-localStorage.setItem("agentName", data.agent?.name || "");
-
-const testPassed = localStorage.getItem("agentTestPassed") === "true";
-
-if (testPassed) {
-  router.push("/agentpage");
-} else {
-  router.push("/videolectures");
-}
-
-
-      console.log("Redirect executed successfully");
+      if (Object.keys(completed).length === 3) {
+        router.replace("/videolectures?mode=test");
+      } else {
+        router.replace("/videolectures");
+      }
     } catch (err) {
       console.error("Login failed:", err);
       setError(true);
@@ -80,7 +85,6 @@ if (testPassed) {
       )}
 
       <div className={styles.cont}>
-        {/* LEFT IMAGE SECTION */}
         <div className={styles.left}>
           <Image
             src={require("@/assets/loginbanner.png")}
@@ -89,10 +93,8 @@ if (testPassed) {
           />
         </div>
 
-        {/* LOGIN FORM */}
         <div className={styles.loginCont}>
           <div className={styles.formDiv}>
-            {/* LOGO */}
             <div className={styles.logo}>
               <Image
                 src={require("@/assets/logo.png")}
@@ -102,49 +104,34 @@ if (testPassed) {
             </div>
 
             <h1 className={styles.heading}>Agent Login</h1>
-            <p className={styles.headingp}>
-              Access to the most powerful tool in the insurance industry.
-            </p>
 
             <form className={styles.loginForm} onSubmit={onSubmit}>
-              <div className={styles.error}>
-                {error && <h4>Invalid Credentials</h4>}
-              </div>
+              {error && <h4>Invalid Credentials</h4>}
 
-              {/* EMAIL INPUT */}
-              <div className={styles.formInput}>
-                <input
-                  type="text"
-                  placeholder="E-mail Address"
-                  required
-                  className={styles.input}
-                  onChange={(e) => setUserName(e.target.value)}
-                />
-              </div>
+              <input
+                type="text"
+                placeholder="E-mail Address"
+                required
+                className={styles.input}
+                onChange={(e) => setUserName(e.target.value)}
+              />
 
-              {/* PASSWORD INPUT */}
-              <div className={styles.formInput}>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Password"
-                  required
-                  className={styles.input}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                required
+                className={styles.input}
+                onChange={(e) => setPassword(e.target.value)}
+              />
 
-              {/* SHOW PASSWORD */}
-              <div className={styles.showPasswordDiv}>
+              <label>
                 <input
                   type="checkbox"
-                  id="showP"
-                  className={styles.passCheck}
                   onClick={() => setShowPassword(!showPassword)}
-                />
-                <label htmlFor="showP">Show Password</label>
-              </div>
+                />{" "}
+                Show Password
+              </label>
 
-              {/* LOGIN BUTTON */}
               <button
                 className={styles.loginButton}
                 disabled={loading}
