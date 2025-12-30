@@ -23,11 +23,13 @@ const Homeinsurancelist = () => {
   const [records, setRecords] = useState<HomeRecord[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const [selectedRecord, setSelectedRecord] = useState<HomeRecord | null>(null);
+  const [selectedRecord, setSelectedRecord] =
+    useState<HomeRecord | null>(null);
   const [agents, setAgents] = useState<Agent[]>([]);
   const [selectedAgent, setSelectedAgent] = useState("");
 
   const fetchRecords = async () => {
+    setLoading(true);
     const res = await axios.get("/api/homeinsurance");
     setRecords(res.data.data || []);
     setLoading(false);
@@ -47,7 +49,7 @@ const Homeinsurancelist = () => {
   }, [selectedRecord]);
 
   const assignLead = async () => {
-    if (!selectedAgent) return alert("Select agent");
+    if (!selectedAgent) return alert("Please select an agent");
 
     await axios.post("/api/homeinsurance?assign=true", {
       recordId: selectedRecord?._id,
@@ -66,6 +68,7 @@ const Homeinsurancelist = () => {
     <div className={styles.wrapper}>
       <h2 className={styles.title}>Home Insurance List</h2>
 
+      {/* ================= TABLE ================= */}
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead>
@@ -73,21 +76,21 @@ const Homeinsurancelist = () => {
               <th>S.No</th>
               <th>Email</th>
               <th>Phone</th>
-              <th>Assigned</th>
-              <th>Created</th>
+              <th>Assigned To</th>
               <th>Show</th>
             </tr>
           </thead>
 
           <tbody>
             {records.map((item, i) => (
-              <tr key={item._id} onClick={() => setSelectedRecord(item)}>
+              <tr
+                key={item._id}
+                onClick={() => setSelectedRecord(item)}
+              >
                 <td>{i + 1}</td>
                 <td>{item.email || "-"}</td>
                 <td>{item.phoneNumber}</td>
                 <td>{item.assignedTo || "Not Assigned"}</td>
-                <td>{new Date(item.createdAt).toLocaleString()}</td>
-
                 <td>
                   <button
                     className={styles.showBtn}
@@ -96,7 +99,7 @@ const Homeinsurancelist = () => {
                       setSelectedRecord(item);
                     }}
                   >
-                    Show Data
+                    Show
                   </button>
                 </td>
               </tr>
@@ -105,18 +108,22 @@ const Homeinsurancelist = () => {
         </table>
       </div>
 
+      {/* ================= MODAL ================= */}
       {selectedRecord && (
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
             <h3>Home Insurance Details</h3>
 
-            {Object.entries(selectedRecord).map(([k, v]) => (
-              <p key={k}>
-                <strong>{k}:</strong> {v?.toString()}
-              </p>
-            ))}
+            <div className={styles.modalContent}>
+              {Object.entries(selectedRecord).map(([k, v]) => (
+                <p key={k}>
+                  <strong>{k}</strong>
+                  <span>{v?.toString()}</span>
+                </p>
+              ))}
+            </div>
 
-            <label>Assign Agent</label>
+            <label className={styles.assignLabel}>Select Agent</label>
             <select
               className={styles.agentDropdown}
               value={selectedAgent}
@@ -130,13 +137,17 @@ const Homeinsurancelist = () => {
               ))}
             </select>
 
-            <button className={styles.assignBtn} onClick={assignLead}>
-              Assign Lead
-            </button>
-
-            <button className={styles.closeBtn} onClick={() => setSelectedRecord(null)}>
-              Close
-            </button>
+            <div className={styles.modalFooter}>
+              <button className={styles.assignBtn} onClick={assignLead}>
+                Assign To Agent
+              </button>
+              <button
+                className={styles.closeBtn}
+                onClick={() => setSelectedRecord(null)}
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
