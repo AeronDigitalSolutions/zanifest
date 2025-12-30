@@ -33,11 +33,11 @@ const HealthInsuranceList = () => {
   const [records, setRecords] = useState<HealthRecord[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const [selectedRecord, setSelectedRecord] = useState<HealthRecord | null>(null);
+  const [selectedRecord, setSelectedRecord] =
+    useState<HealthRecord | null>(null);
   const [agents, setAgents] = useState<Agent[]>([]);
   const [selectedAgent, setSelectedAgent] = useState("");
 
-  // ---------- FETCH RECORDS ----------
   const fetchRecords = async () => {
     setLoading(true);
     const res = await axios.get("/api/healthinsurance");
@@ -45,7 +45,6 @@ const HealthInsuranceList = () => {
     setLoading(false);
   };
 
-  // ---------- FETCH AGENTS ----------
   const fetchAgents = async () => {
     const res = await axios.get("/api/getallagents");
     setAgents(res.data || []);
@@ -59,7 +58,6 @@ const HealthInsuranceList = () => {
     if (selectedRecord) fetchAgents();
   }, [selectedRecord]);
 
-  // ---------- ASSIGN LEAD ----------
   const handleAssign = async () => {
     if (!selectedAgent) return alert("Please select an agent");
 
@@ -82,53 +80,49 @@ const HealthInsuranceList = () => {
 
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>S.No</th>
-              <th>Full Name</th>
-              <th>Email</th>
-              <th>Mobile</th>
-              <th>Gender</th>
-              <th>City</th>
-              <th>Assigned</th>
-              <th>Created</th>
-              <th>Show</th>
-            </tr>
-          </thead>
+         <thead>
+  <tr>
+    <th>S.No</th>
+    <th>Email</th>
+    <th>Phone</th>
+    <th>Assigned To</th>
+    <th>Show </th>
+  </tr>
+</thead>
 
-          <tbody>
-            {records.map((r, index) => (
-              <tr
-                key={r._id}
-                onClick={() => setSelectedRecord(r)}   // ✅ ROW CLICK
-              >
-                <td>{index + 1}</td>
-                <td>{r.fullName}</td>
-                <td>{r.email || "Unregistered"}</td>
-                <td>{r.mobile}</td>
-                <td>{r.gender}</td>
-                <td>{r.city}</td>
-                <td>{r.assignedTo || "Not Assigned"}</td>
-                <td>{new Date(r.createdAt).toLocaleString()}</td>
 
-                <td>
-                  <button
-                    className={styles.showBtn}
-                    onClick={(e) => {
-                      e.stopPropagation();            // ✅ IMPORTANT
-                      setSelectedRecord(r);
-                    }}
-                  >
-                    Show Data
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+         <tbody>
+  {records.map((r, index) => (
+    <tr
+      key={r._id}
+      onClick={() => setSelectedRecord(r)}
+    >
+      <td>{index + 1}</td>
+
+      <td>{r.email || "Unregistered"}</td>
+
+      <td>{r.mobile}</td>
+
+      <td>{r.assignedTo || "Not Assigned"}</td>
+
+      <td>
+        <button
+          className={styles.showBtn}
+          onClick={(e) => {
+            e.stopPropagation();
+            setSelectedRecord(r);
+          }}
+        >
+          Show data
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
         </table>
       </div>
 
-      {/* ---------- MODAL ---------- */}
       {selectedRecord && (
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
@@ -137,17 +131,17 @@ const HealthInsuranceList = () => {
             <div className={styles.modalContent}>
               {Object.entries(selectedRecord).map(([key, value]) => (
                 <p key={key}>
-                  <strong>{key}:</strong>{" "}
-                  {Array.isArray(value)
-                    ? JSON.stringify(value)
-                    : typeof value === "object"
-                    ? JSON.stringify(value)
-                    : value?.toString()}
+                  <strong>{key}</strong>
+                  <span>
+                    {Array.isArray(value)
+                      ? JSON.stringify(value)
+                      : value?.toString()}
+                  </span>
                 </p>
               ))}
             </div>
 
-            <label>Assign Agent</label>
+            <label className={styles.assignLabel}>Select Agent</label>
             <select
               className={styles.agentDropdown}
               value={selectedAgent}
@@ -161,16 +155,17 @@ const HealthInsuranceList = () => {
               ))}
             </select>
 
-            <button className={styles.assignBtn} onClick={handleAssign}>
-              Assign Lead
-            </button>
-
-            <button
-              className={styles.closeBtn}
-              onClick={() => setSelectedRecord(null)}
-            >
-              Close
-            </button>
+            <div className={styles.modalFooter}>
+              <button className={styles.assignBtn} onClick={handleAssign}>
+                Assign Lead
+              </button>
+              <button
+                className={styles.closeBtn}
+                onClick={() => setSelectedRecord(null)}
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -5,7 +5,15 @@ export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   /* ===============================
-     1️⃣ PUBLIC ROUTES
+     🔹 NEW (SAFE): SKIP API ROUTES
+     (Training progress, login, me API etc.)
+  =============================== */
+  if (pathname.startsWith("/api")) {
+    return NextResponse.next();
+  }
+
+  /* ===============================
+     1️⃣ PUBLIC ROUTES (UNCHANGED)
   =============================== */
   if (
     pathname.startsWith("/agentlogin") ||
@@ -16,7 +24,7 @@ export async function middleware(req: NextRequest) {
   }
 
   /* ===============================
-     2️⃣ READ TOKEN
+     2️⃣ READ TOKEN (UNCHANGED)
   =============================== */
   const token =
     req.cookies.get("adminToken")?.value ||
@@ -47,7 +55,7 @@ export async function middleware(req: NextRequest) {
   }
 
   /* ===============================
-     3️⃣ VERIFY TOKEN
+     3️⃣ VERIFY TOKEN (UNCHANGED)
   =============================== */
   const decoded: any = await verifyToken(token);
 
@@ -60,7 +68,7 @@ export async function middleware(req: NextRequest) {
   const trainingCompleted = decoded.trainingCompleted === true;
 
   /* ===============================
-     4️⃣ ACCOUNT STATUS CHECK
+     4️⃣ ACCOUNT STATUS CHECK (UNCHANGED)
   =============================== */
   if (status !== "active") {
     if (role === "agent") {
@@ -75,7 +83,19 @@ export async function middleware(req: NextRequest) {
   }
 
   /* ===============================
-     5️⃣ AGENT TRAINING LOGIC (FINAL)
+     🔹 NEW (SAFE): AGENT LOGIN PAGE GUARD
+     - Prevent blank page after login
+  =============================== */
+  if (role === "agent" && pathname.startsWith("/agentlogin")) {
+    if (trainingCompleted) {
+      return NextResponse.redirect(new URL("/agentpage", req.url));
+    } else {
+      return NextResponse.redirect(new URL("/videolectures", req.url));
+    }
+  }
+
+  /* ===============================
+     5️⃣ AGENT TRAINING LOGIC (UNCHANGED)
   =============================== */
   if (role === "agent") {
     // ✅ TRAINING COMPLETED → ONLY AGENT PAGE
@@ -96,7 +116,7 @@ export async function middleware(req: NextRequest) {
   }
 
   /* ===============================
-     6️⃣ OTHER ROLES
+     6️⃣ OTHER ROLES (UNCHANGED)
   =============================== */
   if (role === "superadmin" && pathname.startsWith("/superadmin"))
     return NextResponse.next();
@@ -117,7 +137,7 @@ export async function middleware(req: NextRequest) {
 }
 
 /* ===============================
-   7️⃣ MATCHER (FULL & CORRECT)
+   7️⃣ MATCHER (UNCHANGED)
 =============================== */
 export const config = {
   matcher: [

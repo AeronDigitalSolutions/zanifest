@@ -59,7 +59,7 @@
   position: absolute;
   right: 0;
   top: 0;
-  width: 90%;
+  width: 100%;
   height: 100vh;
   background-color: #ffffff;
   padding-top: 6rem;
@@ -67,16 +67,36 @@
   padding-left: 10%;
   align-items: flex-start;
   animation: slideInFromLeft 0.5s ease-out alternate;
+  text-decoration: none;
 }
 
+/* MOBILE INSURANCE PRODUCT DROPDOWN */
 .dropDownMobile {
-  margin: 2rem 0 0 0;
+  margin-top: 1.2rem;
+
+  width: 100vw;              /* 🔥 FULL SCREEN WIDTH */
+  margin-left: -10%;         /* 🔥 padding-left compensate */
+  padding-left: 10%;
+  padding-right: 10%;
+
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  transition: all 0.5s;
-  position: relative;
-  z-index: 0;
+  gap: 1.2rem;
+
+  max-height: 45vh;          /* scroll height */
+  overflow-y: auto;
+  background: #fff;
+}
+
+
+/* smooth scrolling */
+.dropDownMobile::-webkit-scrollbar {
+  width: 5px;
+}
+
+.dropDownMobile::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
 }
 
 .dropItemMobile {
@@ -87,7 +107,7 @@
   display: flex;
   width: 100%;
   justify-content: center;
-  gap: 4rem;
+  gap: 3rem;
   font-size: 1.5rem;
 }
 
@@ -166,9 +186,9 @@
 
 /* YOU ASKED: REMOVE BACKGROUND, ADD UNDERLINE */
 .dropItem:hover {
-  background-color: transparent !important;
-  color: #fa621a;
-  text-decoration: underline #fa621a;
+  background-color:#1c75bb ;
+  color: white;
+  /* text-decoration: underline #fa621a; */
   transform: none;
 }
 
@@ -181,6 +201,7 @@
 
 .loginButton {
   cursor: pointer;
+  /* border:solid 2px #fa621a ; */
 }
 
 .loginText {
@@ -190,6 +211,17 @@
   font-size: 20px;
   transition: all 0.4s;
   margin-top: 15px;
+  border:solid 2px #fa621a ;
+}
+.loginText {
+  color: white;
+  background-color: #fa621a;
+  padding: 10px 32px;
+  font-size: 20px;
+  transition: all 0.4s;
+  margin-top: 15px;
+
+  border-radius: 10px;
 }
 
 .loginLogo {
@@ -242,4 +274,303 @@
   font-weight: 500;
   color: #333;
 
+}
+/* 🔥 MOBILE HEADER */
+.mobileHeader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.2rem;
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  z-index: 10000;
+}
+
+.mobileLogo {
+  cursor: pointer;
+}
+
+.mobileLogoImage {
+  height: 2.8rem;
+  width: auto;
+}
+
+.mobileClose {
+  font-size: 2rem;
+  cursor: pointer;
+  color: #000;
+}
+
+/* FIX MOBILE MENU */
+.mobileMenuList {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #ffffff;
+  padding-top: 5.5rem;
+  padding-left: 10%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  z-index: 9999;
+}
+@media screen and (max-width: 1200px) {
+  .totalLine {
+    display: none;
+  }
+}
+@media screen and (max-width: 1200px) {
+  .loginButton {
+    width: 90%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .loginText {
+    text-align: center;
+  }
+}
+/* ❌ DESKTOP PAR MOBILE SIDEBAR HIDE */
+@media screen and (min-width: 1201px) {
+  .mobileMenuList {
+    display: none !important;
+  }
+
+  .mobileHeader {
+    display: none !important;
+  }
+}
+/* Mobile menu full screen */
+.mobileMenuList {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #ffffff;
+  padding-top: 6.5rem;
+  padding-left: 10%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  z-index: 9999;
+  overflow-x: hidden;
+}
+
+/* Mobile header (logo + close) */
+.mobileHeader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.2rem;
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  z-index: 10000;
+}
+
+.mobileLogoImage {
+  height: 2.8rem;
+  width: auto;
+}
+
+.mobileClose {
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+/* ===================== */
+/* REMOVE UNDERLINE MOBILE */
+/* ===================== */
+
+@media screen and (max-width: 1200px) {
+  .totalLine {
+    display: none;
+  }
+}
+
+/* ===================== */
+/* INSURANCE PRODUCT DROPDOWN */
+/* ===================== */
+
+.dropDownMobile {
+  width: 100vw;
+  margin-left: -10%;
+  padding: 1rem 10% 1.2rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+
+  max-height: 45vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  background: #ffffff;
+
+  /* smooth mobile animation */
+  animation: mobileDropdownFade 0.35s ease-out;
+  transform-origin: top;
+
+  /* premium scroll */
+  -webkit-overflow-scrolling: touch;
+  box-shadow: inset 0 -8px 8px -10px rgba(0,0,0,0.15);
+}
+
+/* Scrollbar (clean look) */
+.dropDownMobile::-webkit-scrollbar {
+  width: 4px;
+}
+.dropDownMobile::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+/* Dropdown items */
+.dropItemMobile {
+  width: 100%;
+  padding: 0.75rem 0;
+  font-size: 16px;
+  color: #222;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  transition: all 0.25s ease;
+}
+
+/* Touch feedback */
+.dropItemMobile:active {
+  background-color: #f9f9f9;
+}
+
+/* ===================== */
+/* LOGIN BUTTON CENTER (MOBILE) */
+/* ===================== */
+
+@media screen and (max-width: 1200px) {
+  .loginButton {
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .loginText {
+    text-align: center;
+  }
+}
+
+/* ===================== */
+/* DESKTOP SAFETY */
+/* ===================== */
+
+@media screen and (min-width: 1201px) {
+  .mobileMenuList,
+  .mobileHeader {
+    display: none !important;
+  }
+}
+
+/* ===================== */
+/* ANIMATION */
+/* ===================== */
+
+@keyframes mobileDropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* ===================================== */
+/* DESKTOP: LEFT–RIGHT GAP INCREASE ONLY */
+/* ===================================== */
+
+@media screen and (min-width: 1201px) {
+
+  /* Increase overall left–right spacing */
+  .cont {
+    padding-left: 90px;   /* was tighter */
+    padding-right: 90px;
+  }
+
+  /* Slightly increase center menu spacing */
+  .menuCont {
+    gap: 3.8rem;          /* was 3rem */
+  }
+
+  /* Optional: give login button a bit more air */
+  .loginCont {
+    justify-content: flex-end;
+  }
+}
+/* ===================== */
+/* DESKTOP INSURANCE DROPDOWN */
+/* ===================== */
+@media screen and (min-width: 1201px) {
+
+  .dropDown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+
+    /* ✅ 2 COLUMN LAYOUT */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+
+    min-width: 450px;
+    background-color: #ffffff;
+    border: 1px solid #dcdcdc;
+    padding: 18px;
+    border-radius: 12px;
+
+    font-size: 15px;
+    z-index: 999;
+  }
+
+  /* Show on hover (existing logic safe) */
+  .menuItem:hover .dropDown {
+    display: grid;
+  }
+
+  /* ITEM STYLE */
+  .dropItem {
+    padding: 12px 14px;
+    cursor: pointer;
+    border-radius: 8px;
+
+    /* 🔵 Default Blue Text */
+    color: #1c75bb;
+    font-weight: 500;
+
+    transition: all 0.25s ease;
+    text-align: left;
+  }
+
+  /* 🔥 HOVER EFFECT */
+  /* .dropItem:hover {
+    background-color: #1c75bb;
+    color: #ffffff;
+    text-decoration: none;
+  } */
+}
+/* ===================== */
+/* MOBILE: LOGIN BUTTON TOP MARGIN FIX */
+/* ===================== */
+@media screen and (max-width: 1200px) {
+  .loginText {
+    margin-top: 0px;   /* 🔽 pehle 15px tha */
+  }
 }

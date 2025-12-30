@@ -6,8 +6,7 @@ import styles from "@/styles/components/superadminsidebar/directorlist.module.cs
 export default function Directorlist() {
   const [records, setRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState<any>(null);
+  const [selected, setSelected] = useState<any | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -23,24 +22,13 @@ export default function Directorlist() {
     })();
   }, []);
 
-  const openModal = (record: any) => {
-    setSelected(record);
-    setOpen(true);
-  };
-
-  const closeModal = () => {
-    setSelected(null);
-    setOpen(false);
-  };
-
   if (loading) return <div className={styles.loading}>Loading...</div>;
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.header}>
-        <h2>Director Insurance Records</h2>
-      </div>
+      <h2 className={styles.title}>Director Insurance List</h2>
 
+      {/* ================= TABLE ================= */}
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead>
@@ -49,24 +37,30 @@ export default function Directorlist() {
               <th>Mobile</th>
               <th>Company</th>
               <th>Industry</th>
-              <th>Created</th>
-              <th>Action</th>
+              <th>Assigned</th>
+              <th>Show</th>
             </tr>
           </thead>
 
           <tbody>
             {records.length > 0 ? (
               records.map((r, i) => (
-                <tr key={r._id}>
+                <tr
+                  key={r._id}
+                  onClick={() => setSelected(r)}
+                >
                   <td>{i + 1}</td>
                   <td>{r.mobileNumber}</td>
                   <td>{r.companyName}</td>
                   <td>{r.industryCategory}</td>
-                  <td>{new Date(r.createdAt).toLocaleDateString()}</td>
+                  <td>{r.assignedTo || "Not Assigned"}</td>
                   <td>
                     <button
                       className={styles.showBtn}
-                      onClick={() => openModal(r)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelected(r);
+                      }}
                     >
                       Show
                     </button>
@@ -85,26 +79,32 @@ export default function Directorlist() {
       </div>
 
       {/* ================= MODAL ================= */}
-      {open && selected && (
+      {selected && (
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
             <h3>Director Insurance Details</h3>
 
             <div className={styles.modalContent}>
-              <p><b>Mobile:</b> {selected.mobileNumber}</p>
-              <p><b>Email:</b> {selected.email || "Unregistered User"}</p>
-              <p><b>Company:</b> {selected.companyName}</p>
-              <p><b>Industry:</b> {selected.industryCategory}</p>
-              <p><b>Territory:</b> {selected.territory}</p>
-              <p><b>Jurisdiction:</b> {selected.jurisdiction}</p>
-              <p><b>Turnover:</b> {selected.companyTurnover}</p>
-              <p><b>Liability:</b> {selected.limitOfLiability}</p>
-              <p><b>Created:</b> {new Date(selected.createdAt).toLocaleString()}</p>
+              {Object.entries(selected).map(([k, v]) => (
+                <p key={k}>
+                  <strong>{k}</strong>
+                  <span>
+                    {typeof v === "object"
+                      ? JSON.stringify(v)
+                      : v?.toString()}
+                  </span>
+                </p>
+              ))}
             </div>
 
-            <button className={styles.closeBtn} onClick={closeModal}>
-              Close
-            </button>
+            <div className={styles.modalFooter}>
+              <button
+                className={styles.closeBtn}
+                onClick={() => setSelected(null)}
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}

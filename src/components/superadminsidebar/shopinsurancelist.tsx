@@ -28,7 +28,6 @@ const ShopInsuranceList = () => {
   const [agents, setAgents] = useState<AgentRecord[]>([]);
   const [selectedAgent, setSelectedAgent] = useState("");
 
-  // ---------- FETCH SHOP DATA ----------
   const fetchShopData = async () => {
     setLoading(true);
     const res = await axios.get("/api/shopinsurance");
@@ -36,7 +35,6 @@ const ShopInsuranceList = () => {
     setLoading(false);
   };
 
-  // ---------- FETCH AGENTS ----------
   const fetchAgents = async () => {
     const res = await axios.get("/api/getallagents");
     setAgents(res.data || []);
@@ -50,7 +48,6 @@ const ShopInsuranceList = () => {
     if (selectedShop) fetchAgents();
   }, [selectedShop]);
 
-  // ---------- ASSIGN LEAD ----------
   const handleAssign = async () => {
     if (!selectedAgent) return alert("Please select an agent");
 
@@ -71,6 +68,7 @@ const ShopInsuranceList = () => {
     <div className={styles.wrapper}>
       <h2 className={styles.title}>Shop Insurance List</h2>
 
+      {/* ================= TABLE ================= */}
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead>
@@ -78,8 +76,7 @@ const ShopInsuranceList = () => {
               <th>S.No</th>
               <th>Email</th>
               <th>Phone</th>
-              <th>Assigned</th>
-              <th>Created</th>
+              <th>Assigned To</th>
               <th>Show</th>
             </tr>
           </thead>
@@ -88,23 +85,21 @@ const ShopInsuranceList = () => {
             {shopData.map((shop, index) => (
               <tr
                 key={shop._id}
-                onClick={() => setSelectedShop(shop)}   // ✅ ROW CLICK
+                onClick={() => setSelectedShop(shop)}
               >
                 <td>{index + 1}</td>
                 <td>{shop.email || "-"}</td>
                 <td>{shop.phone}</td>
                 <td>{shop.assignedTo || "Not Assigned"}</td>
-                <td>{new Date(shop.createdAt).toLocaleString()}</td>
-
                 <td>
                   <button
                     className={styles.showBtn}
                     onClick={(e) => {
-                      e.stopPropagation();            // ✅ IMPORTANT
+                      e.stopPropagation();
                       setSelectedShop(shop);
                     }}
                   >
-                    Show Data
+                    Show
                   </button>
                 </td>
               </tr>
@@ -113,19 +108,22 @@ const ShopInsuranceList = () => {
         </table>
       </div>
 
-      {/* ---------- MODAL ---------- */}
+      {/* ================= MODAL ================= */}
       {selectedShop && (
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
             <h3>Shop Insurance Details</h3>
 
-            {Object.entries(selectedShop).map(([k, v]) => (
-              <p key={k}>
-                <strong>{k}:</strong> {v?.toString()}
-              </p>
-            ))}
+            <div className={styles.modalContent}>
+              {Object.entries(selectedShop).map(([k, v]) => (
+                <p key={k}>
+                  <strong>{k}</strong>
+                  <span>{v?.toString()}</span>
+                </p>
+              ))}
+            </div>
 
-            <label>Assign Agent</label>
+            <label className={styles.assignLabel}>Select Agent</label>
             <select
               className={styles.agentDropdown}
               value={selectedAgent}
@@ -139,16 +137,17 @@ const ShopInsuranceList = () => {
               ))}
             </select>
 
-            <button className={styles.assignBtn} onClick={handleAssign}>
-              Assign Lead
-            </button>
-
-            <button
-              className={styles.closeBtn}
-              onClick={() => setSelectedShop(null)}
-            >
-              Close
-            </button>
+            <div className={styles.modalFooter}>
+              <button className={styles.assignBtn} onClick={handleAssign}>
+                Assign To Agent
+              </button>
+              <button
+                className={styles.closeBtn}
+                onClick={() => setSelectedShop(null)}
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
