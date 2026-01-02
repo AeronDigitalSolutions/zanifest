@@ -3,7 +3,10 @@ import dbConnect from "@/lib/dbConnect";
 import Agent from "@/models/Agent";
 import AgentLogin from "@/models/AgentLogin";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -12,8 +15,40 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await dbConnect();
     const data = req.body;
 
-    // Required fields (agentCode removed)
-    const required = [
+    /* =================================================
+       🔍 CHECK IF AGENT ALREADY EXISTS (EDIT MODE)
+       ================================================= */
+    const existingAgent = await Agent.findOne({
+      loginId: data.loginId,
+    });
+
+    /* =================================================
+       🔁 EDIT MODE (REJECTED AGENT RESUBMIT)
+       ================================================= */
+    if (existingAgent) {
+      // ✅ update ONLY fields sent by frontend
+      Object.keys(data).forEach((key) => {
+        if (key !== "loginId") {
+          existingAgent[key] = data[key];
+        }
+      });
+
+      // 🔄 reset review state
+      existingAgent.status = "pending";
+      existingAgent.rejectedFields = [];
+      existingAgent.rejectionRemark = "";
+
+      await existingAgent.save();
+
+      return res.status(200).json({
+        message: "Application re-submitted successfully",
+      });
+    }
+
+    /* =================================================
+       🆕 FIRST-TIME AGENT CREATION
+       ================================================= */
+    const requiredFields = [
       "firstName",
       "lastName",
       "email",
@@ -26,25 +61,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       "loginId",
     ];
 
-    for (const field of required) {
+    for (const field of requiredFields) {
       if (!data[field]) {
         return res.status(400).json({ error: `Missing: ${field}` });
       }
     }
 
-    // Check loginId exists in AgentLogin table
-    const loginRecord = await AgentLogin.findOne({ loginId: data.loginId });
+    // validate loginId exists
+    const loginRecord = await AgentLogin.findOne({
+      loginId: data.loginId,
+    });
     if (!loginRecord) {
       return res.status(400).json({ error: "Invalid loginId" });
     }
 
-    // Check duplicate email only
-    const existingAgent = await Agent.findOne({ email: data.email });
-    if (existingAgent) {
+    // prevent duplicate email
+    const emailExists = await Agent.findOne({ email: data.email });
+    if (emailExists) {
       return res.status(400).json({ error: "Email already exists" });
     }
 
-    // Create agent
     const newAgent = new Agent({
       ...data,
       status: "pending",
@@ -52,9 +88,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     await newAgent.save();
 
-    res.status(201).json({ message: "Agent created successfully", newAgent });
-  } catch (err: any) {
+    return res.status(201).json({
+      message: "Agent created successfully",
+    });
+
+  } catch (err) {
     console.error("Create Agent Error:", err);
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: "Server error" });
   }
 }

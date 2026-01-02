@@ -17,20 +17,33 @@ console.log("Login request body:", req.body);
   try {
     await dbConnect();
 
-    const agent = await Agent.findOne({ email });
-console.log("Found agent:", agent);
-    if (!agent) {
-      return res.status(401).json({ message: "Invalid email or password" });
-    }
-console.log("Agent status:", agent.status);
-    // 🚨 Status based blocking
-    if (agent.status === "pending") {
-      return res.status(403).json({ message: "Your application is under review" });
-    }
+ const agent = await Agent.findOne({ email });
+if (!agent) {
+  return res.status(401).json({ message: "Invalid credentials" });
+}
 
-    if (agent.status === "rejected") {
-      return res.status(403).json({ message: "Your application is rejected" });
-    }
+const isValid =
+  agent.password === password ||
+  bcrypt.compareSync(password, agent.password);
+
+if (!isValid) {
+  return res.status(401).json({ message: "Invalid credentials" });
+}
+
+// 🚫 pending
+if (agent.status === "pending") {
+  return res.status(403).json({
+    message: "Your application is under review",
+  });
+}
+
+// 🔁 rejected → redirect
+if (agent.status === "rejected") {
+  return res.status(200).json({
+    redirect: `/createagent?loginId=${agent.loginId}&mode=edit`,
+  });
+}
+
 
     // ✔ Password validation (plain text OR encrypted support)
     const isPasswordValid =
@@ -82,4 +95,5 @@ console.log("Password valid");
     console.error("Login error:", err);
     return res.status(500).json({ message: "Server error" });
   }
+  
 }
