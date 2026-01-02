@@ -109,11 +109,10 @@ export default function SignUp() {
               </span>
             </div>
 
-            <button
+            <button 
               className={styles.loginButton}
               disabled={loading}
-              type="submit"
-            >
+              type="submit">
               {loading ? "Registering..." : "Sign Up"}
             </button>
           </form>

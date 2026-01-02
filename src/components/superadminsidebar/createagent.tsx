@@ -118,64 +118,60 @@ const createagent = () => {
   });
 
   /* ================= FIELD LOCK ================= */
- const isLocked = (field: keyof FormDataType) =>
-  isEditMode &&
-  rejectedFields.length > 0 &&
-  !rejectedFields.includes(field);
-
+  const isLocked = (field: keyof FormDataType) =>
+    isEditMode && rejectedFields.length > 0 && !rejectedFields.includes(field);
 
   /* ================= PREFILL ================= */
-// ================= PREFILL FOR FIRST-TIME AGENT =================
-useEffect(() => {
-  if (!loginId || isEditMode) return;
+  // ================= PREFILL FOR FIRST-TIME AGENT =================
+  useEffect(() => {
+    if (!loginId || isEditMode) return;
 
-  const loadLoginData = async () => {
-    try {
-      const res = await fetch(`/api/auth/fetchLogin?loginId=${loginId}`);
-      const data = await res.json();
-      if (!res.ok) return;
+    const loadLoginData = async () => {
+      try {
+        const res = await fetch(`/api/auth/fetchLogin?loginId=${loginId}`);
+        const data = await res.json();
+        if (!res.ok) return;
 
-      const fullName = data.name || "";
-      const parts = fullName.split(" ");
+        const fullName = data.name || "";
+        const parts = fullName.split(" ");
 
-      setFormData((prev) => ({
-        ...prev,
-        firstName: parts[0] || "",
-        lastName: parts.slice(1).join(" "),
-        email: data.email,
-        password: data.password,
-      }));
-    } catch (err) {
-      console.error("Login prefill error", err);
-    }
-  };
+        setFormData((prev) => ({
+          ...prev,
+          firstName: parts[0] || "",
+          lastName: parts.slice(1).join(" "),
+          email: data.email,
+          password: data.password,
+        }));
+      } catch (err) {
+        console.error("Login prefill error", err);
+      }
+    };
 
-  loadLoginData();
-}, [loginId, isEditMode]);
-// ================= PREFILL FOR REJECTED AGENT (EDIT MODE) =================
-useEffect(() => {
-  if (!loginId || !isEditMode) return;
+    loadLoginData();
+  }, [loginId, isEditMode]);
+  // ================= PREFILL FOR REJECTED AGENT (EDIT MODE) =================
+  useEffect(() => {
+    if (!loginId || !isEditMode) return;
 
-  const loadRejectedAgent = async () => {
-    try {
-      const res = await fetch(`/api/agent/by-loginId?loginId=${loginId}`);
-      const data = await res.json();
-      if (!res.ok) return;
+    const loadRejectedAgent = async () => {
+      try {
+        const res = await fetch(`/api/agent/by-loginId?loginId=${loginId}`);
+        const data = await res.json();
+        if (!res.ok) return;
 
-      setFormData((prev) => ({
-        ...prev,
-        ...data.agent, // 🔥 full agent data
-      }));
+        setFormData((prev) => ({
+          ...prev,
+          ...data.agent, // 🔥 full agent data
+        }));
 
-      setRejectedFields(data.agent.rejectedFields || []);
-    } catch (err) {
-      console.error("Edit-mode prefill error", err);
-    }
-  };
+        setRejectedFields(data.agent.rejectedFields || []);
+      } catch (err) {
+        console.error("Edit-mode prefill error", err);
+      }
+    };
 
-  loadRejectedAgent();
-}, [loginId, isEditMode]);
-
+    loadRejectedAgent();
+  }, [loginId, isEditMode]);
 
   /* ================= PINCODE (🔥 FIXED) ================= */
   const handlePincodeChange = async (
@@ -281,7 +277,7 @@ useEffect(() => {
             <input
               id="lastName"
               value={formData.lastName}
-  disabled={isLocked("lastName")}
+              disabled={isLocked("lastName")}
               className={styles.input}
               onChange={handleChange}
             />
@@ -294,8 +290,7 @@ useEffect(() => {
             <input
               id="email"
               type="email"
-                disabled={isEditMode}
-
+              disabled={isEditMode}
               value={formData.email}
               className={styles.input}
               onChange={handleChange}
@@ -307,7 +302,7 @@ useEffect(() => {
             <input
               id="phone"
               className={styles.input}
-  disabled={isLocked("phone")}
+              disabled={isLocked("phone")}
               value={formData.phone}
               onChange={handleChange}
             />
@@ -321,8 +316,8 @@ useEffect(() => {
                 type={showPassword ? "text" : "password"}
                 id="password"
                 value={formData.password}
-                  disabled={false}
-
+                // disabled={false}
+                disabled={isLocked("password")}
                 onChange={handleChange}
                 className={styles.input}
               />
@@ -346,6 +341,7 @@ useEffect(() => {
             <input
               id="pinCode"
               className={styles.input}
+              disabled={isLocked("pinCode")}
               value={formData.pinCode}
               onChange={handlePincodeChange}
             />
@@ -357,6 +353,7 @@ useEffect(() => {
               id="city"
               className={styles.input}
               value={formData.city}
+              disabled={isLocked("city")}
               onChange={handleChange}
             />
           </div>
@@ -367,6 +364,7 @@ useEffect(() => {
               id="district"
               className={styles.input}
               value={formData.district}
+              disabled={isLocked("district")}
               onChange={handleChange}
             />
           </div>
@@ -380,6 +378,7 @@ useEffect(() => {
               className={styles.input}
               value={formData.state}
               onChange={handleChange}
+              disabled={isLocked("state")}
             />
           </div>
 
@@ -389,8 +388,7 @@ useEffect(() => {
               id="panNumber"
               className={styles.input}
               // disabled={!rejectedFields.includes("panNumber")}
-                disabled={isEditMode && !rejectedFields.includes("panNumber")}
-
+              disabled={isEditMode && !rejectedFields.includes("panNumber")}
               value={formData.panNumber}
               onChange={handleChange}
             />
@@ -408,8 +406,7 @@ useEffect(() => {
               id="adhaarNumber"
               className={styles.input}
               // disabled={!rejectedFields.includes("adhaarNumber")}
-                disabled={isEditMode && !rejectedFields.includes("adhaarNumber")}
-
+              disabled={isEditMode && !rejectedFields.includes("adhaarNumber")}
               value={formData.adhaarNumber}
               onChange={handleChange}
             />
@@ -430,6 +427,7 @@ useEffect(() => {
             <label>Nominee Name</label>
             <input
               id="nomineeName"
+              disabled={isLocked("nomineeName")}
               className={styles.input}
               value={formData.nomineeName}
               onChange={handleChange}
@@ -441,6 +439,7 @@ useEffect(() => {
             <input
               id="nomineeRelation"
               className={styles.input}
+              disabled={isLocked("nomineeRelation")}
               value={formData.nomineeRelation}
               onChange={handleChange}
             />
@@ -452,6 +451,7 @@ useEffect(() => {
             <label>Nominee PAN Number</label>
             <input
               id="nomineePanNumber"
+              disabled={isLocked("nomineePanNumber")}
               className={styles.input}
               value={formData.nomineePanNumber}
               onChange={handleChange}
@@ -467,6 +467,7 @@ useEffect(() => {
             <label>Nominee Aadhaar Number</label>
             <input
               id="nomineeAadharNumber"
+              disabled={isLocked("nomineeAadharNumber")}
               className={styles.input}
               value={formData.nomineeAadharNumber}
               onChange={handleChange}
@@ -487,6 +488,7 @@ useEffect(() => {
             <label>Account Holder Name</label>
             <input
               id="accountHolderName"
+              disabled={isLocked("accountHolderName")}
               className={styles.input}
               value={formData.accountHolderName}
               onChange={handleChange}
@@ -498,6 +500,7 @@ useEffect(() => {
             <input
               id="bankName"
               className={styles.input}
+              disabled={isLocked("bankName")}
               value={formData.bankName}
               onChange={handleChange}
             />
@@ -507,6 +510,7 @@ useEffect(() => {
             <label>Account Number</label>
             <input
               id="accountNumber"
+              disabled={isLocked("accountNumber")}
               className={styles.input}
               value={formData.accountNumber}
               onChange={handleChange}
@@ -519,6 +523,7 @@ useEffect(() => {
             <label>IFSC Code</label>
             <input
               id="ifscCode"
+              disabled={isLocked("ifscCode")}
               className={styles.input}
               value={formData.ifscCode}
               onChange={handleChange}
@@ -529,6 +534,7 @@ useEffect(() => {
             <label>Branch Location</label>
             <input
               id="branchLocation"
+              disabled={isLocked("branchLocation")}
               className={styles.input}
               value={formData.branchLocation}
               onChange={handleChange}

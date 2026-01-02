@@ -16,9 +16,9 @@ interface AgentData {
   state?: string;
   pinCode?: string;
   panNumber?: string;
-  panAttachment?: string;     // filename only
+  panAttachment?: string; // filename only
   adhaarNumber?: string;
-  adhaarAttachment?: string;  // filename only
+  adhaarAttachment?: string; // filename only
   nomineeName?: string;
   nomineeRelation?: string;
   nomineeAadharNumber?: string;
@@ -43,9 +43,13 @@ export default function ReviewApplications() {
 
   // local verification states for currently selected agent
   const [panStatus, setPanStatus] = useState<VerificationState>("pending");
-  const [aadhaarStatus, setAadhaarStatus] = useState<VerificationState>("pending");
+  const [aadhaarStatus, setAadhaarStatus] =
+    useState<VerificationState>("pending");
   const [remark, setRemark] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [approveLoading, setApproveLoading] = useState(false);
+  const [rejectLoading, setRejectLoading] = useState(false);
+
+    const [loading, setLoading] = useState(false);
 
   // base URL for file preview — change via NEXT_PUBLIC_UPLOAD_BASE_URL if needed
   const FILE_BASE =
@@ -88,28 +92,32 @@ export default function ReviewApplications() {
 
   // When user approves/rejects overall application (final action)
   const handleReview = async (action: "accept" | "reject") => {
-    // require both verifications completed
     if (panStatus === "pending" || aadhaarStatus === "pending") {
-      alert("Please complete PAN and Aadhaar verification before final review.");
+      alert(
+        "Please complete PAN and Aadhaar verification before final review."
+      );
       return;
     }
 
-    // if any rejected, remark required
-    if ((panStatus === "rejected" || aadhaarStatus === "rejected") && !remark.trim()) {
+    if (
+      (panStatus === "rejected" || aadhaarStatus === "rejected") &&
+      !remark.trim()
+    ) {
       alert("Please add a remark explaining rejection.");
       return;
     }
 
     if (!selected) return;
 
-    // if accepting, ensure a manager is assigned
     if (action === "accept" && !assignManager) {
       alert("Please assign a District Manager before approving.");
       return;
     }
 
     try {
-      setLoading(true);
+      if (action === "accept") setApproveLoading(true);
+      if (action === "reject") setRejectLoading(true);
+
       await axios.post("/api/admin/reviewAgent", {
         agentId: selected._id,
         action,
@@ -130,13 +138,17 @@ export default function ReviewApplications() {
       console.error("handleReview error", err);
       alert("Something went wrong while submitting review.");
     } finally {
-      setLoading(false);
+      setApproveLoading(false);
+      setRejectLoading(false);
     }
   };
 
   // IRDAI link open (keeps same behavior) — marks IRDAI step done
   const handleIrdaiClick = () => {
-    window.open("https://agencyportal.irdai.gov.in/PublicAccess/LookUpPAN.aspx", "_blank");
+    window.open(
+      "https://agencyportal.irdai.gov.in/PublicAccess/LookUpPAN.aspx",
+      "_blank"
+    );
     setIrdaiVerified(true);
   };
 
@@ -144,7 +156,8 @@ export default function ReviewApplications() {
   const getFileUrl = (filename?: string | null) => {
     if (!filename) return null;
     // if filename already contains http(s), return as-is
-    if (filename.startsWith("http://") || filename.startsWith("https://")) return filename;
+    if (filename.startsWith("http://") || filename.startsWith("https://"))
+      return filename;
     // else combine with base path
     return `${FILE_BASE.replace(/\/$/, "")}/${filename.replace(/^\//, "")}`;
   };
@@ -180,7 +193,9 @@ export default function ReviewApplications() {
                 onClick={() => openReview(a)}
               >
                 <td>{index + 1}</td>
-                <td>{a.firstName} {a.lastName}</td>
+                <td>
+                  {a.firstName} {a.lastName}
+                </td>
                 <td>{a.email}</td>
 
                 <td>
@@ -204,9 +219,7 @@ export default function ReviewApplications() {
       {selected && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalBox} role="dialog" aria-modal="true">
-            <h2 className={styles.modalTitle}>
-              Review Agent Application
-            </h2>
+            <h2 className={styles.modalTitle}>Review Agent Application</h2>
 
             <div className={styles.modalContent}>
               {/* top grid */}
@@ -326,7 +339,9 @@ export default function ReviewApplications() {
                         }}
                       />
                     ) : (
-                      <div className={styles.noPreview}>No Aadhaar uploaded</div>
+                      <div className={styles.noPreview}>
+                        No Aadhaar uploaded
+                      </div>
                     )}
                   </div>
 
@@ -385,7 +400,7 @@ export default function ReviewApplications() {
                       onClick={handleIrdaiClick}
                       type="button"
                     >
-                      Open IRDAI 
+                      Open IRDAI
                     </button>
                     <div className={styles.irdaiStatus}>
                       {irdaiVerified ? "Done" : "Not Verified"}
@@ -396,7 +411,12 @@ export default function ReviewApplications() {
 
               {/* Remark (required if any reject) */}
               <div className={styles.remarkWrap}>
-                <label>Remark { (panStatus === "rejected" || aadhaarStatus === "rejected") ? <span style={{color:"red"}}>*</span> : null }</label>
+                <label>
+                  Remark{" "}
+                  {panStatus === "rejected" || aadhaarStatus === "rejected" ? (
+                    <span style={{ color: "red" }}>*</span>
+                  ) : null}
+                </label>
                 <textarea
                   className={styles.remarkField}
                   placeholder="Type reason for rejection or any notes."
@@ -411,28 +431,32 @@ export default function ReviewApplications() {
                   className={styles.finalRejectBtn}
                   onClick={() => handleReview("reject")}
                   disabled={
-                    loading ||
+                    rejectLoading ||
                     panStatus === "pending" ||
                     aadhaarStatus === "pending" ||
-                    ( (panStatus === "rejected" || aadhaarStatus === "rejected") && !remark.trim() )
+                    ((panStatus === "rejected" ||
+                      aadhaarStatus === "rejected") &&
+                      !remark.trim())
                   }
                 >
-                  {loading ? "Processing..." : "Reject Application"}
+                  {rejectLoading ? "Processing..." : "Reject Application"}
                 </button>
 
                 <button
                   className={styles.finalAcceptBtn}
                   onClick={() => handleReview("accept")}
                   disabled={
-                    loading ||
+                    approveLoading ||
                     panStatus === "pending" ||
                     aadhaarStatus === "pending" ||
                     !irdaiVerified ||
                     !assignManager ||
-                    ( (panStatus === "rejected" || aadhaarStatus === "rejected") && !remark.trim() )
+                    ((panStatus === "rejected" ||
+                      aadhaarStatus === "rejected") &&
+                      !remark.trim())
                   }
                 >
-                  {loading ? "Processing..." : "Approve Application"}
+                  {approveLoading ? "Processing..." : "Approve Application"}
                 </button>
 
                 <button
@@ -449,3 +473,6 @@ export default function ReviewApplications() {
     </div>
   );
 }
+
+
+

@@ -49,23 +49,62 @@ export default async function handler(
        🆕 FIRST-TIME AGENT CREATION
        ================================================= */
     const requiredFields = [
-      "firstName",
-      "lastName",
-      "email",
-      "password",
-      "phone",
-      "city",
-      "district",
-      "state",
-      "pinCode",
-      "loginId",
-    ];
+  // Personal
+  "firstName",
+  "lastName",
+  "email",
+  "password",
+  "phone",
+
+  // Address
+  "city",
+  "district",
+  "state",
+  "pinCode",
+
+  // Nominee (REQUIRED)
+  "nomineeName",
+  "nomineeRelation",
+  "nomineeAadharNumber",
+  "nomineePanNumber",
+
+  // Bank (REQUIRED)
+  "accountHolderName",
+  "bankName",
+  "accountNumber",
+  "ifscCode",
+  "branchLocation",
+
+  // System
+  "loginId",
+];
+
 
     for (const field of requiredFields) {
       if (!data[field]) {
         return res.status(400).json({ error: `Missing: ${field}` });
       }
     }
+// 🔐 REQUIRED ATTACHMENTS (FIRST TIME ONLY)
+if (!existingAgent) {
+  if (!data.nomineePanAttachment) {
+    return res.status(400).json({
+      error: "Missing: nomineePanAttachment",
+    });
+  }
+
+  if (!data.nomineeAadhaarAttachment) {
+    return res.status(400).json({
+      error: "Missing: nomineeAadhaarAttachment",
+    });
+  }
+
+  if (!data.cancelledChequeAttachment) {
+    return res.status(400).json({
+      error: "Missing: cancelledChequeAttachment",
+    });
+  }
+}
 
     // validate loginId exists
     const loginRecord = await AgentLogin.findOne({

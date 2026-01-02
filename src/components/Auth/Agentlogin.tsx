@@ -35,11 +35,11 @@ export default function Agentlogin() {
       });
 
       const data = await res.json();
-// 🔁 HANDLE BACKEND REDIRECT (🔥 ADD THIS BLOCK)
-if (data.redirect) {
-  router.replace(data.redirect);
-  return;
-}
+      // 🔁 HANDLE BACKEND REDIRECT (🔥 ADD THIS BLOCK)
+      if (data.redirect) {
+        router.replace(data.redirect);
+        return;
+      }
       if (!res.ok) {
         setError(true);
         alert(data.message || "Login failed");
@@ -143,6 +143,15 @@ if (data.redirect) {
               >
                 Login
               </button>
+              <p className={styles.signupLink}>
+                Don't have an account?{" "}
+                <span
+                  className={styles.signupText}
+                  onClick={() => router.push("/agentsignup")}
+                >
+                  Sign Up
+                </span>
+              </p>
             </form>
           </div>
         </div>
