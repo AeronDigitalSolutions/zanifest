@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import styles from "@/styles/components/ui/Navbar.module.css";
@@ -224,7 +225,7 @@ function Navbar() {
             onClick={() => router.push("/login")}
           >
             <p className={styles.loginText}>
-              Login/Register <FaSignInAlt />
+              Login/Register <FaSignInAlt style={{ position: "relative", top: "5px" }} />
             </p>
           </div>
         ) : (
