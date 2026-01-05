@@ -134,6 +134,15 @@ export default function AgentsignUp() {
             <button className={styles.loginButton} disabled={loading}>
               {loading ? "Please wait..." : "Sign Up"}
             </button>
+             <p className={styles.signupLink}>
+                            Don't have an account?{" "}
+                            <span
+                              className={styles.signupText}
+                              onClick={() => router.push("/agentlogin")}
+                            >
+                              Login
+                            </span>
+                          </p>
           </form>
         </div>
       </div>

@@ -1,7 +1,6 @@
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/router";
 
-
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import Image from "next/image";
 import styles from "@/styles/components/Auth/Login.module.css";
@@ -39,7 +38,11 @@ export default function SignUp() {
   return (
     <div className={styles.cont}>
       <div className={styles.left}>
-        <Image src={loginBanner} alt="signup-banner" className={styles.leftImage} />
+        <Image
+          src={loginBanner}
+          alt="signup-banner"
+          className={styles.leftImage}
+        />
       </div>
 
       <div className={styles.loginCont}>
@@ -49,7 +52,6 @@ export default function SignUp() {
           </div>
 
           <h1 className={styles.heading}>Signup to continue</h1>
-         
 
           <form onSubmit={handleSubmit} className={styles.loginForm}>
             {error && (
@@ -65,7 +67,8 @@ export default function SignUp() {
                 value={userName}
                 onChange={(e) => {
                   const input = e.target.value;
-                  const capitalized = input.charAt(0).toUpperCase() + input.slice(1);
+                  const capitalized =
+                    input.charAt(0).toUpperCase() + input.slice(1);
                   setUserName(capitalized);
                 }}
                 className={styles.input}
@@ -109,12 +112,22 @@ export default function SignUp() {
               </span>
             </div>
 
-            <button 
+            <button
               className={styles.loginButton}
               disabled={loading}
-              type="submit">
+              type="submit"
+            >
               {loading ? "Registering..." : "Sign Up"}
             </button>
+            <p className={styles.signupLink}>
+              Don't have an account?{" "}
+              <span
+                className={styles.signupText}
+                onClick={() => router.push("/login")}
+              >
+                Login
+              </span>
+            </p>
           </form>
         </div>
       </div>
