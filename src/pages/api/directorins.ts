@@ -1,4 +1,3 @@
-// pages/api/directorins.ts
 import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "@/lib/dbConnect";
 import Director from "@/models/Director";
@@ -8,56 +7,65 @@ import { verifyToken } from "@/utils/verifyToken";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await dbConnect();
 
-  // Get token from cookie
-  const userToken = req.cookies?.userToken || null;
   let email: string | null = null;
+  let isGuest = true;
 
-  if (userToken) {
+  const token = req.cookies?.userToken;
+
+  if (token) {
     try {
-      const decoded: any = await verifyToken(userToken);
+      const decoded: any = await verifyToken(token);
       if (decoded?.id) {
         const user = await User.findById(decoded.id).select("email");
-        if (user) email = user.email;
+        if (user) {
+          email = user.email;
+          isGuest = false;
+        }
       }
-    } catch (err) {
-      console.warn("directorins: token verify failed", err);
+    } catch (e) {
+      console.log("Director token verify failed");
     }
   }
 
   try {
+    // ---------------- POST (SAVE) ----------------
     if (req.method === "POST") {
       const payload = {
         ...req.body,
-        email, // logged in user's email OR null
+        email,
+        isGuest
       };
 
       const saved = await Director.create(payload);
       return res.status(201).json({ success: true, data: saved });
     }
 
-    if (req.method === "GET") {
-      const docs = await Director.find().sort({ createdAt: -1 });
-      return res.status(200).json({ success: true, data: docs });
-    }
-
+    // ---------------- PUT (UPDATE AFTER LOGIN) ----------------
     if (req.method === "PUT") {
-      const id = req.query.id as string;
-      if (!id) return res.status(400).json({ success: false, message: "id required" });
-      const updated = await Director.findByIdAndUpdate(id, req.body, { new: true });
+      const { id, email } = req.body;
+
+      const updated = await Director.findByIdAndUpdate(
+        id,
+        {
+          email,
+          isGuest: false
+        },
+        { new: true }
+      );
+
       return res.status(200).json({ success: true, data: updated });
     }
 
-    if (req.method === "DELETE") {
-      const id = req.query.id as string;
-      if (!id) return res.status(400).json({ success: false, message: "id required" });
-      await Director.findByIdAndDelete(id);
-      return res.status(200).json({ success: true, message: "deleted" });
+    // ---------------- GET ----------------
+    if (req.method === "GET") {
+      const list = await Director.find().sort({ createdAt: -1 });
+      return res.status(200).json({ success: true, data: list });
     }
 
-    res.setHeader("Allow", ["GET", "POST", "PUT", "DELETE"]);
-    return res.status(405).end(`Method ${req.method} Not Allowed`);
+    res.setHeader("Allow", ["GET", "POST", "PUT"]);
+    return res.status(405).end("Method Not Allowed");
   } catch (err: any) {
-    console.error("directorins error:", err);
-    return res.status(500).json({ success: false, message: err.message || "Server error" });
+    return res.status(500).json({ success: false, message: err.message });
   }
 }
+

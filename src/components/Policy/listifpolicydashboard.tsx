@@ -2,50 +2,40 @@
 import React, { useEffect, useState } from "react";
 import PdfUpload, { Summary } from "@/components/Policy/pdfupload";
 import PolicyTable from "@/components/Policy/PolicyTable";
-import styles from "@/styles/pages/listofpolicy.module.css";
 
-const ListOfPolicy = () => {
-  const [preview, setPreview] = useState<Summary | null>(null);
+export default function ListOfPolicy() {
+  const [policies, setPolicies] = useState<Summary[]>([]);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
-  const [saved, setSaved] = useState<Summary[]>([]);
-  const [uploadedText, setUploadedText] = useState(""); // ✅ ADD THIS
 
-  const fetchPolicies = async () => {
-    const res = await fetch("/api/policy/list");
+  // 🔄 Fetch from DB
+  const loadPolicies = async () => {
+    const res = await fetch("/api/policy/list", {
+      credentials: "include",
+    });
     const json = await res.json();
-    if (json.success) setSaved(json.data);
+    if (json.success) setPolicies(json.data);
   };
 
   useEffect(() => {
-    fetchPolicies();
-    window.addEventListener("policy-updated", fetchPolicies);
+    loadPolicies();
+    window.addEventListener("policy-updated", loadPolicies);
     return () =>
-      window.removeEventListener("policy-updated", fetchPolicies);
+      window.removeEventListener("policy-updated", loadPolicies);
   }, []);
 
   return (
-    <div className={styles.pageContainer}>
-      <div className={styles.topBar}>
-        <h2>Policy Scanner</h2>
+    <>
+    <h2>List of Policies</h2>
+      <PdfUpload
+        setPdfUrl={setPdfUrl}
+        setSummary={(summary) => {
+          // 🔥 TEMP add uploaded row in table
+          setPolicies((prev) => [summary, ...prev]);
+        }}
+        setUploadedText={() => {}}
+      />
 
-        <PdfUpload
-          setSummary={setPreview}
-          setPdfUrl={setPdfUrl}
-          setUploadedText={setUploadedText} // ✅ PASS IT
-        />
-      </div>
-
-      {/* CURRENT UPLOAD */}
-      {preview && pdfUrl && (
-        <PolicyTable policies={[preview]} pdfUrl={pdfUrl} />
-      )}
-
-      {/* VERIFIED POLICIES */}
-      {saved.length > 0 && (
-        <PolicyTable policies={saved} pdfUrl="" />
-      )}
-    </div>
+      <PolicyTable policies={policies} pdfUrl={pdfUrl || ""} />
+    </>
   );
-};
-
-export default ListOfPolicy;
+}

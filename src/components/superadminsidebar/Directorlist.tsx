@@ -1,28 +1,53 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import styles from "@/styles/components/superadminsidebar/directorlist.module.css";
 
-export default function Directorlist() {
+export default function DirectorList() {
   const [records, setRecords] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [agents, setAgents] = useState<any[]>([]);
   const [selected, setSelected] = useState<any | null>(null);
+  const [assignedAgent, setAssignedAgent] = useState("");
 
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch("/api/directorins", { cache: "no-store" });
-        const json = await res.json();
-        setRecords(json.data || []);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    })();
+    fetchList();
   }, []);
 
-  if (loading) return <div className={styles.loading}>Loading...</div>;
+  const fetchList = async () => {
+    const res = await axios.get("/api/directorins");
+    setRecords(res.data.data || []);
+  };
+
+  const fetchAgents = async () => {
+    const res = await axios.get("/api/getallagents");
+    setAgents(res.data || []);
+  };
+
+  useEffect(() => {
+    if (selected) fetchAgents();
+  }, [selected]);
+
+  const assignAgent = async () => {
+    if (!assignedAgent || !selected) return alert("Select agent");
+
+    const agent = agents.find((a) => a._id === assignedAgent);
+    const agentName =
+      agent?.firstName || agent?.name
+        ? `${agent.firstName ?? ""} ${agent.lastName ?? ""}`.trim()
+        : agent?.email;
+
+    await axios.put("/api/directorins", {
+      directorId: selected._id,
+      agentId: assignedAgent,
+      agentName,
+    });
+
+    alert("Agent assigned successfully");
+    setSelected(null);
+    setAssignedAgent("");
+    fetchList();
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -36,24 +61,21 @@ export default function Directorlist() {
               <th>S.No</th>
               <th>Mobile</th>
               <th>Company</th>
-              <th>Industry</th>
+              <th>Email</th>
               <th>Assigned</th>
               <th>Show</th>
             </tr>
           </thead>
 
           <tbody>
-            {records.length > 0 ? (
+            {records.length ? (
               records.map((r, i) => (
-                <tr
-                  key={r._id}
-                  onClick={() => setSelected(r)}
-                >
+                <tr key={r._id} onClick={() => setSelected(r)}>
                   <td>{i + 1}</td>
                   <td>{r.mobileNumber}</td>
                   <td>{r.companyName}</td>
-                  <td>{r.industryCategory}</td>
-                  <td>{r.assignedTo || "Not Assigned"}</td>
+                  <td>{r.email || "Guest"}</td>
+                  <td>{r.assignedAgentName || "Not Assigned"}</td>
                   <td>
                     <button
                       className={styles.showBtn}
@@ -82,22 +104,36 @@ export default function Directorlist() {
       {selected && (
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
-            <h3>Director Insurance Details</h3>
+            <h3>Directorlist Details</h3>
 
             <div className={styles.modalContent}>
               {Object.entries(selected).map(([k, v]) => (
-                <p key={k}>
+                <div key={k}>
                   <strong>{k}</strong>
-                  <span>
-                    {typeof v === "object"
-                      ? JSON.stringify(v)
-                      : v?.toString()}
-                  </span>
-                </p>
+                  <span>{v === null ? "null" : String(v)}</span>
+                </div>
               ))}
             </div>
 
+            <div className={styles.agentBox}>
+              <label>Select Agent</label>
+              <select
+                value={assignedAgent}
+                onChange={(e) => setAssignedAgent(e.target.value)}
+              >
+                <option value="">Select Agent</option>
+                {agents.map((a) => (
+                  <option key={a._id} value={a._id}>
+                    {a.firstName || a.name} ({a.email})
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <div className={styles.modalFooter}>
+              <button className={styles.assignBtn} onClick={assignAgent}>
+                Assign To Agent
+              </button>
               <button
                 className={styles.closeBtn}
                 onClick={() => setSelected(null)}

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/pages/listofpolicy.module.css";
 import { FiEdit2, FiCheck } from "react-icons/fi";
 
@@ -9,6 +9,7 @@ export type Summary = {
   companyName: string;
   amount: string;
   expiryDate: string;
+  pdfUrl?: string;
 };
 
 const PolicyTable = ({
@@ -18,9 +19,14 @@ const PolicyTable = ({
   policies: Summary[];
   pdfUrl: string;
 }) => {
-  const [rows, setRows] = useState<Summary[]>(policies);
+  const [rows, setRows] = useState<Summary[]>([]);
   const [editing, setEditing] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+
+  // 🔥 SYNC PROPS TO STATE
+  useEffect(() => {
+    setRows(policies);
+  }, [policies]);
 
   const update = (i: number, key: keyof Summary, value: string) => {
     const copy = [...rows];
@@ -34,11 +40,14 @@ const PolicyTable = ({
     const res = await fetch("/api/policy/verify", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(row),
+      credentials: "include",
+      body: JSON.stringify({ ...row, pdfUrl }),
     });
 
+    const data = await res.json();
+
     if (!res.ok) {
-      alert("Verify failed");
+      alert(data.message || "Verify failed");
       setSaving(false);
       return;
     }
@@ -56,18 +65,12 @@ const PolicyTable = ({
             value={rows[i][key]}
             onChange={(e) => update(i, key, e.target.value)}
           />
-          <FiCheck
-            style={{ cursor: "pointer" }}
-            onClick={() => setEditing(null)}
-          />
+          <FiCheck onClick={() => setEditing(null)} />
         </>
       ) : (
         <>
           <span>{rows[i][key]}</span>
-          <FiEdit2
-            style={{ cursor: "pointer", color: "orangered" }}
-            onClick={() => setEditing(`${i}-${key}`)}
-          />
+          <FiEdit2 onClick={() => setEditing(`${i}-${key}`)} />
         </>
       )}
     </div>
@@ -75,8 +78,6 @@ const PolicyTable = ({
 
   return (
     <div className={styles.tableWrapper}>
-      <h3 className={styles.tableHeading}>Policies</h3>
-
       <table className={styles.table}>
         <thead>
           <tr>
@@ -102,7 +103,7 @@ const PolicyTable = ({
               <td>
                 <button
                   className={styles.viewBtn}
-                  onClick={() => window.open(pdfUrl, "_blank")}
+                  onClick={() => window.open(row.pdfUrl || pdfUrl, "_blank")}
                 >
                   View
                 </button>
