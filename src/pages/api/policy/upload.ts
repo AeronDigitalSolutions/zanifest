@@ -1,7 +1,7 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import { formidable } from "formidable";
 import { Writable } from "stream";
 import { extractText } from "unpdf";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 export const config = { api: { bodyParser: false } };
 
@@ -24,13 +24,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   });
 
   form.parse(req, async (_err, _fields, files: any) => {
-    const pdfFile = files?.pdf?.[0];
-    if (!pdfFile) return res.status(400).json({ error: "No PDF" });
+    const pdf = files?.pdf?.[0];
+    if (!pdf) return res.status(400).json({ error: "No PDF" });
 
     // @ts-ignore
-    const buffer: Buffer = pdfFile._writeStream._buffer;
-    const text = (await extractText(new Uint8Array(buffer))).text || "";
+    const buffer: Buffer = pdf._writeStream._buffer;
+    const result = await extractText(new Uint8Array(buffer));
 
-    res.json({ text });
+    res.json({ text: result.text ?? "" });
   });
 }

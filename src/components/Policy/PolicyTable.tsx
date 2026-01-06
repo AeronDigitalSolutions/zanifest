@@ -2,127 +2,172 @@
 import React, { useEffect, useState } from "react";
 import styles from "@/styles/pages/listofpolicy.module.css";
 import { FiEdit2, FiCheck } from "react-icons/fi";
+import { Summary } from "./pdfupload";
+import { FiSearch } from "react-icons/fi";
 
-export type Summary = {
-  insuredName: string;
-  policyNo: string;
-  companyName: string;
-  amount: string;
-  expiryDate: string;
-  pdfUrl?: string;
-};
 
-const PolicyTable = ({
-  policies,
-  pdfUrl,
-}: {
+interface Props {
   policies: Summary[];
-  pdfUrl: string;
+  mode: "temp" | "verified";
+  onVerifySuccess?: (row: Summary) => void;
+  showHeader?: boolean;
+}
+
+const PolicyTable: React.FC<Props> = ({
+  policies,
+  mode,
+  onVerifySuccess,
+  showHeader = true,
 }) => {
   const [rows, setRows] = useState<Summary[]>([]);
   const [editing, setEditing] = useState<string | null>(null);
-  const [saving, setSaving] = useState(false);
+  const [search, setSearch] = useState(""); // ✅ NEW
 
-  // 🔥 SYNC PROPS TO STATE
   useEffect(() => {
     setRows(policies);
   }, [policies]);
 
-  const update = (i: number, key: keyof Summary, value: string) => {
-    const copy = [...rows];
-    copy[i] = { ...copy[i], [key]: value };
-    setRows(copy);
-  };
-
-  const verify = async (row: Summary) => {
-    setSaving(true);
-
+  const verify = async (row: Summary, index: number) => {
     const res = await fetch("/api/policy/verify", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ ...row, pdfUrl }),
+      body: JSON.stringify(row),
     });
 
     const data = await res.json();
 
-    if (!res.ok) {
-      alert(data.message || "Verify failed");
-      setSaving(false);
+    if (res.status === 409) {
+      alert(data.message || "Policy already exists");
+      const updated = rows.filter((_, i) => i !== index);
+      setRows(updated);
       return;
     }
 
-    window.dispatchEvent(new Event("policy-updated"));
-    alert("Policy verified & saved");
-    setSaving(false);
+    if (!res.ok) {
+      alert(data.message || "Verify failed");
+      return;
+    }
+
+    alert("Verified successfully");
+    onVerifySuccess?.(data.policy);
   };
 
+  const filteredRows = rows.filter((r) => {
+    const q = search.toLowerCase();
+    return (
+      r.insuredName?.toLowerCase().includes(q) ||
+      r.policyNo?.toLowerCase().includes(q) ||
+      r.companyName?.toLowerCase().includes(q) ||
+      r.amount?.toLowerCase().includes(q) ||
+      r.expiryDate?.toLowerCase().includes(q)
+    );
+  });
+
   const cell = (i: number, key: keyof Summary) => (
-    <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+    <>
       {editing === `${i}-${key}` ? (
         <>
           <input
             value={rows[i][key]}
-            onChange={(e) => update(i, key, e.target.value)}
+            onChange={(e) => {
+              const copy = [...rows];
+              copy[i] = { ...copy[i], [key]: e.target.value };
+              setRows(copy);
+            }}
           />
           <FiCheck onClick={() => setEditing(null)} />
         </>
       ) : (
         <>
           <span>{rows[i][key]}</span>
-          <FiEdit2 onClick={() => setEditing(`${i}-${key}`)} />
+          {mode === "temp" && (
+            <FiEdit2
+              style={{ marginLeft: 6, cursor: "pointer" }}
+              onClick={() => setEditing(`${i}-${key}`)}
+            />
+          )}
         </>
       )}
-    </div>
+    </>
   );
 
+  if (!rows.length) return null;
+
   return (
+    <>
     <div className={styles.tableWrapper}>
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Policy No</th>
-            <th>Company</th>
-            <th>Amount</th>
-            <th>Expiry</th>
-            <th>PDF</th>
-            <th>Verify</th>
-          </tr>
-        </thead>
+      {/* 🔍 SEARCH BAR */}
+      <div className={styles.tableHeader}>
+         <div className={styles.searchBox}>
+    <FiSearch className={styles.searchIcon} />
+    <input
+      type="text"
+      placeholder="Search policy..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      className={styles.searchInput}
+    />
+  </div>
+      </div>
 
-        <tbody>
-          {rows.map((row, i) => (
-            <tr key={row.policyNo + i}>
-              <td>{cell(i, "insuredName")}</td>
-              <td>{cell(i, "policyNo")}</td>
-              <td>{cell(i, "companyName")}</td>
-              <td>{cell(i, "amount")}</td>
-              <td>{cell(i, "expiryDate")}</td>
+      <div className={styles.responsiveTable}>
+        <table className={styles.table}>
+          {showHeader && (
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Policy No</th>
+                <th>Company</th>
+                <th>Amount</th>
+                <th>Expiry</th>
+                      <th>Assigned At</th> {/* ✅ NEW */}
 
-              <td>
-                <button
-                  className={styles.viewBtn}
-                  onClick={() => window.open(row.pdfUrl || pdfUrl, "_blank")}
-                >
-                  View
-                </button>
-              </td>
+                <th>Status</th>
+              </tr>
+            </thead>
+          )}
 
-              <td>
-                <button
-                  className={styles.verifyBtn}
-                  disabled={saving}
-                  onClick={() => verify(row)}
-                >
-                  Verify
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          <tbody>
+            {filteredRows.map((r, i) => (
+              <tr key={r.policyNo + i}>
+                <td>{cell(i, "insuredName")}</td>
+                <td>{cell(i, "policyNo")}</td>
+                <td>{cell(i, "companyName")}</td>
+                <td>{cell(i, "amount")}</td>
+                <td>{cell(i, "expiryDate")}</td>
+                <td>
+  {r.assignedAt
+    ? new Date(r.assignedAt).toLocaleString("en-IN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      })
+    : "--"}
+</td>
+
+                <td>
+                  {mode === "temp" ? (
+                    <button
+                      className={styles.verifyBtn}
+                      onClick={() => verify(r, i)}
+                    >
+                      Verify
+                    </button>
+                  ) : (
+                    <span className={styles.verifiedText}>✔ Verified</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
+    </>
   );
 };
 

@@ -4,38 +4,48 @@ import PdfUpload, { Summary } from "@/components/Policy/pdfupload";
 import PolicyTable from "@/components/Policy/PolicyTable";
 
 export default function ListOfPolicy() {
-  const [policies, setPolicies] = useState<Summary[]>([]);
-  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [tempPolicies, setTempPolicies] = useState<Summary[]>([]);
+  const [verifiedPolicies, setVerifiedPolicies] = useState<Summary[]>([]);
 
-  // 🔄 Fetch from DB
-  const loadPolicies = async () => {
+  const loadVerified = async () => {
     const res = await fetch("/api/policy/list", {
       credentials: "include",
     });
     const json = await res.json();
-    if (json.success) setPolicies(json.data);
+    if (json.success) setVerifiedPolicies(json.data);
   };
 
   useEffect(() => {
-    loadPolicies();
-    window.addEventListener("policy-updated", loadPolicies);
-    return () =>
-      window.removeEventListener("policy-updated", loadPolicies);
+    loadVerified();
   }, []);
 
   return (
     <>
-    <h2>List of Policies</h2>
       <PdfUpload
-        setPdfUrl={setPdfUrl}
-        setSummary={(summary) => {
-          // 🔥 TEMP add uploaded row in table
-          setPolicies((prev) => [summary, ...prev]);
-        }}
-        setUploadedText={() => {}}
+        onBulkUpload={(rows) =>
+          setTempPolicies((prev) => [...rows, ...prev])
+        }
       />
 
-      <PolicyTable policies={policies} pdfUrl={pdfUrl || ""} />
+      {/* 🔵 TEMP TABLE (SHOW HEADER) */}
+      <PolicyTable
+        policies={tempPolicies}
+        mode="temp"
+        showHeader={true}
+        onVerifySuccess={(row) => {
+          setTempPolicies((p) =>
+            p.filter((x) => x.policyNo !== row.policyNo)
+          );
+          setVerifiedPolicies((v) => [row, ...v]);
+        }}
+      />
+
+      {/* 🟢 VERIFIED TABLE (NO HEADER) */}
+      <PolicyTable
+        policies={verifiedPolicies}
+        mode="verified"
+  showHeader={verifiedPolicies.length > 0}
+      />
     </>
   );
 }

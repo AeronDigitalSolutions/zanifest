@@ -2,7 +2,6 @@ import mongoose, { Schema, models } from "mongoose";
 
 const PolicySchema = new Schema(
   {
-    // 🔥 REQUIRED FOR AGENT ISOLATION
     agentId: {
       type: Schema.Types.ObjectId,
       ref: "Agent",
@@ -10,19 +9,20 @@ const PolicySchema = new Schema(
       index: true,
     },
 
-    insuredName: { type: String },
+    insuredName: String,
     policyNo: { type: String, required: true },
-    companyName: { type: String },
-    amount: { type: String },
-    expiryDate: { type: String },
-
-    pdfUrl: { type: String },
+    companyName: String,
+    amount: String,
+    expiryDate: String,
     verified: { type: Boolean, default: false },
+    assignedAt: {
+  type: Date,
+  default: null,
+},
+
   },
   { timestamps: true }
 );
 
-// 🔥 VERY IMPORTANT (prevents old schema caching)
 delete mongoose.models.Policy;
-
 export default models.Policy || mongoose.model("Policy", PolicySchema);

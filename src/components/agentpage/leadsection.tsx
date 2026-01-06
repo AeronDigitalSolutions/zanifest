@@ -1,6 +1,7 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styles from "@/styles/pages/leadsection.module.css";
+import { FiSearch } from "react-icons/fi";
 
 interface Lead {
   id: string;
@@ -17,13 +18,16 @@ export default function LeadSection() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // 🔍 filter states
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+
   // modal state
   const [showModal, setShowModal] = useState(false);
   const [fullDoc, setFullDoc] = useState<FullDoc | null>(null);
   const [modalLoading, setModalLoading] = useState(false);
   const [modalError, setModalError] = useState<string | null>(null);
 
-  // status + remark
   const [status, setStatus] = useState("Cold");
   const [remark, setRemark] = useState("");
   const [currentLeadId, setCurrentLeadId] = useState<string | null>(null);
@@ -39,6 +43,25 @@ export default function LeadSection() {
     if (json.success) setLeads(json.data || []);
     setLoading(false);
   };
+
+  // ✅ FILTERED DATA
+  const filteredLeads = useMemo(() => {
+    return leads.filter((l) => {
+      const matchesStatus =
+        statusFilter === "All" ||
+        (l.status || "Cold").toLowerCase() === statusFilter.toLowerCase();
+
+      const searchText = search.toLowerCase();
+      const matchesSearch =
+        !search ||
+        l.email?.toLowerCase().includes(searchText) ||
+        l.phone?.toLowerCase().includes(searchText) ||
+        l.module.toLowerCase().includes(searchText) ||
+        l.status?.toLowerCase().includes(searchText);
+
+      return matchesStatus && matchesSearch;
+    });
+  }, [leads, search, statusFilter]);
 
   const openLeadDetails = async (moduleName: string, id: string) => {
     setModalError(null);
@@ -72,11 +95,7 @@ export default function LeadSection() {
     const res = await fetch("/api/agent/updateLeadStatus", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        leadId: currentLeadId,
-        status,
-        remark,
-      }),
+      body: JSON.stringify({ leadId: currentLeadId, status, remark }),
     });
 
     const json = await res.json();
@@ -90,12 +109,37 @@ export default function LeadSection() {
   };
 
   if (loading) return <div className={styles.loading}>Loading leads...</div>;
-  if (leads.length === 0) return <div className={styles.empty}>No leads assigned yet.</div>;
 
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>All Leads</h2>
 
+      {/* 🔍 FILTER BAR */}
+      <div className={styles.filterBar}>
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+        >
+          <option value="All">All Status</option>
+          <option value="Cold">Cold</option>
+          <option value="Hot">Hot</option>
+          <option value="interested">Interested</option>
+          <option value="Closed">Closed</option>
+          <option value="not interested">Not Interested</option>
+        </select>
+
+        <div className={styles.searchBox}>
+          <FiSearch className={styles.searchIcon} />
+          <input
+            type="text"
+            placeholder="Search...."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+      </div>
+
+      {/* TABLE */}
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead>
@@ -110,13 +154,25 @@ export default function LeadSection() {
           </thead>
 
           <tbody>
-            {leads.map((l) => (
+            {filteredLeads.length === 0 && (
+              <tr>
+                <td colSpan={6} className={styles.empty}>
+                  No matching leads found
+                </td>
+              </tr>
+            )}
+
+            {filteredLeads.map((l) => (
               <tr key={l.id}>
                 <td>{l.email || "-"}</td>
                 <td>{l.phone || "-"}</td>
                 <td>{l.module}</td>
                 <td>{l.status || "Cold"}</td>
-                <td>{l.assignedAt ? new Date(l.assignedAt).toLocaleString() : "-"}</td>
+                <td>
+                  {l.assignedAt
+                    ? new Date(l.assignedAt).toLocaleString()
+                    : "-"}
+                </td>
                 <td>
                   <button
                     className={styles.showBtn}
@@ -131,34 +187,36 @@ export default function LeadSection() {
         </table>
       </div>
 
-      {/* MODAL */}
+      {/* MODAL (same as before) */}
       {showModal && (
         <div className={styles.modalOverlay} onClick={() => setShowModal(false)}>
           <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
             <div className={styles.modalHeader}>
               <h3>Lead Details</h3>
-              <button className={styles.closeBtn} onClick={() => setShowModal(false)}>
+              <button
+                className={styles.closeBtn}
+                onClick={() => setShowModal(false)}
+              >
                 Close
               </button>
             </div>
 
-            {modalLoading && <div className={styles.modalLoading}>Loading details...</div>}
-            {modalError && <div className={styles.modalError}>{modalError}</div>}
+            {modalLoading && <div>Loading...</div>}
+            {modalError && <div>{modalError}</div>}
 
-            {!modalLoading && !modalError && fullDoc && (
+            {!modalLoading && fullDoc && (
               <>
                 <div className={styles.modalContent}>
-                  {Object.entries(fullDoc).map(([key, value]) => (
-                    <div key={key} className={styles.field}>
-                      <label className={styles.label}>{key}</label>
-                      <div className={styles.valueBox}>{renderValue(value)}</div>
+                  {Object.entries(fullDoc).map(([k, v]) => (
+                    <div key={k} className={styles.field}>
+                      <label>{k}</label>
+                      <div className={styles.valueBox}>{renderValue(v)}</div>
                     </div>
                   ))}
                 </div>
 
                 <div className={styles.modalFooter}>
                   <div className={styles.statusBox}>
-                    <label>Status</label>
                     <select value={status} onChange={(e) => setStatus(e.target.value)}>
                       <option value="Cold">Cold</option>
                       <option value="Hot">Hot</option>
@@ -167,23 +225,17 @@ export default function LeadSection() {
                       <option value="not interested">Not Interested</option>
                     </select>
 
-                    <label>Remark</label>
                     <textarea
                       rows={3}
                       value={remark}
                       onChange={(e) => setRemark(e.target.value)}
-                      placeholder="Enter remark"
+                      placeholder="Remark"
                     />
                   </div>
 
-                  <div className={styles.footerBtns}>
-                    <button className={styles.saveBtn} onClick={saveStatusRemark}>
-                      Save
-                    </button>
-                    <button className={styles.closeBtn} onClick={() => setShowModal(false)}>
-                      Close
-                    </button>
-                  </div>
+                  <button className={styles.saveBtn} onClick={saveStatusRemark}>
+                    Save
+                  </button>
                 </div>
               </>
             )}
@@ -194,8 +246,8 @@ export default function LeadSection() {
   );
 }
 
-function renderValue(value: any): React.ReactNode {
-  if (value === null || value === undefined) return "-";
+function renderValue(value: any) {
+  if (!value) return "-";
   if (typeof value === "object") return <pre>{JSON.stringify(value, null, 2)}</pre>;
   return String(value);
 }
