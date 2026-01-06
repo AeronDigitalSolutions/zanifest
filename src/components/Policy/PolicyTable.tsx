@@ -4,6 +4,8 @@ import styles from "@/styles/pages/listofpolicy.module.css";
 import { FiEdit2, FiCheck } from "react-icons/fi";
 import { Summary } from "./pdfupload";
 import { FiSearch } from "react-icons/fi";
+import { FiEye } from "react-icons/fi";
+
 
 
 interface Props {
@@ -97,6 +99,7 @@ const PolicyTable: React.FC<Props> = ({
   return (
     <>
     <div className={styles.tableWrapper}>
+      
       {/* 🔍 SEARCH BAR */}
       <div className={styles.tableHeader}>
          <div className={styles.searchBox}>
@@ -122,6 +125,7 @@ const PolicyTable: React.FC<Props> = ({
                 <th>Amount</th>
                 <th>Expiry</th>
                       <th>Assigned At</th> {/* ✅ NEW */}
+  <th>View</th>       {/* ✅ NEW */}
 
                 <th>Status</th>
               </tr>
@@ -136,6 +140,7 @@ const PolicyTable: React.FC<Props> = ({
                 <td>{cell(i, "companyName")}</td>
                 <td>{cell(i, "amount")}</td>
                 <td>{cell(i, "expiryDate")}</td>
+
                 <td>
   {r.assignedAt
     ? new Date(r.assignedAt).toLocaleString("en-IN", {
@@ -148,6 +153,20 @@ const PolicyTable: React.FC<Props> = ({
       })
     : "--"}
 </td>
+<td>
+  {r.pdfUrl ? (
+    <button
+      className={styles.viewBtn}
+      onClick={() => window.open(r.pdfUrl, "_blank")}
+    >
+      View
+    </button>
+  ) : (
+    "--"
+  )}
+</td>
+
+
 
                 <td>
                   {mode === "temp" ? (

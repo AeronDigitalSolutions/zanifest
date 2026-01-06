@@ -15,6 +15,10 @@ const PolicySchema = new Schema(
     amount: String,
     expiryDate: String,
     verified: { type: Boolean, default: false },
+     pdfUrl: {
+      type: String,
+      default: null,
+    },
     assignedAt: {
   type: Date,
   default: null,
