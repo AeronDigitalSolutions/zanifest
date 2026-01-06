@@ -70,24 +70,26 @@ export default function DirectorList() {
           <tbody>
             {records.length ? (
               records.map((r, i) => (
-                <tr key={r._id} onClick={() => setSelected(r)}>
-                  <td>{i + 1}</td>
-                  <td>{r.mobileNumber}</td>
-                  <td>{r.companyName}</td>
-                  <td>{r.email || "Guest"}</td>
-                  <td>{r.assignedAgentName || "Not Assigned"}</td>
-                  <td>
-                    <button
-                      className={styles.showBtn}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelected(r);
-                      }}
-                    >
-                      Show
-                    </button>
-                  </td>
-                </tr>
+ <tr key={r._id} onClick={() => setSelected(r)} style={{ cursor: "pointer" }}>
+  <td>{i + 1}</td>
+  <td>{r.mobileNumber}</td>
+  <td>{r.companyName}</td>
+  <td>{r.email || "Guest"}</td>
+  <td>{r.assignedAgentName ?? "Not Assigned"}</td>
+  <td>
+    <button
+      className={styles.showBtn}
+      onClick={(e) => {
+        e.stopPropagation();
+        setSelected(r);
+      }}
+    >
+      Show
+    </button>
+  </td>
+</tr>
+
+
               ))
             ) : (
               <tr>

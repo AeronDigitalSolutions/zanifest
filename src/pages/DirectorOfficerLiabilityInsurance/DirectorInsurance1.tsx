@@ -17,6 +17,10 @@ import sbi from "@/assets/sbi.png";
 import hdfc from "@/assets/unitedindia.png";
 import director from "@/assets/Director.webp";
 
+import PromptDialog from "@/components/Dialog/PromptDialog";
+import LoginDialog from "@/components/Dialog/LoginDialog";
+import RegisterDialog from "@/components/Dialog/RegisterDialog";
+
 import Footer from "@/components/ui/Footer";
 import Navbar from "@/components/ui/Navbar";
 
@@ -25,11 +29,12 @@ import AOS from "aos";
 import { useRouter } from "next/navigation";
 
 const DirectorInsurance1: React.FC = () => {
-  const [whatsapp, setWhatsapp] = useState(true);
-  const [step, setStep] = useState(1);
   const router = useRouter();
 
-  // Form fields
+  const [step, setStep] = useState(1);
+  const [whatsapp, setWhatsapp] = useState(true);
+
+  // ================= FORM STATE =================
   const [mobileNumber, setMobileNumber] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [industryCategory, setIndustry] = useState("");
@@ -39,6 +44,11 @@ const DirectorInsurance1: React.FC = () => {
   const [companyTurnover, setCompanyTurnover] = useState("");
   const [limitOfLiability, setLimitOfLiability] = useState("");
 
+  // ================= DIALOG STATE =================
+  const [promptOpen, setPromptOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [registerOpen, setRegisterOpen] = useState(false);
+
   useEffect(() => {
     AOS.init({ duration: 1000, once: true });
   }, []);
@@ -46,10 +56,39 @@ const DirectorInsurance1: React.FC = () => {
   const nextStep = () => setStep((s) => Math.min(3, s + 1));
   const prevStep = () => setStep((s) => Math.max(1, s - 1));
 
-  // --------------------------
-  // FINAL SUBMIT (after Step 3)
-  // --------------------------
-  const handleSubmit = () => {
+  // ================= SAVE DIRECTOR =================
+  const saveDirector = async () => {
+    const payload = {
+      mobileNumber,
+      companyName,
+      industryCategory,
+      subCategory,
+      territory,
+      jurisdiction,
+      companyTurnover,
+      limitOfLiability,
+      whatsappOptIn: whatsapp,
+    };
+
+    const res = await fetch("/api/directorins", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include", // ✅ cookie required
+      body: JSON.stringify(payload),
+    });
+
+    const json = await res.json();
+
+    if (!res.ok || !json.success) {
+      alert("Failed to save data");
+      return;
+    }
+
+    router.push("/DirectorOfficerLiabilityInsurance/DirectorInsurance2");
+  };
+
+  // ================= FINAL SUBMIT =================
+  const handleSubmit = async () => {
     if (mobileNumber.length !== 10) {
       alert("⚠️ Please enter a valid 10-digit mobile number.");
       setStep(1);
@@ -70,41 +109,21 @@ const DirectorInsurance1: React.FC = () => {
 
     if (!territory.trim() || !jurisdiction.trim()) {
       alert("⚠️ Please enter both territory and jurisdiction.");
-      setStep(3);
       return;
     }
 
-    if (!/^\d+$/.test(companyTurnover)) {
-      alert("⚠️ Company Turnover must contain only numbers.");
-      setStep(3);
+    if (!/^\d+$/.test(companyTurnover) || !/^\d+$/.test(limitOfLiability)) {
+      alert("⚠️ Only numbers allowed.");
       return;
     }
 
-    if (!/^\d+$/.test(limitOfLiability)) {
-      alert("⚠️ Limit of Liability must contain only numbers.");
-      setStep(3);
-      return;
+    const loggedIn = document.cookie.includes("userToken");
+
+    if (loggedIn) {
+      await saveDirector();
+    } else {
+      setPromptOpen(true);
     }
-
-    // --------------------------
-    // Save step 1 data into sessionStorage
-    // --------------------------
-    sessionStorage.setItem(
-      "director_step1",
-      JSON.stringify({
-        mobileNumber,
-        companyName,
-        industryCategory,
-        subCategory,
-        territory,
-        jurisdiction,
-        companyTurnover,
-        limitOfLiability,
-        whatsappOptIn: whatsapp,
-      })
-    );
-
-    router.push("/DirectorOfficerLiabilityInsurance/DirectorInsurance2");
   };
 
   return (
@@ -358,6 +377,31 @@ const DirectorInsurance1: React.FC = () => {
         </div>
       </div>
 
+      {/* DIALOGS */}
+      <PromptDialog
+        open={promptOpen}
+        onCancel={() => setPromptOpen(false)}
+        onLogin={() => { setPromptOpen(false); setLoginOpen(true); }}
+        onRegister={() => { setPromptOpen(false); setRegisterOpen(true); }}
+      />
+
+      <LoginDialog
+        open={loginOpen}
+        onClose={() => setLoginOpen(false)}
+        onSuccess={async () => {
+          setLoginOpen(false);
+          await saveDirector();
+        }}
+      />
+
+      <RegisterDialog
+        open={registerOpen}
+        onClose={() => setRegisterOpen(false)}
+        onSuccess={async () => {
+          setRegisterOpen(false);
+          await saveDirector();
+        }}
+      />
       <Footer />
     </>
   );

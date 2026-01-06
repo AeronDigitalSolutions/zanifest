@@ -7,6 +7,36 @@ import { verifyToken } from "@/utils/verifyToken";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await dbConnect();
 
+  try {
+    // ================= SAVE DIRECTOR =================
+    if (req.method === "POST") {
+      let email = req.body.email || null;
+      let isGuest = true;
+
+      const token = req.cookies?.userToken;
+
+      if (token) {
+        const decoded: any = await verifyToken(token);
+        if (decoded?.id) {
+          const user = await User.findById(decoded.id).select("email");
+          if (user) {
+            email = user.email;
+            isGuest = false;
+          }
+        }
+      }
+
+      const saved = await Director.create({
+        ...req.body,
+        email,
+        isGuest,
+      });
+
+      return res.status(201).json({ success: true, data: saved });
+    }
+
+    // ================= ASSIGN AGENT =================
+   if (req.method === "POST") {
   let email: string | null = null;
   let isGuest = true;
 
@@ -18,54 +48,87 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (decoded?.id) {
         const user = await User.findById(decoded.id).select("email");
         if (user) {
-          email = user.email;
+          email = user.email;     // ✅ LOGIN EMAIL
           isGuest = false;
         }
       }
-    } catch (e) {
-      console.log("Director token verify failed");
+    } catch {
+      console.log("Token verify failed");
     }
   }
 
-  try {
-    // ---------------- POST (SAVE) ----------------
-    if (req.method === "POST") {
-      const payload = {
-        ...req.body,
+  const payload = {
+    ...req.body,
+    email,
+    isGuest,
+  };
+
+  const saved = await Director.create(payload);
+
+  return res.status(201).json({
+    success: true,
+    data: saved,
+  });
+}
+if (req.method === "PUT") {
+  const {
+    directorId,
+    email,
+    agentId,
+    agentName,
+  } = req.body;
+
+  // 🔹 CASE 1: AGENT ASSIGN
+  if (directorId && agentId) {
+    const updated = await Director.findByIdAndUpdate(
+      directorId,
+      {
+        assignedAgentId: agentId,
+        assignedAgentName: agentName,
+        assignedAt: new Date(),
+      },
+      { new: true }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Agent assigned successfully",
+      data: updated,
+    });
+  }
+
+  // 🔹 CASE 2: EMAIL UPDATE AFTER LOGIN
+  if (directorId && email) {
+    const updated = await Director.findByIdAndUpdate(
+      directorId,
+      {
         email,
-        isGuest
-      };
+        isGuest: false,
+      },
+      { new: true }
+    );
 
-      const saved = await Director.create(payload);
-      return res.status(201).json({ success: true, data: saved });
-    }
+    return res.status(200).json({
+      success: true,
+      data: updated,
+    });
+  }
 
-    // ---------------- PUT (UPDATE AFTER LOGIN) ----------------
-    if (req.method === "PUT") {
-      const { id, email } = req.body;
+  return res.status(400).json({
+    success: false,
+    message: "Invalid PUT payload",
+  });
+}
 
-      const updated = await Director.findByIdAndUpdate(
-        id,
-        {
-          email,
-          isGuest: false
-        },
-        { new: true }
-      );
-
-      return res.status(200).json({ success: true, data: updated });
-    }
-
-    // ---------------- GET ----------------
+    // ================= LIST =================
     if (req.method === "GET") {
       const list = await Director.find().sort({ createdAt: -1 });
       return res.status(200).json({ success: true, data: list });
     }
 
     res.setHeader("Allow", ["GET", "POST", "PUT"]);
-    return res.status(405).end("Method Not Allowed");
+    res.status(405).end();
   } catch (err: any) {
-    return res.status(500).json({ success: false, message: err.message });
+    res.status(500).json({ success: false, message: err.message });
   }
 }
-

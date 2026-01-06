@@ -1,5 +1,9 @@
 import mongoose, { Schema, Document } from "mongoose";
 
+if (mongoose.models.Director) {
+  delete mongoose.models.Director;
+}
+
 export interface IDirector extends Document {
   mobileNumber: string;
   companyName: string;
@@ -11,10 +15,12 @@ export interface IDirector extends Document {
   limitOfLiability: string;
   whatsappOptIn: boolean;
 
-  email?: string | null;
+  email?: string;
   isGuest?: boolean;
 
-  createdAt: Date;
+  assignedAgentId?: string | null;
+  assignedAgentName?: string | null;
+  assignedAt?: Date | null;
 }
 
 const DirectorSchema = new Schema<IDirector>(
@@ -30,10 +36,13 @@ const DirectorSchema = new Schema<IDirector>(
     whatsappOptIn: { type: Boolean, default: true },
 
     email: { type: String, default: null },
-    isGuest: { type: Boolean, default: true }
+    isGuest: { type: Boolean, default: true },
+
+    assignedAgentId: { type: String, default: null },
+    assignedAgentName: { type: String, default: null },
+    assignedAt: { type: Date, default: null },
   },
   { timestamps: true }
 );
 
-export default mongoose.models.Director ||
-  mongoose.model<IDirector>("Director", DirectorSchema);
+export default mongoose.model<IDirector>("Director", DirectorSchema);
