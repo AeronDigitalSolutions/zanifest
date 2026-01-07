@@ -1,36 +1,43 @@
-import { formidable } from "formidable";
-import { Writable } from "stream";
-import { extractText } from "unpdf";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { formidable } from "formidable";
+import fs from "fs";
+import { extractText } from "unpdf";
 
-export const config = { api: { bodyParser: false } };
+export const config = {
+  api: { bodyParser: false },
+};
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  const form = formidable({
-    fileWriteStreamHandler: () => {
-      const chunks: Buffer[] = [];
-      return new Writable({
-        write(chunk, _e, cb) {
-          chunks.push(Buffer.from(chunk));
-          cb();
-        },
-        final(cb) {
-          // @ts-ignore
-          this._buffer = Buffer.concat(chunks);
-          cb();
-        },
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const form = formidable();
+
+  form.parse(req, async (err, fields, files: any) => {
+    if (err) {
+      return res.status(500).json({ error: "UPLOAD_FAILED" });
+    }
+
+    const file = files.pdf?.[0];
+    if (!file) {
+      return res.status(400).json({ error: "NO_FILE" });
+    }
+
+    const buffer = fs.readFileSync(file.filepath);
+
+    try {
+      // 🔓 If this succeeds → PDF is NOT password protected
+      const result = await extractText(new Uint8Array(buffer));
+
+      return res.status(200).json({
+        encrypted: false,
+        text: result.text || "",
       });
-    },
-  });
-
-  form.parse(req, async (_err, _fields, files: any) => {
-    const pdf = files?.pdf?.[0];
-    if (!pdf) return res.status(400).json({ error: "No PDF" });
-
-    // @ts-ignore
-    const buffer: Buffer = pdf._writeStream._buffer;
-    const result = await extractText(new Uint8Array(buffer));
-
-    res.json({ text: result.text ?? "" });
+    } catch {
+      // 🔐 If extractText fails → PDF IS password protected
+      return res.status(200).json({
+        encrypted: true,
+      });
+    }
   });
 }

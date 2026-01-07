@@ -574,3 +574,9 @@
     margin-top: 0px;   /* 🔽 pehle 15px tha */
   }
 }
+@media screen and (min-width: 1200px) {
+  .loginText {
+    font-size: 20px;
+    padding: 10px 20px
+  }
+}

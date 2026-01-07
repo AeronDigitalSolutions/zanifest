@@ -29,31 +29,35 @@ const PolicyTable: React.FC<Props> = ({
     setRows(policies);
   }, [policies]);
 
-  const verify = async (row: Summary, index: number) => {
-    const res = await fetch("/api/policy/verify", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(row),
-    });
+ const verify = async (row: Summary, index: number) => {
+  const res = await fetch("/api/policy/verify", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(row),
+  });
 
-    const data = await res.json();
+  const data = await res.json();
 
-    if (res.status === 409) {
-      alert(data.message || "Policy already exists");
-      const updated = rows.filter((_, i) => i !== index);
-      setRows(updated);
-      return;
-    }
+  if (res.status === 409) {
+    alert(data.message || "Policy already exists");
 
-    if (!res.ok) {
-      alert(data.message || "Verify failed");
-      return;
-    }
+    // ✅ REMOVE FROM TEMP LIST
+    setRows((prev) => prev.filter((_, i) => i !== index));
+    return;
+  }
 
-    alert("Verified successfully");
-    onVerifySuccess?.(data.policy);
-  };
+  if (!res.ok) {
+    alert(data.message || "Verification failed");
+    return;
+  }
+
+  alert("Verified successfully");
+
+  setRows((prev) => prev.filter((_, i) => i !== index));
+  onVerifySuccess?.(data.policy);
+};
+
 
   const filteredRows = rows.filter((r) => {
     const q = search.toLowerCase();

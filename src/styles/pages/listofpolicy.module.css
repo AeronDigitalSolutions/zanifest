@@ -20,7 +20,7 @@
 .table th,
 .table td {
   padding: 10px;
-  border: 1px solid #ddd;
+  /* border: 1px solid #ddd; */
 }
 
 .viewBtn {
@@ -140,7 +140,7 @@
 ========================= */
 .responsiveTable {
   width: 100%;
-  background: #ffffff;
+  background: #ffffffe8;
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);

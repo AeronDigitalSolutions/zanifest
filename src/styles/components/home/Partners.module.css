@@ -104,7 +104,7 @@
 
 /* ---------- PARTNERS GRID ---------- */
 .partList {
-  display: grid;
+  display: flex;
   grid-template-columns: 1fr 1fr 1fr;
   border-style: solid;
   border-radius: 22px;
@@ -310,12 +310,14 @@
 /* ===== DESKTOP ONLY: Increase left icon size ===== */
 @media screen and (min-width: 769px) {
   .catItem img {
-    width: 64px !important;
-    height: 64px !important;
+    width: 48px !important;
+    height: 48px !important;
     object-fit: contain;
   }
 
   .catName {
-    font-size: 22px; /* optional – keeps proportion clean */
+    font-size: 16px; /* optional – keeps proportion clean */
+    margin-top: 15px;
+    margin-right: 5px;
   }
 }
