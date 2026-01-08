@@ -1,311 +1,118 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;900&display=swap");
 
+/* ================= PAGE ================= */
 .container {
-  width: 100%;
-  margin: 1rem auto;
-  background-color: #ffffff;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.06);
-  box-sizing: border-box;
+  min-height: 100vh;
+  background: #fafafa;
+  padding: 40px 0;
+  font-family: "Roboto", sans-serif;
 }
 
-.heading {
-  font-size: 1.6rem;
-  font-weight: 600;
+/* ================= HEADER ================= */
+.header {
   text-align: center;
-  margin-bottom: 1.5rem;
-  color: #1f2937;
+  margin-bottom: 24px;
 }
 
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
+.header h2 {
+  font-size: 28px;
+  font-weight: 900; /* Heading */
+  color: #2b2f38;
+  margin-bottom: 6px;
 }
 
-.row {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
+.header span {
+  font-size: 14px;
+  font-weight: 400; /* description */
+  color: #8b8f98;
 }
 
-.formGroup {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 200px;
-}
-
-.formGroup label {
-  margin-bottom: 0.4rem;
-  font-weight: 500;
-  font-size: 0.95rem;
-  color: black;
-}
-
-.input {
-  padding: 0.65rem 0.9rem;
-  border: 1px solid #d1d5db;
+/* ================= PROGRESS ================= */
+.progressBar {
+  width: 320px;
+  height: 6px;
+  background: #e5e7eb;
   border-radius: 6px;
-  font-size: 1rem;
-  outline: none;
+  margin: 12px auto 6px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: #ff8a1f;
+  border-radius: 6px;
+}
+
+/* ================= FORM CARD ================= */
+:global(form) {
+  width: 600px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* ================= SECTION TITLE ================= */
+:global(form h3) {
+  font-size: 18px;
+  font-weight: 500; /* SubHeading */
+  color: #2b2f38;
+  margin-bottom: 16px;
+}
+
+/* ================= INPUT ================= */
+:global(form input) {
   width: 100%;
-  box-sizing: border-box;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  height: 44px;
+  padding: 0 12px;
+  margin-bottom: 14px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  font-weight: 400; /* description */
+  background: #ffffff;
 }
 
-.input:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+:global(form input::placeholder) {
+  color: #9ca3af;
 }
 
-.checkboxGroup {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+:global(form input:focus) {
+  outline: none;
+  border-color: #ff8a1f;
 }
 
-.checkboxLabel {
-  font-size: 0.95rem;
-  color: black;
-  display: flex;
-  align-items: center;
+:global(form input:disabled) {
+  background: #f3f4f6;
+  cursor: not-allowed;
 }
 
-.submitButton {
-  margin-top: 1rem;
-  padding: 0.75rem 1.25rem;
-  background-color: orangered;
-  color: #ffffff;
-  font-weight: 600;
-  font-size: 1rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  width: 35%;
-}
-
-.submitButton:hover {
-  background-color: orangered;
-}
-
-@media (max-width: 768px) {
-  .row {
-    flex-direction: column;
-  }
-
-  .checkboxGroup {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-/* For mobile up to 480px */
-@media (max-width: 480px) {
-  .container {
-    width: 100%;
-    margin-left: 1px;
-    margin-right: 1px;
-    padding: 1rem;
-  }
-
-  .heading {
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
-  }
-
-  .form {
-    gap: 0.8rem;
-  }
-
-  .row {
-    flex-direction: column;
-    gap: 0.8rem;
-  }
-
-  .formGroup {
-    min-width: 100%;
-  }
-
-  .input {
-    font-size: 0.9rem;
-    padding: 0.55rem 0.75rem;
-  }
-
-  .submitButton {
-    padding: 0.6rem;
-    font-size: 0.95rem;
-  }
-}
-
-/* For very small screens up to 370px */
-@media (max-width: 370px) {
-  .container {
-    width: 100%;
-    margin-left: 1px;
-    margin-right: 1px;
-    padding: 0.8rem;
-  }
-
-  .heading {
-    font-size: 1.2rem;
-  }
-
-  .input {
-    font-size: 0.85rem;
-    padding: 0.5rem 0.7rem;
-  }
-
-  .formGroup label {
-    font-size: 0.85rem;
-  }
-
-  .submitButton {
-    font-size: 0.9rem;
-    padding: 0.55rem;
-  }
-
-  .eyeIcon {
-    top: 32px !important;
-    right: 8px !important;
-  }
-}
-
-
-/* button----- */
-
-.documentsBtn {
-  margin-top: 3px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: fit-content;
-  height: 40px;
-  border: none;
-  padding: 0px 17px;
-  border-radius: 5px;
-  /* background: linear-gradient(to left bottom, #9b3ce8, #3386ef, #13bcec); */
-  background-color:#413B43;
-  gap: 8px;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.folderContainer {
-  width: 40px;
-  height: fit-content;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
+/* ================= PASSWORD ================= */
+.passwordWrapper {
   position: relative;
 }
 
-.fileBack {
-  z-index: 1;
-  width: 80%;
-  height: auto;
-}
-
-.filePage {
-  width: 50%;
-  height: auto;
+.passwordWrapper span {
   position: absolute;
-  z-index: 2;
-  transition: all 0.3s ease-out;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #9ca3af;
 }
 
-.fileFront {
-  width: 85%;
-  height: auto;
-  position: absolute;
-  z-index: 3;
-  opacity: 0.95;
-  transform-origin: bottom;
-  transition: all 0.3s ease-out;
-}
-
-.text {
-  color: white;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
-.documentsBtn:hover .filePage {
-  transform: translateY(-5px);
-}
-
-.documentsBtn:hover {
-  /* background-color: rgb(58, 58, 94); */
-  background-color: #28E0B2;
-}
-
-.documentsBtn:hover .fileFront {
-  transform: rotateX(30deg);
-}
-.container {
-  width: 100%;
-  background: #fff;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-}
-
-.heading {
-  text-align: center;
-  font-size: 1.7rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-}
-
-.row {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.formGroup {
-  flex: 1;
-  min-width: 200px;
-  display: flex;
-  flex-direction: column;
-}
-
-.formGroup label {
-  font-size: 0.95rem;
-  margin-bottom: 6px;
-  color: #000;
-}
-
-.input {
-  padding: 0.7rem 0.9rem;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 1rem;
-  outline: none;
-}
-
-.input:focus {
-  border-color: #2563eb;
-}
-
-/* NEW SIMPLE FILE UPLOAD BOX */
-
+/* ================= FILE UPLOAD ================= */
 .simpleUploadWrapper {
-  margin-top: 5px;
+  margin-bottom: 16px;
 }
 
-.uploadLabel {
-  font-size: 0.9rem;
-  margin-bottom: 5px;
-  color: #000;
+.simpleUploadWrapper label {
+  display: block;
+  font-size: 13px;
+  font-weight: 400;
+  color: #6b7280;
+  margin-bottom: 6px;
 }
 
 .simpleUploadBox {
@@ -314,85 +121,347 @@
   gap: 12px;
 }
 
-.chooseBtn {
-  background: #e5e7eb;
-  padding: 6px 12px;
-  border: 1px solid #cbd5e1;
-  border-radius: 4px;
+.simpleUploadBox button {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
   cursor: pointer;
 }
 
-.chooseBtn:hover {
-  background: #d1d5db;
+.simpleUploadBox span {
+  font-size: 13px;
+  font-weight: 400;
+  color: #6b7280;
 }
 
-.fileName {
-  font-size: 0.9rem;
-  color: #555;
+/* ================= ACTIONS ================= */
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
 }
 
-.submitButton {
-  padding: 0.75rem 2rem;
-  background: orangered;
-  color: #fff;
-  font-size: 1rem;
-  border-radius: 6px;
+.actions button {
+  height: 44px;
+  padding: 0 32px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
   border: none;
   cursor: pointer;
 }
 
-.submitButton:hover {
-  background: #e05500;
+.actions button[type="button"] {
+  background: #e5e7eb;
+  color: #374151;
 }
 
-/* RESPONSIVE */
+.actions button[type="submit"],
+.actions button:last-child {
+  background: #ff8a1f;
+  color: #ffffff;
+}
+/* =========================
+   MOBILE RESPONSIVE
+   ========================= */
 
-@media (max-width: 768px) {
-  .row {
-    flex-direction: column;
+/* Tablets & small laptops */
+@media (max-width: 1024px) {
+  :global(form) {
+    width: 90%;
+    padding: 28px;
   }
 }
 
+/* Tablets */
+@media (max-width: 768px) {
+  .header h2 {
+    font-size: 24px;
+  }
+
+  .progressBar {
+    width: 260px;
+  }
+
+  :global(form) {
+    width: 92%;
+    padding: 24px;
+  }
+
+  :global(form h3) {
+    font-size: 16px;
+  }
+
+  .actions {
+    gap: 12px;
+  }
+
+  .actions button {
+    padding: 0 24px;
+    font-size: 13px;
+    max-width: 50%;
+    align-self:center;
+  }
+}
+
+/* Mobile devices */
 @media (max-width: 480px) {
   .container {
-    padding: 1rem;
+    padding: 20px 0;
   }
 
-  .heading {
-    font-size: 1.4rem;
+  .header h2 {
+    font-size: 20px;
   }
 
-  .input {
-    font-size: 0.9rem;
+  .header span {
+    font-size: 13px;
   }
 
-  .chooseBtn {
-    padding: 5px 10px;
+  .progressBar {
+    width: 220px;
+    height: 5px;
   }
 
-  .fileName {
-    font-size: 0.8rem;
+  :global(form) {
+    width: 94%;
+    padding: 20px;
+    border-radius: 12px;
+  }
+
+  :global(form h3) {
+    font-size: 15px;
+  }
+
+  :global(form input) {
+    height: 42px;
+    font-size: 13px;
+  }
+
+  .simpleUploadBox {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .simpleUploadBox button {
+    width: 100%;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .actions button {
+    width: 100%;
+    height: 42px;
   }
 }
-.passwordWrapper {
-  position: relative;
+
+/* Small mobile screens */
+@media (max-width: 360px) {
+  .header h2 {
+    font-size: 18px;
+  }
+
+  :global(form) {
+    padding: 16px;
+  }
+
+  .progressBar {
+    width: 200px;
+  }
+}
+/* ================= BASIC DETAILS LAYOUT FIX ================= */
+
+/* Target only the first step block */
+:global(form > h3 + input),
+:global(form > h3 + input + input),
+:global(form > h3 + input + input + input),
+:global(form > h3 + input + input + input + input),
+:global(form > h3 + input + input + input + input + .passwordWrapper) {
   width: 100%;
 }
 
-.eyeIcon {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
+/* Create grid for first step */
+:global(form) {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 20px;
+}
+
+/* First Name */
+:global(form > h3 + input) {
+  grid-column: 1 / 2;
+}
+
+/* Last Name */
+:global(form > h3 + input + input) {
+  grid-column: 2 / 3;
+}
+
+/* Email - full row */
+:global(form > h3 + input + input + input) {
+  grid-column: 1 / -1;
+}
+
+/* Phone */
+:global(form > h3 + input + input + input + input) {
+  grid-column: 1 / 2;
+}
+
+/* Password */
+:global(form > h3 + input + input + input + input + .passwordWrapper) {
+  grid-column: 1 / 3;
+}
+
+/* Continue button alignment */
+.actions {
+  grid-column: 1 / -1;
+}
+/* ================= BOTTOM STEP INDICATOR ================= */
+
+.bottomSteps {
+  margin: 28px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: "Roboto", sans-serif;
+}
+
+.stepItem {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #6b7280;
+  background: transparent;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.stepItem span {
+  font-weight: 400;
+}
+
+.activeStep {
+  color: #ff8a1f;
+  background: white;
+  border: 1px solid #fed7aa;
+  font-weight: 500;
+}
+
+.arrow {
+  color: #cbd5e1;
+  font-size: 16px;
+  margin: 0 2px;
+}
+@media (max-width: 480px) {
+  .bottomSteps{
+    display: none;
+  }
+}
+
+/* =====================================================
+   MOBILE VIEW – FORCE IMAGE-LIKE SINGLE COLUMN
+   ===================================================== */
+@media (max-width: 480px) {
+
+  /* 🔒 Kill desktop grid completely on mobile */
+  :global(form) {
+    display: block !important;   /* 🔥 KEY FIX */
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* 🔒 All inputs stack vertically */
+  :global(form input),
+  :global(.passwordWrapper) {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* 🔒 Password input full width */
+  :global(.passwordWrapper input) {
+    width: 100% !important;
+  }
+
+  /* 🔒 Actions center like image */
+  .actions {
+    display: flex;
+    justify-content: center;
+  }
+
+  .actions button {
+    width: 70%;
+    max-width: 240px;
+  }
+
+  /* 🔒 Hide bottom steps (image has none on mobile) */
+  .bottomSteps {
+    display: none;
+  }
+}
+/* ================= STEP HEADER (IMAGE STYLE) ================= */
+
+.stepHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-family: "Roboto", sans-serif;
+  margin-top: 8px;
+}
+
+.stepText {
+  font-size: 14px;
+  font-weight: 400;
   color: #6b7280;
 }
 
-.eyeIcon:hover {
-  color: #111827;
+.stepDots {
+  display: flex;
+  gap: 6px;
 }
+
+.dot {
+  width: 10px;
+  height: 6px;
+  border-radius: 6px;
+  background: #e5e7eb;
+}
+
+.activeDot {
+  background: #ff8a1f;
+}
+
+.percentText {
+  font-size: 14px;
+  font-weight: 400;
+  color: #9ca3af;
+}
+
+/* ================= MOBILE ================= */
 @media (max-width: 480px) {
-  .eyeIcon {
-    right: 10px;
+  .stepHeader {
+    gap: 10px;
   }
+
+  .stepText,
+  .percentText {
+    font-size: 13px;
+  }
+}
+/* 🔴 Error message – always below input */
+.errorText {
+  grid-column: span 1;
+  color: red;
+  font-size: 12px;
+  margin-top: -8px;
+  margin-bottom: 8px;
 }

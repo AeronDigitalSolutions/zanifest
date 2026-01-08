@@ -1,5 +1,6 @@
 /* @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"); */
 @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;900&display=swap");
 
 :root {
   --background: #ffffff;
@@ -62,4 +63,19 @@ img, video, iframe {
   --card-blue-2: #cceffa;
 }
 
+/* Typography */
+.text-heading {
+  font-family: "Roboto";
+  font-weight: 900;
+}
+
+.text-subheading {
+  font-family: "Roboto";
+  font-weight: 500;
+}
+
+.text-description {
+  font-family: "Roboto";
+  font-weight: 400;
+}
 

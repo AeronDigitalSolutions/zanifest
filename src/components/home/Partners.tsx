@@ -142,6 +142,21 @@ const Partners: React.FC<PartnersProps> = ({ liveHeading, liveImages }) => {
             </div>
           ))}
         </div>
+        {/* ===== MOBILE TABS (ONLY MOBILE) ===== */}
+<div className={styles.mobileTabs}>
+  {CATEGORYLIST.map((item, index) => (
+    <button
+      key={index}
+      className={`${styles.mobileTab} ${
+        selectedCategory.name === item.name ? styles.active : ""
+      }`}
+      onClick={() => setSelectedCategory(item)}
+    >
+      {item.name.replace(" Insurance", "")}
+    </button>
+  ))}
+</div>
+
 
         {/* Partners */}
         <div className={styles.partList}>

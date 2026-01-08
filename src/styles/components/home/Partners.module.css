@@ -123,7 +123,8 @@
 
 .imagePartner {
   width: 95%;
-  height: 73px;
+  height: 130px;
+  margin-top: 30px;
   border-radius: 22px;
   object-fit: contain;
 }
@@ -320,4 +321,87 @@
     margin-top: 15px;
     margin-right: 5px;
   }
+}
+/* ================= MOBILE TABS ================= */
+.mobileTabs {
+  display: none;
+}
+
+/* ===== MOBILE VIEW ONLY ===== */
+@media screen and (max-width: 768px) {
+  /* Heading hide on mobile */
+ 
+
+  /* Left section hide */
+  .catList {
+    display: none;
+  }
+
+  /* Mobile Tabs show */
+  .mobileTabs {
+    display: flex;
+    justify-content: center;
+    gap: 1.8rem;
+    margin-top: 10px;
+    margin-bottom: 8px;
+    overflow-x: auto;
+  }
+
+  .mobileTab {
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
+    padding-bottom: 6px;
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+  }
+
+  .mobileTab.active {
+    color: #1f8f4a; /* green like screenshot */
+    font-weight: 600;
+    align-items: center;
+  }
+
+  .mobileTab.active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2.5px;
+    background-color: #1f8f4a;
+    border-radius: 2px;
+  }
+}
+.mobileTab {
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+  color: #666;
+  padding: 0;
+  padding-bottom: 6px;
+  cursor: pointer;
+  position: relative;
+  white-space: nowrap;
+}
+
+.mobileTab.active {
+  color: #1f8f4a;
+  font-weight: 600;
+}
+
+.mobileTab.active::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;           /* 🔥 TEXT WIDTH FEEL */
+  height: 2.5px;
+  background-color: #1f8f4a;
+  border-radius: 2px;
 }
