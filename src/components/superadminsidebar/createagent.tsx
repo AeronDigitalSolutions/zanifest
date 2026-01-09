@@ -739,6 +739,7 @@ const CreateAgent = () => {
       if (!formData.bankName) newErrors.bankName = "Required";
       if (!formData.accountNumber) newErrors.accountNumber = "Required";
       if (!formData.ifscCode) newErrors.ifscCode = "Required";
+        if (!formData.branchLocation) newErrors.branchLocation = "Required";
       if (!attachments.cancelledChequeAttachment)
         newErrors.cancelledChequeAttachment = "Upload required";
     }
@@ -888,7 +889,7 @@ const shortFileName = (name: string, limit = 5) => {
   /* ================= SUBMIT ================= */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+ if (!validateStep()) return;
     const payload = isEditMode
       ? rejectedFields.reduce(
           (acc, field) => {
@@ -982,6 +983,8 @@ const shortFileName = (name: string, limit = 5) => {
               placeholder="Last Name"
               value={formData.lastName}
               onChange={handleChange}
+                className={errors.lastName ? styles.errorInput : ""}
+
             />
             <input id="email" value={formData.email} disabled />
            <input
@@ -1021,6 +1024,7 @@ const shortFileName = (name: string, limit = 5) => {
               placeholder="Pin Code"
               value={formData.pinCode}
               onChange={handlePincodeChange}
+              className={errors.pinCode ? styles.errorInput : ""}
             />
             <input placeholder="City" value={formData.city} disabled />
             <input placeholder="State" value={formData.state} disabled />
@@ -1043,6 +1047,7 @@ const shortFileName = (name: string, limit = 5) => {
   name="panAttachment"
   fileName={attachments.panFileName}
   onChange={handleFileChange}
+  
 />
 
             <input
