@@ -21,7 +21,7 @@ interface TrainingProgress {
   testCompleted: boolean;
 }
 
-export default function VideoLectureDashboard() {
+export default function vVideoLectureDashboard() {
   const [current, setCurrent] = useState(1);
   const [completed, setCompleted] = useState<Record<number, boolean>>({});
   const [showTest, setShowTest] = useState(false);

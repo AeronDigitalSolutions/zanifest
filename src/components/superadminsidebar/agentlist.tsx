@@ -186,28 +186,33 @@ const AgentsPage: React.FC = () => {
   };
 
   // -------------------- Filtering + Sorting --------------------
-  const filteredAgents = agents
-    .filter((a) => {
-      if (statusFilter && a.accountStatus !== statusFilter) return false;
-      if (searchQuery) {
-        const q = searchQuery.toLowerCase();
-        return (
-          a.firstName.toLowerCase().includes(q) ||
-          a.lastName.toLowerCase().includes(q) ||
-          a.email.toLowerCase().includes(q) ||
-          a.agentCode.toLowerCase().includes(q)
-        );
-      }
-      return true;
-    })
-    .sort((a, b) => {
-      if (sortBy === "name") {
-        return a.firstName.localeCompare(b.firstName);
-      } else if (sortBy === "email") {
-        return a.email.localeCompare(b.email);
-      }
-      return 0;
-    });
+ const filteredAgents = agents
+  .filter((a) => {
+    if (statusFilter && a.accountStatus !== statusFilter) return false;
+
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+
+      return (
+        (a.firstName || "").toLowerCase().includes(q) ||
+        (a.lastName || "").toLowerCase().includes(q) ||
+        (a.email || "").toLowerCase().includes(q) ||
+        (a.agentCode || "").toLowerCase().includes(q)
+      );
+    }
+
+    return true;
+  })
+  .sort((a, b) => {
+    if (sortBy === "name") {
+      return (a.firstName || "").localeCompare(b.firstName || "");
+    }
+    if (sortBy === "email") {
+      return (a.email || "").localeCompare(b.email || "");
+    }
+    return 0;
+  });
+
 
   // -------------------- confirm Add Sales --------------------
     const confirmAddSales = async () => {
@@ -372,12 +377,13 @@ const AgentsPage: React.FC = () => {
           </button>
         </div>
         <div className={styles.rightSearch}>
-          <Input.Search
-            placeholder="Search...."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className={styles.search}
-          />
+         <Input
+  placeholder="Search..."
+  value={searchQuery}
+  onChange={(e) => setSearchQuery(e.target.value)}
+  className={styles.search}
+/>
+
         </div>
       </div>
 

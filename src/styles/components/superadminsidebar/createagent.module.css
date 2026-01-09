@@ -309,15 +309,30 @@
   grid-column: 1 / -1;
 }
 
-/* Phone */
+/* =====================================================
+   FINAL GRID FIX — NO UI CHANGE, NO TSX CHANGE
+   ===================================================== */
+
+/* Phone input stays in left column */
 :global(form > h3 + input + input + input + input) {
   grid-column: 1 / 2;
 }
 
-/* Password */
-:global(form > h3 + input + input + input + input + .passwordWrapper) {
-  grid-column: 1 / 3;
+/* Tooltip MUST stay under Phone (same column) */
+:global(form > h3 + input + input + input + input + .tooltipError) {
+  grid-column: 1 / 2;
 }
+
+/* Password stays on the right (same row as Phone) */
+:global(
+  form > h3 + input + input + input + input + .tooltipError + .passwordWrapper
+),
+:global(
+  form > h3 + input + input + input + input + .passwordWrapper
+) {
+  grid-column: 2 / 3;
+}
+
 
 /* Continue button alignment */
 .actions {
@@ -464,4 +479,83 @@
   font-size: 12px;
   margin-top: -8px;
   margin-bottom: 8px;
+}
+/* ================= PHONE INPUT ERROR BORDER ================= */
+input:has(+ .tooltipError) {
+  border: 1px solid #ff3b30;
+}
+
+/* ================= TOOLTIP UNDER SAME FIELD ================= */
+.tooltipError {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  margin-top: 6px;        /* stays under phone */
+  margin-left: 4px;
+
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  padding: 6px 10px;
+
+  font-size: 12.5px;
+  color: #000;
+
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  width: fit-content;
+  max-width: 100%;
+  position: relative;    /* arrow anchor */
+  white-space: nowrap;
+      /* translate: -276px 30px; */
+
+}
+
+/* ================= UPWARD ARROW ================= */
+.tooltipError::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 14px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent transparent #d9d9d9 transparent;
+}
+
+.tooltipError::after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 14px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #ffffff transparent;
+}
+
+/* ================= WARNING ICON ================= */
+.icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ff9800;
+  color: #ffffff;
+
+  font-size: 11px;
+  font-weight: bold;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* ================= MOBILE SAFE ================= */
+@media (max-width: 768px) {
+  .tooltipError {
+    white-space: normal;
+  }
+}
+.errorInput {
+  border: 1.5px solid red !important;
+  outline: none;
 }

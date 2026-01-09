@@ -595,35 +595,38 @@ type FormDataType = {
   ifscCode: string;
   branchLocation: string;
 };
-
 type AttachmentType = {
   panAttachment: string | null;
+  panFileName?: string;
+
   adhaarAttachment: string | null;
+  adhaarFileName?: string;
+
   nomineePanAttachment: string | null;
+  nomineePanFileName?: string;
+
   nomineeAadhaarAttachment: string | null;
+  nomineeAadhaarFileName?: string;
+
   cancelledChequeAttachment: string | null;
+  cancelledChequeFileName?: string;
 };
 
 /* ================= FILE INPUT ================= */
 interface FileInputProps {
   label: string;
   name: keyof AttachmentType;
+  fileName?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const FileInput: React.FC<FileInputProps> = ({ label, name, onChange }) => {
+const FileInput: React.FC<FileInputProps> = ({
+  label,
+  name,
+  fileName,
+  onChange,
+}) => {
   const fileRef = useRef<HTMLInputElement>(null);
-  const [fileName, setFileName] = useState("No file chosen");
-  const formatFileName = (fullName: string) => {
-    const ext = fullName.includes(".") ? "." + fullName.split(".").pop() : "";
-
-    const nameOnly = fullName.replace(ext, "");
-
-    // show only 6–7 characters
-    if (nameOnly.length <= 7) return nameOnly + ext;
-
-    return nameOnly.slice(0, 6) + "…" + ext;
-  };
 
   return (
     <div className={styles.simpleUploadWrapper}>
@@ -634,25 +637,22 @@ const FileInput: React.FC<FileInputProps> = ({ label, name, onChange }) => {
           Choose File
         </button>
 
-        <span title={fileName}>{fileName}</span>
+        <span title={fileName || "No file chosen"}>
+          {fileName || "No file chosen"}
+        </span>
 
         <input
           ref={fileRef}
           type="file"
           name={name}
           hidden
-          onChange={(e) => {
-            const file = e.target.files?.[0];
-            if (file) {
-              setFileName(formatFileName(file.name));
-            }
-            onChange(e);
-          }}
+          onChange={onChange}
         />
       </div>
     </div>
   );
 };
+
 
 /* ================= MAIN ================= */
 const CreateAgent = () => {
@@ -803,17 +803,37 @@ const CreateAgent = () => {
       }
     }
   };
+const shortFileName = (name: string, limit = 5) => {
+  if (!name) return "";
+  const extIndex = name.lastIndexOf(".");
+  const ext = extIndex !== -1 ? name.slice(extIndex) : "";
+  const base = name.slice(0, extIndex !== -1 ? extIndex : name.length);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const key = e.target.name as keyof AttachmentType;
-    const file = e.target.files?.[0];
-    if (!file) return;
+  return base.length > limit
+    ? base.slice(0, limit) + "..." + ext
+    : name;
+};
 
-    const reader = new FileReader();
-    reader.onload = () =>
-      setAttachments((p) => ({ ...p, [key]: reader.result as string }));
-    reader.readAsDataURL(file);
+ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const key = e.target.name as keyof AttachmentType;
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = () => {
+    setAttachments((p) => ({
+      ...p,
+      [key]: reader.result as string,
+
+      // 👇 filename limited to 5 letters
+      [`${key.replace("Attachment", "")}FileName`]: shortFileName(file.name),
+    }));
   };
+
+  reader.readAsDataURL(file);
+};
+
 
   /* ================= VALIDATION ================= */
   const validateBeforeSubmit = () => {
@@ -964,17 +984,19 @@ const CreateAgent = () => {
               onChange={handleChange}
             />
             <input id="email" value={formData.email} disabled />
-            <input
-              id="phone"
-              placeholder="Phone"
-              value={formData.phone}
-              onChange={(e) =>
-                setFormData((p) => ({
-                  ...p,
-                  phone: onlyDigits(e.target.value, 10),
-                }))
-              }
-            />
+           <input
+  id="phone"
+  placeholder="Phone"
+  value={formData.phone}
+  onChange={(e) =>
+    setFormData((p) => ({
+      ...p,
+      phone: onlyDigits(e.target.value, 10),
+    }))
+  }
+  className={errors.phone ? styles.errorInput : ""}
+/>
+ 
 
             <div className={styles.passwordWrapper}>
               <input
@@ -1013,12 +1035,15 @@ const CreateAgent = () => {
                   panNumber: formatPAN(e.target.value),
                 }))
               }
+              className={errors.panNumber ? styles.errorInput : ""}
             />
-            <FileInput
-              label="Upload PAN"
-              name="panAttachment"
-              onChange={handleFileChange}
-            />
+      
+           <FileInput
+  label="Upload PAN"
+  name="panAttachment"
+  fileName={attachments.panFileName}
+  onChange={handleFileChange}
+/>
 
             <input
               id="adhaarNumber"
@@ -1031,12 +1056,17 @@ const CreateAgent = () => {
                   adhaarNumber: formatAadhaar(e.target.value),
                 }))
               }
+                className={errors.adhaarNumber ? styles.errorInput : ""}
+
             />
-            <FileInput
-              label="Upload Aadhaar"
-              name="adhaarAttachment"
-              onChange={handleFileChange}
-            />
+     
+           <FileInput
+  label="Upload Aadhaar"
+  name="adhaarAttachment"
+  fileName={attachments.adhaarFileName}
+  onChange={handleFileChange}
+/>
+  
           </>
         )}
 
@@ -1048,45 +1078,62 @@ const CreateAgent = () => {
               placeholder="Nominee Name"
               value={formData.nomineeName}
               onChange={handleChange}
+                className={errors.nomineeName ? styles.errorInput : ""}
+
             />
             <input
               id="nomineeRelation"
               placeholder="Relation"
               value={formData.nomineeRelation}
               onChange={handleChange}
+                className={errors.nomineeRelation ? styles.errorInput : ""}
             />
-            <input
-              id="nomineePanNumber"
-              placeholder="Nominee PAN Number"
-              value={formData.nomineePanNumber}
-              onChange={(e) =>
-                setFormData((p) => ({
-                  ...p,
-                  nomineePanNumber: formatPAN(e.target.value),
-                }))
-              }
-            />
-            <FileInput
-              label="Upload Nominee PAN"
-              name="nomineePanAttachment"
-              onChange={handleFileChange}
-            />
-            <input
-              id="nomineeAadharNumber"
-              placeholder="Nominee Aadhaar Number"
-              value={formData.nomineeAadharNumber}
-              onChange={(e) =>
-                setFormData((p) => ({
-                  ...p,
-                  nomineeAadharNumber: formatAadhaar(e.target.value),
-                }))
-              }
-            />
-            <FileInput
-              label="Upload Nominee Aadhaar"
-              name="nomineeAadhaarAttachment"
-              onChange={handleFileChange}
-            />
+           {/* Nominee PAN */}
+<div className={styles.docRow}>
+  <input
+    id="nomineePanNumber"
+    placeholder="Nominee PAN Number"
+    value={formData.nomineePanNumber}
+    onChange={(e) =>
+      setFormData((p) => ({
+        ...p,
+        nomineePanNumber: formatPAN(e.target.value),
+      }))
+    }
+    className={errors.nomineePanNumber ? styles.errorInput : ""}
+  />
+
+  <FileInput
+    label="Upload PAN"
+    name="nomineePanAttachment"
+    fileName={attachments.nomineePanFileName}
+    onChange={handleFileChange}
+  />
+</div>
+
+{/* Nominee Aadhaar */}
+<div className={styles.docRow}>
+  <input
+    id="nomineeAadharNumber"
+    placeholder="Nominee Aadhaar Number"
+    value={formData.nomineeAadharNumber}
+    onChange={(e) =>
+      setFormData((p) => ({
+        ...p,
+        nomineeAadharNumber: formatAadhaar(e.target.value),
+      }))
+    }
+    className={errors.nomineeAadharNumber ? styles.errorInput : ""}
+  />
+
+  <FileInput
+    label="Upload Aadhaar"
+    name="nomineeAadhaarAttachment"
+    fileName={attachments.nomineeAadhaarFileName}
+    onChange={handleFileChange}
+  />
+</div>
+
           </>
         )}
 
@@ -1103,6 +1150,7 @@ const CreateAgent = () => {
                   accountHolderName: onlyLetters(e.target.value),
                 }))
               }
+              className={errors.accountHolderName ? styles.errorInput : ""}
             />
             <input
               id="bankName"
@@ -1114,6 +1162,7 @@ const CreateAgent = () => {
                   bankName: onlyLetters(e.target.value),
                 }))
               }
+              className={errors.bankName ? styles.errorInput : ""}
             />
             <input
               id="accountNumber"
@@ -1125,6 +1174,7 @@ const CreateAgent = () => {
                   accountNumber: onlyDigits(e.target.value, 18),
                 }))
               }
+              className={errors.accountNumber ? styles.errorInput : ""}
             />
             <input
               id="ifscCode"
@@ -1136,6 +1186,7 @@ const CreateAgent = () => {
                   ifscCode: formatIFSC(e.target.value),
                 }))
               }
+              className={errors.ifscCode ? styles.errorInput : ""}
             />
             <input
               id="branchLocation"
@@ -1147,13 +1198,15 @@ const CreateAgent = () => {
                   branchLocation: onlyLettersWithHyphen(e.target.value),
                 }))
               }
+              className={errors.branchLocation ? styles.errorInput : ""}
             />
 
             <FileInput
-              label="Upload Cancelled Cheque"
-              name="cancelledChequeAttachment"
-              onChange={handleFileChange}
-            />
+  label="Upload Cancelled Cheque"
+  name="cancelledChequeAttachment"
+  fileName={attachments.cancelledChequeFileName}
+  onChange={handleFileChange}
+/>
           </>
         )}
 
@@ -1164,9 +1217,16 @@ const CreateAgent = () => {
             </button>
           )}
           {step < totalSteps ? (
-            <button type="button" onClick={() => setStep(step + 1)}>
-              Continue
-            </button>
+           <button
+  type="button"
+  onClick={() => {
+    if (validateStep()) {
+      setStep(step + 1);
+    }
+  }}
+>
+  Continue
+</button>
           ) : (
             <button type="submit">
               {isEditMode ? "Resubmit" : "Submit for Verification"}
