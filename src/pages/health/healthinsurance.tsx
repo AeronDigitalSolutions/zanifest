@@ -15,10 +15,10 @@ const MEMBERS = [
   { id: 4, name: "Daughter", maleImg: require("@/assets/pageImages/health/4.webp"), femaleImg: require("@/assets/pageImages/health/4.webp") },
   { id: 5, name: "Father", maleImg: require("@/assets/pageImages/health/5.webp"), femaleImg: require("@/assets/pageImages/health/5.webp") },
   { id: 6, name: "Mother", maleImg: require("@/assets/pageImages/health/6.webp"), femaleImg: require("@/assets/pageImages/health/6.webp") },
-  { id: 7, name: "Grandfather", maleImg: require("@/assets/pageImages/health/5.webp"), femaleImg: require("@/assets/pageImages/health/5.webp") },
-  { id: 8, name: "Grandmother", maleImg: require("@/assets/pageImages/health/6.webp"), femaleImg: require("@/assets/pageImages/health/6.webp") },
-  { id: 9, name: "Father-in-law", maleImg: require("@/assets/pageImages/health/3.webp"), femaleImg: require("@/assets/pageImages/health/3.webp") },
-  { id: 10, name: "Mother-in-law", maleImg: require("@/assets/pageImages/health/4.webp"), femaleImg: require("@/assets/pageImages/health/4.webp") },
+  { id: 7, name: "Grandfather", maleImg: require("@/assets/pageImages/health/grandfather.png"), femaleImg: require("@/assets/pageImages/health/grandfather.png") },
+  { id: 8, name: "Grandmother", maleImg: require("@/assets/pageImages/health/old-woman.png"), femaleImg: require("@/assets/pageImages/health/old-woman.png") },
+  { id: 9, name: "Father-in-law", maleImg: require("@/assets/pageImages/health/man.png"), femaleImg: require("@/assets/pageImages/health/man.png") },
+  { id: 10, name: "Mother-in-law", maleImg: require("@/assets/pageImages/health/woman.png"), femaleImg: require("@/assets/pageImages/health/woman.png") },
 ];
 
 function HealthInsurance() {

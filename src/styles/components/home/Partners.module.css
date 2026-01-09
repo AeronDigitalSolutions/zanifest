@@ -407,7 +407,7 @@
 }
 .partList {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 5 per row */
+  grid-template-columns: repeat(4, 1fr); /* 5 per row */
   gap: 24px;
   align-items: start; /* 🔥 TOP alignment */
   justify-items: center;
@@ -496,3 +496,140 @@
   }
 }
 
+@media (max-width: 1200px) {
+  .partList {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding: 10px 14px;   /* ✅ equal left & right */
+    margin: 0;            /* ❌ no negative margin */
+
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .partItem {
+    flex: 0 0 auto;
+    width: 90px;
+    height: 90px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    scroll-snap-align: center; /* 🔥 center snap */
+  }
+
+  .imagePartner {
+    width: 95%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 16px;
+    margin-top: 0;
+  }
+
+  .partList::-webkit-scrollbar {
+    display: none;
+  }
+}
+@media screen and (max-width: 1200px) {
+  .catList {
+    display: none;
+  }
+
+  .bottom {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    width: 95%;
+    margin-top: 25px;
+  }
+
+  .mobileTabs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: auto;
+  }
+
+  .mobileTab {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 78px;
+    padding: 6px 10px;
+    border-radius: 12px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+  }
+
+  .mobileTab:focus {
+    outline: none;
+  }
+
+  .mobileTabImage {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    margin-bottom: 6px;
+  }
+
+  .mobileTabName {
+    font-size: 13px;
+    line-height: 1;
+    color: #333;
+    text-align: center;
+    display: block;
+    padding: 0 2px;
+  }
+
+  .active .mobileTabName {
+    color: #1877c0;
+    font-weight: 600;
+  }
+
+  .mobileTab.active::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 3px;
+    width: 80%;
+    height: 3px;
+    border-radius: 2px;
+    background-color: #1877c0;
+  }
+
+  .partList {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .partItem {
+    height: auto;
+  }
+
+  .imagePartner {
+    width: 105%;
+    height: auto;
+    border-radius: 12px;
+  }
+
+  .heading {
+    font-size: 24px;
+  }
+}
