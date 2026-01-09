@@ -248,7 +248,7 @@
   }
 
   .simpleUploadBox button {
-    width: 100%;
+    width: 50%;
   }
 
   .actions {
@@ -375,7 +375,7 @@
   /* 🔒 Kill desktop grid completely on mobile */
   :global(form) {
     display: block !important;   /* 🔥 KEY FIX */
-    width: 100%;
+    width: 90%;
     max-width: 100%;
   }
 

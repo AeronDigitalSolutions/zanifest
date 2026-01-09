@@ -14,7 +14,7 @@
 //   phone: string;
 //   city: string;
 //   district: string;
-//   state: string;  
+//   state: string;
 //   pinCode: string;
 //   adhaarNumber: string;
 //   panNumber: string;
@@ -572,7 +572,6 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 
-
 /* ================= TYPES ================= */
 type FormDataType = {
   firstName: string;
@@ -615,10 +614,8 @@ interface FileInputProps {
 const FileInput: React.FC<FileInputProps> = ({ label, name, onChange }) => {
   const fileRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState("No file chosen");
-   const formatFileName = (fullName: string) => {
-    const ext = fullName.includes(".")
-      ? "." + fullName.split(".").pop()
-      : "";
+  const formatFileName = (fullName: string) => {
+    const ext = fullName.includes(".") ? "." + fullName.split(".").pop() : "";
 
     const nameOnly = fullName.replace(ext, "");
 
@@ -628,9 +625,8 @@ const FileInput: React.FC<FileInputProps> = ({ label, name, onChange }) => {
     return nameOnly.slice(0, 6) + "…" + ext;
   };
 
-
   return (
-     <div className={styles.simpleUploadWrapper}>
+    <div className={styles.simpleUploadWrapper}>
       <label>{label}</label>
 
       <div className={styles.simpleUploadBox}>
@@ -664,11 +660,12 @@ const CreateAgent = () => {
   const loginId = searchParams.get("loginId");
   const isEditMode = searchParams.get("mode") === "edit";
   const [errors, setErrors] = useState<Record<string, string>>({});
-const [showSuccess, setShowSuccess] = useState(false);
-const [rejectedFields, setRejectedFields] = useState<(keyof FormDataType)[]>([]);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [rejectedFields, setRejectedFields] = useState<(keyof FormDataType)[]>(
+    []
+  );
 
-const router = useRouter();
-
+  const router = useRouter();
 
   const [step, setStep] = useState(1);
   const totalSteps = 4;
@@ -696,11 +693,11 @@ const router = useRouter();
     ifscCode: "",
     branchLocation: "",
   });
-const isLocked = (field: keyof FormDataType) => {
-  if (!isEditMode) return false;
-  if (rejectedFields.length === 0) return true;
-  return !rejectedFields.includes(field);
-};
+  const isLocked = (field: keyof FormDataType) => {
+    if (!isEditMode) return false;
+    if (rejectedFields.length === 0) return true;
+    return !rejectedFields.includes(field);
+  };
 
   const [attachments, setAttachments] = useState<AttachmentType>({
     panAttachment: null,
@@ -709,44 +706,46 @@ const isLocked = (field: keyof FormDataType) => {
     nomineeAadhaarAttachment: null,
     cancelledChequeAttachment: null,
   });
-const validateStep = () => {
-  const newErrors: Record<string, string> = {};
+  const validateStep = () => {
+    const newErrors: Record<string, string> = {};
 
-  if (step === 1) {
-    if (!formData.firstName) newErrors.firstName = "Required";
-    if (!formData.lastName) newErrors.lastName = "Required";
-    if (!formData.phone) newErrors.phone = "Required";
-    if (!formData.password) newErrors.password = "Required";
-  }
+    if (step === 1) {
+      if (!formData.firstName) newErrors.firstName = "Required";
+      if (!formData.lastName) newErrors.lastName = "Required";
+      if (!formData.phone) newErrors.phone = "Required";
+      if (!formData.password) newErrors.password = "Required";
+    }
 
-  if (step === 2) {
-    if (!formData.pinCode) newErrors.pinCode = "Required";
-    if (!formData.panNumber) newErrors.panNumber = "Required";
-    if (!formData.adhaarNumber) newErrors.adhaarNumber = "Required";
-    if (!attachments.panAttachment) newErrors.panAttachment = "Upload required";
-    if (!attachments.adhaarAttachment) newErrors.adhaarAttachment = "Upload required";
-  }
+    if (step === 2) {
+      if (!formData.pinCode) newErrors.pinCode = "Required";
+      if (!formData.panNumber) newErrors.panNumber = "Required";
+      if (!formData.adhaarNumber) newErrors.adhaarNumber = "Required";
+      if (!attachments.panAttachment)
+        newErrors.panAttachment = "Upload required";
+      if (!attachments.adhaarAttachment)
+        newErrors.adhaarAttachment = "Upload required";
+    }
 
-  if (step === 3) {
-    if (!formData.nomineeName) newErrors.nomineeName = "Required";
-    if (!formData.nomineeRelation) newErrors.nomineeRelation = "Required";
-    if (!formData.nomineePanNumber) newErrors.nomineePanNumber = "Required";
-    if (!formData.nomineeAadharNumber) newErrors.nomineeAadharNumber = "Required";
-  }
+    if (step === 3) {
+      if (!formData.nomineeName) newErrors.nomineeName = "Required";
+      if (!formData.nomineeRelation) newErrors.nomineeRelation = "Required";
+      if (!formData.nomineePanNumber) newErrors.nomineePanNumber = "Required";
+      if (!formData.nomineeAadharNumber)
+        newErrors.nomineeAadharNumber = "Required";
+    }
 
-  if (step === 4) {
-    if (!formData.accountHolderName) newErrors.accountHolderName = "Required";
-    if (!formData.bankName) newErrors.bankName = "Required";
-    if (!formData.accountNumber) newErrors.accountNumber = "Required";
-    if (!formData.ifscCode) newErrors.ifscCode = "Required";
-    if (!attachments.cancelledChequeAttachment)
-      newErrors.cancelledChequeAttachment = "Upload required";
-  }
+    if (step === 4) {
+      if (!formData.accountHolderName) newErrors.accountHolderName = "Required";
+      if (!formData.bankName) newErrors.bankName = "Required";
+      if (!formData.accountNumber) newErrors.accountNumber = "Required";
+      if (!formData.ifscCode) newErrors.ifscCode = "Required";
+      if (!attachments.cancelledChequeAttachment)
+        newErrors.cancelledChequeAttachment = "Upload required";
+    }
 
-  setErrors(newErrors);
-  return Object.keys(newErrors).length === 0;
-};
-
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   /* ================= PREFILL LOGIN DATA ================= */
   useEffect(() => {
@@ -780,7 +779,7 @@ const validateStep = () => {
   }, [loginId, isEditMode]);
 
   /* ================= HANDLERS ================= */
-   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id = e.target.id as keyof FormDataType;
     setFormData((p) => ({ ...p, [id]: e.target.value }));
   };
@@ -791,9 +790,7 @@ const validateStep = () => {
     setFormData((p) => ({ ...p, pinCode: value }));
 
     if (value.length === 6) {
-      const res = await fetch(
-        `https://api.postalpincode.in/pincode/${value}`
-      );
+      const res = await fetch(`https://api.postalpincode.in/pincode/${value}`);
       const data = await res.json();
       const po = data[0]?.PostOffice?.[0];
       if (po) {
@@ -807,7 +804,7 @@ const validateStep = () => {
     }
   };
 
-const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const key = e.target.name as keyof AttachmentType;
     const file = e.target.files?.[0];
     if (!file) return;
@@ -862,7 +859,7 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
     return true;
   };
- const attachmentMap: Partial<
+  const attachmentMap: Partial<
     Record<keyof FormDataType, keyof AttachmentType>
   > = {
     panNumber: "panAttachment",
@@ -873,12 +870,15 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
     const payload = isEditMode
-      ? rejectedFields.reduce((acc, field) => {
-          acc[field] = formData[field];
-          const att = attachmentMap[field];
-          if (att && attachments[att]) acc[att] = attachments[att];
-          return acc;
-        }, { loginId } as any)
+      ? rejectedFields.reduce(
+          (acc, field) => {
+            acc[field] = formData[field];
+            const att = attachmentMap[field];
+            if (att && attachments[att]) acc[att] = attachments[att];
+            return acc;
+          },
+          { loginId } as any
+        )
       : { ...formData, ...attachments, loginId };
 
     const res = await fetch("/api/createagent", {
@@ -890,48 +890,96 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (res.ok) setShowSuccess(true);
   };
 
+  // only digits helper
+  const onlyDigits = (value: string, max: number) =>
+    value.replace(/\D/g, "").slice(0, max);
 
+  // Aadhaar formatter 1234 5678 9012
+  const formatAadhaar = (value: string) =>
+    value
+      .replace(/\D/g, "")
+      .slice(0, 12)
+      .replace(/(.{4})/g, "$1 ")
+      .trim();
+
+  // PAN formatter ABCDE1234F
+  const formatPAN = (value: string) =>
+    value
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, "")
+      .slice(0, 10);
+
+  const onlyLetters = (value: string) => value.replace(/[^a-zA-Z\s]/g, "");
+
+  const onlyLettersWithHyphen = (value: string) =>
+    value.replace(/[^a-zA-Z\s-]/g, "");
+
+  const formatIFSC = (value: string) =>
+    value
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, "")
+      .slice(0, 11);
 
   /* ================= UI ================= */
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-  <h2>Create Agent</h2>
+        <h2>Create Agent</h2>
 
-  <div className={styles.stepHeader}>
-    <span className={styles.stepText}>
-      Step {step} of {totalSteps}
-    </span>
+        <div className={styles.stepHeader}>
+          <span className={styles.stepText}>
+            Step {step} of {totalSteps}
+          </span>
 
-    <div className={styles.stepDots}>
-      {[1, 2, 3, 4].map((s) => (
-        <span
-          key={s}
-          className={`${styles.dot} ${step >= s ? styles.activeDot : ""}`}
-        />
-      ))}
-    </div>
+          <div className={styles.stepDots}>
+            {[1, 2, 3, 4].map((s) => (
+              <span
+                key={s}
+                className={`${styles.dot} ${step >= s ? styles.activeDot : ""}`}
+              />
+            ))}
+          </div>
 
-    <span className={styles.percentText}>
-      {Math.round((step / totalSteps) * 100)}% complete
-    </span>
-  </div>
-</div>
-
+          <span className={styles.percentText}>
+            {Math.round((step / totalSteps) * 100)}% complete
+          </span>
+        </div>
+      </div>
 
       <form onSubmit={handleSubmit}>
         {step === 1 && (
           <>
             <h3>Basic Details</h3>
-            <input id="firstName" placeholder="First Name" disabled  value={formData.firstName} onChange={handleChange} />
-            <input id="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} />
+            <input
+              id="firstName"
+              placeholder="First Name"
+              disabled
+              value={formData.firstName}
+              onChange={handleChange}
+            />
+            <input
+              id="lastName"
+              placeholder="Last Name"
+              value={formData.lastName}
+              onChange={handleChange}
+            />
             <input id="email" value={formData.email} disabled />
-            <input id="phone" placeholder="Phone" value={formData.phone} onChange={handleChange} />
+            <input
+              id="phone"
+              placeholder="Phone"
+              value={formData.phone}
+              onChange={(e) =>
+                setFormData((p) => ({
+                  ...p,
+                  phone: onlyDigits(e.target.value, 10),
+                }))
+              }
+            />
 
             <div className={styles.passwordWrapper}>
               <input
                 id="password"
-                  disabled
+                disabled
                 type={showPassword ? "text" : "password"}
                 value={formData.password}
                 onChange={handleChange}
@@ -947,46 +995,159 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         {step === 2 && (
           <>
             <h3>Address & KYC</h3>
-            <input placeholder="Pin Code" value={formData.pinCode} onChange={handlePincodeChange} />
+            <input
+              placeholder="Pin Code"
+              value={formData.pinCode}
+              onChange={handlePincodeChange}
+            />
             <input placeholder="City" value={formData.city} disabled />
             <input placeholder="State" value={formData.state} disabled />
 
- <input
-              id="adhaarNumber"
-              disabled={isLocked("adhaarNumber")}
-              value={formData.adhaarNumber}
-              onChange={handleChange}
-            />            <FileInput label="Upload PAN" name="panAttachment" onChange={handleFileChange} />
+            <input
+              id="panNumber"
+              placeholder="PAN Number"
+              value={formData.panNumber}
+              onChange={(e) =>
+                setFormData((p) => ({
+                  ...p,
+                  panNumber: formatPAN(e.target.value),
+                }))
+              }
+            />
+            <FileInput
+              label="Upload PAN"
+              name="panAttachment"
+              onChange={handleFileChange}
+            />
 
- <input
+            <input
               id="adhaarNumber"
+              placeholder="Aadhaar Number"
               disabled={isLocked("adhaarNumber")}
               value={formData.adhaarNumber}
-              onChange={handleChange}
-            />            <FileInput label="Upload Aadhaar" name="adhaarAttachment" onChange={handleFileChange} />
+              onChange={(e) =>
+                setFormData((p) => ({
+                  ...p,
+                  adhaarNumber: formatAadhaar(e.target.value),
+                }))
+              }
+            />
+            <FileInput
+              label="Upload Aadhaar"
+              name="adhaarAttachment"
+              onChange={handleFileChange}
+            />
           </>
         )}
 
         {step === 3 && (
           <>
             <h3>Nominee Details</h3>
-            <input id="nomineeName" placeholder="Nominee Name" value={formData.nomineeName} onChange={handleChange} />
-            <input id="nomineeRelation" placeholder="Relation" value={formData.nomineeRelation} onChange={handleChange} />
-            <input id="nomineePanNumber" placeholder="Nominee PAN Number" value={formData.nomineePanNumber} onChange={handleChange} />
-            <FileInput label="Upload Nominee PAN" name="nomineePanAttachment" onChange={handleFileChange} />
-            <input id="nomineeAadharNumber" placeholder="Nominee Aadhaar Number" value={formData.nomineeAadharNumber} onChange={handleChange} />
-            <FileInput label="Upload Nominee Aadhaar" name="nomineeAadhaarAttachment" onChange={handleFileChange} />
+            <input
+              id="nomineeName"
+              placeholder="Nominee Name"
+              value={formData.nomineeName}
+              onChange={handleChange}
+            />
+            <input
+              id="nomineeRelation"
+              placeholder="Relation"
+              value={formData.nomineeRelation}
+              onChange={handleChange}
+            />
+            <input
+              id="nomineePanNumber"
+              placeholder="Nominee PAN Number"
+              value={formData.nomineePanNumber}
+              onChange={(e) =>
+                setFormData((p) => ({
+                  ...p,
+                  nomineePanNumber: formatPAN(e.target.value),
+                }))
+              }
+            />
+            <FileInput
+              label="Upload Nominee PAN"
+              name="nomineePanAttachment"
+              onChange={handleFileChange}
+            />
+            <input
+              id="nomineeAadharNumber"
+              placeholder="Nominee Aadhaar Number"
+              value={formData.nomineeAadharNumber}
+              onChange={(e) =>
+                setFormData((p) => ({
+                  ...p,
+                  nomineeAadharNumber: formatAadhaar(e.target.value),
+                }))
+              }
+            />
+            <FileInput
+              label="Upload Nominee Aadhaar"
+              name="nomineeAadhaarAttachment"
+              onChange={handleFileChange}
+            />
           </>
         )}
 
         {step === 4 && (
           <>
             <h3>Bank Details</h3>
-            <input id="accountHolderName" placeholder="Account Holder Name" value={formData.accountHolderName} onChange={handleChange} />
-            <input id="bankName" placeholder="Bank Name" value={formData.bankName} onChange={handleChange} />
-            <input id="accountNumber" placeholder="Account Number" value={formData.accountNumber} onChange={handleChange} />
-            <input id="ifscCode" placeholder="IFSC Code" value={formData.ifscCode} onChange={handleChange} />
-            <input id="branchLocation" placeholder="Branch Location" value={formData.branchLocation} onChange={handleChange} />
+            <input
+              id="accountHolderName"
+              placeholder="Account Holder Name"
+              value={formData.accountHolderName}
+              onChange={(e) =>
+                setFormData((p) => ({
+                  ...p,
+                  accountHolderName: onlyLetters(e.target.value),
+                }))
+              }
+            />
+            <input
+              id="bankName"
+              placeholder="Bank Name"
+              value={formData.bankName}
+              onChange={(e) =>
+                setFormData((p) => ({
+                  ...p,
+                  bankName: onlyLetters(e.target.value),
+                }))
+              }
+            />
+            <input
+              id="accountNumber"
+              placeholder="Account Number"
+              value={formData.accountNumber}
+              onChange={(e) =>
+                setFormData((p) => ({
+                  ...p,
+                  accountNumber: onlyDigits(e.target.value, 18),
+                }))
+              }
+            />
+            <input
+              id="ifscCode"
+              placeholder="IFSC Code"
+              value={formData.ifscCode}
+              onChange={(e) =>
+                setFormData((p) => ({
+                  ...p,
+                  ifscCode: formatIFSC(e.target.value),
+                }))
+              }
+            />
+            <input
+              id="branchLocation"
+              placeholder="Branch Location"
+              value={formData.branchLocation}
+              onChange={(e) =>
+                setFormData((p) => ({
+                  ...p,
+                  branchLocation: onlyLettersWithHyphen(e.target.value),
+                }))
+              }
+            />
 
             <FileInput
               label="Upload Cancelled Cheque"
@@ -996,7 +1157,7 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           </>
         )}
 
-          <div className={styles.actions}>
+        <div className={styles.actions}>
           {step > 1 && (
             <button type="button" onClick={() => setStep(step - 1)}>
               Back
@@ -1014,72 +1175,90 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         </div>
       </form>
       {showSuccess && (
-  <div style={{
-    position: "fixed",
-    inset: 0,
-    background: "rgba(0,0,0,0.4)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: 1000
-  }}>
-    <div style={{
-      background: "#fff",
-      padding: 24,
-      borderRadius: 12,
-      width: 320,
-      textAlign: "center"
-    }}>
-      <p style={{ marginBottom: 20 }}>
-        Agent application submitted successfully.
-        Status will be updated after verification.
-      </p>
-     <button
-  onClick={() => {
-    setShowSuccess(false);
-    router.push("/");
-  }}
-  style={{
-    background: "#ff8a1f",
-    color: "#fff",
-    border: "none",
-    padding: "10px 24px",
-    borderRadius: 8,
-    cursor: "pointer"
-  }}
->
-  Go to home page
-</button>
-
-    </div>
-  </div>
-)}
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.4)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+          }}
+        >
+          <div
+            style={{
+              background: "#fff",
+              padding: 24,
+              borderRadius: 12,
+              width: 320,
+              textAlign: "center",
+            }}
+          >
+            <p style={{ marginBottom: 20 }}>
+              Agent application submitted successfully. Status will be updated
+              after verification.
+            </p>
+            <button
+              onClick={() => {
+                setShowSuccess(false);
+                router.push("/");
+              }}
+              style={{
+                background: "#ff8a1f",
+                color: "#fff",
+                border: "none",
+                padding: "10px 24px",
+                borderRadius: 8,
+                cursor: "pointer",
+              }}
+            >
+              Go to home page
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* ===== BOTTOM STEP INDICATOR ===== */}
-<div className={styles.bottomSteps}>
-  <div className={`${styles.stepItem} ${step === 1 ? styles.activeStep : ""}`}>
-    Step 1 <span>Basic Details</span>
-  </div>
+      <div className={styles.bottomSteps}>
+        <div
+          className={`${styles.stepItem} ${
+            step === 1 ? styles.activeStep : ""
+          }`}
+        >
+          Step 1 <span>Basic Details</span>
+        </div>
 
-  <div className={styles.arrow}>›</div>
+        <div className={styles.arrow}>›</div>
 
-  <div className={`${styles.stepItem} ${step === 2 ? styles.activeStep : ""}`}>
-    Step 2 <span>Address & KYC</span>
-  </div>
+        <div
+          className={`${styles.stepItem} ${
+            step === 2 ? styles.activeStep : ""
+          }`}
+        >
+          Step 2 <span>Address & KYC</span>
+        </div>
 
-  <div className={styles.arrow}>›</div>
+        <div className={styles.arrow}>›</div>
 
-  <div className={`${styles.stepItem} ${step === 3 ? styles.activeStep : ""}`}>
-    Step 3 <span>Nominee Details</span>
-  </div>
+        <div
+          className={`${styles.stepItem} ${
+            step === 3 ? styles.activeStep : ""
+          }`}
+        >
+          Step 3 <span>Nominee Details</span>
+        </div>
 
-  <div className={styles.arrow}>›</div>
+        <div className={styles.arrow}>›</div>
 
-  <div className={`${styles.stepItem} ${step === 4 ? styles.activeStep : ""}`}>
-    Step 4 <span>Bank Details</span>
-  </div>
-</div>
-
+        <div
+          className={`${styles.stepItem} ${
+            step === 4 ? styles.activeStep : ""
+          }`}
+        >
+          Step 4 <span>Bank Details</span>
+        </div>
+      </div>
     </div>
   );
 };
