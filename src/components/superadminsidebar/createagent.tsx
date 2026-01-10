@@ -617,6 +617,8 @@ interface FileInputProps {
   label: string;
   name: keyof AttachmentType;
   fileName?: string;
+    error?: boolean; // ✅ ADD THIS
+
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -624,12 +626,17 @@ const FileInput: React.FC<FileInputProps> = ({
   label,
   name,
   fileName,
+  error,
   onChange,
 }) => {
   const fileRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div className={styles.simpleUploadWrapper}>
+    <div
+      className={`${styles.simpleUploadWrapper} ${
+        error ? styles.errorInput : ""
+      }`}
+    >
       <label>{label}</label>
 
       <div className={styles.simpleUploadBox}>
@@ -652,6 +659,7 @@ const FileInput: React.FC<FileInputProps> = ({
     </div>
   );
 };
+
 
 
 /* ================= MAIN ================= */
@@ -727,12 +735,19 @@ const CreateAgent = () => {
     }
 
     if (step === 3) {
-      if (!formData.nomineeName) newErrors.nomineeName = "Required";
-      if (!formData.nomineeRelation) newErrors.nomineeRelation = "Required";
-      if (!formData.nomineePanNumber) newErrors.nomineePanNumber = "Required";
-      if (!formData.nomineeAadharNumber)
-        newErrors.nomineeAadharNumber = "Required";
-    }
+  if (!formData.nomineeName) newErrors.nomineeName = "Required";
+  if (!formData.nomineeRelation) newErrors.nomineeRelation = "Required";
+  if (!formData.nomineePanNumber) newErrors.nomineePanNumber = "Required";
+  if (!formData.nomineeAadharNumber)
+    newErrors.nomineeAadharNumber = "Required";
+
+  if (!attachments.nomineePanAttachment)
+    newErrors.nomineePanAttachment = "Upload required";
+
+  if (!attachments.nomineeAadhaarAttachment)
+    newErrors.nomineeAadhaarAttachment = "Upload required";
+}
+
 
     if (step === 4) {
       if (!formData.accountHolderName) newErrors.accountHolderName = "Required";
@@ -1047,7 +1062,9 @@ const shortFileName = (name: string, limit = 5) => {
   name="panAttachment"
   fileName={attachments.panFileName}
   onChange={handleFileChange}
-  
+    error={!!errors.panAttachment}
+
+
 />
 
             <input
@@ -1070,6 +1087,8 @@ const shortFileName = (name: string, limit = 5) => {
   name="adhaarAttachment"
   fileName={attachments.adhaarFileName}
   onChange={handleFileChange}
+    error={!!errors.adhaarAttachment}
+
 />
   
           </>
@@ -1113,6 +1132,7 @@ const shortFileName = (name: string, limit = 5) => {
     name="nomineePanAttachment"
     fileName={attachments.nomineePanFileName}
     onChange={handleFileChange}
+    error={!!errors.nomineePanAttachment}
   />
 </div>
 
@@ -1136,6 +1156,7 @@ const shortFileName = (name: string, limit = 5) => {
     name="nomineeAadhaarAttachment"
     fileName={attachments.nomineeAadhaarFileName}
     onChange={handleFileChange}
+    error={!!errors.nomineeAadhaarAttachment}
   />
 </div>
 
@@ -1211,6 +1232,7 @@ const shortFileName = (name: string, limit = 5) => {
   name="cancelledChequeAttachment"
   fileName={attachments.cancelledChequeFileName}
   onChange={handleFileChange}
+    error={!!errors.cancelledChequeAttachment}
 />
           </>
         )}
