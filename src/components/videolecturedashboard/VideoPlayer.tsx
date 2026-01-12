@@ -124,6 +124,14 @@ export default function VideoPlayer({
       >
         <source src={src} type="video/mp4" />
       </video>
+   <div className={styles.videoFooter}>
+    <div className={styles.skipDisabledBadge}>
+      <span className={styles.skipIcon}>⏱</span>
+      <span>Skipping disabled</span>
+    </div>
+  </div>
+
+
     </div>
   );
 }

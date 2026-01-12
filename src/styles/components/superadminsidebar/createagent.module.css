@@ -559,3 +559,120 @@ input:has(+ .tooltipError) {
   border: 1.5px solid red !important;
   outline: none;
 }
+/* ================= RESULT WRAP ================= */
+.resultWrap {
+  position: fixed;
+  inset: 0;
+  background: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+/* ================= CONFETTI ================= */
+.confetti {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: auto;
+  opacity: 0.35;
+}
+
+.confettiBottom {
+  position: absolute;
+  bottom: -40px;
+  width: 100%;
+  opacity: 0.4;
+}
+
+/* ================= CARD ================= */
+.resultCard {
+  position: relative;
+  width: 440px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 75px 42px 40px;
+  text-align: center;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+}
+
+/* ================= MEDAL ================= */
+.medalWrap {
+  position: absolute;
+  top: -55px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.medal {
+  width: 92px;
+  height: auto;
+}
+
+/* ================= TEXT ================= */
+.congrats {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+
+.resultText {
+  font-size: 15px;
+  color: #4b5563;
+}
+
+.resultText span {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.resultSub {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 6px 0 18px;
+}
+
+/* ================= SCORE ================= */
+.finalScore {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2563eb;
+  margin-bottom: 28px;
+}
+
+/* ================= BUTTONS ================= */
+.actions {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+}
+
+.linkBtn {
+  background: #f59e0b;
+  color: #ffffff;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.linkBtn:hover {
+  background: #ea8c04;
+}
+
+.greyBtn {
+  background: #e5e7eb;
+  color: #374151;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}

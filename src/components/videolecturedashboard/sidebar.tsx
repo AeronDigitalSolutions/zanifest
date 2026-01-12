@@ -10,12 +10,13 @@ export default function Sidebar({ videos, current, completed, onSelect }: any) {
   const progress = Math.round((completedCount / videos.length) * 100);
 
   function isLocked(id: number) {
-    return id !== 1 && !completed[id - 1];
-  }
+  return id !== 1 && !completed[id];
+}
+
 
   return (
     <aside className={styles.sidebar}>
-      <div className={styles.menuTitle}>MENU</div>
+      <div className={styles.menuTitle}>Video Lecture Status</div>
 
       <div className={styles.progressPercent}>{progress}% Completed</div>
 

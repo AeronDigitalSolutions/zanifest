@@ -89,6 +89,40 @@ export default function ReviewApplications() {
       setLoading(false);
     }
   };
+const renderPreview = (file?: string) => {
+  if (!file) return <div className={styles.noPreview}>No document uploaded</div>;
+
+  // PDF file
+  if (file.startsWith("data:application/pdf")) {
+    return (
+      <iframe
+        src={file}
+        className={styles.docPreview}
+        style={{ border: "none" }}
+        title="PDF Preview"
+      />
+    );
+  }
+
+  // Image file
+  if (file.startsWith("data:image")) {
+    return (
+      <img
+        src={file}
+        className={styles.docPreview}
+        alt="Document Preview"
+      />
+    );
+  }
+
+  // fallback (old filename based uploads)
+  const url = getFileUrl(file);
+  return url ? (
+    <img src={url} className={styles.docPreview} alt="Document" />
+  ) : (
+    <div className={styles.noPreview}>Preview not available</div>
+  );
+};
 
   // When user approves/rejects overall application (final action)
   const handleReview = async (action: "accept" | "reject") => {
@@ -164,6 +198,7 @@ export default function ReviewApplications() {
 
   // Approve/reject handlers for pan & aadhaar
   const setPanApproved = () => setPanStatus("approved");
+  
   const setPanRejected = () => setPanStatus("rejected");
   const setAadhaarApproved = () => setAadhaarStatus("approved");
   const setAadhaarRejected = () => setAadhaarStatus("rejected");
@@ -279,20 +314,50 @@ export default function ReviewApplications() {
                   </div>
 
                   <div className={styles.docPreviewWrap}>
-                    {selected.panAttachment ? (
-                      <img
-                        className={styles.docPreview}
-                        src={getFileUrl(selected.panAttachment) || ""}
-                        alt="PAN"
-                        onClick={() => {
-                          const url = getFileUrl(selected.panAttachment);
-                          if (url) window.open(url, "_blank");
-                        }}
-                      />
-                    ) : (
-                      <div className={styles.noPreview}>No PAN uploaded</div>
-                    )}
-                  </div>
+  {selected.panAttachment ? (
+    selected.panAttachment.startsWith("data:application/pdf") ? (
+      <iframe
+        src={selected.panAttachment}
+        className={styles.docPreview}
+        style={{ border: "none" }}
+        title="PAN PDF"
+        onClick={() => window.open(selected.panAttachment, "_blank")}
+      />
+    ) : selected.panAttachment.startsWith("data:image") ? (
+      <img
+        className={styles.docPreview}
+        src={selected.panAttachment}
+        alt="PAN"
+        onClick={() =>
+          window.open(selected.panAttachment, "_blank")
+        }
+      />
+    ) : (
+      <img
+        className={styles.docPreview}
+        src={getFileUrl(selected.panAttachment) || ""}
+        alt="PAN"
+        onClick={() => {
+          const url = getFileUrl(selected.panAttachment);
+          if (url) window.open(url, "_blank");
+        }}
+      />
+    )
+  ) : (
+    <div className={styles.noPreview}>No PAN uploaded</div>
+  )}
+</div>
+
+                  {/* <div
+  className={styles.docPreviewWrap}
+  onClick={() => {
+    if (selected.panAttachment)
+      window.open(selected.panAttachment, "_blank");
+  }}
+>
+  {renderPreview(selected.panAttachment)}
+</div> */}
+
 
                   <div className={styles.verifyRow}>
                     <button
@@ -327,23 +392,52 @@ export default function ReviewApplications() {
                     <span className={styles.smallNote}>Preview & verify</span>
                   </div>
 
-                  <div className={styles.docPreviewWrap}>
-                    {selected.adhaarAttachment ? (
-                      <img
-                        className={styles.docPreview}
-                        src={getFileUrl(selected.adhaarAttachment) || ""}
-                        alt="Aadhaar"
-                        onClick={() => {
-                          const url = getFileUrl(selected.adhaarAttachment);
-                          if (url) window.open(url, "_blank");
-                        }}
-                      />
-                    ) : (
-                      <div className={styles.noPreview}>
-                        No Aadhaar uploaded
-                      </div>
-                    )}
-                  </div>
+                 <div className={styles.docPreviewWrap}>
+  {selected.adhaarAttachment ? (
+    selected.adhaarAttachment.startsWith("data:application/pdf") ? (
+      <iframe
+        src={selected.adhaarAttachment}
+        className={styles.docPreview}
+        style={{ border: "none" }}
+        title="Aadhaar PDF"
+        onClick={() => window.open(selected.adhaarAttachment, "_blank")}
+      />
+    ) : selected.adhaarAttachment.startsWith("data:image") ? (
+      <img
+        className={styles.docPreview}
+        src={selected.adhaarAttachment}
+        alt="Aadhaar"
+        onClick={() =>
+          window.open(selected.adhaarAttachment, "_blank")
+        }
+      />
+    ) : (
+      <img
+        className={styles.docPreview}
+        src={getFileUrl(selected.adhaarAttachment) || ""}
+        alt="Aadhaar"
+        onClick={() => {
+          const url = getFileUrl(selected.adhaarAttachment);
+          if (url) window.open(url, "_blank");
+        }}
+      />
+    )
+  ) : (
+    <div className={styles.noPreview}>No Aadhaar uploaded</div>
+  )}
+</div>
+
+
+                  {/* <div
+  className={styles.docPreviewWrap}
+  onClick={() => {
+    if (selected.adhaarAttachment)
+      window.open(selected.adhaarAttachment, "_blank");
+  }}
+>
+  {renderPreview(selected.adhaarAttachment)}
+</div> */}
+
 
                   <div className={styles.verifyRow}>
                     <button

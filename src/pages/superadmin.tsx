@@ -213,7 +213,7 @@ const SuperAdminDashboard = () => {
                 <span className={styles.label}>Create Manager</span>
               </span>
             </li>
-            <li
+            {/* <li
               onClick={() => {
                 setActiveSection("createAgent");
                 setSidebarOpen(false);
@@ -226,7 +226,7 @@ const SuperAdminDashboard = () => {
                 <FiUserPlus className={styles.icon} />
                 <span className={styles.label}>Create Agent</span>
               </span>
-            </li>
+            </li> */}
 
             {/* Lists */}
             <p className={styles.sectionTitle}>List</p>

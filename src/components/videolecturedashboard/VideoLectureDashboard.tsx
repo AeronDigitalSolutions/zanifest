@@ -109,33 +109,51 @@ export default function vVideoLectureDashboard() {
   if (checking) return null;
 
   return (
-    <div className={styles.container}>
-      <Sidebar
-        videos={VIDEO_LIST}
-        current={current}
-        completed={completed}
-        onSelect={setCurrent}
-      />
+   <div className={styles.pageCenter}>
+  <div className={styles.dashboardCard}>
+    <Sidebar
+      videos={VIDEO_LIST}
+      current={current}
+      completed={completed}
+      onSelect={setCurrent}
+    />
 
-      <main className={styles.main}>
-        {!showTest ? (
-          <>
-            <h2 className={styles.heading}>
-              {VIDEO_LIST[current - 1].title}
-            </h2>
+    <main className={styles.main}>
+      {!showTest ? (
+        <>
+         <div className={styles.videoHeaderRow}>
+  <h2 className={styles.heading}>
+    {VIDEO_LIST[current - 1].title}
+  </h2>
 
-            <VideoPlayer
-              key={current}
-              src={VIDEO_LIST[current - 1].src}
-              videoId={current}
-              progress={progress || undefined}
-              onEnded={() => handleVideoEnd(current)}
-            />
-          </>
-        ) : (
-          <TestPage onClose={() => setShowTest(false)} />
-        )}
-      </main>
+  <div className={styles.certWarning}>
+    <span className={styles.warnIcon}>⚠️</span>
+    <div>
+      <div className={styles.warnTitle}>
+        Certification incomplete.
+      </div>
+      <div className={styles.warnSub}>
+        You cannot activate agent account
+      </div>
     </div>
+  </div>
+</div>
+
+
+          <VideoPlayer
+            key={current}
+            src={VIDEO_LIST[current - 1].src}
+            videoId={current}
+            progress={progress || undefined}
+            onEnded={() => handleVideoEnd(current)}
+          />
+        </>
+      ) : (
+        <TestPage onClose={() => setShowTest(false)} />
+      )}  
+    </main>
+  </div>
+</div>
+
   );
 }
