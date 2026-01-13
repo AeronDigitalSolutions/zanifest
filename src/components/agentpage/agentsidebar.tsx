@@ -1,13 +1,20 @@
-
 "use client";
+
 import React from "react";
 import styles from "@/styles/pages/agent.module.css";
-import { FiHome, FiUserPlus, FiUsers, FiLock } from "react-icons/fi";
+import {
+  FiHome,
+  FiUserPlus,
+  FiUsers,
+  FiLock,
+  FiChevronRight,
+} from "react-icons/fi";
 
 interface AgentSidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setActiveSection: React.Dispatch<React.SetStateAction<string>>;
+  activeSection: string; // ✅ ADD THIS
   handleLogout: () => void;
 }
 
@@ -15,124 +22,122 @@ const AgentSidebar: React.FC<AgentSidebarProps> = ({
   sidebarOpen,
   setSidebarOpen,
   setActiveSection,
+  activeSection, // ✅ RECEIVE HERE
   handleLogout,
 }) => {
-  // Reusable handler
   const handleClick = (section: string) => {
     setActiveSection(section);
     setSidebarOpen(false);
   };
 
   return (
-    <aside className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarMobile : ""}`}>
-      <div>
-        {/* Menu Section */}
-        <div>
-          <p className={styles.sectionTitle}>Menu</p>
-          <ul className={styles.menu}>
-            <li
-              className={styles.menuItem}
-              onClick={() => handleClick("dashboard")}
-              role="button"
-              tabIndex={0}
-            >
-              <div className={styles.iconLabel}>
-                <span className={styles.icon}><FiHome /></span>
-                <span className={styles.label}>Dashboard</span>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        {/* User Management Section */}
-        <div>
-          <p className={styles.sectionTitle}>User Management</p>
-          <ul className={styles.menu}>
-            <li
-              className={styles.menuItem}
-              onClick={() => handleClick("createuser")}
-              role="button"
-              tabIndex={0}
-            >
-              <div className={styles.iconLabel}>
-                <span className={styles.icon}><FiUserPlus /></span>
-                <span className={styles.label}>Create User</span>
-              </div>
-            </li>
-            <li
-              className={styles.menuItem}
-              onClick={() => handleClick("userlist")}
-              role="button"
-              tabIndex={0}
-            >
-              <div className={styles.iconLabel}>
-                <span className={styles.icon}><FiUsers /></span>
-                <span className={styles.label}>User List</span>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        {/* Security Section */}
-        <div>
-          <p className={styles.sectionTitle}>Security</p>
-          <ul className={styles.menu}>
-            <li
-              className={styles.menuItem}
-              onClick={() => handleClick("resetpassword")}
-              role="button"
-              tabIndex={0}
-            >
-              <div className={styles.iconLabel}>
-                <span className={styles.icon}><FiLock /></span>
-                <span className={styles.label}>Reset Password</span>
-              </div>
-            </li>
-          </ul>
-        </div>
-       {/* Lead Section */}
-<div>
-  <p className={styles.sectionTitle}>Lead Section</p>
-  <ul className={styles.menu}>
-    <li
-      className={styles.menuItem}
-      onClick={() => handleClick("leadsection")}
-      role="button"
-      tabIndex={0}
+    <aside
+      className={`${styles.sidebar} ${
+        sidebarOpen ? styles.sidebarMobile : ""
+      }`}
     >
-      <div className={styles.iconLabel}>
-        <span className={styles.icon}><FiLock /></span>
-        <span className={styles.label}>Lead</span>
+      <div className={styles.sidebarContent}>
+        {/* MENU */}
+        <p className={styles.sectionTitle}>MENU</p>
+        <ul className={styles.menu}>
+          <li
+            className={`${styles.menuItem} ${
+              activeSection === "dashboard" ? styles.active : ""
+            }`}
+            onClick={() => handleClick("dashboard")}
+          >
+            <div className={styles.iconLabel}>
+              <FiHome className={styles.icon} />
+              <span>Dashboard</span>
+            </div>
+          </li>
+        </ul>
+
+        {/* USER MANAGEMENT */}
+        <p className={styles.sectionTitle}>USER MANAGEMENT</p>
+        <ul className={styles.menu}>
+          <li
+            className={`${styles.menuItem} ${
+              activeSection === "createuser" ? styles.active : ""
+            }`}
+            onClick={() => handleClick("createuser")}
+          >
+            <div className={styles.iconLabel}>
+              <FiUserPlus className={styles.icon} />
+              <span>Create User</span>
+            </div>
+          </li>
+
+          <li
+            className={`${styles.menuItem} ${
+              activeSection === "userlist" ? styles.active : ""
+            }`}
+            onClick={() => handleClick("userlist")}
+          >
+            <div className={styles.iconLabel}>
+              <FiUsers className={styles.icon} />
+              <span>User List</span>
+            </div>
+          </li>
+        </ul>
+
+        {/* SECURITY */}
+        <p className={styles.sectionTitle}>SECURITY</p>
+        <ul className={styles.menu}>
+          <li
+            className={`${styles.menuItem} ${
+              activeSection === "resetpassword" ? styles.active : ""
+            }`}
+            onClick={() => handleClick("resetpassword")}
+          >
+            <div className={styles.iconLabel}>
+              <FiLock className={styles.icon} />
+              <span>Reset Password</span>
+            </div>
+          </li>
+        </ul>
+
+        {/* LEAD MANAGEMENT */}
+        <p className={styles.sectionTitle}>LEAD MANAGEMENT</p>
+        <ul className={styles.menu}>
+          <li
+            className={`${styles.menuItem} ${
+              activeSection === "leadsection" ? styles.active : ""
+            }`}
+            onClick={() => handleClick("leadsection")}
+          >
+            <div className={styles.iconLabel}>
+              <FiUsers className={styles.icon} />
+              <span>Lead</span>
+            </div>
+          </li>
+
+          <li
+            className={`${styles.menuItem} ${
+              activeSection === "listofpolicy" ? styles.active : ""
+            }`}
+            onClick={() => handleClick("listofpolicy")}
+          >
+            <div className={styles.iconLabel}>
+              <FiLock className={styles.icon} />
+              <span>List of Policy</span>
+            </div>
+          </li>
+        </ul>
       </div>
-    </li>
 
-    {/* ✅ FIXED LIST OF POLICY */}
-    <li
-      className={styles.menuItem}
-      onClick={() => handleClick("listofpolicy")}
-      role="button"
-      tabIndex={0}
-    >
-      <div className={styles.iconLabel}>
-        <span className={styles.icon}><FiLock /></span>
-        <span className={styles.label}>List of Policy</span>
-      </div>
-    </li>
-  </ul>
-</div>
+      {/* PROFILE BUTTON */}
+      {/* <div className={styles.profileBox}>
+        <button
+          className={styles.profileBtn}
+          onClick={() => handleClick("profileEdit")}
+        >
+          <span>Your Profile</span>
+          <FiChevronRight />
+        </button>
+      </div> */}
 
-      </div>
-     <div className={styles.editprofile}>
-  <button
-    className={styles.editButton}
-    onClick={() => handleClick("profileEdit")} 
-  >
-    Your profile Edit
-  </button>
-</div>
-
-
-      {/* Mobile Only Logout */}
+      {/* MOBILE LOGOUT */}
       <div className={styles.mobileOnlyLogout}>
         <button className={styles.logoutButton} onClick={handleLogout}>
           Logout

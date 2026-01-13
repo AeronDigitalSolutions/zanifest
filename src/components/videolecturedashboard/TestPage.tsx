@@ -2624,6 +2624,8 @@ export default function TestPage({ onClose }: { onClose: () => void }) {
   if (!currentSet) return null;
 
   const questions = currentSet.questions;
+    const optionLabels = ["A", "B", "C", "D"];
+
 
   function selectChoice(qid: number, idx: number) {
     setAnswers((p) => ({ ...p, [qid]: idx }));
@@ -2645,6 +2647,7 @@ export default function TestPage({ onClose }: { onClose: () => void }) {
 
   return (
     <div className={styles.testWrap}>
+      
       {!showResult ? (
         <div className={styles.testCenterColumn}>
           {/* ===== HEADER ===== */}
@@ -2675,19 +2678,21 @@ export default function TestPage({ onClose }: { onClose: () => void }) {
               Q{index + 1}. {questions[index].q}
             </div>
 
-            <div className={styles.answersGrid}>
-              {questions[index].choices.map((c: string, i: number) => (
-                <button
-                  key={i}
-                  className={`${styles.choiceBtn} ${
-                    answers[questions[index].id] === i ? styles.selected : ""
-                  }`}
-                  onClick={() => selectChoice(questions[index].id, i)}
-                >
-                  {c}
-                </button>
-              ))}
-            </div>
+          
+<div className={styles.answersGrid}>
+  {questions[index].choices.map((c: string, i: number) => (
+    <button
+      key={i}
+      className={`${styles.choiceBtn} ${
+        answers[questions[index].id] === i ? styles.selected : ""
+      }`}
+      onClick={() => selectChoice(questions[index].id, i)}
+    >
+      <span className={styles.optionLabel}>{optionLabels[i]}</span>
+      <span className={styles.optionText}>{c}</span>
+    </button>
+  ))}
+</div>
 
             <div className={styles.navRow}>
               <button
@@ -2763,35 +2768,7 @@ function Result({
   }
 
   return (
-    // <div className={styles.resultWrap}>
-    //   <div className={styles.resultCard}>
-    //     <h2>
-    //       Score: {score} / {total}
-    //     </h2>
-
-    //     {pass ? (
-    //       <button
-    //         className={styles.linkBtn}
-    //         onClick={() => (window.location.href = "/agentpage")}
-    //       >
-    //         Go to Dashboard
-    //       </button>
-    //     ) : (
-    //       <button
-    //         className={styles.linkBtn}
-    //         onClick={() => window.location.replace("/videolectures")}
-    //       >
-    //         Retry Training
-    //       </button>
-    //     )}
-
-    //     <button className={styles.greyBtn} onClick={onClose}>
-    //       Close
-    //     </button>
-    //   </div>
-    // </div>
-
-    // ----------------------------------
+  
 
  <div className={styles.resultWrap}>
   {/* CONFETTI BACKGROUND */}

@@ -161,20 +161,27 @@ const CreateAgent = () => {
       if (!formData.pinCode) newErrors.pinCode = "Required";
       if (!formData.panNumber) newErrors.panNumber = "Required";
       if (!formData.adhaarNumber) newErrors.adhaarNumber = "Required";
+
+      // ✅ ADD: normal create mode
+      if (!attachments.panAttachment) {
+        newErrors.panAttachment = "Upload required";
+      }
+
+      if (!attachments.adhaarAttachment) {
+        newErrors.adhaarAttachment = "Upload required";
+      }
+
+      // ✅ existing rejected logic stays
+      if (rejectedFields.includes("panNumber") && !attachments.panAttachment) {
+        newErrors.panAttachment = "Upload required";
+      }
+
       if (
-  rejectedFields.includes("panNumber") &&
-  !attachments.panAttachment
-) {
-  newErrors.panAttachment = "Upload required";
-}
-
-if (
-  rejectedFields.includes("adhaarNumber") &&
-  !attachments.adhaarAttachment
-) {
-  newErrors.adhaarAttachment = "Upload required";
-}
-
+        rejectedFields.includes("adhaarNumber") &&
+        !attachments.adhaarAttachment
+      ) {
+        newErrors.adhaarAttachment = "Upload required";
+      }
     }
 
     if (step === 3) {
@@ -314,14 +321,30 @@ if (
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // ✅ ADD THIS — invalid file ko "no file" jaisa treat karo
+    if (file.size > 200 * 1024) {
+      alert("File size must be less than or equal to 200KB");
+
+      // input clear
+      e.target.value = "";
+
+      // attachment state clear (very important)
+      setAttachments((p) => ({
+        ...p,
+        [key]: null,
+        [`${key.replace("Attachment", "")}FileName`]: undefined,
+      }));
+
+      return; // ⛔ stop here
+    }
+
+    // 👇 existing logic EXACT SAME
     const reader = new FileReader();
 
     reader.onload = () => {
       setAttachments((p) => ({
         ...p,
         [key]: reader.result as string,
-
-        // 👇 filename limited to 5 letters
         [`${key.replace("Attachment", "")}FileName`]: shortFileName(file.name),
       }));
     };
@@ -373,54 +396,52 @@ if (
 
     return true;
   };
- const attachmentMap: Partial<
-  Record<keyof FormDataType, keyof AttachmentType>
-> = {
-  panNumber: "panAttachment",
-  adhaarNumber: "adhaarAttachment",
-};
+  const attachmentMap: Partial<
+    Record<keyof FormDataType, keyof AttachmentType>
+  > = {
+    panNumber: "panAttachment",
+    adhaarNumber: "adhaarAttachment",
+  };
 
   /* ================= SUBMIT ================= */
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  if (!validateStep()) return;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateStep()) return;
 
-  let payload: any = { loginId };
+    let payload: any = { loginId };
 
-  if (isEditMode) {
-    // ✅ ONLY PAN & AADHAAR IF REJECTED
-    if (rejectedFields.includes("panNumber")) {
-      payload.panNumber = formData.panNumber;
-      if (attachments.panAttachment) {
-        payload.panAttachment = attachments.panAttachment;
+    if (isEditMode) {
+      // ✅ ONLY PAN & AADHAAR IF REJECTED
+      if (rejectedFields.includes("panNumber")) {
+        payload.panNumber = formData.panNumber;
+        if (attachments.panAttachment) {
+          payload.panAttachment = attachments.panAttachment;
+        }
       }
+
+      if (rejectedFields.includes("adhaarNumber")) {
+        payload.adhaarNumber = formData.adhaarNumber;
+        if (attachments.adhaarAttachment) {
+          payload.adhaarAttachment = attachments.adhaarAttachment;
+        }
+      }
+    } else {
+      // ✅ New submission
+      payload = {
+        ...formData,
+        ...attachments,
+        loginId,
+      };
     }
 
-    if (rejectedFields.includes("adhaarNumber")) {
-      payload.adhaarNumber = formData.adhaarNumber;
-      if (attachments.adhaarAttachment) {
-        payload.adhaarAttachment = attachments.adhaarAttachment;
-      }
-    }
-  } else {
-    // ✅ New submission
-    payload = {
-      ...formData,
-      ...attachments,
-      loginId,
-    };
-  }
+    const res = await fetch("/api/createagent", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
 
-  const res = await fetch("/api/createagent", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
-
-  if (res.ok) setShowSuccess(true);
-};
-
-
+    if (res.ok) setShowSuccess(true);
+  };
 
   // only digits helper
   const onlyDigits = (value: string, max: number) =>
@@ -749,7 +770,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             <button
               type="button"
               onClick={() => {
-                setSubmittedStep(null); 
+                setSubmittedStep(null);
                 setErrors({});
                 setStep(step - 1);
               }}

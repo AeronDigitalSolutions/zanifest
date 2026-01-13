@@ -77,6 +77,7 @@ import Loader from "@/components/Loader" // ✅ import loader
 import "antd/dist/reset.css";
 
 import type { AppProps } from "next/app";
+import GlobalAlert from "@/components/GlobalAlert";
 
 function ScrollToTop() {
   const router = useRouter();
@@ -148,6 +149,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <AntdApp>
           <ScrollToTop />
           {loading && <Loader />} {/* ✅ show loader globally */}
+          <GlobalAlert/> {/* ✅ Global Alert Component */}
           <Component {...pageProps} />
           <Toaster position="top-center" reverseOrder={false} />
         </AntdApp>

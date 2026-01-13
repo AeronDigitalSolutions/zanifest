@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-
+import agentbackground from "@/assets/agentbackground.png";
 import styles from "@/styles/pages/agent.module.css";
 
 import AgentHeader from "@/components/agentpage/agentheader";
@@ -91,29 +91,37 @@ const AgentDashboard = () => {
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
           setActiveSection={setActiveSection}
+          activeSection={activeSection}
           handleLogout={handleLogout}
         />
 
         {/* CONTENT */}
-        <main className={styles.content}>
-          {activeSection === "dashboard" && (
-            <AgentContent
-              agentName={agentName}
-              agentSales={agentSales}
-              agentId={agent?._id || ""}
-            />
-          )}
+       <main className={styles.content}>
+  {/* BACKGROUND IMAGE */}
+  <div
+    className={styles.contentBackground}
+    style={{ backgroundImage: `url(${agentbackground.src})` }}
+  />
 
-          {activeSection === "leadsection" && <LeadSection />}
-          {activeSection === "listofpolicy" && <ListOfPolicy />}
-          {activeSection === "resetpassword" && <ResetPassword />}
-          {activeSection === "createuser" && <CreateUser />}
-          {activeSection === "addsale" && <AgentSale />}
+  {/* ACTUAL CONTENT */}
+  <div className={styles.contentInner}>
+    {activeSection === "dashboard" && (
+      <AgentContent
+        agentName={agentName}
+        agentSales={agentSales}
+        agentId={agent?._id || ""}
+      />
+    )}
 
-          {activeSection === "profileEdit" && (
-            <CreateAgent />
-          )}
-        </main>
+    {activeSection === "leadsection" && <LeadSection />}
+    {activeSection === "listofpolicy" && <ListOfPolicy />}
+    {activeSection === "resetpassword" && <ResetPassword />}
+    {activeSection === "createuser" && <CreateUser />}
+    {activeSection === "addsale" && <AgentSale />}
+    {activeSection === "profileEdit" && <CreateAgent />}
+  </div>
+</main>
+
       </div>
     </div>
   );

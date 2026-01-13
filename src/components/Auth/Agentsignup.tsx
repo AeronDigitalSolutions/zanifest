@@ -7,9 +7,10 @@ import styles from "@/styles/components/Auth/Login.module.css";
 
 import loginBanner from "@/assets/loginbanner.png";
 import logo from "@/assets/logo.png";
+import { showGlobalAlert } from "../GlobalAlert";
 
 export default function AgentsignUp() {
-  const [userName, setUserName] = useState("");   // FULL NAME store here
+  const [userName, setUserName] = useState(""); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -34,7 +35,7 @@ export default function AgentsignUp() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userName,   // send FULL NAME
+          userName, 
           email,
           password,
         }),
@@ -43,15 +44,22 @@ export default function AgentsignUp() {
       const data = await res.json();
 
       if (!res.ok) {
-        setErrorMsg(data.message || "Signup failed");
+        setErrorMsg(
+          data.message ||
+            "You have an incomplete signup. Please wait 1 minute before retrying."
+        );
         setLoading(false);
         return;
       }
 
-      alert("Signup Successful!");
-
-      router.push(`/createagent?loginId=${data.loginId}`);
-
+      if (!res.ok) {
+        setErrorMsg(data.message || "Signup failed");
+        setLoading(false);
+        return;
+      }
+      showGlobalAlert("Signup Successful!", () => {
+        router.push(`/createagent?loginId=${data.loginId}`);
+      });
     } catch (error) {
       console.error(error);
       setErrorMsg("Something went wrong.");
@@ -63,7 +71,11 @@ export default function AgentsignUp() {
   return (
     <div className={styles.cont}>
       <div className={styles.left}>
-        <Image src={loginBanner} alt="signup-banner" className={styles.leftImage} />
+        <Image
+          src={loginBanner}
+          alt="signup-banner"
+          className={styles.leftImage}
+        />
       </div>
 
       <div className={styles.loginCont}>
@@ -89,7 +101,8 @@ export default function AgentsignUp() {
                 value={userName}
                 onChange={(e) =>
                   setUserName(
-                    e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1)
+                    e.target.value.charAt(0).toUpperCase() +
+                      e.target.value.slice(1)
                   )
                 }
                 className={styles.input}
@@ -134,15 +147,15 @@ export default function AgentsignUp() {
             <button className={styles.loginButton} disabled={loading}>
               {loading ? "Please wait..." : "Sign Up"}
             </button>
-             <p className={styles.signupLink}>
-                            Don't have an account?{" "}
-                            <span
-                              className={styles.signupText}
-                              onClick={() => router.push("/agentlogin")}
-                            >
-                              Login
-                            </span>
-                          </p>
+            <p className={styles.signupLink}>
+              Already have an account?{" "}
+              <span
+                className={styles.signupText}
+                onClick={() => router.push("/agentlogin")}
+              >
+                Login
+              </span>
+            </p>
           </form>
         </div>
       </div>

@@ -356,3 +356,85 @@ translate: 0 15px;
     translate: -10px 0;
     
 }
+
+/* ================= ANSWER OPTIONS ================= */
+
+.answersGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.choiceBtn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  background: #ffffff;
+  padding: 18px 20px;
+  border-radius: 14px;
+  border: 2px solid #e5e7eb;
+
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+
+  cursor: pointer;
+  text-align: left;
+
+  transition: all 0.25s ease;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+}
+
+/* OPTION LETTER */
+.optionLabel {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+
+  background: #f3f4f6;
+  color: #374151;
+
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* OPTION TEXT */
+.optionText {
+  flex: 1;
+  line-height: 1.4;
+}
+
+/* HOVER */
+.choiceBtn:hover {
+  border-color: #f59e0b;
+  background: #fff7ed;
+  transform: translateY(-1px);
+}
+
+/* SELECTED */
+.selected {
+  background: rgb(234, 100, 51) !important;
+  border-color: rgb(234, 100, 51) !important;
+  color: #ffffff !important;
+}
+
+.selected .optionLabel {
+  background: #ffffff;
+  color: rgb(234, 100, 51);
+}
+@media (max-width: 1200px) {
+  .answersGrid {
+    gap: 14px;
+  }
+
+  .choiceBtn {
+    padding: 16px 18px;
+    font-size: 15px;
+  }
+}
