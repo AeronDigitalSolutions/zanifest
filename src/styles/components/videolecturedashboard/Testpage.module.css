@@ -1,15 +1,18 @@
 /* ================= ROOT WRAPPER ================= */
 
+/* ✅ FIX: Desktop layout ko stable banao */
+
 .testWrap {
   width: 100%;
   min-height: 100vh;
   background: #ffffff;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;   /* 🔥 ONLY CHANGE */
   align-items: flex-start;
   padding: 40px 20px;
   font-family: 'Poppins', sans-serif;
 }
+
 
 /* ================= CENTER COLUMN ================= */
 
@@ -314,10 +317,10 @@
 
 /* TEXT OVER CARD */
 .overlayContent {
-  position: fixed;
+  position: absolute;   /* 🔥 IMPORTANT */
   top: 40px;
   left: 0;
-  width: 100%;
+  ;
   height: calc(100% - 40px);
 
   display: flex;
@@ -326,7 +329,6 @@
   justify-content: center;
 translate: 0 15px;
   text-align: center;
-  padding: 24px;
   z-index: 4;
 }
 .congrats{
@@ -436,5 +438,314 @@ translate: 0 15px;
   .choiceBtn {
     padding: 16px 18px;
     font-size: 15px;
+  }
+}
+/* ================= FAIL RESULT ================= */
+
+.resultWrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+/* MAIN CARD (SAME AS SUCCESS CARD) */
+.failCard {
+  position: relative;
+  width: 520px;
+  height: 360px;
+
+  background: #ffffff;
+  border-radius: 22px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: visible;
+}
+
+/* IMAGE6 → CARD KE PEECHE (BIGGER) */
+.failCardBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.95;
+width: 100%;
+
+  /* 🔥 REAL SIZE INCREASE */
+  transform: scale(1.25);   /* 1.12–1.25 safe range */
+}
+
+
+
+/* TOP ICON GROUP */
+.failTopIcons {
+  position: absolute;
+  top: -46px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  z-index: 3;
+}
+
+/* CONTENT */
+.failOverlay {
+  position: relative;
+  z-index: 2;
+
+  text-align: center;
+  padding: 78px 32px 32px;
+  
+}
+
+/* TEXT */
+.failTitle {
+  font-size: 26px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.failScore {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #ef4444;
+}
+
+.failScore span {
+  font-weight: 700;
+}
+
+.failSub {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #6b7280;
+  max-width: 340px;
+  margin-inline: auto;
+  line-height: 1.5;
+}
+
+/* ACTIONS */
+.failActions {
+  margin-top: 28px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+/* BUTTONS */
+.retryBtn {
+  background: #ef4444;
+  color: #ffffff;
+  padding: 12px 22px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.retryBtn:hover {
+  background: #dc2626;
+}
+
+.greyBtn {
+  background: #f3f4f6;
+  color: #374151;
+  padding: 12px 22px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.greyBtn:hover {
+  background: #e5e7eb;
+}
+
+.failTopIcons {
+  position: absolute;
+  top: -64px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  z-index: 3;
+}
+.failSadIcon {
+  width: 280px;
+  height: 160px;
+    translate: 0 -20px;
+
+}
+.failWarningIcon {
+   width: 200px;
+  height: 100px;
+  translate: -150px -20px;
+}
+.failTitle{
+  font-size: 35px;
+  font-weight: 700;
+  color: #111827;
+  translate: 5px -35px;
+}
+.failScore{
+  margin-top: 10px;
+  font-size: 20px;
+  color: #ef4444;
+    translate: 0 -35px;
+}
+.failSub{
+    translate: 0 -35px;
+    font-size: 16px;
+    max-width: 400px;
+}
+.failActions{
+    translate: 0 -25px;
+}
+.resultBackground {
+  width: 100%;
+  max-width: 820px;   /* sidebar ke baad ka area */
+  height: auto;
+  border-radius: 20px;
+}
+.imageBox {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 750px;   /* 🔥 sidebar ke saath align */
+  height: auto;
+}
+.overlayContent{
+      text-align: center;
+    z-index: 4;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: calc(100% - 40px);
+    display: flex;
+    position: absolute;
+    top: 11px;
+    left: 0px;
+    translate: 0px 15px;
+    padding: 24px;
+}
+/* ================= RESULT – LOCKED DESKTOP LAYOUT ================= */
+
+.resultWrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+/* CARD CONTAINER */
+.imageBox {
+  position: relative;
+  width: 100%;
+  max-width: 820px;   /* 🔒 LOCK AT 1200px */
+  height: auto;
+  z-index: 2;
+}
+
+/* CARD IMAGE */
+.resultBackground {
+  width: 100%;
+  max-width: 820px;
+  height: auto;
+  border-radius: 20px;
+  display: block;
+}
+
+/* MEDAL */
+.medalTop {
+  position: absolute;
+  top: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
+/* TEXT OVER CARD */
+.overlayContent {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 24px;
+  z-index: 4;
+}
+
+/* TEXT SIZES */
+.congrats {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.resultText {
+  font-size: 16px;
+}
+
+.resultSub {
+  font-size: 15px;
+  margin-top: 6px;
+}
+
+.finalScore {
+  font-size: 22px;
+  font-weight: 700;
+  margin-top: 8px;
+}
+
+/* BUTTONS */
+.actions {
+  margin-top: 22px;
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+}
+/* 🔒 FORCE 1400px RESULT UI SAME ON 1200px */
+
+@media (min-width: 1200px) {
+
+  .imageBox {
+    width: 800px !important;
+    max-width: 800px !important;
+    height: 420px !important;
+    translate: 10px 0 !important;
+  }
+
+  .resultBackground {
+    width: 159vw !important;   /* jo 1400px pe hai wahi */
+  }
+
+  .overlayContent {
+    top: 40px !important;
+    height: calc(100% - 40px) !important;
+    translate: 0 15px !important;
+  }
+
+  .congrats,
+  .resultSub,
+  .finalScore,
+  .resultText,
+  .linkBtn,
+  .greyBtn {
+    translate: -10px 0 !important;
+  }
+
+  .medalTop {
+    translate: -10px 0 !important;
   }
 }

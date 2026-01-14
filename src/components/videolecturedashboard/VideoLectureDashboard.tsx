@@ -27,6 +27,9 @@ export default function vVideoLectureDashboard() {
   const [showTest, setShowTest] = useState(false);
   const [checking, setChecking] = useState(true);
   const [progress, setProgress] = useState<TrainingProgress | null>(null);
+const [testProgress, setTestProgress] = useState(0);
+const [hideSidebar, setHideSidebar] = useState(false);
+
 
   const searchParams = useSearchParams();
   const forceTest = searchParams.get("mode") === "test";
@@ -53,7 +56,13 @@ export default function vVideoLectureDashboard() {
         const progData: TrainingProgress = await progRes.json();
 
         setProgress(progData);
-        setCurrent(progData.currentVideo || 1);
+
+  /*  SAFE CURRENT VIDEO */
+        const safeCurrent = Math.min(
+          Math.max(progData.currentVideo || 1, 1),
+          VIDEO_LIST.length
+        );
+        setCurrent(safeCurrent);
 
         const map: Record<number, boolean> = {};
         progData.completedVideos?.forEach((v) => (map[v] = true));
@@ -107,24 +116,31 @@ export default function vVideoLectureDashboard() {
   }
 
   if (checking) return null;
+const currentVideo = VIDEO_LIST[current - 1];
 
   return (
    <div className={styles.pageCenter}>
   <div className={styles.dashboardCard}>
-    <Sidebar
-      videos={VIDEO_LIST}
-      current={current}
-      completed={completed}
-      onSelect={setCurrent}
-    />
+ {!hideSidebar && (
+  <Sidebar
+    videos={VIDEO_LIST}
+    current={current}
+    completed={completed}
+    onSelect={setCurrent}
+    testProgress={testProgress}
+  />
+)}
+
+
 
     <main className={styles.main}>
       {!showTest ? (
         <>
          <div className={styles.videoHeaderRow}>
-  <h2 className={styles.heading}>
-    {VIDEO_LIST[current - 1].title}
-  </h2>
+ <h2 className={styles.heading}>
+  {currentVideo?.title || ""}
+</h2>
+
 
   <div className={styles.certWarning}>
     <span className={styles.warnIcon}>⚠️</span>
@@ -140,16 +156,24 @@ export default function vVideoLectureDashboard() {
 </div>
 
 
-          <VideoPlayer
-            key={current}
-            src={VIDEO_LIST[current - 1].src}
-            videoId={current}
-            progress={progress || undefined}
-            onEnded={() => handleVideoEnd(current)}
-          />
+        {currentVideo && (
+  <VideoPlayer
+    key={current}
+    src={currentVideo.src}
+    videoId={current}
+    progress={progress || undefined}
+    onEnded={() => handleVideoEnd(current)}
+  />
+)}
+
         </>
       ) : (
-        <TestPage onClose={() => setShowTest(false)} />
+<TestPage
+  onClose={() => setShowTest(false)}
+  onProgressChange={setTestProgress}
+  onResultVisible={setHideSidebar} // ✅ ADD
+/>
+
       )}  
     </main>
   </div>

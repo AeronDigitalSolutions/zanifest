@@ -5,6 +5,7 @@ import styles from "@/styles/components/superadminsidebar/createagent.module.css
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { th } from "framer-motion/client";
 
 /* ================= TYPES ================= */
 type FormDataType = {
@@ -28,7 +29,10 @@ type FormDataType = {
   accountNumber: string;
   ifscCode: string;
   branchLocation: string;
+  yearofpassing10th?: string;
+  yearofpassing12th?: string;
 };
+
 type AttachmentType = {
   panAttachment: string | null;
   panFileName?: string;
@@ -44,7 +48,14 @@ type AttachmentType = {
 
   cancelledChequeAttachment: string | null;
   cancelledChequeFileName?: string;
+  
+ tenthMarksheetAttachment: string | null;
+  tenthMarksheetFileName?: string;
+
+  twelfthMarksheetAttachment: string | null;
+  twelfthMarksheetFileName?: string;
 };
+
 
 /* ================= FILE INPUT ================= */
 interface FileInputProps {
@@ -108,7 +119,7 @@ const CreateAgent = () => {
   const router = useRouter();
 
   const [step, setStep] = useState(1);
-  const totalSteps = 4;
+const totalSteps = 5;
   const [showPassword, setShowPassword] = useState(false);
   const [submittedStep, setSubmittedStep] = useState<number | null>(null);
 
@@ -140,13 +151,17 @@ const CreateAgent = () => {
     return !rejectedFields.includes(field);
   };
 
-  const [attachments, setAttachments] = useState<AttachmentType>({
-    panAttachment: null,
-    adhaarAttachment: null,
-    nomineePanAttachment: null,
-    nomineeAadhaarAttachment: null,
-    cancelledChequeAttachment: null,
-  });
+const [attachments, setAttachments] = useState<AttachmentType>({
+  panAttachment: null,
+  adhaarAttachment: null,
+  nomineePanAttachment: null,
+  nomineeAadhaarAttachment: null,
+  cancelledChequeAttachment: null,
+  tenthMarksheetAttachment: null,
+  twelfthMarksheetAttachment: null,
+});
+
+
   const validateStep = () => {
     const newErrors: Record<string, string> = {};
 
@@ -184,29 +199,45 @@ const CreateAgent = () => {
       }
     }
 
-    if (step === 3) {
-      if (!formData.nomineeName) newErrors.nomineeName = "Required";
-      if (!formData.nomineeRelation) newErrors.nomineeRelation = "Required";
-      if (!formData.nomineePanNumber) newErrors.nomineePanNumber = "Required";
-      if (!formData.nomineeAadharNumber)
-        newErrors.nomineeAadharNumber = "Required";
+if (step === 3) {
+  if (!formData.yearofpassing10th)
+    newErrors.yearofpassing10th = "Required";
 
-      if (!attachments.nomineePanAttachment)
-        newErrors.nomineePanAttachment = "Upload required";
+  if (!attachments.tenthMarksheetAttachment)
+    newErrors.tenthMarksheetAttachment = "Upload required";
 
-      if (!attachments.nomineeAadhaarAttachment)
-        newErrors.nomineeAadhaarAttachment = "Upload required";
-    }
+  if (!formData.yearofpassing12th)
+    newErrors.yearofpassing12th = "Required";
 
-    if (step === 4) {
-      if (!formData.accountHolderName) newErrors.accountHolderName = "Required";
-      if (!formData.bankName) newErrors.bankName = "Required";
-      if (!formData.accountNumber) newErrors.accountNumber = "Required";
-      if (!formData.ifscCode) newErrors.ifscCode = "Required";
-      if (!formData.branchLocation) newErrors.branchLocation = "Required";
-      if (!attachments.cancelledChequeAttachment)
-        newErrors.cancelledChequeAttachment = "Upload required";
-    }
+  if (!attachments.twelfthMarksheetAttachment)
+    newErrors.twelfthMarksheetAttachment = "Upload required";
+}
+
+
+if (step === 4) {
+  if (!formData.nomineeName) newErrors.nomineeName = "Required";
+  if (!formData.nomineeRelation) newErrors.nomineeRelation = "Required";
+  if (!formData.nomineePanNumber) newErrors.nomineePanNumber = "Required";
+  if (!formData.nomineeAadharNumber)
+    newErrors.nomineeAadharNumber = "Required";
+
+  if (!attachments.nomineePanAttachment)
+    newErrors.nomineePanAttachment = "Upload required";
+
+  if (!attachments.nomineeAadhaarAttachment)
+    newErrors.nomineeAadhaarAttachment = "Upload required";
+}
+
+if (step === 5) {
+  if (!formData.accountHolderName) newErrors.accountHolderName = "Required";
+  if (!formData.bankName) newErrors.bankName = "Required";
+  if (!formData.accountNumber) newErrors.accountNumber = "Required";
+  if (!formData.ifscCode) newErrors.ifscCode = "Required";
+  if (!formData.branchLocation) newErrors.branchLocation = "Required";
+  if (!attachments.cancelledChequeAttachment)
+    newErrors.cancelledChequeAttachment = "Upload required";
+}
+
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -278,6 +309,13 @@ const CreateAgent = () => {
           cancelledChequeFileName: rejected.includes("accountNumber")
             ? undefined
             : "Cheque.pdf",
+              tenthMarksheetAttachment: rejected.includes("yearofpassing10th")
+          ? null
+          : d.agent.tenthMarksheetAttachment ?? null,
+
+        twelfthMarksheetAttachment: rejected.includes("yearofpassing12th")
+          ? null
+          : d.agent.twelfthMarksheetAttachment ?? null,
         });
       });
   }, [loginId, isEditMode]);
@@ -370,6 +408,8 @@ const CreateAgent = () => {
       "accountNumber",
       "ifscCode",
       "branchLocation",
+      "yearofpassing10th",
+      "yearofpassing12th"
     ];
 
     for (const field of requiredFields) {
@@ -385,6 +425,8 @@ const CreateAgent = () => {
       "nomineePanAttachment",
       "nomineeAadhaarAttachment",
       "cancelledChequeAttachment",
+     "tenthMarksheetAttachment",
+  "twelfthMarksheetAttachment",
     ];
 
     for (const att of requiredAttachments) {
@@ -489,7 +531,7 @@ const CreateAgent = () => {
           </span>
 
           <div className={styles.stepDots}>
-            {[1, 2, 3, 4].map((s) => (
+            {[1, 2, 3, 4, 5].map((s) => (
               <span
                 key={s}
                 className={`${styles.dot} ${step >= s ? styles.activeDot : ""}`}
@@ -498,7 +540,7 @@ const CreateAgent = () => {
           </div>
 
           <span className={styles.percentText}>
-            {Math.round((step / totalSteps) * 100)}% complete
+{Math.min(100, Math.round((step / totalSteps) * 100))}% complete
           </span>
         </div>
       </div>
@@ -607,8 +649,61 @@ const CreateAgent = () => {
             />
           </>
         )}
+{step === 3 && (
+  <>
+    <h3>Education Details</h3>
 
-        {step === 3 && (
+    {/* ===== 10th Passing Year ===== */}
+    <input
+      id="yearofpassing10th"
+      placeholder="10th Passing Year (e.g. 2019)"
+      value={formData.yearofpassing10th || ""}
+      onChange={(e) =>
+        setFormData((p) => ({
+          ...p,
+          yearofpassing10th: onlyDigits(e.target.value, 4),
+        }))
+      }
+      className={errors.yearofpassing10th ? styles.errorInput : ""}
+    />
+
+    {/* ===== 10th Marksheet Upload ===== */}
+   <FileInput
+  label="Upload 10th Marksheet (Max upload size 200kb)"
+  name="tenthMarksheetAttachment"
+  fileName={attachments.tenthMarksheetFileName}
+  onChange={handleFileChange}
+  error={!!errors.tenthMarksheetAttachment}
+/>
+
+    {/* ===== 12th Passing Year ===== */}
+    <input
+      id="yearofpassing12th"
+      placeholder="12th Passing Year (e.g. 2021)"
+      value={formData.yearofpassing12th || ""}
+      onChange={(e) =>
+        setFormData((p) => ({
+          ...p,
+          yearofpassing12th: onlyDigits(e.target.value, 4),
+        }))
+      }
+      className={errors.yearofpassing12th ? styles.errorInput : ""}
+    />
+
+    {/* ===== 12th Marksheet Upload ===== */}
+    <FileInput
+  label="Upload 12th Marksheet (Max upload size 200kb)"
+  name="twelfthMarksheetAttachment"
+  fileName={attachments.twelfthMarksheetFileName}
+  onChange={handleFileChange}
+  error={!!errors.twelfthMarksheetAttachment}
+/>
+  </>
+)}
+
+
+
+        {step === 4 && (
           <>
             <h3>Nominee Details</h3>
             <input
@@ -675,7 +770,7 @@ const CreateAgent = () => {
           </>
         )}
 
-        {step === 4 && (
+        {step === 5 && (
           <>
             <h3>Bank Details</h3>
             <input
@@ -790,7 +885,7 @@ const CreateAgent = () => {
               Continue
             </button>
           ) : (
-            <button type="submit" onClick={() => setSubmittedStep(4)}>
+<button type="submit" onClick={() => setSubmittedStep(5)}>
               {isEditMode ? "Resubmit" : "Submit for Verification"}
             </button>
           )}
@@ -842,45 +937,36 @@ const CreateAgent = () => {
       )}
 
       {/* ===== BOTTOM STEP INDICATOR ===== */}
-      <div className={styles.bottomSteps}>
-        <div
-          className={`${styles.stepItem} ${
-            step === 1 ? styles.activeStep : ""
-          }`}
-        >
-          Step 1 <span>Basic Details</span>
-        </div>
+     <div className={styles.bottomSteps}>
+  <div className={`${styles.stepItem} ${step === 1 ? styles.activeStep : ""}`}>
+    Step 1 <span>Basic Details</span>
+  </div>
 
-        <div className={styles.arrow}>›</div>
+  <div className={styles.arrow}>›</div>
 
-        <div
-          className={`${styles.stepItem} ${
-            step === 2 ? styles.activeStep : ""
-          }`}
-        >
-          Step 2 <span>Address & KYC</span>
-        </div>
+  <div className={`${styles.stepItem} ${step === 2 ? styles.activeStep : ""}`}>
+    Step 2 <span>Address & KYC</span>
+  </div>
 
-        <div className={styles.arrow}>›</div>
+  <div className={styles.arrow}>›</div>
 
-        <div
-          className={`${styles.stepItem} ${
-            step === 3 ? styles.activeStep : ""
-          }`}
-        >
-          Step 3 <span>Nominee Details</span>
-        </div>
+  <div className={`${styles.stepItem} ${step === 3 ? styles.activeStep : ""}`}>
+    Step 3 <span>Education Details</span>
+  </div>
 
-        <div className={styles.arrow}>›</div>
+  <div className={styles.arrow}>›</div>
 
-        <div
-          className={`${styles.stepItem} ${
-            step === 4 ? styles.activeStep : ""
-          }`}
-        >
-          Step 4 <span>Bank Details</span>
-        </div>
-      </div>
+  <div className={`${styles.stepItem} ${step === 4 ? styles.activeStep : ""}`}>
+    Step 4 <span>Nominee Details</span>
+  </div>
+
+  <div className={styles.arrow}>›</div>
+
+  <div className={`${styles.stepItem} ${step === 5 ? styles.activeStep : ""}`}>
+    Step 5 <span>Bank Details</span>
+  </div>
+</div>
+
     </div>
   );
 };

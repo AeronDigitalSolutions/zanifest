@@ -14,6 +14,7 @@ export default async function handler(
   try {
     await dbConnect();
     const data = req.body;
+    console.log("Create Agent Data:", data);  
 
     /* =================================================
        🔍 CHECK IF AGENT ALREADY EXISTS (EDIT MODE)
@@ -28,10 +29,15 @@ export default async function handler(
     if (existingAgent) {
       // ✅ update ONLY fields sent by frontend
       Object.keys(data).forEach((key) => {
-        if (key !== "loginId") {
-          existingAgent[key] = data[key];
-        }
-      });
+  if (
+    key !== "loginId" &&
+    data[key] !== undefined &&
+    data[key] !== ""
+  ) {
+    existingAgent[key] = data[key];
+  }
+});
+
 
       // 🔄 reset review state
       existingAgent.status = "pending";
@@ -85,6 +91,7 @@ export default async function handler(
 
       // System
       "loginId",
+
     ];
 
     for (const field of requiredFields) {

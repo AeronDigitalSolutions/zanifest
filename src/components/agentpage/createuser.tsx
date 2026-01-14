@@ -51,12 +51,11 @@ const CreateUser = () => {
         <h2 className={styles.title}>Create User</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.formGroup}>
-            <label htmlFor="fullname" className={styles.label}>
-              Full Name
-            </label>
+            
             <input
               type="text"
               id="userName"
+              placeholder="Full Name"
               value={userName}
               onChange={handleFullNameChange}
               className={styles.input}
@@ -65,12 +64,11 @@ const CreateUser = () => {
           </div>
 
           <div className={styles.formGroup}>
-            <label htmlFor="email" className={styles.label}>
-              Email
-            </label>
+            
             <input
               type="email"
               id="email"
+              placeholder="Enter email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className={styles.input}

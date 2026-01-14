@@ -5,6 +5,10 @@ import styles from "@/styles/components/videolecturedashboard/Testpage.module.cs
 import image1 from "@/assets/testdashboard/image1.png";
 import image2 from "@/assets/testdashboard/image2.png";
 import image3 from "@/assets/testdashboard/image3.png";
+import image4 from "@/assets/testdashboard/image4.png";
+import image5 from "@/assets/testdashboard/image5.png";
+import image6 from "@/assets/testdashboard/image6.png";
+
 import Image from "next/image";
 
 /* ======================================================
@@ -2584,13 +2588,32 @@ const QUESTION_SETS = [
 /* ======================================================
    TEST PAGE
 ====================================================== */
-export default function TestPage({ onClose }: { onClose: () => void }) {
+export default function TestPage({
+  onClose,
+  onProgressChange,
+  onResultVisible, // ✅ ADD
+}: {
+  onClose: () => void;
+  onProgressChange: (p: number) => void;
+  onResultVisible: (v: boolean) => void;
+}) {
+
   const [currentSet, setCurrentSet] = useState<any>(null);
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [showResult, setShowResult] = useState(false);
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60 * 60); // 60 minutes
+  const testProgress = currentSet
+  ? Math.round(((index + 1) / currentSet.questions.length) * 100)
+  : 0;
+
+useEffect(() => {
+  if (currentSet) {
+    onProgressChange(testProgress);
+  }
+}, [testProgress, currentSet]);
+
   useEffect(() => {
     if (showResult) return;
 
@@ -2624,8 +2647,7 @@ export default function TestPage({ onClose }: { onClose: () => void }) {
   if (!currentSet) return null;
 
   const questions = currentSet.questions;
-    const optionLabels = ["A", "B", "C", "D"];
-
+  const optionLabels = ["A", "B", "C", "D"];
 
   function selectChoice(qid: number, idx: number) {
     setAnswers((p) => ({ ...p, [qid]: idx }));
@@ -2638,6 +2660,8 @@ export default function TestPage({ onClose }: { onClose: () => void }) {
     });
     setScore(s);
     setShowResult(true);
+      onResultVisible(true); // ✅ ADD
+
   }
   function formatTime(sec: number) {
     const m = Math.floor(sec / 60);
@@ -2647,7 +2671,6 @@ export default function TestPage({ onClose }: { onClose: () => void }) {
 
   return (
     <div className={styles.testWrap}>
-      
       {!showResult ? (
         <div className={styles.testCenterColumn}>
           {/* ===== HEADER ===== */}
@@ -2678,21 +2701,20 @@ export default function TestPage({ onClose }: { onClose: () => void }) {
               Q{index + 1}. {questions[index].q}
             </div>
 
-          
-<div className={styles.answersGrid}>
-  {questions[index].choices.map((c: string, i: number) => (
-    <button
-      key={i}
-      className={`${styles.choiceBtn} ${
-        answers[questions[index].id] === i ? styles.selected : ""
-      }`}
-      onClick={() => selectChoice(questions[index].id, i)}
-    >
-      <span className={styles.optionLabel}>{optionLabels[i]}</span>
-      <span className={styles.optionText}>{c}</span>
-    </button>
-  ))}
-</div>
+            <div className={styles.answersGrid}>
+              {questions[index].choices.map((c: string, i: number) => (
+                <button
+                  key={i}
+                  className={`${styles.choiceBtn} ${
+                    answers[questions[index].id] === i ? styles.selected : ""
+                  }`}
+                  onClick={() => selectChoice(questions[index].id, i)}
+                >
+                  <span className={styles.optionLabel}>{optionLabels[i]}</span>
+                  <span className={styles.optionText}>{c}</span>
+                </button>
+              ))}
+            </div>
 
             <div className={styles.navRow}>
               <button
@@ -2731,7 +2753,12 @@ export default function TestPage({ onClose }: { onClose: () => void }) {
           </div>
         </div>
       ) : (
-        <Result score={score} total={questions.length} onClose={onClose} />
+<Result
+  score={score}
+  total={questions.length}
+  onClose={onClose}
+  onResultVisible={onResultVisible} // ✅ ADD
+/>
       )}
     </div>
   );
@@ -2744,11 +2771,14 @@ function Result({
   score,
   total,
   onClose,
+  onResultVisible, // ✅ ADD
 }: {
   score: number;
   total: number;
   onClose: () => void;
+  onResultVisible: (v: boolean) => void;
 }) {
+
   const pass = score >= total / 2;
 
   async function handlePass() {
@@ -2767,80 +2797,160 @@ function Result({
     window.location.href = "/agentpage";
   }
 
-  return (
-  
+  if (!pass) {
+    return (
+<div className={styles.resultWrap}>
+  <div className={styles.failCard}>
 
- <div className={styles.resultWrap}>
-  {/* CONFETTI BACKGROUND */}
+    {/* DECORATIVE BACK IMAGE (image6) */}
+    <Image
+      src={image6}
+      alt="decorative bg"
+      className={styles.failCardBg}
+      priority
+    />
+
+    {/* TOP FLOATING ICONS */}
+<div className={styles.failTopIcons}>
   <Image
-    src={image3}
-    alt="confetti background"
-    className={styles.confettiBg}
-    width={900}
-    height={600}
+    src={image4}
+    alt="sad"
+    className={styles.failSadIcon}
     priority
   />
 
-  {/* CARD + MEDAL WRAPPER */}
-  <div className={styles.imageBox}>
-    {/* MEDAL AT TOP CENTER */}
-    <Image
-      src={image2}
-      alt="medal"
-      className={styles.medalTop}
-      width={220}
-      height={120}
-      priority
-    />
+  <Image
+    src={image5}
+    alt="warning"
+    className={styles.failWarningIcon}
+    priority
+  />
+</div>
 
-    {/* WHITE CARD */}
-    <Image
-      src={image1}
-      alt="card background"
-      className={styles.resultBackground}
-      // width={520}
-      // height={420}
-      priority
-    />
 
-    {/* ===== TEXT OVER CARD ===== */}
-    <div className={styles.overlayContent}>
-      <h2 className={styles.congrats}>Congratulations!</h2>
 
-      <p className={styles.resultText}>
-        You scored <span>{score} out of {total}</span>
+    {/* CARD CONTENT */}
+    <div className={styles.failOverlay}>
+      <h2 className={styles.failTitle}>Unfortunately...</h2>
+
+      <p className={styles.failScore}>
+        You scored <span>{score}</span> out of <span>{total}</span>.
       </p>
 
-      <p className={styles.resultSub}>
-        You have successfully completed the agent certification test.
+      <p className={styles.failSub}>
+        You did not pass the agent certification test.
       </p>
 
-      <div className={styles.finalScore}>
-        {score} / {total}
-      </div>
-
-      <div className={styles.actions}>
-        {pass ? (
-          <button className={styles.linkBtn} onClick={handlePass}>
-            Go to Dashboard →
-          </button>
-        ) : (
-          <button
-            className={styles.linkBtn}
-            onClick={() => window.location.replace("/videolectures")}
-          >
-            Return to Training
-          </button>
-        )}
-
-        <button className={styles.greyBtn} onClick={onClose}>
-          Close
+      <div className={styles.failActions}>
+        <button
+          className={styles.retryBtn}
+          onClick={() => window.location.reload()}
+        >
+          Retake Test
         </button>
+
+       <button
+  className={styles.greyBtn}
+  onClick={() => {
+    onResultVisible(false); // ✅ ADD
+    onClose();
+  }}
+>
+  Close
+</button>
+
       </div>
     </div>
+
   </div>
 </div>
 
 
+
+    );
+  }
+
+  return (
+    <div className={styles.resultWrap}>
+      {/* CONFETTI BACKGROUND */}
+      <Image
+        src={image3}
+        alt="confetti background"
+        className={styles.confettiBg}
+        width={300}
+        height={300}
+        priority
+      />
+
+      {/* CARD + MEDAL WRAPPER */}
+      <div className={styles.imageBox}>
+        {/* MEDAL AT TOP CENTER */}
+        <Image
+          src={image2}
+          alt="medal"
+          className={styles.medalTop}
+          width={220}
+          height={120}
+          priority
+        />
+
+
+        {/* WHITE CARD */}
+        <Image
+          src={image1}
+          alt="card background"
+          className={styles.resultBackground}
+          // width={520}
+          // height={420}
+          priority
+        />
+
+        {/* ===== TEXT OVER CARD ===== */}
+        <div className={styles.overlayContent}>
+          <h2 className={styles.congrats}>Congratulations!</h2>
+
+          <p className={styles.resultText}>
+            You scored{" "}
+            <span>
+              {score} out of {total}
+            </span>
+          </p>
+
+          <p className={styles.resultSub}>
+            You have successfully completed the agent certification test.
+          </p>
+
+          <div className={styles.finalScore}>
+            {score} / {total}
+          </div>
+
+          <div className={styles.actions}>
+            {pass ? (
+              <button className={styles.linkBtn} onClick={handlePass}>
+                Go to Dashboard →
+              </button>
+            ) : (
+              <button
+                className={styles.linkBtn}
+                onClick={() => window.location.replace("/videolectures")}
+              >
+                Return to Training
+              </button>
+            )}
+
+           <button
+  className={styles.greyBtn}
+  onClick={() => {
+    onResultVisible(false); // ✅ ADD
+    onClose();
+  }}
+>
+  Close
+</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -51,11 +51,10 @@ const resetpassword = () => {
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.formGroup}>
-            <label htmlFor="email" className={styles.label}>
-              Email
-            </label>
+           
             <input
               type="email"
+              placeholder="Enter Email"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -65,13 +64,12 @@ const resetpassword = () => {
           </div>
 
           <div className={styles.formGroup}>
-            <label htmlFor="current-password" className={styles.label}>
-              Current Password
-            </label>
+           
             <div className={styles.passwordWrapper}>
               <input
                 type={showPassword ? "text" : "password"}
                 id="current-password"
+                placeholder="Current Password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 className={styles.input}
@@ -84,13 +82,12 @@ const resetpassword = () => {
           </div>
 
           <div className={styles.formGroup}>
-            <label htmlFor="new-password" className={styles.label}>
-              New Password
-            </label>
+            
             <div className={styles.passwordWrapper}>
               <input
                 type={showPassword ? "text" : "password"}
                 id="new-password"
+                placeholder="New Password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 className={styles.input}

@@ -22,7 +22,7 @@ const AgentSidebar: React.FC<AgentSidebarProps> = ({
   sidebarOpen,
   setSidebarOpen,
   setActiveSection,
-  activeSection, // ✅ RECEIVE HERE
+  activeSection, 
   handleLogout,
 }) => {
   const handleClick = (section: string) => {

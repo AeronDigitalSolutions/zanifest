@@ -78,6 +78,19 @@ rejectedFields: {
 rejectionRemark: {
   type: String,
 },
+tenthMarksheetAttachment: {
+  type: String,
+  default: null,
+},
+
+twelfthMarksheetAttachment: {
+  type: String,
+  default: null,
+},
+
+yearofpassing10th: String,
+yearofpassing12th: String,
+
 
 }
 
@@ -107,6 +120,12 @@ agentCode: { type: String, unique: true, sparse: true },
     panAttachment: { type: String },
     adhaarNumber: { type: String },
     adhaarAttachment: { type: String },
+    // ===== EDUCATION DETAILS =====
+yearofpassing10th: { type: String },
+tenthMarksheetAttachment: { type: String, default: null },
+
+yearofpassing12th: { type: String },
+twelfthMarksheetAttachment: { type: String, default: null },
 
     // Nominee
     nomineeName: { type: String },

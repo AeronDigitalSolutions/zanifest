@@ -18,7 +18,7 @@ export default async function handler(
 
     const agent = await Agent.findById(agentId);
     if (!agent) {
-      return res.status(404).json({ message: "Agent not found" });
+      return res.status(404).json({ message: "Agent not found" });  
     }
 
     /* =================================================
@@ -54,6 +54,7 @@ export default async function handler(
       });
     }
 
+    
     /* =================================================
        REJECT APPLICATION  ✅ FIXED
     ================================================= */
@@ -69,6 +70,12 @@ export default async function handler(
 
       if (verification?.aadhaarStatus === "rejected") {
         rejectedFields.push("adhaarNumber", "adhaarAttachment");
+      }
+      if (verification?.tenthStatus === "rejected") {
+        rejectedFields.push("yearofpassing10th", "tenthMarksheetAttachment");
+      }   
+      if (verification?.twelfthStatus === "rejected") {
+        rejectedFields.push("yearofpassing12th", "twelfthMarksheetAttachment");
       }
 
       agent.rejectedFields = rejectedFields;

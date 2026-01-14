@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import agentbackground from "@/assets/agentbackground.png";
+import agentbackground from "@/assets/dashboard_bg.webp";
 import styles from "@/styles/pages/agent.module.css";
 
 import AgentHeader from "@/components/agentpage/agentheader";
