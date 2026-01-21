@@ -166,20 +166,21 @@ const CreateAdmin: React.FC<CreateAdminProps> = ({ initialData, mode }) => {
           </div>
         </div>
 
-        <div className={styles.checkboxGroup}>
-          <label className={styles.checkboxLabel}>
-            <input
-              type="checkbox"
-              checked={isSuperAdmin}
-              onChange={() => setIsSuperAdmin(!isSuperAdmin)}
-            />
-            Make Super Admin
-          </label>
-        </div>
+       <div className={styles.actionRow}>
+  <label className={styles.checkboxLabel}>
+    <input
+      type="checkbox"
+      checked={isSuperAdmin}
+      onChange={() => setIsSuperAdmin(!isSuperAdmin)}
+    />
+    Make Super Admin
+  </label>
 
-        <button type="submit" className={styles.submitButton}>
-          {mode==="edit" ? "Update" : "Create"}
-        </button>
+  <button type="submit" className={styles.submitButton}>
+    {mode === "edit" ? "Update" : "Create"}
+  </button>
+</div>
+
       </form>
     </div>
   );

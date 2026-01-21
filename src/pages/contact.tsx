@@ -16,9 +16,18 @@ const contact = () => {
         <Navbar/>
          <div className="min-h-screen bg-white font-sans">
       {/* <HelpSection /> */}
+     
         <Contactmain/>
+         <div style={{ maxWidth: "1100px", margin: "24px auto" }}>
+        
+
+        <p style={{ marginTop: "8px" }}>
+          <strong>Address:</strong> Zanifest Insurance Broker Pvt. Ltd., SCF No.-8,
+          Lower Ground, Old Ambala Road, Gazipur, Zirakpur, Mohali, Punjab – 140603
+        </p>
+      </div>
     </div>
-    <HelpSection/>
+    {/* <HelpSection/> */}
     <FAQSection/>
     <Footer/>
       

@@ -11,7 +11,14 @@ const Contactmain = () => {
         <div className={styles.bannerContainer}>
           <div className={styles.breadcrumb}>
             <span>Home &gt; </span>
-            <span className={styles.link}>Contact Us</span>
+<a
+  href="https://wa.me/919876543210"
+  target="_blank"
+  rel="noopener noreferrer"
+  className={styles.contactLink}
+>
+  Contact Us
+</a>
           </div>
           <h2 className={styles.heading}>
             At Zanifest, it is our constant endeavour to provide great customer experience.

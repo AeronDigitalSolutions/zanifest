@@ -58,3 +58,11 @@
     flex-direction: row;
   }
 }
+.contactLink {
+  cursor: pointer;
+  color: white;
+}
+.contactLink:hover {
+  text-decoration: underline;
+  color: white;
+}

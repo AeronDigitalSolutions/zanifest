@@ -1,129 +1,169 @@
+/* ===== NAVBAR ===== */
+.fixedNavbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 50;
+}
+
+/* ===== HERO ===== */
 .hero {
   position: relative;
-  width: 100%;
-  height: min(80vh, 760px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: 100vh;
   overflow: hidden;
 }
 
-/* Image */
-.heroImage {
-  object-fit: cover;
-  object-position: center;
-  z-index: -2;
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
 }
 
-/* Overlay */
-.overlay {
-  position: relative;
+.active {
+  opacity: 1;
   z-index: 1;
-  width: 100%;
-  height: 100%;
-  padding: 120px 10%;
-  background: linear-gradient(
-    rgba(0, 0, 0, 0.65),
-    rgba(0, 0, 0, 0.65)
-  );
-  color: #ffffff;
+}
+
+.heroImage {
+  object-fit: cover;
+}
+
+/* ===== HERO OVERLAY ===== */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 2;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
+
+  padding: 16px;
+  color: #ffffff;
 }
 
-/* Headings */
 .overlay h1 {
-  font-size: clamp(1.6rem, 2.5vw, 2.8rem);
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-.number {
-  font-size: clamp(4rem, 12vw, 10rem);
-  font-family: "Montserrat", sans-serif;
-  color: transparent;
-  -webkit-text-stroke: 2px #ffffff;
-  margin-bottom: 25px;
-}
-
-/* Buttons */
-.buttons {
-  display: flex;
-  gap: 16px;
-  margin: 25px 0;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.buttons button {
-  padding: 12px 26px;
-  border-radius: 999px;
-  border: 2px solid transparent;
-  background: #ffffff;
-  color: #000000;
-  font-size: 15px;
+  font-size: 42px;
   font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
 }
 
-.buttons button:hover {
-  background: #0f766e;
-  color: #ffffff;
+.year {
+  font-size: 64px;
+  font-weight: 700;
+  color: #f5c451;
+  margin: 10px 0;
 }
 
-.active {
-  background: #0f766e;
-  color: #ffffff;
+.heroText {
+  max-width: 720px;
+  font-size: 16px;
+  line-height: 1.8;
 }
 
-/* Paragraph */
-.overlay p {
-  max-width: 820px;
-  font-size: clamp(0.95rem, 1.2vw, 1.2rem);
-  line-height: 1.7;
+/* ===== ABOUT SECTIONS ===== */
+.section {
+  padding: 100px 16px;
 }
 
-/* ===================== */
-/* ===== RESPONSIVE ==== */
-/* ===================== */
+.lightBg {
+  background-color: #f9fafb;
+}
 
+.grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.imageWrap {
+  position: relative;
+  height: 420px;
+}
+
+.image {
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.content {
+  max-width: 520px;
+}
+
+.subtitle {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #f5c451;
+  margin-bottom: 12px;
+}
+
+.title {
+  font-size: 34px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 20px;
+}
+
+.text {
+  font-size: 16px;
+  line-height: 1.9;
+  color: #374151;
+  margin-bottom: 16px;
+}
+
+.list {
+  padding-left: 20px;
+  margin: 16px 0;
+}
+
+.list li {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
-  .overlay {
-    padding: 90px 6%;
-  }
-}
-
-@media (max-width: 768px) {
-  .hero {
-    height: auto;
-    min-height: 90vh;
-  }
-
-  .overlay {
-    padding: 80px 6%;
-  }
-
-  .buttons {
-    flex-direction: column;
-  }
-
-  .buttons button {
-    width: 100%;
-    max-width: 280px;
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
   }
 }
 
 @media (max-width: 480px) {
-  .overlay {
-    padding: 70px 5%;
+  .overlay h1 {
+    font-size: 28px;
   }
 
-  .overlay p {
-    font-size: 0.95rem;
+  .year {
+    font-size: 44px;
   }
- 
+
+  .heroText {
+    font-size: 15px;
+  }
+
+  .section {
+    padding: 72px 16px;
+  }
+
+  .title {
+    font-size: 26px;
+  }
+
+  .text,
+  .list li {
+    font-size: 15px;
+  }
+
+  .imageWrap {
+    height: 300px;
+  }
 }

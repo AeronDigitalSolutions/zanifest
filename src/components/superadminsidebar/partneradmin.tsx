@@ -57,26 +57,51 @@ const PartnerAdmin: React.FC = () => {
     setHeadingMap(hMap);
     setImagesMap(iMap);
   }, [data]);
+const validateSquareImage = (file: File): Promise<boolean> => {
+  return new Promise((resolve) => {
+    const img = new window.Image(); // ✅ native image
+    img.src = URL.createObjectURL(file);
+
+    img.onload = () => {
+      const isSquare = img.naturalWidth === img.naturalHeight;
+      URL.revokeObjectURL(img.src);
+      resolve(isSquare);
+    };
+  });
+};
 
   // -------- Image Upload --------
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || !selectedCategory) return;
+ const handleImageUpload = async (
+  e: React.ChangeEvent<HTMLInputElement>
+) => {
+  if (!e.target.files || !selectedCategory) return;
 
-    const file = e.target.files[0];
-    const reader = new FileReader();
+  const file = e.target.files[0];
 
-    reader.onloadend = () => {
-      setImagesMap(prev => ({
-        ...prev,
-        [selectedCategory.name]: [
-          ...(prev[selectedCategory.name] || []),
-          reader.result as string,
-        ],
-      }));
-    };
+  // 🔥 1:1 RATIO CHECK
+  const isValid = await validateSquareImage(file);
 
-    reader.readAsDataURL(file);
+  if (!isValid) {
+    alert("❌ Image must be in 1:1 (square) ratio");
+    e.target.value = ""; // reset input
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onloadend = () => {
+    setImagesMap(prev => ({
+      ...prev,
+      [selectedCategory.name]: [
+        ...(prev[selectedCategory.name] || []),
+        reader.result as string,
+      ],
+    }));
   };
+
+  reader.readAsDataURL(file);
+};
+
 
   // -------- Delete Image --------
   const handleDeleteImage = (index: number) => {

@@ -30,7 +30,6 @@
 .optionsWrapper {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
 }
 
 .option {
@@ -77,10 +76,11 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
   font-size: 0.85rem;
   color: #4b5563;
   flex-wrap: wrap;
+  translate: 0 -10px;
 }
 
 .whatsappNumber {

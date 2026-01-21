@@ -857,3 +857,77 @@
     }
   }
 }
+@media (max-width: 470px) {
+
+  /* ================= DASHBOARD CARDS ================= */
+  .cardGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+    justify-items: stretch;
+  }
+
+  /* Last card center */
+  .cardGrid .infoCard:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    width: 85%;
+    margin: 0 auto;
+  }
+
+  .infoCard {
+    padding: 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  /* Breakdown button fix */
+  .breakdownBtn {
+    width: 100%;
+    padding: 7px 10px;
+    font-size: 13px;
+    margin-top: -9px;
+  }
+
+  /* ================= ADD NEW SALE ================= */
+  .addSaleContainer,
+  .addSaleSection {
+    width: 100%;
+    text-align: left;
+  }
+
+  .addSaleContainer input {
+    width: 100%;
+    margin-bottom: 6px;
+  }
+
+  .addSaleContainer button {
+    width: 100%;
+  }
+
+  /* ================= DATE FILTER ================= */
+  .dateFilterSection {
+    flex-direction: row;           /* ✅ keep in one row */
+    gap: 0.5rem;
+    justify-content: space-between;
+  }
+
+  .dateLabel {
+    width: 48%;
+  }
+
+  .dateLabel input {
+    width: 100%;
+    font-size: 13px;
+    padding: 6px;
+  }
+
+  /* Show button full width below */
+  .buttonWrapper {
+    width: 100%;
+    margin-top: 0.6rem;
+  }
+
+  .filterButton {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+  }
+}

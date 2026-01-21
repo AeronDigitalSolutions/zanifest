@@ -97,11 +97,15 @@ const Partners: React.FC<PartnersProps> = ({ liveHeading, liveImages }) => {
       });
     });
 
+
+
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => {
       if (sectionRef.current) observer.unobserve(sectionRef.current);
     };
   }, []);
+
+  // ================= AOS INIT =================
 
   useEffect(() => {
     AOS.init({ duration: 1000, once: true });
@@ -156,9 +160,7 @@ const Partners: React.FC<PartnersProps> = ({ liveHeading, liveImages }) => {
     </button>
   ))}
 </div>
-
-
-        {/* Partners */}
+       {/* Partners */}
         <div className={styles.partList}>
           {partners.length > 0 ? (
             partners.map((img, index) => (

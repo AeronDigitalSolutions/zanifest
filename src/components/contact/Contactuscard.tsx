@@ -37,6 +37,12 @@ const Contactuscard = () => {
             <p className={styles.whatsappNumber}>+91 8146777455</p>
           </div>
         </div>
+          <div className={styles.whatsapp}>
+          <div>
+            <p>Connect on Email at</p>
+            <p className={styles.whatsappNumber}> support@zanifestinsurance.com</p>
+          </div>
+        </div>
       </div>
     </div>
     </div>
