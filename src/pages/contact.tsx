@@ -1,40 +1,95 @@
-"use client"
-import AccountCard from '@/components/contact/Accountcard';
-import Contactmain from '@/components/contact/Contactmain';
-import Contactuscard from '@/components/contact/Contactuscard';
-import HelpSection from '@/components/contact/Helpsection';
-import FAQSection from '@/components/home/FAQSection';
-import Footer from '@/components/ui/Footer';
-import Navbar from '@/components/ui/Navbar';
-import React from 'react';
-// import HeroSection from '@/components/contact/Herosection'
-// import Navbar from '@/components/contact/Navbar'
+"use client";
 
-const contact = () => {
+import React from "react";
+import Navbar from "@/components/ui/Navbar";
+import Footer from "@/components/ui/Footer";
+import styles from "@/styles/contact/contactus.module.css";
+import Image from "next/image";
+
+// ✅ SAME IMAGE USED (no array)
+import contactImage from "@/assets/contact/contact.png";
+
+const ContactPage = () => {
   return (
-    <div>
-        <Navbar/>
-         <div className="min-h-screen bg-white font-sans">
-      {/* <HelpSection /> */}
-     
-        <Contactmain/>
-         <div style={{ maxWidth: "1100px", margin: "24px auto" }}>
-        
+    <>
+      <Navbar />
+{/* ===== CONTACT PAGE HEADER ===== */}
+<section className={styles.contactHeader}>
+  <div className={styles.contactHeaderInner}>
+    <h1 className={styles.contactTitle}>CONTACT Us</h1>
 
-        <p style={{ marginTop: "8px" }}>
-          <strong>Address:</strong> Zanifest Insurance Broker Pvt. Ltd., SCF No.-8,
-          Lower Ground, Old Ambala Road, Gazipur, Zirakpur, Mohali, Punjab – 140603
-        </p>
-      </div>
-    </div>
-    {/* <HelpSection/> */}
-    <FAQSection/>
-    <Footer/>
-      
-        
-        
-    </div>
-  )
-}
+  
+  </div>
+</section>
 
-export default contact
+      {/* ===== IMAGE SECTION (SINGLE IMAGE) ===== */}
+  <section className={styles.carousel}>
+  <Image
+    src={contactImage}
+    alt="Contact Zanifest Insurance"
+    fill
+    priority
+    className={styles.singleImage}
+  />
+
+  <div className={styles.imageOverlay}></div>
+
+  <div className={styles.carouselText}>
+    <p className={styles.heroPara}>
+      At Zanifest, we believe insurance should be a promise kept, not a hassle endured.
+      Founded with a vision to simplify financial protection for every Indian, we bridge
+      the gap between complex insurance terms and your peace of mind.
+    </p>
+
+    <p className={styles.subLine}>
+      Have questions about a policy or need help with a claim? Our team is ready to assist you.
+    </p>
+  </div>
+</section>
+
+      {/* ===== CONTACT SECTION ===== */}
+      <section className={styles.contactSection}>
+        <div className={styles.container}>
+          <div className={styles.grid}>
+            {/* Contact Form */}
+            <div className={styles.card}>
+              <h2>Get in Touch with Zanifest</h2>
+
+              <form>
+                <input type="text" placeholder="Full Name" />
+                <input type="email" placeholder="Email Address" />
+                <input type="tel" placeholder="Phone Number" />
+                <textarea placeholder="Your Message" rows={4} />
+                <button type="submit">Send Message</button>
+              </form>
+            </div>
+
+            {/* Contact Details */}
+            <div className={styles.card}>
+              <h2>Contact Information</h2>
+
+              <div className={styles.detailBox}>
+                <span>📞 Customer Support</span>
+                <p>+91 1762 496 934</p>
+              </div>
+
+              <div className={styles.detailBox}>
+                <span>📧 Customer Support Email</span>
+                <p>support@zanifestinsurance.com</p>
+              </div>
+
+              <div className={styles.detailBox}>
+                <span>🏢 Grievance Support  Email</span>
+                <p>mandeep.rathee@zanifestinsurance.com</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </>
+  );
+};
+
+export default ContactPage;

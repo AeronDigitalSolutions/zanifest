@@ -4,6 +4,7 @@ import { FiPhoneCall } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 import { BsChatDots } from 'react-icons/bs';
 import styles from '@/styles/contact/contactus.module.css';
+import { MdEmail } from 'react-icons/md';
 
 
 const Contactuscard = () => {
@@ -38,10 +39,22 @@ const Contactuscard = () => {
           </div>
         </div>
           <div className={styles.whatsapp}>
+          {/* Emails (Compact – no extra height) */}
+        <div className={styles.emailBlock}>
+          <MdEmail className={styles.iconBlue} />
           <div>
-            <p>Connect on Email at</p>
-            <p className={styles.whatsappNumber}> support@zanifestinsurance.com</p>
+            <p className={styles.emailLabel}>Customer Support</p>
+            <p className={styles.emailText}>support@zanifestinsurance.com</p>
           </div>
+        </div>
+
+        <div className={styles.emailBlock}>
+          <MdEmail className={styles.iconBlue} />
+          <div>
+            <p className={styles.emailLabel}>Official Communication</p>
+            <p className={styles.emailText}>mandeep.rathee@zanifestinsurance.com</p>
+          </div>
+        </div>
         </div>
       </div>
     </div>
