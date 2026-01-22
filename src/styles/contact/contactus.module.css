@@ -410,4 +410,37 @@
   .subLine{
     font-size: clamp(11px, 2.5vw, 14px);
   }
+ 
+}
+.contactTitle {
+  color: #d1d5db;
+  font-weight: 700;
+  font-size: 60px;
+  transform: translateY(-55px);
+}
+
+@media (max-width: 1200px) {
+  .contactTitle {
+    font-size: 52px;
+    transform: translateY(-45px);
+  }
+}
+@media (max-width: 480px) {
+  .contactTitle {
+    font-size: 28px;
+    transform: translateY(-5px);
+    text-align: center;
+  }
+}
+@media (max-width: 768px) {
+  .contactTitle {
+    font-size: 36px;
+    transform: translateY(-5px);
+  }
+}
+@media (max-width: 360px) {
+  .contactTitle {
+    font-size: 24px;
+    transform: translateY(-5px);
+  }
 }

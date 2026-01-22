@@ -13,14 +13,7 @@ const ContactPage = () => {
   return (
     <>
       <Navbar />
-{/* ===== CONTACT PAGE HEADER ===== */}
-<section className={styles.contactHeader}>
-  <div className={styles.contactHeaderInner}>
-    <h1 className={styles.contactTitle}>CONTACT Us</h1>
 
-  
-  </div>
-</section>
 
       {/* ===== IMAGE SECTION (SINGLE IMAGE) ===== */}
   <section className={styles.carousel}>
@@ -35,6 +28,8 @@ const ContactPage = () => {
   <div className={styles.imageOverlay}></div>
 
   <div className={styles.carouselText}>
+        <h1 className={styles.contactTitle}>CONTACT Us</h1>
+
     <p className={styles.heroPara}>
       At Zanifest, we believe insurance should be a promise kept, not a hassle endured.
       Founded with a vision to simplify financial protection for every Indian, we bridge
