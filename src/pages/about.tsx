@@ -15,7 +15,7 @@ import slide1 from "@/assets/contact/contact.png";
 import slide2 from "@/assets/contact/sliders2.png";
 import slide3 from "@/assets/contact/slider3.png";
 import whatweoffer from "@/assets/contact/whatweoffer-removebg-preview.png";
-const slides = [slide1, slide2, slide3]
+const slides = [slide1, slide1, slide3]
 
 const AboutUsPage = () => {
   const [current, setCurrent] = useState(0);

@@ -71,7 +71,7 @@
 
 /* ===== SECTIONS ===== */
 .section {
-  padding: 100px 20px;
+  padding: 0px 20px;
 }
 
 .lightBg {
@@ -156,19 +156,7 @@
   }
 }
 
-@media (max-width: 480px) {
-  .heroTitle {
-    font-size: 26px;
-  }
 
-  .year {
-    font-size: 70px;
-  }
-
-  .textJustify {
-    font-size: 15px;
-  }
-}
 .AboutTitle {
   font-size: 70px;
   font-weight: 700;
@@ -273,39 +261,8 @@
 
 /* ================= RESPONSIVE ================= */
 
-@media (max-width: 1024px) {
-  .splitGrid {
-    grid-template-columns: 1fr;
-    gap: 48px;
-  }
 
-  .splitImage {
-    height: 340px;
-  }
 
-  .splitContent {
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .splitSection {
-    padding: 64px 16px;
-  }
-
-  .splitTitle {
-    font-size: 28px;
-  }
-
-  .splitText,
-  .splitList li {
-    font-size: 15px;
-  }
-
-  .splitImage {
-    height: 260px;
-  }
-}
 /* ===== NAVBAR ===== */
 .fixedNavbar {
   position: fixed;
@@ -438,43 +395,8 @@
 }
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 1024px) {
-  .grid {
-    grid-template-columns: 1fr;
-    gap: 48px;
-  }
-}
 
-@media (max-width: 480px) {
-  .overlay h1 {
-    font-size: 28px;
-  }
 
-  .year {
-    font-size: 44px;
-  }
-
-  .heroText {
-    font-size: 15px;
-  }
-
-  .section {
-    padding: 72px 16px;
-  }
-
-  .title {
-    font-size: 26px;
-  }
-
-  .text,
-  .list li {
-    font-size: 15px;
-  }
-
-  .imageWrap {
-    height: 300px;
-  }
-}
 .fixedNavbar {
   position: fixed;
   top: 0;
@@ -574,81 +496,207 @@
 }
 
 /* ================= RESPONSIVE ================= */
-@media (max-width: 768px) {
-  .hero {
-    height: 70vh;
-    min-height: 420px;
-  }
 
-  .pageTitle {
-    font-size: 32px;
-  }
 
-  .heroYear {
-    font-size: 84px;
-  }
 
-  .heroDesc {
-    font-size: 14.5px;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero {
-    height: 65vh;
-    min-height: 380px;
-  }
-
-  .pageTitle {
-    font-size: 24px;
-  }
-
-  .heroYear {
-    font-size: 64px;
-  }
-}
 .hero {
-  height: 85vh;             /* ⬅️ pehle 78vh tha */
-  min-height: 580px;        /* desktop pe strong presence */
+  height: 75vh;             /* ⬅️ pehle 78vh tha */
+  min-height: 180px;        /* desktop pe strong presence */
   width: 100%;
   overflow: hidden;
 }
+
+
+.overlay .pageTitle {
+  font-size: 80px;   
+  font-weight: 800;
+  letter-spacing: 4px;
+}
+
+
+
+/* ================= HERO MOBILE ================= */
 @media (max-width: 768px) {
-  .hero {
-    height: 75vh;
-    min-height: 460px;
+
+ .pageTitle{
+  font-size: 20px;
+ }
+
+  /* ================= GRID STACK ================= */
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 0px;
   }
+
+  /* ================= ALL IMAGES SAFE ================= */
+  .cleanImageWrap,
+  .squareImageWrap,
+  .imageWrap {
+    height: auto !important;
+    min-height: 260px;            /* ❗ Vision & Mission visible */
+  }
+
+  .image,
+  .imageContain {
+    object-fit: contain;          /* no cut */
+  }
+
+  /* ================= WHAT WE OFFER ================= */
+  .offerImageSticky {
+    position: relative;
+    top: auto;
+    margin-bottom: 24px;
+  }
+
+  .offerImage {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    object-fit: contain;
+  }
+
+  /* ================= BOTTOM SPACE AFTER MISSION ================= */
+  section:last-of-type {
+    padding-bottom: 50px;
+  }
+}
+
+/* ================= EXTRA SMALL DEVICES (≤370px) ================= */
+@media (max-width: 370px) {
 
   .pageTitle {
-    font-size: 40px;
-    letter-spacing: 3px;
+    font-size: 28px !important;
   }
+   .pageTitle{
+  font-size: 10px;
+ }
 
   .heroYear {
-    font-size: 88px;
+    font-size: 56px;
   }
 
   .heroDesc {
-    font-size: 15px;
+    font-size: 13px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .text,
+  .textJustify {
+    font-size: 14px;
   }
 }
+/* =====================================================
+   HERO OVERLAY FIX
+   Only for 370px – 480px screens
+   Desktop untouched
+   ===================================================== */
 
-@media (max-width: 480px) {
+/* ---------- 370px to 480px ---------- */
+@media (min-width: 370px) and (max-width: 480px) {
+
   .hero {
-    height: 70vh;
-    min-height: 400px;
+    height: 80vh;
+    min-height: 520px;
+    position: relative;
   }
 
+  .slide {
+    position: absolute;
+    inset: 0;
+  }
+
+  .heroImage {
+    object-fit: cover;              /* full image */
+    object-position: center top;    /* face safe */
+  }
+
+  /* ===== TEXT OVER IMAGE (CENTER) ===== */
+ .overlay {
+    z-index: 2;
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 4px 12px #0009;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 960px;
+    height: 100%;
+    margin: auto;
+    padding: 0 clamp(16px, 4vw, 24px);
+    display: flex;
+    position: relative;
+}
+.section {
+  padding: 0px 16px;
+}
+  /* ===== ABOUT US – ONE LINE ===== */
   .pageTitle {
-    font-size: 32px;
+    font-size: 56px !important;     /* ❗ one line */
+    letter-spacing: 2px;
+    white-space: nowrap;
+    margin-bottom: 8px;
   }
 
   .heroYear {
-    font-size: 66px;
+    font-size: 52px;
+    margin: 6px 0 12px;
+  }
+
+  .heroDesc {
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 100%;
+  }
+ 
+}
+
+/* ---------- EXTRA SMALL (≤369px) ---------- */
+@media (max-width: 369px) {
+
+  .overlay {
+    position: relative;             /* ❗ very small pe neeche */
+    background: #6f6f6f;
+    padding: 24px 16px;
+  }
+
+  .pageTitle {
+    font-size: 52px ;
+  }
+
+  .heroYear {
+    font-size: 48px;
+  }
+
+  .heroDesc {
+    font-size: 13px;
   }
 }
-.overlay .pageTitle {
-  font-size: 80px !important;   /* 🔥 FORCE APPLY */
-  font-weight: 800;
-  letter-spacing: 4px;
+/* =================================================
+   HERO FINAL FIX – OPTION A (NO GREY GAP)
+   ================================================= */
+
+.hero {
+  height: 70vh;              /* mobile + desktop balanced */
+  min-height: 420px;
+  overflow: hidden;
+}
+
+.hero .heroImage {
+  object-fit: cover !important;        /* ❗ banner look */
+  object-position: top center;         /* ❗ face safe */
+  width: 100%;
+  height: 100%;
+}
+
+.hero .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);     /* readable text */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
