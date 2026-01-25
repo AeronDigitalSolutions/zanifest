@@ -1,3 +1,311 @@
+.fixedNavbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 50;
+}
+
+/* ===== HERO ===== */
+.hero {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.active {
+  opacity: 1;
+}
+
+.heroImage {
+  object-fit: contain;
+}
+
+/* ===== HERO OVERLAY ===== */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #ffffff;
+  padding: 20px;
+}
+
+.aboutLabel {
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.heroTitle {
+  font-size: 38px;
+  font-weight: 600;
+}
+
+.year {
+  font-size: 130px;
+  font-weight: 800;
+  color: #f5c451;
+  line-height: 1;
+  margin: 8px 0;
+  translate: 0 -55px;
+}
+
+.heroText {
+  max-width: 760px;
+  font-size: 16px;
+  line-height: 1.9;
+}
+
+/* ===== SECTIONS ===== */
+.section {
+  padding: 100px 20px;
+}
+
+.lightBg {
+  background: #f9fafb;
+}
+
+.grid {
+  max-width: 1200px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+/* ===== IMAGE FIXES ===== */
+.cleanImageWrap,
+.squareImageWrap {
+  position: relative;
+  aspect-ratio: 1 / 1;
+}
+
+.squareImageWrap {
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.imageContain {
+  object-fit: contain;
+}
+
+/* ===== CONTENT ===== */
+.content {
+  max-width: 560px;
+}
+
+.subtitle {
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #f5c451;
+  margin-bottom: 10px;
+}
+
+.title {
+  font-size: 34px;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.textJustify {
+  font-size: 17px;
+  line-height: 1.9;
+  color: #374151;
+  text-align: justify;
+}
+
+.highlightText {
+  font-size: 17px;
+  font-weight: 600;
+  margin-top: 18px;
+}
+
+.list {
+  padding-left: 20px;
+  margin: 16px 0;
+}
+
+.list li {
+  margin-bottom: 8px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .year {
+    font-size: 90px;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroTitle {
+    font-size: 26px;
+  }
+
+  .year {
+    font-size: 70px;
+  }
+
+  .textJustify {
+    font-size: 15px;
+  }
+}
+.AboutTitle {
+  font-size: 70px;
+  font-weight: 700;
+  color:white;
+  text-transform: uppercase;
+  margin: 0;
+  margin-bottom: 50px;
+}
+
+/* ===== WHAT WE OFFER IMAGE FIX ===== */
+
+.offerImageSticky {
+  position: sticky;
+  top: 120px;                 /* navbar ke neeche rukega */
+  align-self: flex-start;
+  display: flex;
+  justify-content: center;
+}
+
+.offerImage {
+  width: 100%;
+  max-width: 480px;           /* desktop perfect */
+  height: auto;
+  object-fit: contain;        /* ❗ NO CUT GUARANTEE */
+}
+.grid {
+  align-items: flex-start;    /* ❗ image upar se cut nahi hogi */
+}
+/* ================= SPLIT SECTIONS ================= */
+
+.splitSection {
+  padding: 80px 20px;
+}
+
+.firstSplit {
+  padding-top: 40px;
+}
+
+.whiteBg {
+  background: #ffffff;
+}
+
+.greyBg {
+  background: #f9fafb;
+}
+
+/* ================= GRID ================= */
+
+.splitGrid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+/* ================= TEXT ================= */
+
+.splitContent {
+  max-width: 500px;
+}
+
+.splitTitle {
+  font-size: 36px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 18px;
+}
+
+.splitText {
+  font-size: 17px;
+  line-height: 1.9;
+  color: #374151;
+  margin-bottom: 16px;
+}
+
+.splitList {
+  padding-left: 18px;
+  margin: 16px 0 20px;
+}
+
+.splitList li {
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: #374151;
+}
+
+/* ================= IMAGE ================= */
+
+.splitImage {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+.splitImage img {
+  object-fit: cover;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1024px) {
+  .splitGrid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .splitImage {
+    height: 340px;
+  }
+
+  .splitContent {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .splitSection {
+    padding: 64px 16px;
+  }
+
+  .splitTitle {
+    font-size: 28px;
+  }
+
+  .splitText,
+  .splitList li {
+    font-size: 15px;
+  }
+
+  .splitImage {
+    height: 260px;
+  }
+}
 /* ===== NAVBAR ===== */
 .fixedNavbar {
   position: fixed;
@@ -166,4 +474,181 @@
   .imageWrap {
     height: 300px;
   }
+}
+.fixedNavbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 50;
+}
+
+/* ================= HERO / CAROUSEL (FINAL – KEEP THIS) ================= */
+.hero {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+.heroImage {
+  object-fit: contain; /* face cut nahi hoga */
+}
+
+/* ================= HERO / CAROUSEL FIX ================= */
+.hero {
+  position: relative;
+  height: 78vh;            /* ⬅️ height kam ki */
+  min-height: 520px;       /* desktop safe */
+  width: 100%;
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+/* 🔥 FACE SAFE IMAGE */
+.heroImage {
+  object-fit: cover;               /* full width */
+  object-position: top center;     /* ❗ face cut nahi hoga */
+}
+
+/* ================= OVERLAY ================= */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  padding: 24px;
+  color: #ffffff;
+}
+.pageTitle {
+  font-size: 56px;          /* ⬅️ ABOUT US bada dikhega */
+  font-weight: 800;         /* strong heading */
+  letter-spacing: 3px;      /* premium spacing */
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+
+.heroYear {
+  font-size: 120px;
+  font-weight: 800;
+  color: #f5c451;
+  line-height: 1;
+  margin: 6px 0 18px;
+}
+
+.heroDesc {
+  max-width: 760px;
+  font-size: 16px;
+  line-height: 1.8;
+  color: #f1f5f9;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .hero {
+    height: 70vh;
+    min-height: 420px;
+  }
+
+  .pageTitle {
+    font-size: 32px;
+  }
+
+  .heroYear {
+    font-size: 84px;
+  }
+
+  .heroDesc {
+    font-size: 14.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    height: 65vh;
+    min-height: 380px;
+  }
+
+  .pageTitle {
+    font-size: 24px;
+  }
+
+  .heroYear {
+    font-size: 64px;
+  }
+}
+.hero {
+  height: 85vh;             /* ⬅️ pehle 78vh tha */
+  min-height: 580px;        /* desktop pe strong presence */
+  width: 100%;
+  overflow: hidden;
+}
+@media (max-width: 768px) {
+  .hero {
+    height: 75vh;
+    min-height: 460px;
+  }
+
+  .pageTitle {
+    font-size: 40px;
+    letter-spacing: 3px;
+  }
+
+  .heroYear {
+    font-size: 88px;
+  }
+
+  .heroDesc {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    height: 70vh;
+    min-height: 400px;
+  }
+
+  .pageTitle {
+    font-size: 32px;
+  }
+
+  .heroYear {
+    font-size: 66px;
+  }
+}
+.overlay .pageTitle {
+  font-size: 80px !important;   /* 🔥 FORCE APPLY */
+  font-weight: 800;
+  letter-spacing: 4px;
 }

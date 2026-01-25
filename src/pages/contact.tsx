@@ -30,6 +30,10 @@ const ContactPage = () => {
   <div className={styles.carouselText}>
         <h1 className={styles.contactTitle}>CONTACT Us</h1>
 
+  </div>
+</section>
+ <div className={styles.carouselTexts}>
+
     <p className={styles.heroPara}>
       At Zanifest, we believe insurance should be a promise kept, not a hassle endured.
       Founded with a vision to simplify financial protection for every Indian, we bridge
@@ -40,8 +44,6 @@ const ContactPage = () => {
       Have questions about a policy or need help with a claim? Our team is ready to assist you.
     </p>
   </div>
-</section>
-
       {/* ===== CONTACT SECTION ===== */}
       <section className={styles.contactSection}>
         <div className={styles.container}>
@@ -76,6 +78,10 @@ const ContactPage = () => {
               <div className={styles.detailBox}>
                 <span>🏢 Grievance Support  Email</span>
                 <p>mandeep.rathee@zanifestinsurance.com</p>
+              </div>
+               <div className={styles.detailBox}>
+                <span>🏢 Address</span>
+                <p>Zanifest Insurance Broker Pvt Ltd, SCF-8, 1st Floor, Old Ambala Road, Dhakoli, Zirakpur, Distt Mohali, Punjab-140603</p>
               </div>
             </div>
           </div>
