@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import styles from "@/styles/pages/agent.module.css";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { Label } from "recharts";
+
 
 import {
   LineChart,
@@ -114,43 +116,61 @@ const AgentContent: React.FC<AgentContentProps> = ({
       toast.error("Failed to fetch sales data");
     }
   };
+const updateMonthlySales = (sales: SaleRecord[]) => {
+  const now = new Date();
 
-  const updateMonthlySales = (sales: SaleRecord[]) => {
-    const now = new Date();
-    const month = now.getMonth();
-    const year = now.getFullYear();
+  const filtered = sales.filter((s) => {
+    if (!s.saleDate) return false;
 
-    const filtered = sales.filter((s) => {
-      const d = new Date(s.saleDate);
-      return (
-        d.getMonth() === month &&
-        d.getFullYear() === year &&
-        d.getDate() >= 1
-      );
+    const d = new Date(s.saleDate);
+    if (isNaN(d.getTime())) return false;
+
+    return (
+      d.getMonth() === now.getMonth() &&
+      d.getFullYear() === now.getFullYear()
+    );
+  });
+
+  const total = filtered.reduce(
+    (sum, s) => sum + Number(s.amount || 0),
+    0
+  );
+
+  setMonthlySales(total);
+  updateChart(filtered);
+};
+
+const updateChart = (sales: SaleRecord[]) => {
+  if (!sales || sales.length === 0) {
+    setChartData([]);
+    return;
+  }
+
+  const map: Record<string, number> = {};
+
+  sales.forEach((s) => {
+    if (!s.saleDate) return;
+
+    const d = new Date(s.saleDate);
+    if (isNaN(d.getTime())) return;
+
+    const key = d.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
     });
 
-    const total = filtered.reduce((sum, s) => sum + (s.amount || 0), 0);
-    setMonthlySales(total);
-    updateChart(filtered);
-  };
+    map[key] = (map[key] || 0) + (Number(s.amount) || 0);
+  });
 
-  const updateChart = (sales: SaleRecord[]) => {
-    const formatted = sales
-      .sort(
-        (a, b) =>
-          new Date(a.saleDate).getTime() -
-          new Date(b.saleDate).getTime()
-      )
-      .map((s) => ({
-        date: new Date(s.saleDate).toLocaleDateString("en-IN", {
-          day: "numeric",
-          month: "short",
-        }),
-        price: s.amount,
-      }));
+  const formatted = Object.keys(map).map((date) => ({
+    date,
+    amount: map[date],
+  }));
 
-    setChartData(formatted);
-  };
+  setChartData(formatted);
+};
+
+
 
   useEffect(() => {
     fetchAgentSales();
@@ -179,7 +199,6 @@ const AgentContent: React.FC<AgentContentProps> = ({
 
     try {
       setLoading(true);
-
       await axios.post(
         "/api/agent/add-sales",
         { agentId, amount: salesAmount },
@@ -196,6 +215,10 @@ const AgentContent: React.FC<AgentContentProps> = ({
       setLoading(false);
     }
   };
+  useEffect(() => {
+  console.log("chartData:", chartData);
+}, [chartData]);
+
 
   return (
     <main className={styles.content}>
@@ -312,27 +335,58 @@ const AgentContent: React.FC<AgentContentProps> = ({
       </div>
 
       {/* GRAPH */}
-      <div className={styles.chartContainer}>
-        <h3 className={styles.chartTitle}>
-          Monthly Sales Overview
-        </h3>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis />
-            <Tooltip />
-            <Line
-              type="monotone"
-              dataKey="price"
-              stroke="#2dd4bf"
-              strokeWidth={4}
-              dot={{ r: 5, fill: "#2dd4bf" }}
-              activeDot={{ r: 6 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+ 
+<div className={styles.chartContainer}>
+  <h3 className={styles.chartTitle}>
+    Monthly Sales Overview
+  </h3>
+
+  {chartData.length > 0 ? (
+    <LineChart
+      width={1300}        // 🔥 FIXED WIDTH
+      height={420}       // 🔥 FIXED HEIGHT
+      data={chartData}
+      margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
+    >
+      <CartesianGrid strokeDasharray="3 3" />
+
+    <XAxis dataKey="date" tick={{ fontSize: 12 }}>
+  <Label
+    value="Time"
+    offset={-5}
+    position="insideBottom"
+  />
+</XAxis>
+
+     <YAxis tickFormatter={(value) => `₹${value}`} tick={{ fontSize: 12 }}>
+  <Label
+    value="Amount"
+    angle={-90}
+    position="insideLeft"
+    style={{ textAnchor: "middle" }}
+  />
+</YAxis>
+
+      <Tooltip formatter={(value: number) => `₹${value}`} />
+
+      <Line
+        type="monotone"
+        dataKey="amount"
+        stroke="#2dd4bf"
+        strokeWidth={3}
+        dot={{ r: 5 }}
+        activeDot={{ r: 7 }}
+      />
+    </LineChart>
+  ) : (
+    <p style={{ textAlign: "center", marginTop: 40 }}>
+      No sales data available
+    </p>
+  )}
+</div>
+
+
+
     </main>
   );
 };

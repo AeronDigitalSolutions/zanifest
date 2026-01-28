@@ -1,403 +1,260 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
+import { useState } from "react";
 import styles from "@/styles/about/herosection.module.css";
-
 import Navbar from "@/components/ui/Navbar";
+import aboutBg from "@/assets/About/about.png";
+import logo from "@/assets/logo.png";
+import layer10 from "@/assets/About/Layer 10.png";
+import layer11 from "@/assets/About/Layer 11.png";
+import layer14 from "@/assets/About/Layer 14.png";
+import layer23 from "@/assets/About/Layer 23.png";
+import mandeep from "@/assets/contact/Mandeep.jpeg";
+import naresh from "@/assets/contact/Naresh.jpeg";
+import mayak from "@/assets/contact/Mayak.jpeg";
+import { ZodArray } from "zod";
+import { FaShieldAlt, FaUsers, FaSmile, FaChartLine } from "react-icons/fa";
 import Footer from "@/components/ui/Footer";
 
-import director1 from "@/assets/contact/Mandeep.jpeg";
-import director2 from "@/assets/contact/Naresh.jpeg";
-import director3 from "@/assets/contact/Mayak.jpeg";
 
-import slide1 from "@/assets/contact/contact.png";
-import slide2 from "@/assets/contact/sliders2.png";
-import slide3 from "@/assets/contact/slider3.png";
-import whatweoffer from "@/assets/contact/whatweoffer-removebg-preview.png";
-const slides = [slide1, slide1, slide3]
+type ProfileKey = "mandeep" | "naresh" | "mayak";
 
-const AboutUsPage = () => {
-  const [current, setCurrent] = useState(0);
+type Profile = {
+  name: string;
+  img: StaticImageData;
+  text: string;
+};
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % slides.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
+export default function AboutPage() {
+  const [active, setActive] = useState<ProfileKey>("mandeep");
+const profiles: Record<ProfileKey, Profile> = {
+  mandeep: {
+    name: "Mandeep Rathee",
+    img: mandeep,
+    text: `Mandeep Rathee is the Founder and CEO of Zanifest Insurance Broker Pvt. Limited, based in Chandigarh. He is a science graduate from Hindu College and later completed a Business Management degree from GJU, Hisar. His professional qualifications also include Licentiate in General Insurance from III and an advanced certification in Product Management from IIT Guwahati.
 
+He has worked with leading corporates for more than two decades, starting his career as a Management Trainee with Red Bull Energy Drink in 2005. Over the years, his professional journey took him through organizations such as Bharti AXA General Insurance, HDFC ERGO, and ICICI Lombard General Insurance, where he spent nearly 20 years in the general insurance space. His experience spans simple motor, health, and travel insurance to complex corporate and large project policies.
+
+He has successfully led teams of over 100 professionals and managed insurance business for major private sector banks including ICICI Bank and HDFC Bank across Haryana, Punjab, Himachal Pradesh, and J&K.`
+  },
+
+  naresh: {
+    name: "Naresh Dhiman",
+    img: naresh,
+    text: `Naresh Dhiman is a Director of Zanifest Insurance Broker, based in Bilaspur, Himachal Pradesh. He is a Business Graduate and also holds a Postgraduate degree from IMS, Shimla. With over 20 years of experience, Naresh has successfully handled diverse businesses across insurance companies, dealer networks, and start-up ventures.
+
+Throughout his career, he has worked with reputed organizations such as Shriram General Insurance as a Senior Branch Manager, Bharti AXA General Insurance, Bajaj Allianz General Insurance, and has also managed the Mahindra dealer network across Himachal Pradesh. In addition, he has been a founder of an FMCG start-up, giving him hands-on entrepreneurial experience alongside corporate exposure.
+
+Naresh is passionate about interacting with people and enjoys discussing innovative business ideas. An avid traveller and explorer, he brings strong business acumen and leadership capability, handling large business volumes with efficiency and ease.`
+  },
+
+  mayak: {
+    name: "Mayank Thakur",
+    img: mayak,
+    text: `Mayank is a Director of the company, based in Dehradun. He brings with him extensive experience of 22 years, out of which 18 years have been dedicated to the general insurance industry. He is a Commerce postgraduate from DAV College, Dehradun, and has also completed a Diploma in Information Technology from Sikkim Manipal University.
+
+Professionally, Mayank has worked with leading insurance organizations such as ICICI Lombard, Reliance General Insurance, Bharti AXA General Insurance, and the Royal Sundaram Group. He has handled the Uttar Pradesh and Uttarakhand regions extensively and possesses deep expertise across retail insurance, bancassurance, and corporate insurance domains.
+
+An industry veteran, Mayank is known for his strong operational knowledge and people-centric approach. He is currently focused on building an honest, credible, and customer-friendly insurance organization from the ground up.
+
+Outside of work, Mayank enjoys trekking and driving in the hills, plays badminton, loves listening to music, and—like most Indians—is a true tea enthusiast.`
+  }
+};
+
+
+  const current = profiles[active];
   return (
     <>
-      {/* ===== NAVBAR ===== */}
-      <div className={styles.fixedNavbar}>
-        <Navbar />
+    <Navbar/>
+    <section className={styles.hero}>
+      {/* Background */}
+     <Image
+  src={aboutBg}
+  alt="About Background"
+  fill
+  priority
+  sizes="100vw"
+  className={styles.bgImage}
+/>
+
+
+      {/* Color overlay (NO heavy blur) */}
+      <div className={styles.overlay}></div>
+
+      {/* Center Card */}
+      <div className={styles.card}>
+        <Image
+          src={logo}
+          alt="Zanifest Logo"
+          width={500}   // 🔥 LOGO BIG
+          height={110}
+          className={styles.logo}
+        />
+
+        <p className={styles.text}>
+          redefining modern experiences by creating a seamless, engaging,
+          and inclusive platform that brings people together, removes
+          complexity, and ensures everyone can easily discover, access,
+          and enjoy meaningful moments without barriers.
+        </p>
       </div>
-
-      {/* ===== HERO / CAROUSEL ===== */}
-      <section className={styles.hero}>
-        {slides.map((img, index) => (
-          <div
-            key={index}
-            className={`${styles.slide} ${
-              index === current ? styles.active : ""
-            }`}
-          >
+    </section>
+        <section className={styles.aboutSection}>
+        <div className={styles.aboutContainer}>
+          
+          {/* LEFT : IMAGES */}
+          <div className={styles.imageStack}>
             <Image
-              src={img}
-              alt="Zanifest Insurance"
-              fill
-              priority={index === 0}
-              className={styles.heroImage}
+              src={layer11}
+              alt="Team discussion"
+              className={styles.imageBack}
             />
-          </div>
-        ))}
-
-        <div className={styles.overlay}>
-          <h1 className={styles.pageTitle}>ABOUT US</h1>
-
-          <div className={styles.heroYear}>2026</div>
-
-          <p className={styles.heroDesc}>
-            We wish to be known as an institution of choice for our commitment
-            and fair business practices. Ensuring that Zanifest Insurance Broker
-            becomes the most Honest and Best Insurance Broker of India.
-          </p>
-        </div>
-      </section>
-
-      {/* ================= WHY ZANIFEST ================= */}
-      <section className={styles.section}>
-        <div className={styles.grid}>
-          <div className={styles.cleanImageWrap}>
             <Image
-              src={slide1}
-              alt="Zanifest Team"
-              fill
-              className={styles.imageContain}
+              src={layer10}
+              alt="Business meeting"
+              className={styles.imageFront}
             />
           </div>
 
-          <div className={styles.content}>
-            <p className={styles.subtitle}>Our Purpose</p>
-            <h2 className={styles.title}>Why Zanifest Exists</h2>
-            <p className={styles.textJustify}>
-              Zanifest Insurance Broking is born to realize the dream of helping
-              people by mitigating their risks and providing honest and most
-              effective insurance solutions.
-              <br />
-              <br />
-              Over the years, we discovered serious challenges in the insurance
-              ecosystem. There is widespread mis-selling, service delays, and
-              finding credible, trustworthy advice has become extremely
-              difficult. Trust issues exist — and rightly so.
+          {/* RIGHT : TEXT */}
+          <div className={styles.aboutContent}>
+            <span className={styles.aboutTag}>ABOUT COMPANY</span>
+
+            <h2 className={styles.aboutTitle}>
+              Creating a better <br /> future for your loved <br /> once
+            </h2>
+
+            <p className={styles.aboutDesc}>
+              Zanifest Insurance Broking is born to realize the dream of
+              helping people by mitigating their risks and providing honest
+              and most effective insurance solutions. Over the years, we
+              discovered serious challenges in the insurance ecosystem.
+              There is widespread mis-selling, service delays, and finding
+              credible, trustworthy advice has become extremely difficult.
+              Trust issues exist – and rightly so.
             </p>
           </div>
         </div>
       </section>
+        {/* ===== VISION / MISSION SECTION ===== */}
+      <section className={styles.vmSection}>
+        <div className={styles.vmContainer}>
 
-      {/* ================= OUR APPROACH ================= */}
-      <section className={styles.section}>
-        <div className={styles.grid}>
-          <div className={styles.cleanImageWrap}>
-            <Image
-              src={slide1}
-              alt="Our Approach"
-              fill
-              className={styles.imageContain}
-            />
-          </div>
-
-          <div className={styles.content}>
-            <p className={styles.subtitle}>Our Approach</p>
-            <h2 className={styles.title}>Bridging the Trust Gap</h2>
-
-            <p className={styles.textJustify}>
-              There are very few professionals who have seen both sides of the
-              insurance industry — as a corporate employee and as a broker.
-              Fortunately, we are one of those few.
-              <br />
-              <br />
-              With more than 20 years of corporate experience, we understand how
-              companies decide premiums, what they cover, how they cover, and
-              why claims are sometimes deducted or denied.
-            </p>
-
-            <p className={styles.textJustify}>
-              Insurance needs compassion, but technology has replaced human
-              warmth. At Zanifest, we blend compassion with technology —
-              delivering personalised solutions and standing by our customers
-              when they need us the most.
-            </p>
-
-            <p className={styles.highlightText}>
-              We promise to help our customers choose the best insurance cover.
-              <br />
-              <strong>!! Vada Suraksha Ka !!</strong>
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ================= WHAT WE OFFER ================= */}
-      <section className={styles.section}>
-        <div className={styles.grid}>
           {/* LEFT IMAGE */}
-          <div className={styles.offerImageSticky}>
+          <div className={styles.vmLeft}>
             <Image
-              src={whatweoffer}
-              alt="What We Offer"
-              width={480}
-              height={480}
-              className={styles.offerImage}
+              src={layer14}
+              alt="Vision Mission Values"
+              className={styles.vmHex}
             />
           </div>
 
           {/* RIGHT CONTENT */}
-          <div className={styles.content}>
-            <p className={styles.subtitle}>Our Services</p>
-            <h2 className={styles.title}>What We Offer</h2>
+          <div className={styles.vmRight}>
 
-            <p className={styles.textJustify}>
-              With more than 20 years of experience in insurance, we are now at
-              your service to help you choosing best and customized insurance
-              solutions. Zanifest is working to ensure a worry-free life as we
-              optimally protect people, their families and their businesses.
-              <br />
-              <br />
-              Not only this, with our vast insurance network of 30+ insurance
-              partners, a team of expert insurance advisors and round the clock
-              dedicated claim assistance, we are the perfect insurance partners
-              for our customers. We offer all lines of product to our clients,
-              be it:
-            </p>
+            {/* Mission */}
+            <div className={styles.vmCard}>
+              <Image src={layer23} alt="" className={styles.vmBg} />
+              <div className={styles.vmTextWrap}>
+                <h3 className={styles.vmTitle}>Mission</h3>
+                <p className={styles.vmText}>
+                  Wish to become a trusted insurance provider in the insurance
+                  field. We want to cover all houses, business premises, projects,
+                  vehicles, travellers, employees, and individuals to live a
+                  sustainable, worry-free life.
+                </p>
+              </div>
+            </div>
 
-            <ul className={styles.offerList}>
-              <li>
-                <strong>Individuals Policies:</strong> Health Insurance, Motor
-                Insurance, Travel Insurance, Home Insurance, Cyber Insurance,
-                Personal Accident, Critical Illness and Pet Insurance policies
-              </li>
+            {/* Vision */}
+            <div className={styles.vmCard}>
+              <Image src={layer23} alt="" className={styles.vmBg} />
+              <div className={styles.vmTextWrap}>
+                <h3 className={styles.vmTitle}>Vision</h3>
+                <p className={styles.vmText}>
+                  To become the most honest and transparent insurance provider
+                  of India. We wish to be known as an institution of choice for
+                  our commitment and fair business practices – ensuring Zanifest
+                  Insurance Broker becomes the most honest and best insurance
+                  broker of India.
+                </p>
+              </div>
+            </div>
 
-              <li>
-                <strong>Business Policies:</strong> Shop Insurance, Business
-                Trade Policies, Fire Policy, Marine and Business All Risk
-                Policies, EAR (Erection All Risk Policy)
-              </li>
-
-              <li>
-                <strong>Doctors and Hospitals:</strong> Doctors Liability
-                Insurance, Fire Insurance and Machinery Breakdown Policy
-              </li>
-
-              <li>
-                <strong>Educational Institutes:</strong> Group Mediclaim, Group
-                Personal Accident, Fire and EEI Policy, Equipment and Motor
-                Policy for Buses
-              </li>
-
-              <li>
-                <strong>Contractors & Project Builders:</strong> Contractors All
-                Risk Policy, Fire Policy and Surety Bond Policy
-              </li>
-
-              <li>
-                <strong>Offices:</strong> Office Package Policy and Electronic
-                Equipment Policy
-              </li>
-
-              <li>
-                <strong>Hotels & Cafes:</strong> Fire, All Risk and Public
-                Liability Covers
-              </li>
-
-              <li>
-                <strong>Exporters:</strong> Open Marine, STOP and Product
-                Liability Policies
-              </li>
-
-              <li>
-                <strong>Jewelers:</strong> Jewelers Block Policies
-              </li>
-
-              <li>
-                <strong>Startups & Corporates:</strong> Group Health Insurance
-                for staff and Fire Policy for office or warehouse
-              </li>
-            </ul>
           </div>
         </div>
       </section>
+       
+      {/* ================= LEADERSHIP ================= */}
+<section className={styles.leaderSection}>
+  {/* Tabs */}
+  <div className={styles.tabs}>
+    {(Object.keys(profiles) as ProfileKey[]).map((key) => (
+      <button
+        key={key}
+        className={`${styles.tab} ${active === key ? styles.activeTab : ""}`}
+        onClick={() => setActive(key)}
+      >
+        {profiles[key].name}
+      </button>
+    ))}
+  </div>
 
-      {/* ================= FOUNDER ================= */}
-      <section className={`${styles.section} ${styles.lightBg}`}>
-        <div className={styles.grid}>
-          <div className={styles.stickyImageWrap}>
-            <Image
-              src={director1}
-              alt="Founder"
-              width={420}
-              height={420}
-              className={styles.stickyImage}
-            />
-          </div>
+  {/* Content */}
+  <div className={styles.leaderContent}>
+    {/* Left Image */}
+    <div className={styles.leaderImage}>
+      <Image
+        src={current.img}
+        alt={current.name}
+        priority
+      />
+    </div>
 
-          <div className={styles.content}>
-            <p className={styles.subtitle}>About the Founder</p>
-            <h2 className={styles.title}>Mandeep Rathee</h2>
-            <p className={styles.textJustify}>
-              Mandeep Rathee is a Founder and CEO of Zanifest Insurance Broker
-              Pvt. Limited based at Chandigarh. He is a science graduate from
-              “Hindu College” and then took a Business Management Degree from
-              “GJU, Hisar”. His professional qualification also includes
-              Licentiate in General insurance from “III” and advanced
-              certification in Product Management from “IIT Guwahati”.
-              <br />
-              <br />
-              He has worked with leading corporates for more than two decades,
-              starting his journey as a Management Trainee with Red Bull Energy
-              Drink back in 2005. Over the years, his professional journey took
-              him through different organizations like Bharti AXA general
-              Insurance, HDFC ERGO, and ICICI Lombard General Insurance, where
-              he spent almost 20 years in the General insurance space doing all
-              lines of products ranging from simple motor, health and travel
-              insurances to complex business and group policies of large
-              projects and corporates. He has handled a team 100 plus employees
-              and managed 2 largest private sector Indian Banks ICICI Bank and
-              HDFC Bank for their insurance business in entire Haryana, Punjab,
-              Himachal and J&K.
-            </p>
-          </div>
-        </div>
-      </section>
+    {/* Right Text */}
+    <div className={styles.leaderText}>
+      <p>{current.text}</p>
+    </div>
+  </div>
 
-      {/* ================= DIRECTOR ================= */}
-      <section className={`${styles.section} ${styles.lightBg}`}>
-        <div className={styles.grid}>
-          <div className={styles.squareImageWrap}>
-            <Image
-              src={director2}
-              alt="Director"
-              fill
-              className={styles.imageContain}
-            />
-          </div>
+  {/* Stats Bar */}
+  <div className={styles.statsBar}>
+    <div className={styles.statItem}>
+      <FaShieldAlt className={styles.statIcon} />
+      <div className={styles.statText}>
+        <h3>2.6k</h3>
+        <span>Gave insurances</span>
+      </div>
+    </div>
 
-          <div className={styles.content}>
-            <p className={styles.subtitle}>About the Founder</p>
+    <div className={styles.statItem}>
+      <FaUsers className={styles.statIcon} />
+      <div className={styles.statText}>
+        <h3>89+</h3>
+        <span>Professional team</span>
+      </div>
+    </div>
 
-            <h2 className={styles.title}>Naresh Dhiman</h2>
-            <p className={styles.textJustify}>
-              Naresh is a Director of Zanifest Insurance Broker based at
-              Bilaspur, Himachal Pradesh. He is business Graduate and also a
-              Post Graduate from IMS , Shimla. He is having 20 years of
-              experience in Handling Various business, insurance companies,
-              dealers and start-ups. He loves to Interact with people and
-              discuss business ideas with them. He is an avid traveller and
-              explorer.
-              <br />
-              <br />
-              He has worked with Shriram General Insurance as senior Branch
-              Manager, with Bharti Axa General Insurance, handled Mahindra
-              dealers network in Himachal , Bajaj Allianz General Insurance and
-              a FMCG startup founder as well. Business runs in his veins and he
-              is capable of handling large business volumes with ease.
-            </p>
-          </div>
-        </div>
-      </section>
+    <div className={styles.statItem}>
+      <FaSmile className={styles.statIcon} />
+      <div className={styles.statText}>
+        <h3>2.8k</h3>
+        <span>Satisfied customers</span>
+      </div>
+    </div>
 
-      {/* ================= DIRECTOR ================= */}
-      <section className={`${styles.section} ${styles.lightBg}`}>
-        <div className={styles.grid}>
-          <div className={styles.squareImageWrap}>
-            <Image
-              src={director3}
-              alt="Director"
-              fill
-              className={styles.imageContain}
-            />
-          </div>
+    <div className={styles.statItem}>
+      <FaChartLine className={styles.statIcon} />
+      <div className={styles.statText}>
+        <h3>99%</h3>
+        <span>Our success rate</span>
+      </div>
+    </div>
+  </div>
+</section>
+<Footer/>
 
-          <div className={styles.content}>
-            <p className={styles.subtitle}>About the Founder</p>
-
-            <h2 className={styles.title}>Mayank Thakur</h2>
-            <p className={styles.textJustify}>
-              Mayank is a Director of the company based at Dehradun. He is
-              having vast experience of 22 years out of which 18 years he has
-              spent with various general insurance companies. He is a Commerce
-              Post Graduate from DAV College, Dehradun and also done diploma in
-              Information Technology from Sikkim Manipal University. He like
-              Tracking and driving in hills, a badminton player, fond of
-              listening music and a tea lover like all Indians
-              <br />
-              <br />
-              He has worked with ICICI Lombard, Reliance General Insurance,
-              Bharti Axa General and Royal Sundaram group in various capacities
-              and handled UP and Uttarakhand Area extensively. From Retail
-              business to bancassurance and corporates, Mayank is an expert in
-              all lines of general insurance businesses. He is an industry
-              veteran and working now to build an Honest, credible and customer
-              friendly organisation from scratch.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ================= VISION ================= */}
-      <section className={styles.section}>
-        <div className={styles.grid}>
-          <div className={styles.content}>
-            <h2 className={styles.title}>Our Vision</h2>
-            <p className={styles.text}>
-              Wish to become a trusted insurance provider in the insurance
-              field. We want to cover all houses, business premises, projects,
-              vehicles, travellers, employees, and individuals to live a
-              sustainable, worry-free life — eventually making India reach the
-              top of the world happiness index.
-            </p>
-          </div>
-
-          <div className={styles.imageWrap}>
-            <Image src={slide2} alt="Vision" fill className={styles.image} />
-          </div>
-        </div>
-      </section>
-
-      {/* ================= MISSION ================= */}
-      <section className={`${styles.section} ${styles.lightBg}`}>
-        <div className={styles.grid}>
-          <div className={styles.content}>
-            <h2 className={styles.title}>Our Mission</h2>
-            <p className={styles.text}>
-              To become the most honest and transparent insurance provider of
-              India. We want to deliver our four core service promises:
-            </p>
-
-            <ul className={styles.list}>
-              <li>Agility</li>
-              <li>Honesty</li>
-              <li>Transparency</li>
-              <li>Ease</li>
-            </ul>
-
-            <p className={styles.text}>
-              We wish to be known as an institution of choice for our commitment
-              and fair business practices — ensuring Zanifest Insurance Broker
-              becomes the most honest and best insurance broker of India.
-            </p>
-          </div>
-
-          <div className={styles.imageWrap}>
-            <Image src={slide3} alt="Mission" fill className={styles.image} />
-          </div>
-        </div>
-      </section>
-
-      <Footer />
     </>
   );
-};
-
-export default AboutUsPage;
+}

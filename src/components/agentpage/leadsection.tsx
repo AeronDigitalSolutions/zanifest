@@ -31,6 +31,24 @@ export default function LeadSection() {
   const [status, setStatus] = useState("Cold");
   const [remark, setRemark] = useState("");
   const [currentLeadId, setCurrentLeadId] = useState<string | null>(null);
+  // module filter
+const [moduleFilter, setModuleFilter] = useState("All");
+
+// date range
+const [fromDate, setFromDate] = useState("");
+const [toDate, setToDate] = useState("");
+
+// pagination
+const [currentPage, setCurrentPage] = useState(1);
+const ITEMS_PER_PAGE = 10;
+
+const MODULES = [
+  "MarineModuleRequest",
+  "TravelInsurance",
+  "HomeInsurance",
+  "OfficePackagePolicy",
+];
+
 
   useEffect(() => {
     fetchLeads();
@@ -45,23 +63,44 @@ export default function LeadSection() {
   };
 
   // ✅ FILTERED DATA
-  const filteredLeads = useMemo(() => {
-    return leads.filter((l) => {
-      const matchesStatus =
-        statusFilter === "All" ||
-        (l.status || "Cold").toLowerCase() === statusFilter.toLowerCase();
+ const filteredLeads = useMemo(() => {
+  return leads.filter((l) => {
+    // status
+    const statusMatch =
+      statusFilter === "All" ||
+      (l.status || "Cold").toLowerCase() === statusFilter.toLowerCase();
 
-      const searchText = search.toLowerCase();
-      const matchesSearch =
-        !search ||
-        l.email?.toLowerCase().includes(searchText) ||
-        l.phone?.toLowerCase().includes(searchText) ||
-        l.module.toLowerCase().includes(searchText) ||
-        l.status?.toLowerCase().includes(searchText);
+    // module
+    const moduleMatch =
+      moduleFilter === "All" || l.module === moduleFilter;
 
-      return matchesStatus && matchesSearch;
-    });
-  }, [leads, search, statusFilter]);
+    // search
+    const searchText = search.toLowerCase();
+    const searchMatch =
+      !search ||
+      l.email?.toLowerCase().includes(searchText) ||
+      l.phone?.toLowerCase().includes(searchText) ||
+      l.module.toLowerCase().includes(searchText);
+
+    // date range
+    const assigned = l.assignedAt ? new Date(l.assignedAt) : null;
+    const from = fromDate ? new Date(fromDate) : null;
+    const to = toDate ? new Date(toDate) : null;
+
+    const dateMatch =
+      (!from || (assigned && assigned >= from)) &&
+      (!to || (assigned && assigned <= to));
+
+    return statusMatch && moduleMatch && searchMatch && dateMatch;
+  });
+}, [leads, statusFilter, moduleFilter, search, fromDate, toDate]);
+
+// ✅ PAGINATION (HOOKS MUST BE HERE)
+
+const paginatedLeads = useMemo(() => {
+  const start = (currentPage - 1) * ITEMS_PER_PAGE;
+  return filteredLeads.slice(start, start + ITEMS_PER_PAGE);
+}, [filteredLeads, currentPage]);
 
   const openLeadDetails = async (moduleName: string, id: string) => {
     setModalError(null);
@@ -108,36 +147,86 @@ export default function LeadSection() {
     }
   };
 
-  if (loading) return <div className={styles.loading}>Loading leads...</div>;
+const totalPages = Math.ceil(filteredLeads.length / ITEMS_PER_PAGE);
+
+
 
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>All Leads</h2>
 
       {/* 🔍 FILTER BAR */}
-      <div className={styles.filterBar}>
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-        >
-          <option value="All">All Status</option>
-          <option value="Cold">Cold</option>
-          <option value="Hot">Hot</option>
-          <option value="interested">Interested</option>
-          <option value="Closed">Closed</option>
-          <option value="not interested">Not Interested</option>
-        </select>
+     <div className={styles.filterBar}>
+  {/* MODULE DROPDOWN */}
+  <select
+    value={moduleFilter}
+    onChange={(e) => {
+      setModuleFilter(e.target.value);
+      setCurrentPage(1);
+    }}
+  >
+    <option value="All">All Modules</option>
+    {MODULES.map((m) => (
+      <option key={m} value={m}>
+        {m}
+      </option>
+    ))}
+  </select>
 
-        <div className={styles.searchBox}>
-          <FiSearch className={styles.searchIcon} />
-          <input
-            type="text"
-            placeholder="Search...."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-      </div>
+  {/* STATUS DROPDOWN (existing) */}
+  <select
+    value={statusFilter}
+    onChange={(e) => {
+      setStatusFilter(e.target.value);
+      setCurrentPage(1);
+    }}
+  >
+    <option value="All">All Status</option>
+    <option value="Cold">Cold</option>
+    <option value="Hot">Hot</option>
+    <option value="interested">Interested</option>
+    <option value="Closed">Closed</option>
+    <option value="not interested">Not Interested</option>
+  </select>
+
+ {/* FROM DATE */}
+<input
+  type="date"
+  className={styles.dateInput}
+  value={fromDate}
+  onChange={(e) => {
+    setFromDate(e.target.value);
+    setCurrentPage(1);
+  }}
+/>
+
+{/* TO DATE */}
+<input
+  type="date"
+  className={styles.dateInput}
+  value={toDate}
+  onChange={(e) => {
+    setToDate(e.target.value);
+    setCurrentPage(1);
+  }}
+/>
+
+
+  {/* SEARCH (existing) */}
+  <div className={styles.searchBox}>
+    <FiSearch className={styles.searchIcon} />
+    <input
+      type="text"
+      placeholder="Search...."
+      value={search}
+      onChange={(e) => {
+        setSearch(e.target.value);
+        setCurrentPage(1);
+      }}
+    />
+  </div>
+</div>
+
 
       {/* TABLE */}
       <div className={styles.tableWrapper}>
@@ -154,7 +243,7 @@ export default function LeadSection() {
           </thead>
 
           <tbody>
-            {filteredLeads.length === 0 && (
+{paginatedLeads.length === 0 && (
               <tr>
                 <td colSpan={6} className={styles.empty}>
                   No matching leads found
@@ -162,7 +251,7 @@ export default function LeadSection() {
               </tr>
             )}
 
-            {filteredLeads.map((l) => (
+{paginatedLeads.map((l) => (
               <tr key={l.id}>
                 <td>{l.email || "-"}</td>
                 <td>{l.phone || "-"}</td>
@@ -185,6 +274,27 @@ export default function LeadSection() {
             ))}
           </tbody>
         </table>
+   
+</div>
+     <div className={styles.pagination}>
+  <button
+    disabled={currentPage === 1}
+    onClick={() => setCurrentPage(p => p - 1)}
+  >
+    Prev
+  </button>
+
+  <span>
+    Page {currentPage} of {totalPages || 1}
+  </span>
+
+  <button
+    disabled={currentPage === totalPages}
+    onClick={() => setCurrentPage(p => p + 1)}
+  >
+    Next
+  </button>
+
       </div>
 
       {/* MODAL (same as before) */}
