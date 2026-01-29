@@ -10,6 +10,7 @@ import {
   FiChevronRight,
 } from "react-icons/fi";
 
+
 interface AgentSidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -124,7 +125,24 @@ const AgentSidebar: React.FC<AgentSidebarProps> = ({
             </div>
           </li>
         </ul>
+        <p className={styles.sectionTitle}>CERTIFICATION</p>
+<ul className={styles.menu}>
+  <li
+    className={`${styles.menuItem} ${
+      activeSection === "downloadCertificate" ? styles.active : ""
+    }`}
+    onClick={() => handleClick("downloadCertificate")}
+  >
+    <div className={styles.iconLabel}>
+      <FiChevronRight className={styles.icon} />
+      <span>Download Certificate</span>
+    </div>
+  </li>
+</ul>
+
       </div>
+ 
+
 
       {/* PROFILE BUTTON */}
       {/* <div className={styles.profileBox}>

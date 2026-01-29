@@ -12,7 +12,7 @@ import layer14 from "@/assets/About/Layer 14.png";
 import layer23 from "@/assets/About/Layer 23.png";
 import mandeep from "@/assets/contact/Mandeep.jpeg";
 import naresh from "@/assets/contact/Naresh.jpeg";
-import mayak from "@/assets/contact/Mayak.jpeg";
+import mayak from "@/assets/contact/mayakthakur.jpeg";
 import { ZodArray } from "zod";
 import { FaShieldAlt, FaUsers, FaSmile, FaChartLine } from "react-icons/fa";
 import Footer from "@/components/ui/Footer";
@@ -20,45 +20,101 @@ import Footer from "@/components/ui/Footer";
 
 type ProfileKey = "mandeep" | "naresh" | "mayak";
 
+import { ReactNode } from "react";
+
 type Profile = {
   name: string;
   img: StaticImageData;
-  text: string;
+  text: ReactNode; // ✅ FIX
 };
+
 
 export default function AboutPage() {
   const [active, setActive] = useState<ProfileKey>("mandeep");
 const profiles: Record<ProfileKey, Profile> = {
-  mandeep: {
-    name: "Mandeep Rathee",
-    img: mandeep,
-    text: `Mandeep Rathee is the Founder and CEO of Zanifest Insurance Broker Pvt. Limited, based in Chandigarh. He is a science graduate from Hindu College and later completed a Business Management degree from GJU, Hisar. His professional qualifications also include Licentiate in General Insurance from III and an advanced certification in Product Management from IIT Guwahati.
+mandeep: {
+  name: "Mandeep Rathee",
+  img: mandeep,
+  text: (
+    <>
+      <strong>Mandeep Rathee</strong> is the Founder and CEO of{" "}
+      <strong>Zanifest Insurance Broker Pvt Ltd</strong>. He is a{" "}
+      <strong>Science Graduate</strong> from Hindu College and later completed a{" "}
+      <strong>Business Management</strong> degree from GJU, Hisar. His professional
+      qualifications also include <strong>Licentiate</strong> in General Insurance
+      from <strong>III</strong> and an advanced certification in{" "}
+      <strong>Product Management</strong> from <strong>IIT Guwahati</strong>.
+      <br />
+      <br/>
+      He has worked with leading corporates for more than two decades, starting his
+      career as a Management Trainee with <strong>Red Bull</strong> Energy Drink in
+      2005. Over the years, his professional journey took him through different
+      organizations like <strong>Bharti AXA</strong> General Insurance,{" "}
+      <strong>HDFC ERGO</strong>, and <strong>ICICI Lombard</strong> General
+      Insurance, where he spent nearly 20 years in the general insurance space. His experience spans over simple motor, health, and travel insurance to complex corporate and large project policies.
+      <br />
+      <br/>
+      He has successfully led a team of over 100 professionals and managed
+      insurance Bancassurance business for two largest private sector banks,{" "}
+      <strong>ICICI</strong> and <strong>HDFC</strong> for North India.
+    </>
+  )
+},
 
-He has worked with leading corporates for more than two decades, starting his career as a Management Trainee with Red Bull Energy Drink in 2005. Over the years, his professional journey took him through organizations such as Bharti AXA General Insurance, HDFC ERGO, and ICICI Lombard General Insurance, where he spent nearly 20 years in the general insurance space. His experience spans simple motor, health, and travel insurance to complex corporate and large project policies.
 
-He has successfully led teams of over 100 professionals and managed insurance business for major private sector banks including ICICI Bank and HDFC Bank across Haryana, Punjab, Himachal Pradesh, and J&K.`
-  },
+naresh: {
+  name: "Naresh Dhiman",
+  img: naresh,
+  text: (
+    <>
+      <strong>Naresh Dhiman</strong> is a Director of{" "}
+      <strong>Zanifest Insurance Broker</strong>, based in{" "}
+      <strong>Bilaspur, Himachal Pradesh</strong>. He is a{" "}
+      <strong>Business Graduate</strong> and also holds a{" "}
+      <strong>Postgraduate degree</strong> from <strong>IMS, Shimla</strong>. With
+      over <strong>20 years of experience</strong>, Naresh has successfully
+      handled diverse businesses across insurance companies, dealer networks, and
+      start-up ventures.
+      <br />
+      <br />
+      Throughout his career, he has worked with reputed organizations such as{" "}
+      <strong>Shriram General Insurance</strong> as a Senior Branch Manager,{" "}
+      <strong>Bharti AXA </strong>General Insurance,{" "}
+      <strong>Bajaj Allianz General Insurance</strong>, and has also managed the{" "}
+      <strong>Mahindra dealer network</strong> across{" "}
+      <strong>Himachal Pradesh</strong>. In addition, he has been a founder of an{" "}
+      <strong>FMCG start-up</strong>, giving him hands-on entrepreneurial
+      experience alongside corporate exposure.
+      <br />
+      <br />
+      Naresh is passionate about interacting with people and enjoys discussing{" "}
+      <strong>innovative business ideas</strong>. An{" "}
+      <strong>avid traveller and explorer</strong>, he brings{" "}
+      <strong>strong business acumen</strong> and{" "}
+      <strong>leadership capability</strong>, handling large business volumes with
+      efficiency and ease.
+    </>
+  ),
+},
 
-  naresh: {
-    name: "Naresh Dhiman",
-    img: naresh,
-    text: `Naresh Dhiman is a Director of Zanifest Insurance Broker, based in Bilaspur, Himachal Pradesh. He is a Business Graduate and also holds a Postgraduate degree from IMS, Shimla. With over 20 years of experience, Naresh has successfully handled diverse businesses across insurance companies, dealer networks, and start-up ventures.
-
-Throughout his career, he has worked with reputed organizations such as Shriram General Insurance as a Senior Branch Manager, Bharti AXA General Insurance, Bajaj Allianz General Insurance, and has also managed the Mahindra dealer network across Himachal Pradesh. In addition, he has been a founder of an FMCG start-up, giving him hands-on entrepreneurial experience alongside corporate exposure.
-
-Naresh is passionate about interacting with people and enjoys discussing innovative business ideas. An avid traveller and explorer, he brings strong business acumen and leadership capability, handling large business volumes with efficiency and ease.`
-  },
 
   mayak: {
     name: "Mayank Thakur",
     img: mayak,
-    text: `Mayank is a Director of the company, based in Dehradun. He brings with him extensive experience of 22 years, out of which 18 years have been dedicated to the general insurance industry. He is a Commerce postgraduate from DAV College, Dehradun, and has also completed a Diploma in Information Technology from Sikkim Manipal University.
+    text: (
+      <>
+     <strong>Mayank Thakur</strong> is a Director of the company, based in <strong>Dehradun</strong>. He brings with him extensive <strong>experience of 22 years</strong>, out of which 18 years have been dedicated to the general insurance industry. He is a Commerce <strong>postgraduate</strong> from <strong>DAV College</strong>, Dehradun, and has also completed a Diploma in Information Technology from <strong>Sikkim Manipal University</strong>.
+     <br/>
 
-Professionally, Mayank has worked with leading insurance organizations such as ICICI Lombard, Reliance General Insurance, Bharti AXA General Insurance, and the Royal Sundaram Group. He has handled the Uttar Pradesh and Uttarakhand regions extensively and possesses deep expertise across retail insurance, bancassurance, and corporate insurance domains.
-
-An industry veteran, Mayank is known for his strong operational knowledge and people-centric approach. He is currently focused on building an honest, credible, and customer-friendly insurance organization from the ground up.
-
-Outside of work, Mayank enjoys trekking and driving in the hills, plays badminton, loves listening to music, and—like most Indians—is a true tea enthusiast.`
+Professionally, Mayank has worked with leading insurance organizations such as ICICI Lombard, Reliance General Insurance,<strong> Bharti AXA</strong> General Insurance, and the  <strong>Royal Sundaram Group</strong>. He has handled the Uttar Pradesh and Uttarakhand regions extensively and possesses deep expertise across retail insurance, bancassurance, and corporate insurance domains.
+<br/>
+An <strong>industry veteran</strong>, Mayank is known for his strong operational knowledge and people-centric approach. He is currently focused on building an honest, credible, and customer-friendly insurance organization from the ground up. Outside of work, Mayank enjoys <strong>trekking</strong> and{" "}
+      <strong>driving in the hills</strong>, plays{" "}
+      <strong>badminton</strong>, loves listening to{" "}
+      <strong>music</strong>, and—like most Indians—is a true{" "}
+      <strong>tea enthusiast</strong>.
+</>
+    ),
   }
 };
 
@@ -93,7 +149,7 @@ Outside of work, Mayank enjoys trekking and driving in the hills, plays badminto
         />
 
         <p className={styles.text}>
-          redefining modern experiences by creating a seamless, engaging,
+          Redefining modern experiences by creating a seamless, engaging,
           and inclusive platform that brings people together, removes
           complexity, and ensures everyone can easily discover, access,
           and enjoy meaningful moments without barriers.
@@ -122,7 +178,7 @@ Outside of work, Mayank enjoys trekking and driving in the hills, plays badminto
             <span className={styles.aboutTag}>ABOUT COMPANY</span>
 
             <h2 className={styles.aboutTitle}>
-              Creating a better <br /> future for your loved <br /> once
+              Creating a better <br /> future for your loved <br /> ones
             </h2>
 
             <p className={styles.aboutDesc}>
@@ -151,38 +207,57 @@ Outside of work, Mayank enjoys trekking and driving in the hills, plays badminto
           </div>
 
           {/* RIGHT CONTENT */}
-          <div className={styles.vmRight}>
+        <div className={styles.vmRight}>
 
-            {/* Mission */}
-            <div className={styles.vmCard}>
-              <Image src={layer23} alt="" className={styles.vmBg} />
-              <div className={styles.vmTextWrap}>
-                <h3 className={styles.vmTitle}>Mission</h3>
-                <p className={styles.vmText}>
-                  Wish to become a trusted insurance provider in the insurance
-                  field. We want to cover all houses, business premises, projects,
-                  vehicles, travellers, employees, and individuals to live a
-                  sustainable, worry-free life.
-                </p>
-              </div>
-            </div>
+  {/* Vision */}
+  <div className={styles.vmCard}>
+    <Image src={layer23} alt="" className={styles.vmBg} />
+    <div className={styles.vmTextWrap}>
+      <h3 className={styles.vmTitle}>Vision</h3>
+      <p className={styles.vmText}>
+        To become the most honest and transparent insurance provider of India.
+        We wish to be known as an institution of choice for our commitment and
+        fair business practices – ensuring Zanifest Insurance Broker becomes
+        the most honest and best insurance broker of India.
+      </p>
+    </div>
+  </div>
 
-            {/* Vision */}
-            <div className={styles.vmCard}>
-              <Image src={layer23} alt="" className={styles.vmBg} />
-              <div className={styles.vmTextWrap}>
-                <h3 className={styles.vmTitle}>Vision</h3>
-                <p className={styles.vmText}>
-                  To become the most honest and transparent insurance provider
-                  of India. We wish to be known as an institution of choice for
-                  our commitment and fair business practices – ensuring Zanifest
-                  Insurance Broker becomes the most honest and best insurance
-                  broker of India.
-                </p>
-              </div>
-            </div>
+  {/* Mission */}
+  <div className={styles.vmCard}>
+    <Image src={layer23} alt="" className={styles.vmBg} />
+    <div className={styles.vmTextWrap}>
+      <h3 className={styles.vmTitle}>Mission</h3>
+      <p className={styles.vmText}>
+        Wish to become a trusted insurance provider in the insurance field.
+        We want to cover all houses, business premises, projects, vehicles,
+        travellers, employees, and individuals to live a sustainable,
+        worry-free life.
+      </p>
+    </div>
+  </div>
 
-          </div>
+  {/* Values */}
+  <div className={styles.vmCard}>
+    <Image src={layer23} alt="" className={styles.vmBg} />
+    <div className={styles.vmTextWrap}>
+      <h3 className={styles.vmTitle}>Values</h3>
+      <p className={styles.vmText}>
+        At Zanifest, we strongly believe in upholding four core values for our
+        business:
+      </p>
+
+      <ul className={styles.valuesList}>
+        <li><strong>Honesty</strong></li>
+        <li><strong>Integrity</strong></li>
+        <li><strong>Customer Centricity</strong></li>
+        <li><strong>Compassion</strong></li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
         </div>
       </section>
        
@@ -204,13 +279,24 @@ Outside of work, Mayank enjoys trekking and driving in the hills, plays badminto
   {/* Content */}
   <div className={styles.leaderContent}>
     {/* Left Image */}
-    <div className={styles.leaderImage}>
-      <Image
-        src={current.img}
-        alt={current.name}
-        priority
-      />
-    </div>
+   <div className={styles.leaderImage}>
+  <Image
+    src={current.img}
+    alt={current.name}
+    priority
+  />
+
+  {/* MOBILE ONLY NAME + DESIGNATION */}
+  <div className={styles.mobileLeaderInfo}>
+    <h4 className={styles.mobileLeaderName}>{current.name}</h4>
+    <p className={styles.mobileLeaderRole}>
+      {active === "mandeep" && "Founder & CEO"}
+      {active === "naresh" && "Director"}
+      {active === "mayak" && "Director"}
+    </p>
+  </div>
+</div>
+
 
     {/* Right Text */}
     <div className={styles.leaderText}>

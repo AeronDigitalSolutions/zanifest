@@ -2783,9 +2783,17 @@ function Result({
 
   async function handlePass() {
     await fetch("/api/agent/complete-training", {
-      method: "POST",
-      credentials: "include",
-    });
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  credentials: "include",
+  body: JSON.stringify({
+    score,
+    total,
+  }),
+});
+
 
     await fetch("/api/agent/save-training-progress", {
       method: "POST",

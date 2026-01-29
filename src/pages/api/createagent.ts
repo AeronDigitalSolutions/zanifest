@@ -3,6 +3,13 @@ import dbConnect from "@/lib/dbConnect";
 import Agent from "@/models/Agent";
 import AgentLogin from "@/models/AgentLogin";
 
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "10mb", 
+    },
+  },
+};
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse

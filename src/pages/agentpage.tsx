@@ -15,6 +15,8 @@ import CreateAgent from "@/components/superadminsidebar/createagent";
 import AgentSale from "@/components/agentpage/agentsale";
 import LeadSection from "@/components/agentpage/leadsection";
 import ListOfPolicy from "@/pages/listofpolicy";
+import DownloadCertificate from "@/components/agentpage/download";
+
 
 const AgentDashboard = () => {
   const router = useRouter();
@@ -119,6 +121,8 @@ const AgentDashboard = () => {
     {activeSection === "createuser" && <CreateUser />}
     {activeSection === "addsale" && <AgentSale />}
     {activeSection === "profileEdit" && <CreateAgent />}
+    {activeSection === "downloadCertificate" && <DownloadCertificate />}
+
   </div>
 </main>
 

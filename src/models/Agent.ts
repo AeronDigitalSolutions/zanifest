@@ -51,8 +51,11 @@ export interface IAgent extends Document {
 
   // Assignment
   assignedTo: string;
+  // Training / Certification
   trainingCompleted?: boolean;
-
+  trainingScore?: number | null;
+  trainingTotal?: number | null;
+  trainingCompletedAt?: Date | null;
   // Sales tracking
   lifetimeSales: number;
   currentDMSales: number;
@@ -160,7 +163,12 @@ twelfthMarksheetAttachment: { type: String, default: null },
       // required: true,
       default: null,
     },
+  // 🔥 TRAINING DATA
     trainingCompleted: { type: Boolean, default: false },
+    trainingScore: { type: Number, default: null },
+    trainingTotal: { type: Number, default: null },
+    trainingCompletedAt: { type: Date, default: null },
+
 
     // Sales tracking
     lifetimeSales: { type: Number, default: 0 },
