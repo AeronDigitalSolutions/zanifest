@@ -16,6 +16,7 @@
 
 .contactTitle {
   font-size: 48px;
+  justify-content: center;
   font-weight: 700;
   color: #111111;
   text-transform: uppercase;
@@ -412,11 +413,13 @@
  
 }
 .contactTitle {
-  color: #d1d5db;
+  color: #ffffff;
   font-weight: 700;
-  font-size: 60px;
-  transform: translateY(-155px);
+  font-size: clamp(28px, 5vw, 60px);
+  margin: 0;
+  text-align: center;
 }
+
 
 @media (max-width: 1200px) {
   .contactTitle {
@@ -468,4 +471,14 @@
     align-content: space-evenly;
     align-items: end;
     justify-items: stretch;
+}
+.imageOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.35),
+    rgba(0,0,0,0.15)
+  );
+  z-index: 1;
 }

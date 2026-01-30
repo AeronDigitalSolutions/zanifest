@@ -68,6 +68,7 @@
 
 // export default MyApp;
 import { useEffect, useState } from "react";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import "@/styles/globals.css";
 import { AuthProvider } from "@/context/AuthContext";
@@ -145,6 +146,13 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <AuthProvider>
+     <Head>
+  <title>zanifest Insurance: Compare & Buy Insurance</title>
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/favicon.ico" />
+  <meta name="theme-color" content="#000000" />
+</Head>
+
       <ConfigProvider>
         <AntdApp>
           <ScrollToTop />

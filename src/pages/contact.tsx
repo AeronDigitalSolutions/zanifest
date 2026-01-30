@@ -7,7 +7,7 @@ import styles from "@/styles/contact/contactus.module.css";
 import Image from "next/image";
 
 // ✅ SAME IMAGE USED (no array)
-import contactImage from "@/assets/contact/contact.png";
+import contactImage from "@/assets/contact/cont.png";
 
 const ContactPage = () => {
   return (

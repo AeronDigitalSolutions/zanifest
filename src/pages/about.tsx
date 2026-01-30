@@ -247,12 +247,13 @@ An <strong>industry veteran</strong>, Mayank is known for his strong operational
         business:
       </p>
 
-      <ul className={styles.valuesList}>
-        <li><strong>Honesty</strong></li>
-        <li><strong>Integrity</strong></li>
-        <li><strong>Customer Centricity</strong></li>
-        <li><strong>Compassion</strong></li>
-      </ul>
+     <div className={styles.valuesInline}>
+  <span>★ <strong>Honesty</strong></span>
+  <span>★ <strong>Integrity</strong></span>
+  <span>★ <strong>Customer Centricity</strong></span>
+  <span>★ <strong>Compassion</strong></span>
+</div>
+
     </div>
   </div>
 
@@ -279,14 +280,23 @@ An <strong>industry veteran</strong>, Mayank is known for his strong operational
   {/* Content */}
   <div className={styles.leaderContent}>
     {/* Left Image */}
-   <div className={styles.leaderImage}>
-  <Image
-    src={current.img}
-    alt={current.name}
-    priority
-  />
+<div className={styles.leaderImage}>
+  <div className={styles.leaderImageWrap}>
+    <Image
+      src={current.img}
+      alt={current.name}
+      priority
+    />
 
-  {/* MOBILE ONLY NAME + DESIGNATION */}
+    {/* DESKTOP ONLY DESIGNATION */}
+    <p className={styles.desktopLeaderRole}>
+      {active === "mandeep" && "Founder & CEO"}
+      {active === "naresh" && "Director"}
+      {active === "mayak" && "Director"}
+    </p>
+  </div>
+
+  {/* MOBILE ONLY (already working) */}
   <div className={styles.mobileLeaderInfo}>
     <h4 className={styles.mobileLeaderName}>{current.name}</h4>
     <p className={styles.mobileLeaderRole}>
@@ -296,6 +306,8 @@ An <strong>industry veteran</strong>, Mayank is known for his strong operational
     </p>
   </div>
 </div>
+
+
 
 
     {/* Right Text */}

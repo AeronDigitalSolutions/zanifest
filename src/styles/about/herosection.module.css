@@ -65,7 +65,6 @@
   font-size: 16px;
   line-height: 1.8;
   color: #222;
-  font-weight: 700;
 }
 /* ================= SECOND SECTION ================= */
 
@@ -128,7 +127,6 @@
   font-size: 16px;
   line-height: 1.8;
   color: #222121;
-  font-weight: 600;
   text-align: justify;
 }
 
@@ -1068,5 +1066,74 @@ a
   /* 🔥 Remove manual line breaks on mobile */
   .aboutTitle br {
     display: none;
+  }
+}
+/* Image + designation vertical stack */
+.leaderImageWrap {
+  display: flex;
+  flex-direction: column;   /* 🔥 niche laata hai */
+  align-items: center;      /* 🔥 center align */
+}
+
+/* DESKTOP designation */
+.desktopLeaderRole {
+  font-size: 18px;
+  margin-top: 4px;
+  font-weight: 600;
+  color: #ff6a13;           /* brand orange */
+  text-align: center;
+  margin-bottom: 10px;
+  translate: 0 -7px;
+}
+
+/* ❌ Mobile pe hide */
+@media (max-width: 768px) {
+  .desktopLeaderRole {
+    display: none;
+  }
+}
+/* ================= VALUES – STAR ONE LINE ================= */
+
+.valuesInline {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;               /* 🔥 mobile safety */
+  gap: 14px;                     /* space between items */
+  margin-top: 8px;
+  font-size: 14px;
+  color: #000;
+}
+
+.valuesInline span {
+  white-space: nowrap;           /* 🔥 each value stays intact */
+  font-weight: 500;
+}
+
+/* Star color */
+.valuesInline span::first-letter {
+  color: #ff6a13;                /* brand orange star */
+  font-weight: 500;
+  margin-left: 5px;
+}
+
+/* Mobile polish */
+@media (max-width: 768px) {
+  .valuesInline {
+    gap: 10px;
+    font-size: 13.5px;
+  }
+}
+@media (max-width: 768px) {
+  .leaderImage {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;   /* image center */
+  }
+
+  .mobileLeaderInfo {
+    align-self: flex-start; /* text left */
+    text-align: left;
+    width: 100%;
   }
 }

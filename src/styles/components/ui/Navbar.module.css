@@ -135,7 +135,7 @@
 
 /* YOU ASKED: MAIN ITEMS BLUE, SAME SIZE */
 .headingBlue {
-  color: #1c75bb !important;
+  color: black !important;
   font-size: 17px !important;
 }
 
@@ -152,7 +152,7 @@
 }
 
 .activeMenu {
-  color: #1c75bb;
+  color:black;
   font-size: 17px;
 }
 
