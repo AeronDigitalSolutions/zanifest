@@ -17,19 +17,19 @@ const FALLBACK_SERVICES = [
   {
     name: "Family Insurance",
     desc: "Protect your loved ones with comprehensive family coverage designed to secure health, future, and peace of mind.",
-    image: "/assets/home/services/1.png",
+    image: "/public/assets/home/services/1.png",
     link: "#",
   },
   {
     name: "Travel Insurance",
     desc: "Stay worry-free on your journeys with travel insurance that covers medical emergencies, delays, and unexpected cancellations.",
-    image: "/assets/home/services/2.png",
+    image: "/public/assets/home/services/2.png",
     link: "#",
   },
   {
     name: "Home Insurance",
     desc: "Safeguard your home and belongings from natural disasters, theft, and unforeseen events with our reliable home insurance plans.",
-    image: "/assets/home/services/3.png",
+    image: "/public/assets/home/services/3.png",
     link: "#",
   },
 ];
